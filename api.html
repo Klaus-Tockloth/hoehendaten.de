@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="de">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Höhendaten - API</title>
+      <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+      <nav>
+         <ul>
+            <li><a href="index.html">Start</a></li>
+            <li><a href="karte.html">Karte</a></li>
+            <li><a href="dud.html">DuD</a></li>
+            <li class="dropdown">
+               <a href="javascript:void(0);" class="dropbtn">Dienste</a>
+               <ul class="dropdown-content">
+                  <li><a href="punkt.html">Punkt Lon/Lat</a></li>
+                  <li><a href="punkt_utm.html">Punkt UTM</a></li>
+                  <li><a href="gpx.html">GPX-Datei</a></li>
+               </ul>
+            </li>
+            <li><a href="api.html">API</a></li>
+            <li><a href="impressum.html">Impressum</a></li>
+         </ul>
+      </nav>
+      <div class="container">
+         <h2>Application Programming Interface (API)</h2>
+         <h3>Basisinformationen</h3>
+         <div class="table-responsive">
+         <table>
+            <tr>
+               <th>Zweck</th>
+               <th>Basis-URL</th>
+            </tr>
+            <tr>
+               <td>Abfrage von genauen Höheninformationen</td>
+               <td>https://api.hoehendaten.de:14444</td>
+            </tr>
+        </table>
+        </div>
+
+         <h3>API-Aufrufe</h3>
+        <div class="table-responsive">
+        <table>
+            <tr>
+               <th>Methode</th>
+               <th>Typ</th>
+               <th>Beschreibung</th>
+               <th>Aufruf-URL</th>
+            </tr>
+            <tr>
+               <td>POST</td>
+               <td>PointRequest</td>
+               <td>Abfrage der Höheninformation zu einem lon/lat Punkt</td>
+               <td>/v1/point</td>
+            </tr>
+            <tr>
+               <td>OPTIONS</td>
+               <td>PointRequest</td>
+               <td>Abfrage der Request-Eigenschaften (CORS)</td>
+               <td>/v1/point</td>
+            </tr>
+            <tr>
+               <td>POST</td>
+               <td>UTMPointRequest</td>
+               <td>Abfrage der Höheninformation zu einem UTM Punkt</td>
+               <td>/v1/utmpoint</td>
+            </tr>
+            <tr>
+               <td>OPTIONS</td>
+               <td>UTMPointRequest</td>
+               <td>Abfrage der Request-Eigenschaften (CORS)</td>
+               <td>/v1/utmpoint</td>
+            </tr>
+            <tr>
+               <td>POST</td>
+               <td>GPXRequest</td>
+               <td>Abfragen der Höheninformationen zu allen Punkten einer GPX-Datei</td>
+               <td>/v1/gpx</td>
+            </tr>
+            <tr>
+               <td>OPTIONS</td>
+               <td>GPXRequest</td>
+               <td>Abfrage der Request-Eigenschaften (CORS)</td>
+               <td>/v1/gpx</td>
+            </tr>
+         </table>
+         </div>
+ 
+         <hr>
+         <h3 class="request">API-Attribute 'PointRequest'</h3>
+         <div class="table-responsive">
+         <table>
+            <tr>
+               <th>Attribut</th>
+               <th>Subattribut</th>
+               <th>Datentyp</th>
+               <th>Beschreibung</th>
+            </tr>
+            <tr>
+               <td>Type</td>
+               <td></td>
+               <td>string</td>
+               <td>Typ der Anfrage (PointRequest)</td>
+            </tr>
+            <tr>
+               <td>ID</td>
+               <td></td>
+               <td>string</td>
+               <td>ID der Anfrage</td>
+            </tr>
+            <tr>
+               <td>Attributes</td>
+               <td></td>
+               <td>struct</td>
+               <td>Attribute der Anfrage</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Longitude</td>
+               <td>float</td>
+               <td>Längengrad (Dezimalgrad)</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Latitude</td>
+               <td>float</td>
+               <td>Breitengrad (Dezimalgrad)</td>
+            </tr>
+         </table>
+         </div>
+
+         <h3 class="response">API-Attribute 'PointResponse'</h3>
+         <div class="table-responsive">
+         <table>
+            <tr>
+               <th>Attribut</th>
+               <th>Subattribut</th>
+               <th>Subattribut</th>
+               <th>Datentyp</th>
+               <th>Beschreibung</th>
+            </tr>
+            <tr>
+               <td>Type</td>
+               <td></td>
+               <td></td>
+               <td>string</td>
+               <td>Typ der Antwort (PointResponse)</td>
+            </tr>
+            <tr>
+               <td>ID</td>
+               <td></td>
+               <td></td>
+               <td>string</td>
+               <td>ID der Antwort</td>
+            </tr>
+            <tr>
+               <td>Attributes</td>
+               <td></td>
+               <td></td>
+               <td>struct</td>
+               <td>Attribute der Antwort</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Longitude</td>
+               <td></td>
+               <td>float</td>
+               <td>Längengrad (Dezimalgrad)</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Latitude</td>
+               <td></td>
+               <td>float</td>
+               <td>Breitengrad (Dezimalgrad)</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Elevation</td>
+               <td></td>
+               <td>float</td>
+               <td>Höhenwert (Meter)</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Actuality</td>
+               <td></td>
+               <td>string</td>
+               <td>Aktualität der Daten</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Attribution</td>
+               <td></td>
+               <td>string</td>
+               <td>Attribution der Daten</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>TileIndex</td>
+               <td></td>
+               <td>string</td>
+               <td>Index der Quelldaten</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>IsError</td>
+               <td></td>
+               <td>bool</td>
+               <td>Fehler (ja/nein)</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Error</td>
+               <td></td>
+               <td>struct</td>
+               <td>Fehlerdetails</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Code</td>
+               <td>string</td>
+               <td>Fehlernummer</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Title</td>
+               <td>string</td>
+               <td>Fehlerbeschreibung</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Details</td>
+               <td>string</td>
+               <td>Fehlerdetaillierung</td>
+            </tr>
+         </table>
+         </div>
+ 
+         <hr>
+         <h4 class="request">PointRequest (Beispiel)</h4>
+         <pre class="request"><code>
+#!/bin/bash
+#
+# Abfrage der Höhendaten für einen lon/lat Punkt 
+
+postdata=$(cat &lt;&lt;EOF
+{
+  "Type": "PointRequest",
+  "ID": "Langenberg (Rothaargebirge, höchster Berg in NRW)",
+  "Attributes": {
+      "Longitude": 8.558333,
+      "Latitude": 51.276389
+  }
+}
+EOF
+)
+
+echo "postdata =\n$postdata"
+
+curl \
+--silent \
+--include \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--data "$postdata" \
+https://api.hoehendaten.de:14444/v1/point
+
+</code></pre>
+         <h4 class="response">PointResponse:</h4>
+         <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 446
+date: Tue, 22 Apr 2025 07:36:14 GMT
+
+{
+  "Type": "PointResponse",
+  "ID": "Langenberg (Rothaargebirge, höchster Berg in NRW)",
+  "Attributes": {
+    "Longitude": 8.558333,
+    "Latitude": 51.276389,
+    "Elevation": 843.07,
+    "Actuality": "2021-03",
+    "Attribution": "DE-NW: © GeoBasis-DE / NRW (2025), dl-zero-de/2.0, www.geobasis.nrw.de",
+    "TileIndex": "32_469_5680",
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+
+</code></pre>
+
+
+
+         <hr>
+         <h3 class="request">API-Attribute 'UTMPointRequest'</h3>
+         <div class="table-responsive">
+         <table>
+            <tr>
+               <th>Attribut</th>
+               <th>Subattribut</th>
+               <th>Datentyp</th>
+               <th>Beschreibung</th>
+            </tr>
+            <tr>
+               <td>Type</td>
+               <td></td>
+               <td>string</td>
+               <td>Typ der Anfrage (UTMPointRequest)</td>
+            </tr>
+            <tr>
+               <td>ID</td>
+               <td></td>
+               <td>string</td>
+               <td>ID der Anfrage</td>
+            </tr>
+            <tr>
+               <td>Attributes</td>
+               <td></td>
+               <td>struct</td>
+               <td>Attribute der Anfrage</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Zone</td>
+               <td>int</td>
+               <td>UTM Zone (32/33)</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Easting</td>
+               <td>float</td>
+               <td>Easting, X, Ostwert</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Northing</td>
+               <td>float</td>
+               <td>Northing, Y, Nordwert</td>
+            </tr>
+         </table>
+         </div>
+
+         <h3 class="response">API-Attribute 'UTMPointResponse'</h3>
+         <div class="table-responsive">
+         <table>
+            <tr>
+               <th>Attribut</th>
+               <th>Subattribut</th>
+               <th>Subattribut</th>
+               <th>Datentyp</th>
+               <th>Beschreibung</th>
+            </tr>
+            <tr>
+               <td>Type</td>
+               <td></td>
+               <td></td>
+               <td>string</td>
+               <td>Typ der Antwort (UTMPointResponse)</td>
+            </tr>
+            <tr>
+               <td>ID</td>
+               <td></td>
+               <td></td>
+               <td>string</td>
+               <td>ID der Antwort</td>
+            </tr>
+            <tr>
+               <td>Attributes</td>
+               <td></td>
+               <td></td>
+               <td>struct</td>
+               <td>Attribute der Antwort</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Zone</td>
+               <td></td>
+               <td>int</td>
+               <td>UTM Zone</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Easting</td>
+               <td></td>
+               <td>float</td>
+               <td>Easting, X, Ostwert</td>
+            </tr>
+             <tr>
+               <td></td>
+               <td>Northing</td>
+               <td></td>
+               <td>float</td>
+               <td>Northing, Y, Nordwert</td>
+            </tr>
+           <tr>
+               <td></td>
+               <td>Elevation</td>
+               <td></td>
+               <td>float</td>
+               <td>Höhenwert (Meter)</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Actuality</td>
+               <td></td>
+               <td>string</td>
+               <td>Aktualität der Daten</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Attribution</td>
+               <td></td>
+               <td>string</td>
+               <td>Attribution der Daten</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>TileIndex</td>
+               <td></td>
+               <td>string</td>
+               <td>Index des Quelldaten</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>IsError</td>
+               <td></td>
+               <td>bool</td>
+               <td>Fehler (ja/nein)</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Error</td>
+               <td></td>
+               <td>struct</td>
+               <td>Fehlerdetails</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Code</td>
+               <td>string</td>
+               <td>Fehlernummer</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Title</td>
+               <td>string</td>
+               <td>Fehlerbeschreibung</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Details</td>
+               <td>string</td>
+               <td>Fehlerdetaillierung</td>
+            </tr>
+         </table>
+         </div>
+
+          <hr>
+         <h4 class="request">UTMPointRequest (Beispiel)</h4>
+         <pre class="request"><code>
+#!/bin/bash
+#
+# Abfrage der Höhendaten für einen UTM Punkt 
+
+postdata=$(cat &lt;&lt;EOF
+{
+  "Type": "UTMPointRequest",
+  "ID": "GPS-Referenzpunkt Hannover",
+  "Attributes": {
+      "Zone": 32,
+      "Easting": 550251.23,
+      "Northing": 5802052.35
+  }
+}
+EOF
+)
+
+echo "postdata =\n$postdata"
+
+curl \
+--silent \
+--include \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--data "$postdata" \
+https://api.hoehendaten.de:14444/v1/utmpoint
+
+</code></pre>
+
+
+         <h4 class="response">UTMPointResponse:</h4>
+         <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 430
+date: Mon, 12 May 2025 07:39:07 GMT
+
+{
+  "Type": "UTMPointResponse",
+  "ID": "GPS-Referenzpunkt Hannover",
+  "Attributes": {
+    "Zone": 32,
+    "Easting": 550251.23,
+    "Northing": 5802052.35,
+    "Elevation": 53.62300109863281,
+    "Actuality": "2016-04-18",
+    "Attribution": "DE-NI: © GeoBasis-DE / LGLN (2025), cc-by/4.0",
+    "TileIndex": "32_550_5802",
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+
+</code></pre>
+
+<h4>Anmerkungen</h4>
+
+         <ul>
+            <li>Aus den Eingaben werden direkt die Höhendaten ermittelt.</li>
+            <li>Es findet keine Transformation der Eingabedaten statt.</li>
+            <li>Die Eingaben müssen dem CRS der Quelldaten entsprechen.</li>
+         </ul>
+
+
+         <h4>UTM-Zonen</h4>
+         <p>    
+            Deutschland befindet sich überwiegend in der Zone 32 (6-12°). Marginale Flächen im Westen von Nordrhein-Westfalen befinden sich in der Zone 31 (0-6°).
+            Größere Gebiete im Osten von Deutschland befinden sich in der Zone 33 (12-18°). Bundesländer mit Flächen in zwei Zonen ordnen ihr gesamtes Gebiet logisch
+            einer einzigen Zone zu und dementsprechend sind die UTM-Koordinaten zu wählen.
+         </p>
+         <div class="table-responsive">
+         <table>
+            <thead>
+               <tr>
+                  <th>Bundesland</th>
+                  <th>Zone 32</th>
+                  <th>Zone 33</th>
+                  <th>DGM1-Daten</th>
+                  <th>Anmerkungen</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>Baden-Württemberg</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Bayern</td>
+                  <td>Ja</td>
+                  <td>Ja</td>
+                  <td>32</td>
+                  <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
+               </tr>
+               <tr>
+                  <td>Berlin</td>
+                  <td>Nein</td>
+                  <td>Ja</td>
+                  <td>Die Daten für Berlin sind in den Daten für Brandenburg enthalten (Zone 33).</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Brandenburg</td>
+                  <td>Ja</td>
+                  <td>Ja</td>
+                  <td>33</td>
+                  <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
+               </tr>
+               <tr>
+                  <td>Bremen</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Hamburg</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Hessen</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Mecklenburg-Vorpommern</td>
+                  <td>Ja</td>
+                  <td>Ja</td>
+                  <td>33</td>
+                  <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
+               </tr>
+               <tr>
+                  <td>Niedersachsen</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Nordrhein-Westfalen</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>NRW hat marginale Flächen in der Zone 31. Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
+               </tr>
+               <tr>
+                  <td>Rheinland-Pfalz</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Saarland</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Sachsen</td>
+                  <td>Ja</td>
+                  <td>Ja</td>
+                  <td>33</td>
+                  <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
+               </tr>
+               <tr>
+                  <td>Sachsen-Anhalt</td>
+                  <td>Ja</td>
+                  <td>Ja</td>
+                  <td>32</td>
+                  <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
+               </tr>
+               <tr>
+                  <td>Schleswig-Holstein</td>
+                  <td>Ja</td>
+                  <td>Nein</td>
+                  <td>32</td>
+                  <td>-</td>
+               </tr>
+               <tr>
+                  <td>Thüringen</td>
+                  <td>Ja</td>
+                  <td>Ja</td>
+                  <td>32</td>
+                  <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
+               </tr>
+            </tbody>
+         </table>
+         </div>
+
+         <hr>
+         <h3 class="request">API-Attribute 'GPXRequest'</h3>
+         <div class="table-responsive">
+         <table>
+            <tr>
+               <th>Attribut</th>
+               <th>Subattribut</th>
+               <th>Datentyp</th>
+               <th>Beschreibung</th>
+            </tr>
+            <tr>
+               <td>Type</td>
+               <td></td>
+               <td>string</td>
+               <td>Typ der Anfrage (GPXRequest)</td>
+            </tr>
+            <tr>
+               <td>ID</td>
+               <td></td>
+               <td>string</td>
+               <td>ID der Anfrage</td>
+            </tr>
+            <tr>
+               <td>Attributes</td>
+               <td></td>
+               <td>struct</td>
+               <td>Attribute der Anfrage</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>GPXData</td>
+               <td>string</td>
+               <td>GPX-Datei (Base64-Kodierung)</td>
+            </tr>
+         </table>
+         </div>
+ 
+         <h3 class="response">API-Attribute 'GPXResponse'</h3>
+         <div class="table-responsive">
+         <table>
+            <tr>
+               <th>Attribut</th>
+               <th>Subattribut</th>
+               <th>Subattribut</th>
+               <th>Datentyp</th>
+               <th>Beschreibung</th>
+            </tr>
+            <tr>
+               <td>Type</td>
+               <td></td>
+               <td></td>
+               <td>string</td>
+               <td>Typ der Antwort (GPXResponse)</td>
+            </tr>
+            <tr>
+               <td>ID</td>
+               <td></td>
+               <td></td>
+               <td>string</td>
+               <td>ID der Antwort</td>
+            </tr>
+            <tr>
+               <td>Attributes</td>
+               <td></td>
+               <td></td>
+               <td>struct</td>
+               <td>Attribute der Antwort</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>GPXPoints</td>
+               <td></td>
+               <td>int</td>
+               <td>Anzahl Punkte in der GPX-Datei</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>DGMPoints</td>
+               <td></td>
+               <td>int</td>
+               <td>Anzahl Punkte mit DGM-Höhendaten</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Attributions</td>
+               <td></td>
+               <td>[]string</td>
+               <td>Attributionen der Daten</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td>Error</td>
+               <td></td>
+               <td>struct</td>
+               <td>Fehlerdetails</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Code</td>
+               <td>string</td>
+               <td>Fehlernummer</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Title</td>
+               <td>string</td>
+               <td>Fehlerbeschreibung</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td></td>
+               <td>Details</td>
+               <td>string</td>
+               <td>Fehlerdetaillierung</td>
+            </tr>
+         </table>
+         </div>
+         <hr>
+         <h4 class="request">GPXRequest (Beispiel)</h4>
+         <pre class="request"><code>
+#!/bin/bash
+#
+# Abfrage der Höhendaten für alle Punkte einer GPX-Datei
+
+gpxdata=$(cat &lt;&lt;EOF
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1"&gt;
+  &lt;wpt lat="51.276389" lon="8.558333"&gt;
+    &lt;name&gt;Langenberg (Rothaargebirge, höchster Berg in NRW)&lt;/name&gt;
+  &lt;/wpt&gt;
+  &lt;wpt lat="51.179444" lon="8.488889"&gt;
+    &lt;name&gt;Kahler Asten (Rothaargebirge, zweithöchster Berg in NRW)&lt;/name&gt;
+  &lt;/wpt&gt;
+&lt;/gpx&gt;
+EOF
+)
+gpxdataBase64=$(base64 -w 0 &lt;&lt;&lt; "$gpxdata")
+
+postdata=$(cat &lt;&lt;EOF
+{
+  "Type": "GPXRequest",
+  "ID": "rothaargebirge.gpx",
+  "Attributes": {
+      "GPXData": "$gpxdataBase64"
+  }
+}
+EOF
+)
+
+echo "postdata =\n$postdata"
+
+curl \
+--silent \
+--include \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--data "$postdata" \
+https://api.hoehendaten.de:14444/v1/gpx
+
+</code></pre>
+         <h4 class="response">GPXResponse ('GPXData' gekürzt)</h4>
+         <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 1531
+date: Tue, 22 Apr 2025 08:08:23 GMT
+
+{
+  "Type": "GPXResponse",
+  "ID": "rothaargebirge.gpx",
+  "Attributes": {
+    "GPXData": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iV...yMDIxLTAzPC9kZXNjPgoJPC93cHQ+CjwvZ3B4Pg==",
+    "GPXPoints": 2,
+    "DGMPoints": 2,
+    "Attributions": [
+      "DE-NW: © GeoBasis-DE / NRW (2025), dl-zero-de/2.0, www.geobasis.nrw.de"
+    ],
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+        </code></pre>
+         <h4 class="response">Erzeugte GPX-Datei</h4>
+         <pre class="response"><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;gpx  xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://github.com/tkrajina/gpxgo"&gt;
+    &lt;metadata&gt;
+        &lt;desc&gt;Die Höhenangaben (ele) basieren auf DGM-Daten mit hoher Genauigkeit.&lt;/desc&gt;
+        &lt;author&gt;&lt;/author&gt;
+        &lt;copyright author="DE-NW: © GeoBasis-DE / NRW (2025), dl-zero-de/2.0, www.geobasis.nrw.de"&gt;&lt;/copyright&gt;
+    &lt;/metadata&gt;
+    &lt;wpt lat="51.276389" lon="8.558333"&gt;
+        &lt;ele&gt;843.07&lt;/ele&gt;
+        &lt;name&gt;Langenberg (Rothaargebirge, höchster Berg in NRW)&lt;/name&gt;
+        &lt;desc&gt;ele: DE-NW, 2021-03&lt;/desc&gt;
+    &lt;/wpt&gt;
+    &lt;wpt lat="51.179444" lon="8.488889"&gt;
+        &lt;ele&gt;839.83&lt;/ele&gt;
+        &lt;name&gt;Kahler Asten (Rothaargebirge, zweithöchster Berg in NRW)&lt;/name&gt;
+        &lt;desc&gt;ele: DE-NW, 2021-03&lt;/desc&gt;
+    &lt;/wpt&gt;
+&lt;/gpx&gt;
+            </code></pre>
+            <hr>
+            <h3>Abfragelimit</h3>
+            <p>Pro Stunde sind maximal 18.000 Punktabfragen zulässig. Dies entspricht im Mittel 5 Punktabfragen pro Sekunde. Bei einer GPX-Datei zählt jeder einzelne Koordinatenpunkt als eine Punktabfrage.</p>
+        </div>
+      <footer>
+         <p>&copy; 2025 - Höhendaten für Deutschland</p>
+      </footer>
+   </body>
+</html>

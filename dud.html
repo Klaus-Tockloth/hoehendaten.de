@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Höhendaten - Dies und Das</title>
+      <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+      <nav>
+         <ul>
+            <li><a href="index.html">Start</a></li>
+            <li><a href="karte.html">Karte</a></li>
+            <li><a href="dud.html">DuD</a></li>
+            <li class="dropdown">
+               <a href="javascript:void(0);" class="dropbtn">Dienste</a>
+               <ul class="dropdown-content">
+                  <li><a href="punkt.html">Punkt Lon/Lat</a></li>
+                  <li><a href="punkt_utm.html">Punkt UTM</a></li>
+                  <li><a href="gpx.html">GPX-Datei</a></li>
+               </ul>
+            </li>
+            <li><a href="api.html">API</a></li>
+            <li><a href="impressum.html">Impressum</a></li>
+         </ul>
+      </nav>
+      <div class="container">
+         <h2>Dies und Das</h2>
+         <h3>Möglichkeiten der Nutzung der Höhendaten</h3>
+         <ul>
+            <li>Interaktiv über die Karte.</li>
+            <li>Konkrete Abfrage einzelner Punkte.</li>
+            <li>Aktualisierung aller Punkte in einer GPX-Datei.</li>
+            <li> Nutzung des Application Programming Interfaces (API).</li>
+         </ul>
+         <h3>Airborne Laser Scanning (ALS)</h3>
+         <p>Airborne Laser Scanning (ALS), auch bekannt als LiDAR (Light Detection and Ranging), ist ein fernerkundungsbasiertes
+            Verfahren zur hochpräzisen dreidimensionalen Erfassung der Erdoberfläche. Dabei sendet ein auf einem Flugzeug,
+            Hubschrauber oder einer Drohne montierter Laserscanner Laserimpulse in Richtung Boden aus. Die Zeit, die diese Impulse
+            für den Weg zum Objekt und zurück zum Sensor benötigen, wird gemessen, um Entfernungen zu berechnen. In Kombination mit
+            GPS-Daten zur Positionsbestimmung und einem Inertialmesssystem (INS) zur Erfassung der Fluglage entstehen so präzise
+            3D-Punktwolken der gescannten Oberfläche.
+         </p>
+         <img src="./images/Airborne_Laserscan-DSC_0089w-500x328.jpg">
+         <p><small>Foto von Peter Haas, CC BY-SA 3.0, <a href="https://commons.wikimedia.org/w/index.php?curid=29077252">Link</a>
+            </small>
+         </p>
+         <p>Die aus diesen Rohdaten gewonnenen Informationen sind vielfältig nutzbar, beispielsweise zur Erstellung von digitalen
+            Geländemodellen, zur Analyse von Vegetationshöhen oder zur Erfassung von Gebäudestrukturen. Allerdings ist die Nachbearbeitung
+            der Rohdaten ein wichtiger und oft aufwendiger Schritt. Dieser Prozess beinhaltet unter anderem die Filterung von Fehlmessungen,
+            die Klassifizierung der Punkte (z.B. Boden, Vegetation, Gebäude) und die Georeferenzierung, um die Daten exakt zu verorten.
+            Die Komplexität der Daten und die Notwendigkeit, präzise Ergebnisse zu erzielen, machen diese Nachbearbeitung zu einem
+            anspruchsvollen Teil des ALS-Verfahrens. Trotzdem hat sich ALS aufgrund seiner Fähigkeit, auch unter Vegetationsbedeckung 
+            detaillierte Geländedaten zu liefern, in vielen Bereichen wie der Forstwirtschaft, Archäologie, Stadtplanung und dem
+            Umweltmonitoring etabliert.
+         </p>
+         <h3>Qualitätskriterien der DGM1-Daten</h3>
+         <p>Die Bundesländer sind bestrebt folgende Kriterien einzuhalten:</p>
+         <ul>
+            <li>Genauigkeit der georeferenzierten Höhe:</li>
+            <ul>
+               <li>flach bis wenig geneigtes, offenes Gelände: bis zu ±10 cm + 5 % der Rasterweite (entspricht bis zu +/-15 cm)</li>
+               <li>bei stark geneigtem Gelände mit dichter Vegetation: bis zu ±10 cm + 20 % der Rasterweite  (entspricht bis zu ±30 cm)</li>
+               <li>Die Angaben zur geometrischen Genauigkeit beziehen sich auf eine Sicherheitswahrscheinlichkeit von 95% (2σ).</li>
+            </ul>
+            <li>Genauigkeit der georeferenzierten Lage:</li>
+            <ul>
+               <li>Es wird eine Lagegenauigkeit von xy ≤ 0,3 m angestrebt.</li>
+            </ul>
+            <li>Aktualität der Daten:</li>
+            <ul>
+               <li>Die Grundaktualität der Daten beträgt 10 Jahre.</li>
+               <li>Für hochwasser- und bodensenkungsgefährdete Gebiete wird eine Aktualität von 3 Jahren angestrebt.</li>
+            </ul>
+            <li>Koordinatenreferenzsystem Lage:</li>
+            <ul>
+               <li>Abbildung: UTM32, UTM33</li>
+               <li>Ellipsoid: GRS80</li>
+               <li>Datum: ETRS89</li>
+               <li>EPSG-Code: 25832, 25833</li>
+            </ul>
+            <li>Koordinatenreferenzsystem Höhe:</li>
+            <ul>
+               <li>Deutsches Haupthöhennetz: DHHN2016</li>
+               <li>EPSG-Code: 7837</li>
+            </ul>
+            <li>Datenformat:</li>
+            <ul>
+               <li>GEOTIFF, 32 bit, Float, Komprimierung LZW, Hintergrund- / NoData-Wert -9999</li>
+               <li>Optional sind weitere Formate (z.B. XYZ) möglich.</li>
+            </ul>
+            <li>Kachelgröße:</li>
+            <ul>
+               <li>Das DGM1 wird in Kacheln bereitgestellt.</li>
+               <li>Die Kachelgröße beträgt 1 km x 1 km.</li>
+               <li>Die Rasterweite beträgt 1 Meter.</li>
+               <li>Die Rasterelementposition liegt im Zentrum auf 0,5 m Positionen (= Pixelmitte).</li>
+               <li>Der Ursprung der Kachel wird in der linken unteren Ecke des linken unteren Rasterelementes abgebildet.</li>
+               <li>Die Kachelbegrenzungen sind stets auf ganzzahlige Kilometerwerte im jeweiligen Bezugssystem ausgerichtet.</li>
+            </ul>
+         </ul>
+         <img src="./images/dgm-raster-297x288.png" class="img-special-size">
+         <h3>Absolute Genauigkeit der Daten</h3>
+         <p>Das DGM1 in Deutschland bietet eine hohe absolute Höhengenauigkeit, die typischerweise im Bereich von ±15 cm bis ±30 cm liegt,
+            abhängig von der Geländebeschaffenheit. Die absolute Lagegenauigkeit der Rohdaten (Laserscans) liegt oft bei ≤ 30 cm.
+         </p>
+         <p>Die Hersteller von LiDAR-Systemen geben für aktuelle Scanner und optimalen Bedingungen, Genauigkeiten von 2-5 cm vertikal (Höhe) und 5-10 cm horizontal (Lage) an.
+            Wenn Bundesländer neue Befliegungen beauftragen, werden Genauigkeitsanforderungen spezifiziert, die oft in diesem Rahmen liegen.
+         </p>
+         <h3>Relative Genauigkeit der Daten</h3>
+         <p>Die relative Genauigkeit benachbarter Punkte, sowohl in Höhe als auch in Lage, wird allgemein als wesentlich höher eingeschätzt, da sich
+            systematische Fehler hier weniger stark auswirken. Die relative Genauigkeit kann man zum Beispiel selbst beurteilen, indem man die Höhenwerte für 
+            die Laufbahn einer offenen Sportanlage ermittelt. Bei einer planen Laufbahn sollten sich nur sehr geringe Höhenunterschiede ergeben.
+         </p>
+         <h3>Rückgabewerte der API</h3>
+         <p>Das Application Programming Interface (API) gibt die Höhendaten als unveränderte Gleitkommazahl an den Aufrufer zurück. Beispiel: 53.62300109863281 Meter.</p>
+         <h3>Anzeige der Höhen- und Lagewerte auf der Karte</h3>
+         <p>Um keine Scheingenauigkeit zu suggerieren, werden die Höhenangaben auf Zentimeter gerundet. Beispiel: 53.62 Meter.
+            Das Gleiche gilt für die Lageangaben in Lon/Lat-Koordinaten, die mit einer Genauigkeit von jeweils 7 Nachkommastellen ausgegeben werden.
+            Dies entspricht in Deutschland in etwa einer Genauigkeit von einem Zentimeter.
+         </p>
+         <h3>Basisdaten</h3>
+         <p>Die Höhendaten werden von den Landesvermessungsämtern der Bundesländer zur Verfügung gestellt.
+            In der Regel als Kacheln von 1x1km im GeoTIFF-Format und immer in UTM-Projektion.
+            Die Quelldaten werden inhaltlich nicht verändert. Für einzelne Bundesländer sind jedoch Formatumwandlungen (XYZ -> GeoTIFF)
+            oder Umkachelungen (2x2km -> 1x1km) erforderlich. Auch das Benennungsschema der Quelldaten wird nicht geändert. Über einen einheitlichen,
+            zusätzlichen Kachelindex (zone_easting_northing) kann jede Kachel schnell gefunden werden.
+            Jedes Bundesland ordnet sein Verwaltungsgebiet logisch einer UTM-Zone zu. Daraus ergeben sich, homogen für ein Bundesland, Kacheln
+            in den UTM-Zonen 32 oder 33. Kacheln, die Gebiete mehrerer Bundesländer abdecken, werden von allen betroffenen Bundesländern (zwei oder drei) bereitgestellt.
+            Messpunkte jenseits der Bundeslandgrenze werden in der Regel mit NoData-Werten (meist -9999) gefüllt.
+         </p>
+         <img src="./images/details-linie-500x400.png">
+         <p><small>Details zu einer Strecke.</small></p>
+         <h3>Mögliche Erweiterungen</h3>
+         <ul>
+            <li>Anzeige der (Gelände-) Schummerung (Hillshading).</li>
+            <li>Anzeige von Höhenschichtlinien.</li>
+            <li>Anzeige der (Gelände-) Rauigkeit.</li>
+         </ul>
+         <p>Zur Erleichterung der Orientierung sollen ausgewählte OSM-Objekte (z.B. Straßen oder Häuser)
+            angezeigt werden können. Die Parameter zur Erzeugung der genannten Anzeigen sollen durch den Benutzer beeinflusst oder definiert werden können.
+            Zum Beispiel die Position der Beleuchtungsquelle bei der Schummerung oder die Äquidistanz bei den Höhenschichtlinien.
+         </p>
+        <img src="./images/hoehenschichtlinien-500x400.png">
+         <p><small>Individuell generierte Höhenschichtlinien mit einer Äquidistanz von 1.0 Meter.</small></p>
+        <h3>Anmerkungen und Anregungen</h3>
+         <p>Wir freuen uns auf Ihr <a href="mailto:printmaps.service@gmail.com">Feedback</a>.
+         </p>
+      </div>
+      <footer>
+         <p>&copy; 2025 - Höhendaten für Deutschland</p>
+      </footer>
+   </body>
+</html>

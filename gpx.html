@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="de">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Höhendaten - GPX</title>
+      <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+       <nav>
+         <ul>
+            <li><a href="index.html">Start</a></li>
+            <li><a href="karte.html">Karte</a></li>
+            <li><a href="dud.html">DuD</a></li>
+            <li class="dropdown">
+               <a href="javascript:void(0);" class="dropbtn">Dienste</a>
+               <ul class="dropdown-content">
+                  <li><a href="punkt.html">Punkt Lon/Lat</a></li>
+                  <li><a href="punkt_utm.html">Punkt UTM</a></li>
+                  <li><a href="gpx.html">GPX-Datei</a></li>
+               </ul>
+            </li>
+            <li><a href="api.html">API</a></li>
+            <li><a href="impressum.html">Impressum</a></li>
+         </ul>
+      </nav>
+      <div class="container">
+         <h2>Höheninformationen zu allen Punkten einer GPX-Datei</h2>
+         <!-- Bereich für die Eingabefelder (Datei) -->
+         <div class="input-section section-box">
+            <h3>Eingabe</h3>
+            <div class="input-group">
+               <label for="gpxFile">GPX-Datei:</label>
+               <input type="file" id="gpxFile" accept=".gpx">
+            </div>
+         </div>
+         <!-- Bereich für den Button -->
+         <div class="button-section section-box">
+            <button id="queryButton">Abfrage der Höhendaten</button>
+         </div>
+         <!-- Bereich für die Ausgabe -->
+         <div class="output-section section-box">
+            <h3>Ergebnis</h3>
+            <div id="results"></div>
+         </div>
+      </div>
+
+      <script>
+         // Wait for the DOM to be fully loaded
+         document.addEventListener('DOMContentLoaded', () => {
+             // Get references to the HTML elements
+             const gpxFileInput = document.getElementById('gpxFile');
+             const queryButton = document.getElementById('queryButton');
+             const resultsDiv = document.getElementById('results');
+             const apiUrl = "https://api.hoehendaten.de:14444/v1/gpx";
+
+             // Function to convert ArrayBuffer to Base64 string
+             function arrayBufferToBase64(buffer) {
+                 let binary = '';
+                 const bytes = new Uint8Array(buffer);
+                 const len = bytes.byteLength;
+                 for (let i = 0; i < len; i++) {
+                     binary += String.fromCharCode(bytes[i]);
+                 }
+                 return btoa(binary);
+             }
+
+             // Function to convert Base64 string to binary string (for Blob)
+              function base64ToBinaryString(base64) {
+                 return atob(base64);
+             }
+
+             // Function to display results or errors
+             function displayResult(className, htmlContent) {
+                 resultsDiv.className = className; // Set a class for styling (e.g., 'success', 'error', 'loading')
+                 resultsDiv.innerHTML = htmlContent;
+             }
+
+             // Add event listener to the button
+             queryButton.addEventListener('click', async () => {
+                 const file = gpxFileInput.files[0];
+                 // --- Basic Input Validation ---
+                 if (!file) {
+                     displayResult('error', '<p class="status-message">Fehler: Bitte wählen Sie eine GPX-Datei aus.</p>');
+                     return;
+                 }
+
+                 // --- Prepare Request ---
+                 displayResult('loading', '<p class="status-message">Lade ... Lese Datei ... Sende Anfrage an den Dienst ...</p>');
+
+                 const reader = new FileReader();
+
+                 reader.onloadstart = () => {
+                      displayResult('loading', '<p class="status-message">Lade ... Lese GPX-Datei ...</p>');
+                 };
+
+                 reader.onerror = (e) => {
+                     console.error("Fehler beim Lesen der Datei:", e);
+                     displayResult('error', `<p class="status-message">Fehler beim Lesen der Datei: ${e.target.error.message}</p>`);
+                 };
+
+                 reader.onload = async (e) => {
+                     try {
+                         displayResult('loading', '<p class="status-message">Lade ... Lese Datei ... Sende an den Dienst ...</p>');
+                         // Get the file content as ArrayBuffer
+                         const arrayBuffer = e.target.result;
+
+                         // Base64 encode the file content
+                         const base64GpxData = arrayBufferToBase64(arrayBuffer);
+                         if (!base64GpxData) {
+                              throw new Error("Base64-Kodierung fehlgeschlagen.");
+                         }
+
+                         // Construct the JSON payload based on the GPXRequest structure
+                         const requestPayload = {
+                             Type: "GPXRequest",
+                             ID: `WebApp-${Date.now()}-${Math.random().toString(36).substring(7)}`, // A simple unique ID
+                             Attributes: {
+                                 GPXData: base64GpxData
+                             }
+                         };
+
+                         // --- Send HTTPS Request ---
+                         const response = await fetch(apiUrl, {
+                             method: 'POST', // HTTP method is POST
+                             headers: {
+                                 'Content-Type': 'application/json',
+                                 'Accept': 'application/json'
+                             },
+                             body: JSON.stringify(requestPayload)
+                         });
+
+                         // --- Process Response ---
+                          let data = null;
+                          let rawText = null;
+
+                          try {
+                              // Attempt to read the response as text first in case JSON parsing fails
+                              rawText = await response.text();
+                              // Attempt to parse the text as JSON
+                              data = JSON.parse(rawText);
+                              console.log("API Response (Parsed JSON):", data);
+                          } catch (jsonError) {
+                              // JSON parsing failed, rawText still holds the response body
+                              console.warn("JSON-Parsen fehlgeschlagen:", jsonError);
+                              console.log("Rohe Antwort (Text):", rawText);
+                          }
+
+
+                          // Check for HTTP errors first
+                         if (!response.ok) {
+                             // If HTTP status is not OK (e.g., 404, 500, 400)
+                             console.error("HTTP-Fehler:", response.status);
+
+                             let errorHtml = `<p class="status-message">Serverfehler mit Status ${response.status}:</p>`;
+
+                             // If data was successfully parsed as JSON and contains error details
+                             if (data && data.Attributes && data.Attributes.IsError === true) {
+                                 const errorAttributes = data.Attributes;
+
+                                 errorHtml += '<table class="results-table">';
+                                  if (errorAttributes.Error) {
+                                      const errorDetail = errorAttributes.Error;
+                                      if (errorDetail.Code !== undefined) errorHtml += `<tr><td><strong>Fehlercode</strong></td><td>${errorDetail.Code}</td></tr>`;
+                                      if (errorDetail.Title !== undefined) errorHtml += `<tr><td><strong>Fehlertitel</strong></td><td>${errorDetail.Title}</td></tr>`;
+                                      if (errorDetail.Detail !== undefined) errorHtml += `<tr><td><strong>Fehlerdetail</strong></td><td>${errorDetail.Detail}</td></tr>`;
+                                  }
+                                  errorHtml += '</table>';
+                             } else if (rawText !== null) {
+                                 // If not a structured JSON error, display raw text if available
+                                 errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
+                             } else {
+                                  // Fallback if no raw text could be retrieved
+                                 errorHtml += `<br>Konnte die Antwort vom Server nicht lesen.`;
+                             }
+
+                             displayResult('error', errorHtml);
+                             return;
+                         }
+
+                         // --- If response is OK (status 2xx) ---
+                         if (data && data.Attributes) {
+                              // Check for Application-Level Errors in JSON (even with 2xx status)
+                             if (data.Attributes.IsError === true) {
+                                  const errorAttributes = data.Attributes;
+                                  let errorHtml = '<p class="status-message">Erfolgreiche HTTP-Antwort, aber Anwendungsfehler gemeldet.</p>';
+
+                                  errorHtml += '<table class="results-table">';
+                                   if (errorAttributes.Error) {
+                                       const errorDetail = errorAttributes.Error;
+                                       if (errorDetail.Code !== undefined) errorHtml += `<tr><td><strong>Fehlercode</strong></td><td>${errorDetail.Code}</td></tr>`;
+                                       if (errorDetail.Title !== undefined) errorHtml += `<tr><td><strong>Fehlertitel</strong></td><td>${errorDetail.Title}</td></tr>`;
+                                       if (errorDetail.Detail !== undefined) errorHtml += `<tr><td><strong>Fehlerdetail</strong></td><td>${errorDetail.Detail}</td></tr>`;
+                                   }
+                                   errorHtml += '</table>';
+
+                                   console.error("API-Anwendungsfehler trotz OK-Antwort:", data.Attributes);
+                                   displayResult('error', errorHtml);
+                                   return;
+                              }
+
+                              // If no errors, display Success and specified fields in a table
+                              let resultsHtml = '';
+                              resultsHtml += '<p class="status-message">Höhendaten erfolgreich verarbeitet:</p>';
+                              resultsHtml += '<table class="results-table">';
+                              const attributes = data.Attributes;
+
+                              if (attributes.GPXPoints !== undefined) resultsHtml += `<tr><td><strong>Anzahl Punkte in der GPX-Datei</strong></td><td>${attributes.GPXPoints}</td></tr>`;
+                              if (attributes.DGMPoints !== undefined) resultsHtml += `<tr><td><strong>Anzahl Punkte mit DGM-Höhendaten</strong></td><td>${attributes.DGMPoints}</td></tr>`;
+
+                              if (Array.isArray(attributes.Attributions) && attributes.Attributions.length > 0) {
+                                  resultsHtml += `<tr><td><strong>Attribution(en)</strong></td><td>`;
+                                  attributes.Attributions.forEach((attr, index) => {
+                                      resultsHtml += `${attr}${index < attributes.Attributions.length - 1 ? '<br>' : ''}`;
+                                  });
+                                  resultsHtml += `</td></tr>`;
+                              } else if (attributes.Attributions !== undefined) {
+                                   // Handle case where Attributions is not an array or is empty but the field exists
+                                   resultsHtml += `<tr><td><strong>Attribution(en)</strong></td><td>Keine Attributionen verfügbar oder das Format der Attributionen ist unerwartet.</td></tr>`;
+                              }
+
+                              resultsHtml += '</table>';
+
+                              // --- Extract Processed GPX Data and prepare for download ---
+                             const base64ResponseGpx = attributes.GPXData || '';
+
+                             if (base64ResponseGpx) {
+                                  let decodedGpxBinaryString;
+                                  try {
+                                      decodedGpxBinaryString = base64ToBinaryString(base64ResponseGpx);
+                                      if (!decodedGpxBinaryString) {
+                                          throw new Error("Base64-Dekodierung ergab eine leere Zeichenfolge.");
+                                      }
+                                  } catch (decodeError) {
+                                      console.error("Base64-Dekodierungsfehler:", decodeError);
+                                      resultsHtml += `<p class="status-message">Fehler beim Dekodieren der empfangenen GPX-Daten (Base64): ${decodeError.message}</p>`;
+                                      // Still display other results, but indicate decode error
+                                  }
+
+                                  if (decodedGpxBinaryString) {
+                                      // Convert the binary string to a Uint8Array
+                                      const byteNumbers = new Array(decodedGpxBinaryString.length);
+                                      for (let i = 0; i < decodedGpxBinaryString.length; i++) {
+                                        byteNumbers[i] = decodedGpxBinaryString.charCodeAt(i);
+                                      }
+                                      const byteArray = new Uint8Array(byteNumbers);
+
+                                      // Create a Blob from the Uint8Array
+                                      const gpxBlob = new Blob([byteArray], { type: 'application/gpx+xml' });
+
+                                      // Create a download link
+                                      const downloadUrl = URL.createObjectURL(gpxBlob);
+
+                                       // --- Generate output filename based on the new logic ---
+                                       const originalFileName = file.name;
+                                       const lastDotIndex = originalFileName.lastIndexOf('.');
+                                       let outputFileName;
+
+                                       if (lastDotIndex === -1 || lastDotIndex === 0) {
+                                           outputFileName = `${originalFileName}.dgm`;
+                                       } else {
+                                           const fileNameWithoutExtension = originalFileName.substring(0, lastDotIndex);
+                                           const extension = originalFileName.substring(lastDotIndex + 1);
+                                           outputFileName = `${fileNameWithoutExtension}.dgm.${extension}`;
+                                       }
+                                       // --- End filename generation logic ---
+
+                                       // Add download link to results HTML
+                                       resultsHtml += `<p class="download-link-area"><a id="downloadLink" href="${downloadUrl}" download="${outputFileName}">Download der GPX-Datei '${outputFileName}'</a></p>`;
+                                  }
+                             } else {
+                                  resultsHtml += '<p class="status-message">Keine verarbeiteten GPX-Daten in der Antwort enthalten.</p>';
+                             }
+
+                             // Set the content and the overall success class for the #results div
+                             displayResult('success', resultsHtml);
+                         } else {
+                              // If response is OK but expected data structure is missing
+                              let errorHtml = `<p class="status-message">Erfolgreiche HTTP-Antwort (${response.status}), aber die erwarteten Daten wurden nicht gefunden.</p>`;
+                              if (rawText !== null) {
+                                 errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
+                              }
+                              displayResult('error', errorHtml); // Display as error because expected data is missing
+                         }
+                     } catch (error) {
+                         // --- Handle Network Errors or Errors Thrown Before Fetch/Processing ---
+                         console.error("Fehler bei Abruf oder Verarbeitung:", error); // Log the error for debugging
+                         displayResult('error', `<p class="status-message">Fehler beim Abfragen der API oder während der Verarbeitung:</p><p>${error.message}</p>`);                     }
+                 };
+
+                 // Read the file as an ArrayBuffer
+                 reader.readAsArrayBuffer(file);
+             });
+         });
+      </script>
+      <footer>
+         <p>&copy; 2025 - Höhendaten für Deutschland</p>
+      </footer>
+   </body>
+</html>

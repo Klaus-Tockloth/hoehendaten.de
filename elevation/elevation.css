@@ -1,0 +1,152 @@
+/*
+Purpose:
+- Standardstil für elevation.js.
+
+Releases:
+- v1.0.0 - 2025-05-25: initial release
+
+Copyright:
+- © 2025  | Franz Kolberg
+
+License:
+- MIT License
+
+Description:
+- Standardstil für die leaflet-Erweiterung elevation.js.
+*/
+
+:root {
+  --popup-bg-color: #cce7ff; /* Helles Blau für Popup-Hintergründe */
+}
+
+/* --- ELEVATION CONTROL BAR --- */
+
+.elevation-bar {
+  display: block;
+}
+
+.elevation-btn.pressed {
+  background-color: rgb(192, 255, 132) !important; /* Hervorhebung für gedrückten Button */
+}
+
+.elevation-bar .elevation-btn-clear,
+.elevation-bar .elevation-btn-erase,
+.elevation-bar .elevation-btn-1point,
+.elevation-bar .elevation-btn-2points {
+  display: block; /* Stellt sicher, dass Toolbar-Buttons untereinander angeordnet sind */
+}
+
+/* --- LEAFLET TOOLTIP STANDARDANPASSUNGEN --- */
+
+.leaflet-tooltip {
+  max-width: 100px;
+  width: max-content;
+  white-space: nowrap;
+  font-size: 1em;
+  margin: 0px;
+  padding: 0px 3px;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 1);
+  color: #333;
+  border: 0.5px solid lightgrey;
+  box-shadow: none;
+}
+
+/* Entfernt den Pfeil von Leaflet Tooltips */
+.leaflet-tooltip::before,
+.leaflet-tooltip::after {
+  border-color: transparent !important;
+}
+
+/* --- LEAFLET POPUP STANDARDANPASSUNGEN --- */
+
+.leaflet-popup-content-wrapper {
+  border-radius: 3px;
+}
+
+.leaflet-popup-pane .leaflet-popup-content-wrapper {
+  box-shadow: none;
+  border: 1px solid lightgrey;
+}
+
+.leaflet-popup-content {
+  font-size: 1em;
+  margin: 3px;
+  padding: 3px;
+}
+
+/* Entfernt die Spitze/den Pfeil von Leaflet Popups */
+.leaflet-popup-tip-container {
+  display: none;
+}
+
+/* --- SPEZIFISCHE STYLES FÜR "MY-CUSTOM-POPUP" --- */
+
+.my-custom-popup .leaflet-popup-content-wrapper {
+  font-size: 1em;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 3px;
+}
+
+.my-custom-popup .leaflet-popup-content hr {
+  padding: 0px;
+  margin: 4px 0;
+  border: none;
+  height: 1px;
+  background-color: lightgrey;
+}
+
+/* --- KARTEN-OVERLAY (INFO-PANEL) --- */
+
+#map-overlay {
+  position: absolute;
+  top: 160px; /* Ausreichend Platz unter dem Layer-Control */
+  right: 10px;
+  z-index: 1000; /* Über anderen Kartenelementen */
+  background: white;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  max-width: 300px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+}
+
+#map-overlay-header {
+  cursor: move;
+  padding: 6px 10px;
+  background: #f0f0f0;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+#map-overlay-header button {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer; /* Schließen-Button */
+}
+
+#map-overlay-content {
+  padding: 10px;
+  background: var(--popup-bg-color);
+}
+
+/* --- VERSCHIEDENE ELEMENTE --- */
+
+/* Eigene Linienart */
+.my-custom-line {
+  stroke: rgb(82, 144, 199);
+  stroke-width: 1.5;
+  stroke-opacity: 1;
+}
+
+/* Unsichtbares Icon für Popup-Positionierung */
+.ghost-icon {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
