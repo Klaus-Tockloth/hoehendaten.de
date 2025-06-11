@@ -435,19 +435,41 @@ nav ul li.dropdown:hover .dropdown-content {
 @media (max-width: 600px) {
     .results-table th:first-child,
     .results-table td:first-child {
-        width: 45%;
+        width: 35%;
         padding: 6px;
-        font-size: 0.95em;
+        font-size: 0.9em;
     }
 
     .results-table th:nth-child(2),
     .results-table td:nth-child(2) {
-         width: 55%;
+         width: 65%;
          padding: 6px;
-         font-size: 0.95em;
+         font-size: 0.9em;
     }
 
 	.results-table td.attribution-cell {
           word-break: break-all;
      }
+
+    .input-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .input-group label {
+        width: auto;
+        margin-right: 0;
+        margin-bottom: 8px;
+        text-align: left;
+    }
+
+    .input-group input[type="file"] {
+        width: 100%;
+    }
+
+    #results .download-link-area a {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-all;
+    }
 }
