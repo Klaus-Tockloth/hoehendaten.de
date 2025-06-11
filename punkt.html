@@ -1,62 +1,100 @@
 <!DOCTYPE html>
 <html lang="de">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Höhendaten - Punkt Lon/Lat</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Höhendaten - Punkt Lon/Lat</title>
+  <meta name="description" content="Ermitteln Sie die exakte Höhe für einen beliebigen Punkt in Deutschland anhand von Längen- und Breitengrad (Lon/Lat).">
+  <meta name="keywords" content="Höhendaten, Punktabfrage, Lon/Lat, Geokoordinaten, Höhe ermitteln, Deutschland">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
 
-      <meta name="description" content="Ermitteln Sie die exakte Höhe für einen beliebigen Punkt in Deutschland anhand von Längen- und Breitengrad (Lon/Lat).">
-      <meta name="keywords" content="Höhendaten, Punktabfrage, Lon/Lat, Geokoordinaten, Höhe ermitteln, Deutschland">
-      <meta name="robots" content="index, follow">
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
 
-      <link rel="stylesheet" href="style.css">
-   </head>
-   <body>
-       <nav>
-         <ul>
-            <li><a href="index.html">Start</a></li>
-            <li><a href="karte.html">Karte</a></li>
-            <li><a href="dud.html">DuD</a></li>
-            <li class="dropdown">
-               <a href="javascript:void(0);" class="dropbtn">Dienste</a>
-               <ul class="dropdown-content">
-                  <li><a href="punkt.html">Punkt Lon/Lat</a></li>
-                  <li><a href="punkt_utm.html">Punkt UTM</a></li>
-                  <li><a href="gpx.html">GPX-Datei</a></li>
-               </ul>
-            </li>
-            <li><a href="api.html">API</a></li>
-            <li><a href="impressum.html">Impressum</a></li>
-         </ul>
-      </nav>
-      <div class="container">
-         <h2>Höheninformationen zu einem Lon/Lat-Punkt</h2>
-         <!-- Bereich für die Eingabefelder -->
-         <div class="input-section section-box">
-            <h3>Eingabe</h3>
-             <!-- Der amtlich vermessene GPS-Referenzpunkt (9.738032, 52.36644) in Hannover, 
+      <li>
+        <a href="abbildung.html">Abbildung</a>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="punkt.html">Punkt Lon/Lat</a>
+          </li>
+
+          <li>
+            <a href="punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="hoehenlinien.html">Höhenlinien</a>
+          </li>
+          <li>
+            <a href="schummerung.html">Schummerung</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="api.html">API</a>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Höheninformationen zu einem Lon/Lat-Punkt</h2>
+    <!-- Bereich für die Eingabefelder -->
+
+    <div class="input-section section-box">
+      <h3>Eingabe</h3>
+      <!-- Der amtlich vermessene GPS-Referenzpunkt (9.738032, 52.36644) in Hannover,
              eine ebenerdig im Boden eingelassene Platte, weist eine Höhe von 53.636 m aus. -->
-            <div class="input-group">
-               <label for="longitude">Longitude:</label>
-               <input type="text" id="longitude" value="9.738032">
-            </div>
-            <div class="input-group">
-               <label for="latitude">Latitude:</label>
-               <input type="text" id="latitude" value="52.36644">
-            </div>
-         </div>
-         <!-- Bereich für den Button -->
-         <div class="button-section section-box">
-            <button id="queryButton">Abfrage der Höhendaten</button>
-         </div>
-         <!-- Bereich für die Ausgabe -->
-         <div class="output-section section-box">
-            <h3>Ergebnis</h3>
-            <!-- Geändert von h2 zu h3, um Hierarchie zu verdeutlichen -->
-            <div id="results"></div>
-         </div>
+
+      <div class="input-group">
+        <label for="longitude">Longitude:</label> <input type="text" id="longitude" value="9.738032">
       </div>
-      <script>
+
+      <div class="input-group">
+        <label for="latitude">Latitude:</label> <input type="text" id="latitude" value="52.36644">
+      </div>
+    </div>
+    <!-- Bereich für den Button -->
+
+    <div class="button-section section-box">
+      <button id="queryButton">Abfrage der Höhendaten</button>
+    </div>
+    <!-- Bereich für die Ausgabe -->
+
+    <div class="output-section section-box">
+      <h3>Ergebnis</h3>
+      <!-- Geändert von h2 zu h3, um Hierarchie zu verdeutlichen -->
+
+      <div id="results">
+      </div>
+    </div>
+  </div>
+  <script>
          // Wait for the DOM to be fully loaded
          document.addEventListener('DOMContentLoaded', () => {
              // Get references to the HTML elements
@@ -65,7 +103,7 @@
              const queryButton = document.getElementById('queryButton');
              const resultsDiv = document.getElementById('results');
 
-             // The API endpoint URL
+             // API endpoint URL
              const apiUrl = 'https://api.hoehendaten.de:14444/v1/point';
 
              // Function to display results or errors, setting class for styling
@@ -204,8 +242,9 @@
                          if (attributes.Latitude !== undefined) resultsHtml += `<tr><td><strong>Latitude</strong></td><td>${attributes.Latitude}</td></tr>`;
                          if (attributes.Elevation !== undefined) resultsHtml += `<tr><td><strong>Höhe (m)</strong></td><td>${attributes.Elevation}</td></tr>`;
                          if (attributes.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${attributes.Actuality}</td></tr>`;
+                         if (attributes.Origin !== undefined) resultsHtml += `<tr><td><strong>Herkunft</strong></td><td>${attributes.Origin}</td></tr>`;
                          if (attributes.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${attributes.Attribution}</td></tr>`;
-                         if (attributes.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${attributes.TileIndex}</td></tr>`; // Added TileIndex
+                         if (attributes.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${attributes.TileIndex}</td></tr>`;
                          resultsHtml += '</table>';
 
                          displayResult('success', resultsHtml);
@@ -226,9 +265,9 @@
                  }
              });
          });
-      </script>
-      <footer>
-         <p>&copy; 2025 - Höhendaten für Deutschland</p>
-      </footer>
-   </body>
+  </script>
+  <footer>
+    <p>© 2025 - Höhendaten für Deutschland</p>
+  </footer>
+</body>
 </html>

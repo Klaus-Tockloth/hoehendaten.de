@@ -4,6 +4,9 @@ Purpose:
 
 Releases:
 - v1.0.0 - 2025-05-25: initial release
+- v1.0.1 - 2025-06-03: improvements
+- v1.0.2 - 2025-06-07: improvements
+- v1.0.3 - 2025-06-11: improvements
 
 Copyright:
 - © 2025 | Klaus Tockloth
@@ -21,6 +24,7 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
+	font-size: 1rem;
 	line-height: 1.3;
 	color: #333;
 	background-color: #f4f4f4;
@@ -115,7 +119,8 @@ table {
 table,
 th,
 td {
-	border: 1px solid #ddd;
+	
+border: 1px solid #ddd;
 }
 
 th,
@@ -171,7 +176,7 @@ footer {
 
 .input-group label {
 	display: inline-block;
-	width: 90px;
+	width: 150px; /* increased width for labels to accommodate longer text */
 	margin-right: 10px;
 	font-weight: bold;
 	text-align: right;
@@ -179,13 +184,16 @@ footer {
 }
 
 .input-group input[type="file"],
-.input-group input[type="text"] {
+.input-group input[type="text"],
+.input-group input[type="number"],
+.input-group select {
 	padding: 8px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	flex-grow: 1;
 	box-sizing: border-box;
 }
+
 
 .button-section {
 	text-align: center;
@@ -212,15 +220,22 @@ footer {
 }
 
 #results {
-	margin-top: 10px;
-	padding: 15px;
+  	margin-top: 5px;
+    margin-bottom: 5px;
+	padding: 10px;
 	border: 1px solid #ccc;
 	background-color: #fff;
 	border-radius: 4px;
-	max-height: 600px;
-	overflow-y: auto;
 	box-sizing: border-box;
 	width: 100%;
+}
+
+#results > :first-child {
+    margin-top: 0;
+}
+
+#results .contour-info-box:last-child {
+    margin-bottom: 0;
 }
 
 #results.loading {
@@ -276,25 +291,13 @@ footer {
 	color: #333;
 }
 
-.results-table {
-    background-color: #fff;
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-.results-table th, .results-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
 pre {
 	background-color: #f7f7f7;
 	font-family: monospace;
 	color: darkred;
 	overflow-x: auto;
     overflow-y: auto;
+	font-size: 0.8em;
 }
 pre.request {
 	color: darkred;
@@ -370,4 +373,81 @@ nav ul li.dropdown:hover .dropdown-content {
 
 .input-section h3 {
     margin-top: 0;
+}
+
+/* kein oberer Abstand für H4-Elemente innerhalb der Kontur-Infobox */
+.contour-info-box h4 {
+    margin-top: 0em;
+}
+
+.input-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+}
+.input-group input[type="number"],
+.input-group input[type="text"] {
+   width: 100%;
+   padding: 8px;
+   border: 1px solid #ccc;
+   box-sizing: border-box;
+}
+
+.hillshade-info-box {
+    background-color: #f0f0f0;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.results-table {
+    background-color: #fff;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    table-layout: fixed;
+}
+
+.results-table th, .results-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: break-word;
+}
+
+/* Spaltenbreiten für größere Bildschirme (oder als Standard) */
+.results-table th:first-child,
+.results-table td:first-child {
+    width: 30%;
+}
+
+.results-table th:nth-child(2),
+.results-table td:nth-child(2) {
+     width: 70%;
+}
+
+/* Media Query für kleinere Bildschirme (z.B. Smartphones Hochformat) */
+@media (max-width: 600px) {
+    .results-table th:first-child,
+    .results-table td:first-child {
+        width: 45%;
+        padding: 6px;
+        font-size: 0.95em;
+    }
+
+    .results-table th:nth-child(2),
+    .results-table td:nth-child(2) {
+         width: 55%;
+         padding: 6px;
+         font-size: 0.95em;
+    }
+
+	.results-table td.attribution-cell {
+          word-break: break-all;
+     }
 }

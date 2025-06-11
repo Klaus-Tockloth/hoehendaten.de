@@ -1,71 +1,109 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title>Leaflet mit OSM und Google Overlays</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaflet mit OSM und Google Overlays</title>
+  <meta charset="utf-8">
 
-    <meta name="description" content="Erkunden Sie Höhendaten für Deutschland interaktiv auf einer Karte. Laden Sie GPX/KML-Dateien hoch oder fragen Sie Punkte per Lon/Lat oder UTM ab.">
-    <meta name="keywords" content="Höhendaten, Karte, Deutschland, DGM, interaktiv, GPX, KML, Geodaten, Höhe, Lon/Lat, UTM">
-    <meta name="robots" content="index, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
- 
-    <!-- google maps via 'google mutant' -->
-    <script src="https://cdn.jsdelivr.net/npm/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxvlt3A4v0niarIP7hvoaViuMDYfg8fL4&loading=async"></script>
+  <meta name="description" content=
+  "Erkunden Sie Höhendaten für Deutschland interaktiv auf einer Karte. Laden Sie GPX/KML-Dateien hoch oder fragen Sie Punkte per Lon/Lat oder UTM ab.">
+  <meta name="keywords" content="Höhendaten, Karte, Deutschland, DGM, interaktiv, GPX, KML, Geodaten, Höhe, Lon/Lat, UTM">
+  <meta name="robots" content="index, follow">
 
-    <!-- leaflet.fileLayer (with dependencies) -->
-    <script src="https://cdn.jsdelivr.net/npm/@mapbox/togeojson/togeojson.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/shramov/leaflet-plugins@master/layer/vector/KML.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-filelayer@1.2.0/src/leaflet.filelayer.min.js"></script>
+  <!-- leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-     <!-- locate control -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.84.2/dist/L.Control.Locate.mapbox.min.css" />
-     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.84.2/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+  <!-- google maps via 'google mutant' -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxvlt3A4v0niarIP7hvoaViuMDYfg8fL4&amp;loading=async"></script>
 
-     <!-- elevation plugin -->
-     <link rel="stylesheet" href="./elevation/elevation.css">     
-     <script src="./elevation/elevation.js"></script>
+  <!-- leaflet.fileLayer (with dependencies) -->
+  <script src="https://cdn.jsdelivr.net/npm/@mapbox/togeojson/togeojson.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/shramov/leaflet-plugins@master/layer/vector/KML.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-filelayer@1.2.0/src/leaflet.filelayer.min.js"></script>
 
-     <!-- leaflet specific styles -->
-     <style>
+  <!-- locate control -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.84.2/dist/L.Control.Locate.mapbox.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.84.2/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+
+  <!-- PolylineDecorator for arrow on line -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.min.js"></script>
+
+  <!-- elevation plugin -->
+  <link rel="stylesheet" href="./elevation/elevation.css">
+  <script src="./elevation/elevation.js"></script>
+
+  <!-- leaflet specific styles -->
+  <style>
         .leaflet-container .leaflet-control-attribution {
             background: rgba(255, 255, 255, 0.5) !important;
             margin: 5px !important;
             padding: 1px !important;
             color: #333 !important;
         }
-     </style>
+  </style>
 
-     <!-- project specific styles -->
-     <link rel="stylesheet" href="style.css">
+  <!-- project specific styles -->
+  <link rel="stylesheet" href="style.css">
 </head>
-   <body>
-      <nav>
-         <ul>
-            <li><a href="index.html">Start</a></li>
-            <li><a href="karte.html">Karte</a></li>
-            <li><a href="dud.html">DuD</a></li>
-            <li class="dropdown">
-               <a href="javascript:void(0);" class="dropbtn">Dienste</a>
-               <ul class="dropdown-content">
-                  <li><a href="punkt.html">Punkt Lon/Lat</a></li>
-                  <li><a href="punkt_utm.html">Punkt UTM</a></li>
-                  <li><a href="gpx.html">GPX-Datei</a></li>
-               </ul>
-            </li>
-            <li><a href="api.html">API</a></li>
-            <li><a href="impressum.html">Impressum</a></li>
-         </ul>
-      </nav>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
 
-      <div class="map-container">
-         <div id="map"></div>
-      </div>
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
 
-      <script src="map.js"></script>
-   </body>
+      <li>
+        <a href="abbildung.html">Abbildung</a>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="punkt.html">Punkt Lon/Lat</a>
+          </li>
+
+          <li>
+            <a href="punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="hoehenlinien.html">Höhenlinien</a>
+          </li>
+
+          <li>
+            <a href="schummerung.html">Schummerung</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="api.html">API</a>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+  <script src="map.js"></script>
+</body>
 </html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Höhendaten - Schummerung</title>
+  <meta name="description" content=
+  "Generieren Sie Schummerungsabbildungen (Hillshade) für einen Kartenausschnitt in Deutschland basierend auf Koordinaten und verschiedenen Visualisierungsparametern.">
+  <meta name="keywords" content="Höhendaten, Schummerung, Hillshade, DGM, UTM, Lon/Lat, Abbildung, Visualisierung, Geodaten, Deutschland">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li>
+        <a href="abbildung.html">Abbildung</a>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="punkt.html">Punkt Lon/Lat</a>
+          </li>
+
+          <li>
+            <a href="punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="hoehenlinien.html">Höhenlinien</a>
+          </li>
+          <li>
+            <a href="schummerung.html" class="active">Schummerung</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="api.html">API</a>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Schummerung für einen Kartenausschnitt von 1x1 km</h2>
+
+    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Schummerung wird für die Kachel generiert, in der der
+    Referenzpunkt enthalten ist. Die Ausgabe erfolgt im GeoTIFF-Format (wenn UTM-Koordinaten eingegeben wurden) oder im PNG-Format (wenn Lon/Lat-Koordinaten
+    eingegeben wurden).</p>
+    <!-- Bereich für die Eingabefelder -->
+
+    <div class="input-section section-box">
+      <h3>Eingabe</h3>
+
+      <p><b>Option 1: Lon/Lat-Koordinaten</b>
+      </p>
+      <!-- Langenberg (Rothaargebirge, höchster Berg in NRW) -->
+
+      <div class="input-group">
+        <label for="longitude">Longitude:</label> <input type="text" id="longitude" value="8.558333">
+      </div>
+
+      <div class="input-group">
+        <label for="latitude">Latitude:</label> <input type="text" id="latitude" value="51.276389">
+      </div>
+
+      <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
+
+      <p><b>Option 2: UTM-Koordinaten</b>
+      </p>
+
+      <div class="input-group">
+        <label for="zone">Zone:</label> <input type="number" id="zone" value="" min="32" max="33">
+      </div>
+
+      <div class="input-group">
+        <label for="easting">Easting:</label> <input type="text" id="easting" value="">
+      </div>
+
+      <div class="input-group">
+        <label for="northing">Northing:</label> <input type="text" id="northing" value="">
+      </div>
+
+      <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
+
+      <p><b>Parameter für Schummerung</b>
+      </p>
+
+      <div class="input-group">
+        <label for="gradientAlgorithm">Algorithmus:</label>
+        <select id="gradientAlgorithm">
+            <option value="Horn">Horn</option>
+            <option value="ZevenbergenThorne">ZevenbergenThorne</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="verticalExaggeration">Überhöhung:</label>
+        <input type="text" id="verticalExaggeration" value="1.0">
+      </div>
+
+      <div class="input-group">
+        <label for="azimuthOfLight">Azimut Lichtquelle:</label>
+        <input type="text" id="azimuthOfLight" value="315">
+      </div>
+
+      <div class="input-group">
+        <label for="altitudeOfLight">Höhe Lichtquelle:</label>
+        <input type="text" id="altitudeOfLight" value="45">
+      </div>
+
+       <div class="input-group">
+        <label for="shadingVariant">Schattierung:</label>
+        <select id="shadingVariant">
+            <option value="regular">regular</option>
+            <option value="multidirectional" selected>multidirectional</option>
+            <option value="combined">combined</option>
+            <option value="igor">igor</option>
+        </select>
+      </div>
+
+    </div>
+    <!-- Bereich für den Button -->
+
+    <div class="button-section section-box">
+      <button id="queryButton">Abfrage der Schummerung</button>
+    </div>
+    <!-- Bereich für die Ausgabe -->
+
+    <div class="output-section section-box">
+      <h3>Ergebnis</h3>
+
+      <div id="results">
+      </div>
+    </div>
+  </div>
+  <script>
+         document.addEventListener('DOMContentLoaded', () => {
+             const longitudeInput = document.getElementById('longitude');
+             const latitudeInput = document.getElementById('latitude');
+             const zoneInput = document.getElementById('zone');
+             const eastingInput = document.getElementById('easting');
+             const northingInput = document.getElementById('northing');
+
+             const gradientAlgorithmSelect = document.getElementById('gradientAlgorithm');
+             const verticalExaggerationInput = document.getElementById('verticalExaggeration');
+             const azimuthOfLightInput = document.getElementById('azimuthOfLight');
+             const altitudeOfLightInput = document.getElementById('altitudeOfLight');
+             const shadingVariantSelect = document.getElementById('shadingVariant');
+
+
+             const queryButton = document.getElementById('queryButton');
+             const resultsDiv = document.getElementById('results');
+
+             // Die API URL für Schummerung (muss ggf. angepasst werden)
+             const apiUrl = 'https://api.hoehendaten.de:14444/v1/hillshade';
+
+             function displayResult(className, htmlContent) {
+                 resultsDiv.className = className;
+                 resultsDiv.innerHTML = htmlContent;
+             }
+
+             // Function to convert Base64 string to binary string (for Blob)
+             function base64ToBinaryString(base64) {
+                try {
+                    // Check if base64 string is potentially malformed before decoding
+                    if (typeof base64 !== 'string' || base64.length % 4 !== 0 || /[^0-9a-zA-Z+/=]/g.test(base64)) {
+                         console.error("Ungültiger Base64 String:", base64);
+                         return null;
+                    }
+                    return atob(base64);
+                } catch (e) {
+                    console.error("Fehler beim Dekodieren von Base64:", e);
+                    return null;
+                }
+             }
+
+            // Function to update input field states based on selected shading variant
+            function updateInputStates() {
+                const selectedVariant = shadingVariantSelect.value;
+
+                // Reset disabled state
+                azimuthOfLightInput.disabled = false;
+                altitudeOfLightInput.disabled = false;
+
+                // Apply disabling based on variant
+                if (selectedVariant === 'multidirectional') {
+                    azimuthOfLightInput.disabled = true;
+                } else if (selectedVariant === 'igor') {
+                    altitudeOfLightInput.disabled = true;
+                }
+            }
+
+            // Add event listener to shading variant select
+            shadingVariantSelect.addEventListener('change', updateInputStates);
+
+            // Initial call to set correct input states on page load
+            updateInputStates();
+
+
+             queryButton.addEventListener('click', async () => {
+                 const longitude = parseFloat(longitudeInput.value);
+                 const latitude = parseFloat(latitudeInput.value);
+                 const zone = parseInt(zoneInput.value, 10);
+                 const easting = parseFloat(eastingInput.value);
+                 const northing = parseFloat(northingInput.value);
+
+                 const gradientAlgorithm = gradientAlgorithmSelect.value;
+                 const verticalExaggeration = parseFloat(verticalExaggerationInput.value);
+                 // Parse Azimuth and Altitude even if they are disabled, as the API expects the parameter in the payload.
+                 // The API is responsible for ignoring them based on the ShadingVariant.
+                 const azimuthOfLight = parseInt(azimuthOfLightInput.value, 10);
+                 const altitudeOfLight = parseInt(altitudeOfLightInput.value, 10);
+                 const shadingVariant = shadingVariantSelect.value;
+
+
+                 let useLonLat = !isNaN(longitude) && !isNaN(latitude) && longitudeInput.value.trim() !== "" && latitudeInput.value.trim() !== "";
+                 let useUtm = !isNaN(zone) && (zone === 32 || zone === 33) && !isNaN(easting) && !isNaN(northing) && zoneInput.value.trim() !== "" && eastingInput.value.trim() !== "" && northingInput.value.trim() !== "";
+
+                 if (!useLonLat && !useUtm) {
+                     displayResult('error', '<p class="status-message">Fehler: Bitte geben Sie entweder gültige Lon/Lat-Koordinaten oder gültige UTM-Koordinaten (Zone 32/33, Easting, Northing) ein.</p>');
+                     return;
+                 }
+
+                 displayResult('loading', '<p class="status-message">Lade ... Sende Anfrage an den Dienst ...</p>');
+
+                 const requestPayload = {
+                     Type: "HillshadeRequest",
+                     ID: "WebApp-Hillshade-" + Date.now() + "-" + Math.random().toString(36).substring(7),
+                     Attributes: {
+                         Longitude: useLonLat ? longitude : 0.0, // Send 0 if not used, API should ignore
+                         Latitude: useLonLat ? latitude : 0.0,   // Send 0 if not used, API should ignore
+                         Zone: useUtm ? zone : 0,                // Send 0 if not used, API should ignore
+                         Easting: useUtm ? easting : 0.0,        // Send 0 if not used, API should ignore
+                         Northing: useUtm ? northing : 0.0,      // Send 0 if not used, API should ignore
+                         GradientAlgorithm: gradientAlgorithm,
+                         VerticalExaggeration: verticalExaggeration,
+                         // Send Azimuth/Altitude regardless of disabled state; API should handle ignoring them based on ShadingVariant
+                         AzimuthOfLight: azimuthOfLight,
+                         AltitudeOfLight: altitudeOfLight,
+                         ShadingVariant: shadingVariant
+                     }
+                 };
+
+                 // If UTM is primary and Lon/Lat is also filled, clear Lon/Lat for the request
+                 // to avoid ambiguity if the user filled both but intended UTM.
+                 if (useUtm) {
+                     requestPayload.Attributes.Longitude = 0.0;
+                     requestPayload.Attributes.Latitude = 0.0;
+                 } else if (useLonLat) { // UTM fields were not filled or invalid
+                      requestPayload.Attributes.Zone = 0;
+                      requestPayload.Attributes.Easting = 0.0;
+                      requestPayload.Attributes.Northing = 0.0;
+                 }
+
+
+                 try {
+                     const response = await fetch(apiUrl, {
+                         method: 'POST',
+                         headers: {
+                             'Content-Type': 'application/json',
+                             'Accept': 'application/json',
+                             'Accept-Encoding': 'gzip' // Request gzip compression
+                         },
+                         body: JSON.stringify(requestPayload)
+                     });
+
+                     let data = null;
+                     let rawText = null;
+
+                     try {
+                         // Use response.arrayBuffer() for potentially gzipped content if fetch doesn't auto-decompress
+                         // However, fetch usually handles gzip with Accept-Encoding. Let's try parsing as text first.
+                         // If that fails or indicates gzip, we could handle it manually if needed, but typically not required.
+                         rawText = await response.text();
+                         data = JSON.parse(rawText);
+                         console.log("API-Antwort (geparstes JSON):", data);
+                     } catch (jsonError) {
+                         console.warn("JSON-Parsen fehlgeschlagen:", jsonError);
+                         console.log("Rohe Antwort (Text):", rawText);
+                         // If parsing fails, the rawText might be the gzipped content itself
+                         // For simplicity in this client-side script, we assume fetch handles gzip.
+                         // If not, a library for gzip decompression would be needed here.
+                     }
+
+                     if (!response.ok) {
+                         let errorHtml = `<p class="status-message">Serverfehler mit Status ${response.status}:</p>`;
+                         if (data && data.Attributes && data.Attributes.IsError === true) {
+                             const errorAttributes = data.Attributes;
+                             errorHtml += '<table class="results-table">';
+                             // Display relevant request attributes from the error response
+                             if (errorAttributes.Longitude !== undefined && errorAttributes.Longitude !== 0) errorHtml += `<tr><td><strong>Longitude</strong></td><td>${errorAttributes.Longitude}</td></tr>`;
+                             if (errorAttributes.Latitude !== undefined && errorAttributes.Latitude !== 0) errorHtml += `<tr><td><strong>Latitude</strong></td><td>${errorAttributes.Latitude}</td></tr>`;
+                             if (errorAttributes.Zone !== undefined && errorAttributes.Zone !== 0) errorHtml += `<tr><td><strong>Zone</strong></td><td>${errorAttributes.Zone}</td></tr>`;
+                             if (errorAttributes.Easting !== undefined && errorAttributes.Easting !== 0) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
+                             if (errorAttributes.Northing !== undefined && errorAttributes.Northing !== 0) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
+                             if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
+                             if (errorAttributes.VerticalExaggeration !== undefined) errorHtml += `<tr><td><strong>Überhöhung</strong></td><td>${errorAttributes.VerticalExaggeration}</td></tr>`;
+                             // Display Azimuth/Altitude from error response if they were part of the request attributes
+                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut Lichtquelle</strong></td><td>${errorAttributes.AzimuthOfLight}</td></tr>`;
+                             if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe Lichtquelle</strong></td><td>${errorAttributes.AltitudeOfLight}</td></tr>`;
+                             if (errorAttributes.ShadingVariant !== undefined) errorHtml += `<tr><td><strong>Schattierung</strong></td><td>${errorAttributes.ShadingVariant}</td></tr>`;
+
+                             if (errorAttributes.Error) {
+                                 const errorDetail = errorAttributes.Error;
+                                 if (errorDetail.Code !== undefined) errorHtml += `<tr><td><strong>Fehlercode</strong></td><td>${errorDetail.Code}</td></tr>`;
+                                 if (errorDetail.Title !== undefined) errorHtml += `<tr><td><strong>Fehlertitel</strong></td><td>${errorDetail.Title}</td></tr>`;
+                                 if (errorDetail.Detail !== undefined) errorHtml += `<tr><td><strong>Fehlerdetail</strong></td><td>${errorDetail.Detail}</td></tr>`;
+                             }
+                             errorHtml += '</table>';
+                         } else if (rawText !== null) {
+                             errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
+                         } else {
+                             errorHtml += `<br>Konnte die Antwort vom Server nicht lesen.`;
+                         }
+                         displayResult('error', errorHtml);
+                         return;
+                     }
+
+                     if (data && data.Attributes) {
+                         if (data.Attributes.IsError === true) {
+                             const errorAttributes = data.Attributes;
+                             let errorHtml = '<p class="status-message">Erfolgreiche HTTP-Antwort, aber Anwendungsfehler gemeldet.</p>';
+                              errorHtml += '<table class="results-table">';
+                             // Display relevant request attributes from the error response
+                             if (errorAttributes.Longitude !== undefined && errorAttributes.Longitude !== 0) errorHtml += `<tr><td><strong>Longitude</strong></td><td>${errorAttributes.Longitude}</td></tr>`;
+                             if (errorAttributes.Latitude !== undefined && errorAttributes.Latitude !== 0) errorHtml += `<tr><td><strong>Latitude</strong></td><td>${errorAttributes.Latitude}</td></tr>`;
+                             if (errorAttributes.Zone !== undefined && errorAttributes.Zone !== 0) errorHtml += `<tr><td><strong>Zone</strong></td><td>${errorAttributes.Zone}</td></tr>`;
+                             if (errorAttributes.Easting !== undefined && errorAttributes.Easting !== 0) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
+                             if (errorAttributes.Northing !== undefined && errorAttributes.Northing !== 0) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
+                             if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
+                             if (errorAttributes.VerticalExaggeration !== undefined) errorHtml += `<tr><td><strong>Überhöhung</strong></td><td>${errorAttributes.VerticalExaggeration}</td></tr>`;
+                              // Display Azimuth/Altitude from the error response if they were sent in the request
+                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut Lichtquelle</strong></td><td>${errorAttributes.AzimuthOfLight}°</td></tr>`;
+                             if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe Lichtquelle</strong></td><td>${errorAttributes.AltitudeOfLight}°</td></tr>`;
+                             if (errorAttributes.ShadingVariant !== undefined) errorHtml += `<tr><td><strong>Schattierung</strong></td><td>${errorAttributes.ShadingVariant}</td></tr>`;
+
+                             if (errorAttributes.Error) {
+                                 const errorDetail = errorAttributes.Error;
+                                 errorHtml += '<tr><td colspan="2"><strong>Fehlerdetails:</strong></td></tr>';
+                                 if (errorDetail.Code !== undefined) errorHtml += `<tr><td><strong>Code</strong></td><td>${errorDetail.Code}</td></tr>`;
+                                 if (errorDetail.Title !== undefined) errorHtml += `<tr><td><strong>Titel</strong></td><td>${errorDetail.Title}</td></tr>`;
+                                 if (errorDetail.Detail !== undefined) errorHtml += `<tr><td><strong>Detail</strong></td><td>${errorDetail.Detail}</td></tr>`;
+                             }
+                             errorHtml += '</table>';
+                             console.error("API-Anwendungsfehler trotz OK-Antwort:", data.Attributes);
+                             displayResult('error', errorHtml);
+                             return;
+                         }
+
+                         let resultsHtml = '<p class="status-message">Schummerung erfolgreich verarbeitet:</p>';
+                         resultsHtml += '<table class="results-table">';
+                         const attributes = data.Attributes;
+                          // Display input parameters that were used
+                         if (attributes.Longitude !== undefined && attributes.Longitude !== 0) resultsHtml += `<tr><td><strong>Longitude</strong></td><td>${attributes.Longitude}</td></tr>`;
+                         if (attributes.Latitude !== undefined && attributes.Latitude !== 0) resultsHtml += `<tr><td><strong>Latitude</strong></td><td>${attributes.Latitude}</td></tr>`;
+                         if (attributes.Zone !== undefined && attributes.Zone !== 0) resultsHtml += `<tr><td><strong>Zone</strong></td><td>${attributes.Zone}</td></tr>`;
+                         if (attributes.Easting !== undefined && attributes.Easting !== 0) resultsHtml += `<tr><td><strong>Easting</strong></td><td>${attributes.Easting}</td></tr>`;
+                         if (attributes.Northing !== undefined && attributes.Northing !== 0) resultsHtml += `<tr><td><strong>Northing</strong></td><td>${attributes.Northing}</td></tr>`;
+                         if (attributes.GradientAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Algorithmus</strong></td><td>${attributes.GradientAlgorithm}</td></tr>`;
+                         if (attributes.VerticalExaggeration !== undefined) resultsHtml += `<tr><td><strong>Überhöhung</strong></td><td>${attributes.VerticalExaggeration}</td></tr>`;
+                          // Only show Azimuth/Altitude in the result if they were actually used (not disabled/ignored by ShadingVariant)
+                         if (attributes.ShadingVariant !== 'multidirectional' && attributes.AzimuthOfLight !== undefined) resultsHtml += `<tr><td><strong>Azimut Lichtquelle</strong></td><td>${attributes.AzimuthOfLight}°</td></tr>`;
+                         if (attributes.ShadingVariant !== 'igor' && attributes.AltitudeOfLight !== undefined) resultsHtml += `<tr><td><strong>Höhe Lichtquelle</strong></td><td>${attributes.AltitudeOfLight}°</td></tr>`;
+                         if (attributes.ShadingVariant !== undefined) resultsHtml += `<tr><td><strong>Schattierung</strong></td><td>${attributes.ShadingVariant}</td></tr>`;
+
+                         resultsHtml += '</table>';
+
+                         if (attributes.Hillshades && Array.isArray(attributes.Hillshades) && attributes.Hillshades.length > 0) {
+                             resultsHtml += '<h4>Generierte Schummerung(en):</h4>';
+                             attributes.Hillshades.forEach((hillshade, index) => {
+                                 resultsHtml += `<div class="hillshade-info-box">`;
+                                 resultsHtml += `<h4>Abbildung ${index + 1}</h4>`;
+                                 resultsHtml += '<table class="results-table">';
+                                 if (hillshade.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${hillshade.TileIndex}</td></tr>`;
+                                 if (hillshade.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${hillshade.Actuality}</td></tr>`;
+                                 if (hillshade.Origin !== undefined) resultsHtml += `<tr><td><strong>Ursprung</strong></td><td>${hillshade.Origin}</td></tr>`;
+                                 if (hillshade.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${hillshade.Attribution}</td></tr>`;
+                                 if (hillshade.DataFormat !== undefined) resultsHtml += `<tr><td><strong>Format</strong></td><td>${hillshade.DataFormat}</td></tr>`;
+
+                                 // Display Bounding Box if available (relevant for PNG)
+                                  if (hillshade.BoundingBox && (hillshade.BoundingBox.MinLon !== 0 || hillshade.BoundingBox.MinLat !== 0 || hillshade.BoundingBox.MaxLon !== 0 || hillshade.BoundingBox.MaxLat !== 0)) {
+                                     resultsHtml += `<tr><td colspan="2"><strong>Bounding Box (WGS84):</strong></td></tr>`;
+                                     resultsHtml += `<tr><td>MinLon</td><td>${hillshade.BoundingBox.MinLon}</td></tr>`;
+                                     resultsHtml += `<tr><td>MaxLon</td><td>${hillshade.BoundingBox.MaxLon}</td></tr>`;
+                                     resultsHtml += `<tr><td>MinLat</td><td>${hillshade.BoundingBox.MinLat}</td></tr>`;
+                                     resultsHtml += `<tr><td>MaxLat</td><td>${hillshade.BoundingBox.MaxLat}</td></tr>`;
+                                  }
+
+                                 resultsHtml += '</table>';
+
+                                 if (hillshade.Data && hillshade.TileIndex && hillshade.DataFormat) {
+                                     const decodedBinaryString = base64ToBinaryString(hillshade.Data);
+                                     if (decodedBinaryString) {
+                                         const byteNumbers = new Array(decodedBinaryString.length);
+                                         for (let i = 0; i < decodedBinaryString.length; i++) {
+                                             byteNumbers[i] = decodedBinaryString.charCodeAt(i);
+                                         }
+                                         const byteArray = new Uint8Array(byteNumbers);
+
+                                         let mimeType = 'application/octet-stream'; // Default
+                                         let fileExtension = 'bin';
+
+                                         switch(hillshade.DataFormat.toLowerCase()) {
+                                             case 'geotiff':
+                                                 mimeType = 'image/tiff';
+                                                 fileExtension = 'tif';
+                                                 break;
+                                             case 'png':
+                                                 mimeType = 'image/png';
+                                                 fileExtension = 'png';
+                                                 break;
+                                         }
+
+
+                                         const blob = new Blob([byteArray], { type: mimeType });
+                                         const downloadUrl = URL.createObjectURL(blob);
+
+                                         // Filename: TileIndex + optional Origin + Format extension
+                                         const originPart = hillshade.Origin ? `.${hillshade.Origin.toLowerCase()}` : '' ;
+                                         const outputFileName = `${hillshade.TileIndex}${originPart}.${fileExtension}`;
+
+                                         resultsHtml += `<p class="download-link-area"><a href="${downloadUrl}" download="${outputFileName}">Download '${outputFileName}'</a></p>`;
+                                     } else {
+                                         resultsHtml += `<p class="status-message error-message">Fehler: Schummerungsdaten (Base64) für Tile ${hillshade.TileIndex} konnten nicht dekodiert werden.</p>`;
+                                     }
+                                 } else {
+                                     resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${hillshade.TileIndex || 'Unbekannt'}.</p>`;
+                                 }
+                                 resultsHtml += `</div>`;
+                             });
+                         } else {
+                             resultsHtml += '<p>Keine Schummerungs-Daten in der Antwort enthalten.</p>';
+                         }
+                         displayResult('success', resultsHtml);
+
+                     } else {
+                         let errorHtml = `<p class="status-message">Erfolgreiche HTTP-Antwort (${response.status}), aber die erwarteten Daten wurden nicht gefunden.</p>`;
+                         if (rawText !== null) {
+                            errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
+                         }
+                         displayResult('error', errorHtml);
+                     }
+
+                 } catch (error) {
+                     console.error("Fehler bei Abruf oder Verarbeitung:", error);
+                     displayResult('error', `<p class="status-message">Fehler beim Abfragen der API oder während der Verarbeitung:</p><p>${error.message}</p>`);
+                 }
+             });
+
+            // Listener, um UTM-Felder zu leeren, wenn Lon/Lat aktiv bearbeitet wird
+            longitudeInput.addEventListener('input', () => {
+                if(longitudeInput.value.trim() !== "" || latitudeInput.value.trim() !== "") {
+                    zoneInput.value = "";
+                    eastingInput.value = "";
+                    northingInput.value = "";
+                }
+            });
+            latitudeInput.addEventListener('input', () => {
+                 if(longitudeInput.value.trim() !== "" || latitudeInput.value.trim() !== "") {
+                    zoneInput.value = "";
+                    eastingInput.value = "";
+                    northingInput.value = "";
+                }
+            });
+
+            // Listener, um Lon/Lat-Felder zu leeren, wenn UTM aktiv bearbeitet wird
+            zoneInput.addEventListener('input', () => {
+                if(zoneInput.value.trim() !==  "" || eastingInput.value.trim() !== "" || northingInput.value.trim() !== "") {
+                    longitudeInput.value = "";
+                    latitudeInput.value = "";
+                }
+            });
+            eastingInput.addEventListener('input', () => {
+                 if(zoneInput.value.trim() !== "" || eastingInput.value.trim() !== "" || northingInput.value.trim() !== "") {
+                    longitudeInput.value = "";
+                    latitudeInput.value = "";
+                }
+            });
+            northingInput.addEventListener('input', () => {
+                if(northingInput.value.trim() !== "" || eastingInput.value.trim() !== "" || zoneInput.value.trim() !== "") {
+                    longitudeInput.value = "";
+                    latitudeInput.value = "";
+                }
+            });
+         });
+  </script>
+  <footer>
+    <p>© 2025 - Höhendaten für Deutschland</p>
+  </footer>
+</body>
+</html>

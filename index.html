@@ -1,319 +1,453 @@
 <!DOCTYPE html>
 <html lang="de">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content=
+  "Greifen Sie auf detaillierte und genaue Höhendaten (Digitale Geländemodelle - DGM) für ganz Deutschland zu. Basierend auf Open Data der Landesvermessungsämter.">
+  <meta name="keywords" content="Höhendaten, Deutschland, DGM, Digitales Geländemodell, Open Data, Geodaten, Höhe, Relief, Topographie, Landesvermessungsämter">
+  <meta name="robots" content="index, follow">
+  <meta name="google-site-verification" content="gCF9XxALv7B3sXsul7931DDO0TZrs4yDniqZEOr0ifM">
+  <meta name="msvalidate.01" content="2DC3949D70CB230AAF99F4CD5E93B3F3">
+  <meta property="og:title" content="Höhendaten für Deutschland">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="[https://hoehendaten.de/index.html">
+  <meta property="og:image" content="[https://hoehendaten.de/images/dreikaiserstuhl-1000x800.png">
+  <meta property="og:description" content=
+  "Dieser Webservice macht die von den Landesvermessungsämtern als Open Data zur Verfügung gestellten, detaillierten Höhendaten (Digitale Geländemodelle - DGM) für Deutschland allgemein verfügbar.">
+  <meta property="og:site_name" content="Höhendaten für Deutschland">
+  <meta property="og:locale" content="de_DE">
+  <title>Höhendaten - Start</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
 
-      <meta name="description" content="Greifen Sie auf detaillierte und genaue Höhendaten (Digitale Geländemodelle - DGM) für ganz Deutschland zu. Basierend auf Open Data der Landesvermessungsämter.">
-      <meta name="keywords" content="Höhendaten, Deutschland, DGM, Digitales Geländemodell, Open Data, Geodaten, Höhe, Relief, Topographie, Landesvermessungsämter">
-      <meta name="robots" content="index, follow">
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
 
-      <meta name="google-site-verification" content="gCF9XxALv7B3sXsul7931DDO0TZrs4yDniqZEOr0ifM" />
-      <meta name="msvalidate.01" content="2DC3949D70CB230AAF99F4CD5E93B3F3" />
+      <li>
+        <a href="abbildung.html">Abbildung</a>
+      </li>
 
-      <meta property="og:title" content="Höhendaten für Deutschland">
-      <meta property="og:type" content="website">
-      <meta property="og:url" content="[https://hoehendaten.de/index.html">
-      <meta property="og:image" content="[https://hoehendaten.de/images/dreikaiserstuhl-1000x800.png">
-      <meta property="og:description" content="Dieser Webservice macht die von den Landesvermessungsämtern als Open Data zur Verfügung gestellten, detaillierten Höhendaten (Digitale Geländemodelle - DGM) für Deutschland allgemein verfügbar.">
-      <meta property="og:site_name" content="Höhendaten für Deutschland">
-      <meta property="og:locale" content="de_DE">
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
 
-      <title>Höhendaten - Start</title>
-      <link rel="stylesheet" href="style.css">
-   </head>
-   <body>
-       <nav>
-         <ul>
-            <li><a href="index.html">Start</a></li>
-            <li><a href="karte.html">Karte</a></li>
-            <li><a href="dud.html">DuD</a></li>
-            <li class="dropdown">
-               <a href="javascript:void(0);" class="dropbtn">Dienste</a>
-               <ul class="dropdown-content">
-                  <li><a href="punkt.html">Punkt Lon/Lat</a></li>
-                  <li><a href="punkt_utm.html">Punkt UTM</a></li>
-                  <li><a href="gpx.html">GPX-Datei</a></li>
-               </ul>
-            </li>
-            <li><a href="api.html">API</a></li>
-            <li><a href="impressum.html">Impressum</a></li>
-         </ul>
-      </nav>
-      <div class="container">
-         <h2>Höhendaten für Deutschland</h2>
-         <h3>Höhendaten</h3>
-         <p>    
-            Alle Bundesländer in Deutschland erheben durch die Landesvermessungsämter sehr detaillierte und genaue Höhendaten. Diese Daten werden als Digitale Geländemodelle (DGM)
-            frei (Open Data) zur Verfügung gestellt. Die DGM-Daten sind für eine Vielzahl von Anwendungen
-            (z.B. Planung, Umweltanalyse, Simulation) unerlässlich. Dieser Webservice macht die Höhendaten auch für allgemeine Zwecke verfügbar.
-         </p>
-         <h3>Digitale Geländemodelle</h3>
-         <p>    
-            Digitale Geländemodelle (DGM) beschreiben die räumlichen Formen der Erdoberfläche (Geländerelief).
-            Ein DGM stellt im Gegensatz zum Digitalen Oberflächenmodell (DOM) keine Objekte auf der Erdoberfläche dar (z. B. Bäume und Häuser).
-            Brücken sind nicht Bestandteil eines DGM. Die Höhenangaben beziehen sich auf das Deutsche Haupthöhennetz DHHN2016 (EPSG:7837).
-         </p>
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="punkt.html">Punkt Lon/Lat</a>
+          </li>
 
-         <img src="./images/dreikaiserstuhl-500x400.png">
-         <p><small>Genaue Höhenangaben zu einzelnen Punkten.</small></p>
+          <li>
+            <a href="punkt_utm.html">Punkt UTM</a>
+          </li>
 
-         <h3>Genauigkeit der erhobenen Daten</h3>
-         <div class="table-responsive">
-         <table>
-            <thead>
-                  <th>Art</th>
-                  <th>Typ des Geländes</th>
-                  <th>Genauigkeit</th>
-               </tr>
-            </thead>
-            <tbody>
-               <tr>
-                  <td>Höhe</td>
-                  <td>Flachland oder offenes Gelände</td>
-                  <td>≤ ±15 cm</td>
-               </tr>
-               <tr>
-                  <td>Höhe</td>
-                  <td>Steiles Gelände oder dicht bewaldetes Gebiet</td>
-                  <td>≤ ±30 cm</td>
-               </tr>
-              <tr>
-                  <td>Lage</td>
-                  <td></td>
-                  <td>≤ ±30 cm</td>
-               </tr>
-            </tbody>
-         </table>
-         </div>
-         <p>
-         Die Angaben zur Genauigkeit sind generalisiert und beziehen sich auf die Gesamtheit aller Messwerte mit einer statistischen Sicherheit (Konfidenzniveau) von 95 Prozent.
-         Für Messwerte die aus neueren ALS-Befliegungen stammen, sind verbesserte Genauigkeiten anzunehmen. Exakte Angaben zur Genauigkeit der Messpunte sind den Metadaten
-         der jeweils zuständigen Bundesländer zu entnehmen.
-         </p>
-         <p>
-         Die relative Genauigkeit nahe beieinaderliegender Messwerte ist als wesentlich höher einzuschätzen. Die Frage "Wohin fließt das Wasser?" kann im Nahbereich
-         recht verläßlich beantwortet werden.
-         </p>
-         <h3>Aktualität der erhobenen Daten</h3>
-         <p>Die Höhendaten werden von den Bundesländer oft in einem regelmäßigen Turnus (z.B. 5 Jahre) neu erhoben. Die Angaben zur Aktualität der Daten wurden aus den
-         verfügbaren Informationen (z.B. Metadaten) über die Ursprungsdaten abgeleitet.
-         </p>
-         <h3>Anzahl Messpunkte für Deutschland</h3>
-         <p>
-            Die Landfläche der Bundesrepublik Deutschland beträgt ungefähr 357.600 Quadratkilometer. Für jeden Quadratmeter (1x1 m) wird ein Höhenmesswert zur Verfügung gestellt.
-            Aktuell können ca. 365 Milliarden Messwerte abgerufen werden.
-         </p>
+          <li>
+            <a href="gpx.html">GPX-Datei</a>
+          </li>
 
-         <img src="./images/musenberg-500x400.png">
-         <p><small>Genaue Höhenangaben zu einer Strecke.</small></p>
+          <li>
+            <a href="hoehenlinien.html">Höhenlinien</a>
+          </li>
+          <li>
+            <a href="schummerung.html">Schummerung</a>
+          </li>
+        </ul>
+      </li>
 
-         <h3>Bundesländer</h3>
-         <div class="table-responsive">
-         <table>
-            <thead>
-               <tr>
-                  <th>Kürzel</th>
-                  <th>Bundesland</th>
-                  <th>
-                     <ul>
-                        <li>Geoportal / Webseite</li>
-                        <li>Attribution</li>
-                        <li>Aktualität</li>
-                        <li>Anmerkung</li>
-                     </ul>
-                  </th>
-              </tr>
-            </thead>
-            <tbody>
-               <tr>
-                  <td>DE-BW</td>
-                  <td>Baden-Württemberg</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://rips-metadaten.lubw.de/trefferanzeige;jsessionid=6494CD490977AE534F242E0A38A3E8BF?docuuid=271f9e5b-6f12-4fc9-b692-cb7828e8c170" target="_blank">Digitales Geländemodell 1 Meter (DGM1)</a></li>
-                        <li>© GeoBasis-DE / LGL-BW (2025), dl-de/by-2-0</li>
-                        <li>2016 bis 2022-04</li>
-                     </ul>
-                  </td>
-              </tr>
-               <tr>
-                  <td>DE-BY</td>
-                  <td>Bayern</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=dgm1" target="_blank">Digitales Geländemodell 1m (DGM1)</a></li>
-                        <li>Datenquelle: Bayerische Vermessungsverwaltung – geodaten.bayern.de, cc-by/4.0</li>
-                        <li>2015-03-07 bis 2024-04-07 (Die Angaben beziehen sich auf den Erfassungszeitraum des jeweiligen Befliegungsgebiets.)</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-BE</td>
-                  <td>Berlin</td>
-                  <td>
-                     <ul>
-                        <li>Die Höhenwerte für Berlin sind in den Daten für Brandenburg enthalten.</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-BB</td>
-                  <td>Brandenburg</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://geoportal.brandenburg.de/detailansichtdienst/render?url=https://geoportal.brandenburg.de/gs-json/xml?fileid=518094b9-d294-4e99-aeb2-550592a00682" target="_blank">Digitales Geländemodell - DGM</a></li>
-                        <li>© GeoBasis-DE / LGB, dl-de/by-2-0</li>
-                        <li>2008-01-10 bis 2024-03-19</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-HB</td>
-                  <td>Bremen</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://geoportal.bremen.de/geoportal/" target="_blank">GeoPortal Bremen</a></li>
-                        <li>Quellenvermerk: Landesamt GeoInformation Bremen, cc-by/4.0, Quelle verändert</li>
-                        <li>2015 bis 2017</li>
-                        <li>Die Quelldaten wurden technisch konvertiert (XYZ -> GeoTIFF).</li>
-                    </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-HH</td>
-                  <td>Hamburg</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://metaver.de/trefferanzeige?docuuid=A39B4E86-15E2-4BF7-BA82-66F9913D5640" target="_blank">Digitales Höhenmodell Hamburg DGM 1</a></li>
-                        <li>Quellenvermerk: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), dl-de/by-2-0</li>
-                        <li>2022-03</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-HE</td>
-                  <td>Hessen</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://hvbg.hessen.de/landesvermessung/geotopographie/3d-daten/digitale-gelaendemodelle" target="_blank">ATKIS® DGM - Digitale Geländemodelle</a></li>
-                        <li>Geobasisdaten © Hessische Verwaltung für Bodenmanagement und Geoinformation, dl-de/by-2-0</li>
-                        <li>2016-02-27 bis 2023-12-18</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-MV</td>
-                  <td>Mecklenburg-Vorpommern</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://laiv.geodaten-mv.de/afgvk/Geotopographie/Download?produkt=DGM1" target="_blank">Download Digitales Geländemodell 1 m (DGM1)</a></li>
-                        <li>© GeoBasis-DE/MV (2025), dl-de/by-2-0, Quelle verändert</li>
-                        <li>2012-07 bis 2024-03</li>
-                        <li>Die Quelldaten wurden technisch umgekachelt (2x2 km -> 4x 1x1 km).</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-NI</td>
-                  <td>Niedersachsen</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://geoportal.geodaten.niedersachsen.de/harvest/srv/api/records/740e33da-3310-4173-bae1-d30c31124b3a" target="_blank">Digitales Geländemodell (DGM1)</a></li>
-                        <li>© GeoBasis-DE / LGLN (2025), cc-by/4.0</li>
-                        <li>2010-05-14 bis 2022-04-23</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-NW</td>
-                  <td>Nordrhein-Westfalen</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://www.bezreg-koeln.nrw.de/geobasis-nrw/produkte-und-dienste/hoehenmodelle/digitale-gelaendemodelle/digitales-gelaendemodell" target="_blank">Digitales Geländemodell</a></li>
-                        <li>© GeoBasis-DE / NRW (2025), dl-de/by-2-0</li>
-                        <li>2019-12 bis 2024-03</li>
-                        <li>Die Nennung der Attributierung ist optional.</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-RP</td>
-                  <td>Rheinland-Pfalz</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://geoshop.rlp.de/opendata-dgm1.html" target="_blank">Digitales Geländemodell Gitterweite 1 m</a></li>
-                        <li>© GeoBasis-DE / LVermGeoRP (2025), dl-de/by-2-0</li>
-                        <li>2008-03-15 bis 2024-03-15 (Tag und Monat sind als Richtwert zu verstehen.)</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-SL</td>
-                  <td>Saarland</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://www.saarland.de/lvgl/DE/themen-aufgaben/themen/geotopographie/digitalegelaendemodelle/digitalegelaendemodelle" target="_blank">Digitale Geländemodelle</a></li>
-                        <li>© GeoBasis DE/LVGL-SL (2025), dl-de/by-2-0</li>
-                        <li>20.12.2015 bis 01.03.2016</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-SN</td>
-                  <td>Sachsen</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://www.geodaten.sachsen.de/downloadbereich-digitale-hoehenmodelle-4851.html" target="_blank">Downloadbereich Digitale Höhenmodelle</a></li>
-                        <li>© GeoBasis-DE / GeoSN (2025), dl-de/by-2-0</li>
-                        <li>2016-12-05 bis 2024-01-30 (Die Angaben repräsentieren den genauen Befliegungstag.)</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-ST</td>
-                  <td>Sachsen-Anhalt</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://www.lvermgeo.sachsen-anhalt.de/de/gdp-dgm-dom-lsa.html" target="_blank">DGM - Digitales Geländemodell</a></li>
-                        <li>© GeoBasis-DE / LVermGeo ST, dl-de/by-2-0, Quelle verändert</li>
-                        <li>2009-08 bis 2023-01</li>
-                        <li>Die Quelldaten wurden technisch umgekachelt (2x2 km -> 4x 1x1 km).</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-SH</td>
-                  <td>Schleswig-Holstein</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://opendata.schleswig-holstein.de/dataset/digitales-gelandemodell-1-dgm1" target="_blank">Digitales Geländemodell 1 (DGM1)</a></li>
-                        <li>© GeoBasis-DE / LVermGeo SH, cc-by/4.0, Quelle verändert</li>
-                        <li>2005 bis 2023</li>
-                        <li>Die Quelldaten wurden technisch konvertiert (XYZ -> GeoTIFF).</li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr>
-                  <td>DE-TH</td>
-                  <td>Thüringen</td>
-                  <td>
-                     <ul>
-                        <li><a href="https://tlbg.thueringen.de/geobasisdaten/3d-informationen/digitale-gelaendemodelle" target="_blank">Digitale Geländemodelle (DGM)</a></li>
-                        <li>© GDI-Th (2025), dl-de/by-2-0</li>
-                        <li>2019-11 bis 2024-03</li>
-                        <li>Ein Bereich im südlichen Thüringen ist derzeit noch nicht integriert.</li>
-                     </ul>
-                  </td>
-               </tr>
-            </tbody>
-         </table>
-         </div>
-         <p><small>Anmerkung: "Quelle verändert" bedeutet, dass die Quelldaten technisch, nicht jedoch inhaltlich, geändert wurden.
-         </small></p>
-      </div>
-      <footer>
-         <p>&copy; 2025 - Höhendaten für Deutschland</p>
-      </footer>
-   </body>
+      <li>
+        <a href="api.html">API</a>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Höhendaten für Deutschland</h2>
+
+    <h3>Höhendaten</h3>
+
+    <p>Alle Bundesländer in Deutschland erheben durch die Landesvermessungsämter sehr detaillierte und genaue Höhendaten. Diese Daten werden als Digitale
+    Geländemodelle (DGM) frei (Open Data) zur Verfügung gestellt. Die DGM-Daten sind für eine Vielzahl von Anwendungen (z.B. Planung, Umweltanalyse, Simulation)
+    unerlässlich. Dieser Webservice macht die Höhendaten auch für allgemeine Zwecke verfügbar.</p>
+
+    <h3>Digitale Geländemodelle</h3>
+
+    <p>Digitale Geländemodelle (DGM) beschreiben die räumlichen Formen der Erdoberfläche (Geländerelief). Ein DGM stellt im Gegensatz zum Digitalen
+    Oberflächenmodell (DOM) keine Objekte auf der Erdoberfläche dar (z. B. Bäume und Häuser). Brücken sind nicht Bestandteil eines DGM. Die Höhenangaben beziehen
+    sich auf das Deutsche Haupthöhennetz DHHN2016 (EPSG:7837).</p>
+    <img src="./images/dreikaiserstuhl-500x400.png" alt="Karte mit einem Punkt am Dreikaiserstuhl und dessen genauer Höhe.">
+    <p><small>Genaue Höhenangaben zu einzelnen Punkten.</small>
+    </p>
+
+    <h3>Genauigkeit der erhobenen Daten</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Art</th>
+            <th>Typ des Geländes</th>
+            <th>Genauigkeit</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Höhe</td>
+            <td>Flachland oder offenes Gelände</td>
+            <td>≤ ±15 cm</td>
+          </tr>
+
+          <tr>
+            <td>Höhe</td>
+            <td>Steiles Gelände oder dicht bewaldetes Gebiet</td>
+            <td>≤ ±30 cm</td>
+          </tr>
+
+          <tr>
+            <td>Lage</td>
+            <td>
+            </td>
+            <td>≤ ±30 cm</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Die Angaben zur Genauigkeit sind generalisiert und beziehen sich auf die Gesamtheit aller Messwerte mit einer statistischen Sicherheit (Konfidenzniveau) von
+    95 Prozent. Für Messwerte die aus neueren ALS-Befliegungen stammen, sind verbesserte Genauigkeiten anzunehmen. Exakte Angaben zur Genauigkeit der Messpunte
+    sind den Metadaten der jeweils zuständigen Bundesländer zu entnehmen.</p>
+
+    <p>Die relative Genauigkeit nahe beieinanderliegender Messwerte ist als wesentlich höher einzuschätzen. Die Frage "Wohin fließt das Wasser?" kann im Nahbereich
+    recht verläßlich beantwortet werden.</p>
+
+    <h3>Aktualität der erhobenen Daten</h3>
+
+    <p>Die Höhendaten werden von den Bundesländer oft in einem regelmäßigen Turnus (z.B. 5 Jahre) neu erhoben. Die Angaben zur Aktualität der Daten wurden aus den
+    verfügbaren Informationen (z.B. Metadaten) über die Ursprungsdaten abgeleitet.</p>
+
+    <h3>Anzahl Messpunkte für Deutschland</h3>
+
+    <p>Die Landfläche der Bundesrepublik Deutschland beträgt ungefähr 357.600 Quadratkilometer. Für jeden Quadratmeter (1x1 m) wird ein Höhenmesswert zur Verfügung
+    gestellt. Aktuell können ca. 365 Milliarden Messwerte abgerufen werden.</p>
+    <img src="./images/musenberg-500x400.png" alt="Karte mit einer Strecke und den Höheninformationen der Endpunkte am Musenberg.">
+    <p><small>Genaue Höhenangaben zu einer Strecke.</small>
+    </p>
+
+    <h3>Bundesländer</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Kürzel</th>
+            <th>Bundesland</th>
+            <th>
+              <ul>
+                <li>Geoportal / Webseite</li>
+
+                <li>Attribution</li>
+
+                <li>Aktualität</li>
+
+                <li>Anmerkung</li>
+              </ul>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>DE-BW</td>
+            <td>Baden-Württemberg</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://rips-metadaten.lubw.de/trefferanzeige;jsessionid=6494CD490977AE534F242E0A38A3E8BF?docuuid=271f9e5b-6f12-4fc9-b692-cb7828e8c170"
+                  target="_blank">Digitales Geländemodell 1 Meter (DGM1)</a>
+                </li>
+
+                <li>© GeoBasis-DE / LGL-BW (2025), dl-de/by-2-0</li>
+
+                <li>2016 bis 2022-04</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-BY</td>
+            <td>Bayern</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=dgm1" target="_blank">Digitales Geländemodell 1m (DGM1)</a>
+                </li>
+
+                <li>Datenquelle: Bayerische Vermessungsverwaltung – geodaten.bayern.de, cc-by/4.0</li>
+
+                <li>2015-03-07 bis 2024-04-07 (Die Angaben beziehen sich auf den Erfassungszeitraum des jeweiligen Befliegungsgebiets.)</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-BE</td>
+            <td>Berlin</td>
+            <td>
+              <ul>
+                <li>Die Höhenwerte für Berlin sind in den Daten für Brandenburg enthalten.</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-BB</td>
+            <td>Brandenburg</td>
+            <td>
+              <ul>
+                <li>
+                  <a href=
+                  "https://geoportal.brandenburg.de/detailansichtdienst/render?url=https://geoportal.brandenburg.de/gs-json/xml?fileid=518094b9-d294-4e99-aeb2-550592a00682"
+                  target="_blank">Digitales Geländemodell - DGM</a>
+                </li>
+
+                <li>© GeoBasis-DE / LGB, dl-de/by-2-0</li>
+
+                <li>2008-01-10 bis 2024-03-19</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-HB</td>
+            <td>Bremen</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://geoportal.bremen.de/geoportal/" target="_blank">GeoPortal Bremen</a>
+                </li>
+
+                <li>Quellenvermerk: Landesamt GeoInformation Bremen, cc-by/4.0, Quelle verändert</li>
+
+                <li>2015 bis 2017</li>
+
+                <li>Die Quelldaten wurden technisch konvertiert (XYZ -&gt; GeoTIFF).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-HH</td>
+            <td>Hamburg</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://metaver.de/trefferanzeige?docuuid=A39B4E86-15E2-4BF7-BA82-66F9913D5640" target="_blank">Digitales Höhenmodell Hamburg DGM 1</a>
+                </li>
+
+                <li>Quellenvermerk: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), dl-de/by-2-0</li>
+
+                <li>2022-03</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-HE</td>
+            <td>Hessen</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://hvbg.hessen.de/landesvermessung/geotopographie/3d-daten/digitale-gelaendemodelle" target="_blank">ATKIS® DGM - Digitale
+                  Geländemodelle</a>
+                </li>
+
+                <li>Geobasisdaten © Hessische Verwaltung für Bodenmanagement und Geoinformation, dl-de/by-2-0</li>
+
+                <li>2016-02-27 bis 2023-12-18</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-MV</td>
+            <td>Mecklenburg-Vorpommern</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://laiv.geodaten-mv.de/afgvk/Geotopographie/Download?produkt=DGM1" target="_blank">Download Digitales Geländemodell 1 m (DGM1)</a>
+                </li>
+
+                <li>© GeoBasis-DE/MV (2025), dl-de/by-2-0, Quelle verändert</li>
+
+                <li>2012-07 bis 2024-03</li>
+
+                <li>Die Quelldaten wurden technisch umgekachelt (2x2 km -&gt; 4x 1x1 km).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-NI</td>
+            <td>Niedersachsen</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://geoportal.geodaten.niedersachsen.de/harvest/srv/api/records/740e33da-3310-4173-bae1-d30c31124b3a" target="_blank">Digitales
+                  Geländemodell (DGM1)</a>
+                </li>
+
+                <li>© GeoBasis-DE / LGLN (2025), cc-by/4.0</li>
+
+                <li>2010-05-14 bis 2022-04-23</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-NW</td>
+            <td>Nordrhein-Westfalen</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://www.bezreg-koeln.nrw.de/geobasis-nrw/produkte-und-dienste/hoehenmodelle/digitale-gelaendemodelle/digitales-gelaendemodell"
+                  target="_blank">Digitales Geländemodell</a>
+                </li>
+
+                <li>© GeoBasis-DE / NRW (2025), dl-de/by-2-0</li>
+
+                <li>2019-12 bis 2024-03</li>
+
+                <li>Die Nennung der Attributierung ist optional.</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-RP</td>
+            <td>Rheinland-Pfalz</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://geoshop.rlp.de/opendata-dgm1.html" target="_blank">Digitales Geländemodell Gitterweite 1 m</a>
+                </li>
+
+                <li>© GeoBasis-DE / LVermGeoRP (2025), dl-de/by-2-0</li>
+
+                <li>2008-03-15 bis 2024-03-15 (Tag und Monat sind als Richtwert zu verstehen.)</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-SL</td>
+            <td>Saarland</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://www.saarland.de/lvgl/DE/themen-aufgaben/themen/geotopographie/digitalegelaendemodelle/digitalegelaendemodelle" target=
+                  "_blank">Digitale Geländemodelle</a>
+                </li>
+
+                <li>© GeoBasis DE/LVGL-SL (2025), dl-de/by-2-0</li>
+
+                <li>20.12.2015 bis 01.03.2016</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-SN</td>
+            <td>Sachsen</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://www.geodaten.sachsen.de/downloadbereich-digitale-hoehenmodelle-4851.html" target="_blank">Downloadbereich Digitale
+                  Höhenmodelle</a>
+                </li>
+
+                <li>© GeoBasis-DE / GeoSN (2025), dl-de/by-2-0</li>
+
+                <li>2016-12-05 bis 2024-01-30 (Die Angaben repräsentieren den genauen Befliegungstag.)</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-ST</td>
+            <td>Sachsen-Anhalt</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://www.lvermgeo.sachsen-anhalt.de/de/gdp-dgm-dom-lsa.html" target="_blank">DGM - Digitales Geländemodell</a>
+                </li>
+
+                <li>© GeoBasis-DE / LVermGeo ST, dl-de/by-2-0, Quelle verändert</li>
+
+                <li>2009-08 bis 2023-01</li>
+
+                <li>Die Quelldaten wurden technisch umgekachelt (2x2 km -&gt; 4x 1x1 km).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-SH</td>
+            <td>Schleswig-Holstein</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://opendata.schleswig-holstein.de/dataset/digitales-gelandemodell-1-dgm1" target="_blank">Digitales Geländemodell 1 (DGM1)</a>
+                </li>
+
+                <li>© GeoBasis-DE / LVermGeo SH, cc-by/4.0, Quelle verändert</li>
+
+                <li>2005 bis 2023</li>
+
+                <li>Die Quelldaten wurden technisch konvertiert (XYZ -&gt; GeoTIFF).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td>DE-TH</td>
+            <td>Thüringen</td>
+            <td>
+              <ul>
+                <li>
+                  <a href="https://tlbg.thueringen.de/geobasisdaten/3d-informationen/digitale-gelaendemodelle" target="_blank">Digitale Geländemodelle (DGM)</a>
+                </li>
+
+                <li>© GDI-Th (2025), dl-de/by-2-0</li>
+
+                <li>2019-11 bis 2024-03</li>
+
+                <li>Ein Bereich im südlichen Thüringen ist derzeit noch nicht integriert.</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><small>Anmerkung: "Quelle verändert" bedeutet, dass die Quelldaten technisch, nicht jedoch inhaltlich, geändert wurden.</small>
+    </p>
+  </div>
+
+  <footer>
+    <p>© 2025 - Höhendaten für Deutschland</p>
+  </footer>
+</body>
 </html>

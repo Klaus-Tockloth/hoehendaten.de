@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Höhendaten - Höhenlinien</title>
+  <meta name="description" content=
+  "Erzeugen Sie Höhenlinien für einen Kartenausschnitt in Deutschland basierend auf UTM- oder Lon/Lat-Koordinaten und einer gewählten Äquidistanz.">
+  <meta name="keywords" content="Höhendaten, Höhenlinien, Konturen, Isohypsen, DGM, UTM, Lon/Lat, Äquidistanz, Geodaten, Deutschland">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li>
+        <a href="abbildung.html">Abbildung</a>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="punkt.html">Punkt Lon/Lat</a>
+          </li>
+
+          <li>
+            <a href="punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="hoehenlinien.html">Höhenlinien</a>
+          </li>
+          <li>
+            <a href="schummerung.html">Schummerung</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="api.html">API</a>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Höhenlinien für einen Kartenausschnitt von 1x1 km</h2>
+
+    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Höhenlinien werden für die Kachel generiert, in der der
+    Referenzpunkt enthalten ist. Die Koordinaten der errechneten Höhenlinien entsprechen dem gewählten Eingabe-Koordinatensystem: EPSG:4326 für Lon/Lat und
+    EPSG:25832 oder EPSG:25833 für UTM.</p>
+    <!-- Bereich für die Eingabefelder -->
+
+    <div class="input-section section-box">
+      <h3>Eingabe</h3>
+
+      <p><b>Option 1: Lon/Lat-Koordinaten</b>
+      </p>
+      <!-- Langenberg (Rothaargebirge, höchster Berg in NRW) -->
+
+      <div class="input-group">
+        <label for="longitude">Longitude:</label> <input type="text" id="longitude" value="8.558333">
+      </div>
+
+      <div class="input-group">
+        <label for="latitude">Latitude:</label> <input type="text" id="latitude" value="51.276389">
+      </div>
+
+      <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
+
+      <p><b>Option 2: UTM-Koordinaten</b>
+      </p>
+
+      <div class="input-group">
+        <label for="zone">Zone:</label> <input type="text" id="zone" value="">
+      </div>
+
+      <div class="input-group">
+        <label for="easting">Easting:</label> <input type="text" id="easting" value="">
+      </div>
+
+      <div class="input-group">
+        <label for="northing">Northing:</label> <input type="text" id="northing" value="">
+      </div>
+
+      <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
+
+      <p><b>Parameter für Höhenlinien</b>
+      </p>
+
+      <div class="input-group">
+        <label for="equidistance">Äquidistanz (m):</label> <input type="text" id="equidistance" value="5.0" placeholder="z.B. 5.0 oder 10.0">
+      </div>
+    </div>
+    <!-- Bereich für den Button -->
+
+    <div class="button-section section-box">
+      <button id="queryButton">Abfrage der Höhenlinien</button>
+    </div>
+    <!-- Bereich für die Ausgabe -->
+
+    <div class="output-section section-box">
+      <h3>Ergebnis</h3>
+
+      <div id="results">
+      </div>
+    </div>
+  </div>
+  <script>
+         document.addEventListener('DOMContentLoaded', () => {
+             const longitudeInput = document.getElementById('longitude');
+             const latitudeInput = document.getElementById('latitude');
+             const zoneInput = document.getElementById('zone');
+             const eastingInput = document.getElementById('easting');
+             const northingInput = document.getElementById('northing');
+             const equidistanceInput = document.getElementById('equidistance');
+             const queryButton = document.getElementById('queryButton');
+             const resultsDiv = document.getElementById('results');
+
+             // Die API URL für Höhenlinien (muss ggf. angepasst werden)
+             const apiUrl = 'https://api.hoehendaten.de:14444/v1/contours';
+
+             function displayResult(className, htmlContent) {
+                 resultsDiv.className = className;
+                 resultsDiv.innerHTML = htmlContent;
+             }
+
+             // Function to convert Base64 string to binary string (for Blob)
+             function base64ToBinaryString(base64) {
+                try {
+                    return atob(base64);
+                } catch (e) {
+                    console.error("Fehler beim Dekodieren von Base64:", e);
+                    return null;
+                }
+             }
+
+             queryButton.addEventListener('click', async () => {
+                 const longitude = parseFloat(longitudeInput.value);
+                 const latitude = parseFloat(latitudeInput.value);
+                 const zone = parseInt(zoneInput.value, 10);
+                 const easting = parseFloat(eastingInput.value);
+                 const northing = parseFloat(northingInput.value);
+                 const equidistance = parseFloat(equidistanceInput.value);
+
+                 let useLonLat = !isNaN(longitude) && !isNaN(latitude);
+                 let useUtm = !isNaN(zone) && (zone === 32 || zone === 33) && !isNaN(easting) && !isNaN(northing);
+
+                 if (!useLonLat && !useUtm) {
+                     displayResult('error', '<p class="status-message">Fehler: Bitte geben Sie entweder gültige Lon/Lat-Koordinaten oder gültige UTM-Koordinaten (Zone 32/33, Easting, Northing) ein.</p>');
+                     return;
+                 }
+
+                 if (isNaN(equidistance) || equidistance <= 0) {
+                     displayResult('error', '<p class="status-message">Fehler: Bitte geben Sie eine gültige positive Äquidistanz ein.</p>');
+                     return;
+                 }
+
+                 displayResult('loading', '<p class="status-message">Lade ... Sende Anfrage an den Dienst ...</p>');
+
+                 const requestPayload = {
+                     Type: "ContoursRequest",
+                     ID: "WebApp-Contours-" + Date.now() + "-" + Math.random().toString(36).substring(7),
+                     Attributes: {
+                         Longitude: useLonLat ? longitude : 0, // Send 0 if not used, API should ignore
+                         Latitude: useLonLat ? latitude : 0,   // Send 0 if not used, API should ignore
+                         Zone: useUtm ? zone : 0,              // Send 0 if not used, API should ignore
+                         Easting: useUtm ? easting : 0,        // Send 0 if not used, API should ignore
+                         Northing: useUtm ? northing : 0,      // Send 0 if not used, API should ignore
+                         Equidistance: equidistance
+                     }
+                 };
+
+                 // If UTM is primary and Lon/Lat is also filled, clear Lon/Lat for the request
+                 // to avoid ambiguity if the user filled both but intended UTM.
+                 // A more sophisticated UI might use radio buttons to select input type.
+                 if (useUtm && zoneInput.value) { // Check if UTM fields were explicitly filled
+                     requestPayload.Attributes.Longitude = 0;
+                     requestPayload.Attributes.Latitude = 0;
+                 } else if (useLonLat && longitudeInput.value) { // UTM fields were not filled or invalid
+                     requestPayload.Attributes.Zone = 0;
+                     requestPayload.Attributes.Easting = 0;
+                     requestPayload.Attributes.Northing = 0;
+                 }
+
+
+                 try {
+                     const response = await fetch(apiUrl, {
+                         method: 'POST',
+                         headers: {
+                             'Content-Type': 'application/json',
+                             'Accept': 'application/json'
+                         },
+                         body: JSON.stringify(requestPayload)
+                     });
+
+                     let data = null;
+                     let rawText = null;
+
+                     try {
+                         rawText = await response.text();
+                         data = JSON.parse(rawText);
+                         console.log("API-Antwort (geparstes JSON):", data);
+                     } catch (jsonError) {
+                         console.warn("JSON-Parsen fehlgeschlagen:", jsonError);
+                         console.log("Rohe Antwort (Text):", rawText);
+                     }
+
+                     if (!response.ok) {
+                         let errorHtml = `<p class="status-message">Serverfehler mit Status ${response.status}:</p>`;
+                         if (data && data.Attributes && data.Attributes.IsError === true) {
+                             const errorAttributes = data.Attributes;
+                             errorHtml += '<table class="results-table">';
+                             if (errorAttributes.Longitude) errorHtml += `<tr><td><strong>Longitude</strong></td><td>${errorAttributes.Longitude}</td></tr>`;
+                             if (errorAttributes.Latitude) errorHtml += `<tr><td><strong>Latitude</strong></td><td>${errorAttributes.Latitude}</td></tr>`;
+                             if (errorAttributes.Zone) errorHtml += `<tr><td><strong>Zone</strong></td><td>${errorAttributes.Zone}</td></tr>`;
+                             if (errorAttributes.Easting) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
+                             if (errorAttributes.Northing) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
+                             if (errorAttributes.Equidistance) errorHtml += `<tr><td><strong>Äquidistanz</strong></td><td>${errorAttributes.Equidistance}</td></tr>`;
+
+                             if (errorAttributes.Error) {
+                                 const errorDetail = errorAttributes.Error;
+                                 if (errorDetail.Code !== undefined) errorHtml += `<tr><td><strong>Fehlercode</strong></td><td>${errorDetail.Code}</td></tr>`;
+                                 if (errorDetail.Title !== undefined) errorHtml += `<tr><td><strong>Fehlertitel</strong></td><td>${errorDetail.Title}</td></tr>`;
+                                 if (errorDetail.Detail !== undefined) errorHtml += `<tr><td><strong>Fehlerdetail</strong></td><td>${errorDetail.Detail}</td></tr>`;
+                             }
+                             errorHtml += '</table>';
+                         } else if (rawText !== null) {
+                             errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
+                         } else {
+                             errorHtml += `<br>Konnte die Antwort vom Server nicht lesen.`;
+                         }
+                         displayResult('error', errorHtml);
+                         return;
+                     }
+
+                     if (data && data.Attributes) {
+                         if (data.Attributes.IsError === true) {
+                             const errorAttributes = data.Attributes;
+                             let errorHtml = '<p class="status-message">Erfolgreiche HTTP-Antwort, aber Anwendungsfehler gemeldet.</p>';
+                             errorHtml += '<table class="results-table">';
+                             if (errorAttributes.Longitude) errorHtml += `<tr><td><strong>Longitude</strong></td><td>${errorAttributes.Longitude}</td></tr>`;
+                             if (errorAttributes.Latitude) errorHtml += `<tr><td><strong>Latitude</strong></td><td>${errorAttributes.Latitude}</td></tr>`;
+                             if (errorAttributes.Zone) errorHtml += `<tr><td><strong>Zone</strong></td><td>${errorAttributes.Zone}</td></tr>`;
+                             if (errorAttributes.Easting) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
+                             if (errorAttributes.Northing) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
+                             if (errorAttributes.Equidistance) errorHtml += `<tr><td><strong>Äquidistanz</strong></td><td>${errorAttributes.Equidistance}</td></tr>`;
+
+                             if (errorAttributes.Error) {
+                                 const errorDetail = errorAttributes.Error;
+                                 errorHtml += '<tr><td colspan="2"><strong>Fehlerdetails:</strong></td></tr>';
+                                 if (errorDetail.Code !== undefined) errorHtml += `<tr><td><strong>Code</strong></td><td>${errorDetail.Code}</td></tr>`;
+                                 if (errorDetail.Title !== undefined) errorHtml += `<tr><td><strong>Titel</strong></td><td>${errorDetail.Title}</td></tr>`;
+                                 if (errorDetail.Detail !== undefined) errorHtml += `<tr><td><strong>Detail</strong></td><td>${errorDetail.Detail}</td></tr>`;
+                             }
+                             errorHtml += '</table>';
+                             console.error("API-Anwendungsfehler trotz OK-Antwort:", data.Attributes);
+                             displayResult('error', errorHtml);
+                             return;
+                         }
+
+                         let resultsHtml = '<p class="status-message">Höhenlinien erfolgreich verarbeitet:</p>';
+                         resultsHtml += '<table class="results-table">';
+                         const attributes = data.Attributes;
+                         if (attributes.Longitude) resultsHtml += `<tr><td><strong>Longitude</strong></td><td>${attributes.Longitude}</td></tr>`;
+                         if (attributes.Latitude) resultsHtml += `<tr><td><strong>Latitude</strong></td><td>${attributes.Latitude}</td></tr>`;
+                         if (attributes.Zone) resultsHtml += `<tr><td><strong>Zone</strong></td><td>${attributes.Zone}</td></tr>`;
+                         if (attributes.Easting) resultsHtml += `<tr><td><strong>Easting</strong></td><td>${attributes.Easting}</td></tr>`;
+                         if (attributes.Northing) resultsHtml += `<tr><td><strong>Northing</strong></td><td>${attributes.Northing}</td></tr>`;
+                         if (attributes.Equidistance) resultsHtml += `<tr><td><strong>Äquidistanz (m)</strong></td><td>${attributes.Equidistance}</td></tr>`;
+                         resultsHtml += '</table>';
+
+                         if (attributes.Contours && Array.isArray(attributes.Contours) && attributes.Contours.length > 0) {
+                             resultsHtml += '<h4>Generierte Höhenlinien-Dateien:</h4>';
+                             attributes.Contours.forEach((contour, index) => {
+                                 resultsHtml += `<div class="contour-info-box section-box" style="background-color: #f0f0f0; margin-top:10px;">`;
+                                 resultsHtml += `<h4>Datei ${index + 1}</h4>`;
+                                 resultsHtml += '<table class="results-table">';
+                                 if (contour.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${contour.TileIndex}</td></tr>`;
+                                 if (contour.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${contour.Actuality}</td></tr>`;
+                                 if (contour.Origin !== undefined) resultsHtml += `<tr><td><strong>Ursprung</strong></td><td>${contour.Origin}</td></tr>`;
+                                 if (contour.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${contour.Attribution}</td></tr>`;
+                                 resultsHtml += '</table>';
+
+                                 if (contour.Data && contour.TileIndex) {
+                                     const decodedBinaryString = base64ToBinaryString(contour.Data);
+                                     if (decodedBinaryString) {
+                                         const byteNumbers = new Array(decodedBinaryString.length);
+                                         for (let i = 0; i < decodedBinaryString.length; i++) {
+                                             byteNumbers[i] = decodedBinaryString.charCodeAt(i);
+                                         }
+                                         const byteArray = new Uint8Array(byteNumbers);
+                                         const blob = new Blob([byteArray], { type: 'application/geo+json' }); // Annahme: GeoJSON
+                                         const downloadUrl = URL.createObjectURL(blob);
+
+                                         // Original: const outputFileName = `${contour.TileIndex}.geojson`;
+                                         // Modifiziert: Dateiname mit Origin (kleingeschrieben)
+                                         const originPart = contour.Origin ? `.${contour.Origin.toLowerCase()}` : '';
+                                         const outputFileName = `${contour.TileIndex}${originPart}.geojson`;
+
+                                         resultsHtml += `<p class="download-link-area"><a href="${downloadUrl}" download="${outputFileName}">Download '${outputFileName}'</a></p>`;
+                                     } else {
+                                         resultsHtml += `<p class="status-message error-message">Fehler: Konturdaten (Base64) für Tile ${contour.TileIndex} konnten nicht dekodiert werden.</p>`;
+                                     }
+                                 } else {
+                                     resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${contour.TileIndex || 'Unbekannt'}.</p>`;
+                                 }
+                                 resultsHtml += `</div>`;
+                             });
+                         } else {
+                             resultsHtml += '<p>Keine Höhenlinien-Daten in der Antwort enthalten.</p>';
+                         }
+                         displayResult('success', resultsHtml);
+
+                     } else {
+                         let errorHtml = `<p class="status-message">Erfolgreiche HTTP-Antwort (${response.status}), aber die erwarteten Daten wurden nicht gefunden.</p>`;
+                         if (rawText !== null) {
+                            errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
+                         }
+                         displayResult('error', errorHtml);
+                     }
+
+                 } catch (error) {
+                     console.error("Fehler bei Abruf oder Verarbeitung:", error);
+                     displayResult('error', `<p class="status-message">Fehler beim Abfragen der API oder während der Verarbeitung:</p><p>${error.message}</p>`);
+                 }
+             });
+
+            // Listener, um UTM-Felder zu leeren, wenn Lon/Lat aktiv bearbeitet wird
+            longitudeInput.addEventListener('input', () => {
+                if(longitudeInput.value.trim() !== "" || latitudeInput.value.trim() !== "") {
+                    zoneInput.value = "";
+                    eastingInput.value = "";
+                    northingInput.value = "";
+                }
+            });
+            latitudeInput.addEventListener('input', () => {
+                 if(longitudeInput.value.trim() !== "" || latitudeInput.value.trim() !== "") {
+                    zoneInput.value = "";
+                    eastingInput.value = "";
+                    northingInput.value = "";
+                }
+            });
+
+            // Listener, um Lon/Lat-Felder zu leeren, wenn UTM aktiv bearbeitet wird
+            zoneInput.addEventListener('input', () => {
+                if(zoneInput.value.trim() !== "" || eastingInput.value.trim() !== "" || northingInput.value.trim() !== "") {
+                    longitudeInput.value = "";
+                    latitudeInput.value = "";
+                }
+            });
+            eastingInput.addEventListener('input', () => {
+                 if(zoneInput.value.trim() !== "" || eastingInput.value.trim() !== "" || northingInput.value.trim() !== "") {
+                    longitudeInput.value = "";
+                    latitudeInput.value = "";
+                }
+            });
+            northingInput.addEventListener('input', () => {
+                if(zoneInput.value.trim() !== "" || eastingInput.value.trim() !== "" || northingInput.value.trim() !== "") {
+                    longitudeInput.value = "";
+                    latitudeInput.value = "";
+                }
+            });
+
+         });
+  </script>
+  <footer>
+    <p>© 2025 - Höhendaten für Deutschland</p>
+  </footer>
+</body>
+</html>

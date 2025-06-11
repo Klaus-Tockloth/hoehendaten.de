@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - Höhenlinien</title>
+  <meta name="description" content=
+  "Erfahren Sie mehr über die Bedeutung und Methoden der Visualisierung von Höhendaten, inklusive Digitaler Geländemodelle (DGM) und Höhenlinien.">
+  <meta name="keywords" content=
+  "Höhendaten, Abbildung, Visualisierung, DGM, Digitales Geländemodell, Höhenlinien, Konturlinien, Isohypsen, Topographie, Gelände, 3D-Daten">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li>
+        <a href="abbildung.html">Abbildung</a>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="punkt.html">Punkt Lon/Lat</a>
+          </li>
+
+          <li>
+            <a href="punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="hoehenlinien.html">Höhenlinien</a>
+          </li>
+          <li>
+            <a href="schummerung.html">Schummerung</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="api.html">API</a>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Abbildung / Visualisierung von Höhendaten</h3>
+
+    <p>Die Abbildung bzw. Visualisierung von Höhendaten ist aus vielfältigen Gründen sinnvoll und entscheidend für das Verständnis und die Analyse unserer Umwelt.
+    Wesentliche Gründe dafür sind:</p>
+
+    <ol>
+      <li><strong>Verständnis des Geländes:</strong> Durch die Visualisierung werden Höhenunterschiede, Geländeformen wie Hügel, Täler und Gebirgskämme sowie die
+      allgemeine Topographie eines Gebiets veranschaulicht und leichter verständlich gemacht. Dies hilft, die physischen Eigenschaften der Landschaft zu erfassen
+      und wie sie geformt wurde.</li>
+
+      <li><strong>Vereinfachung komplexer Daten:</strong> Rohdaten von Höhenmessungen, wie Punktwolken, können überwältigend und schwer direkt interpretierbar
+      sein. Visualisierungen, wie z. B. digitale Höhenmodelle (DEMs), digitale Oberflächenmodelle (DSMs) oder digitale Geländemodelle (DTMs), sowie traditionelle
+      Methoden wie Höhenlinien (Konturlinien), machen diese komplexen Informationen zugänglich und ermöglichen es, sie sofort zu erfassen.</li>
+
+      <li><strong>Unterstützung bei Analysen:</strong> Visualisierte Höhendaten sind die Grundlage für verschiedene geografische Analysen. Sie ermöglichen
+      Geländeanalyse, die Identifizierung von Mustern und Trends und die Berechnung von Oberflächeneigenschaften.</li>
+
+      <li><strong>Breite Anwendungspalette:</strong> Die Visualisierung ist entscheidend für zahlreiche praktische Anwendungen und Entscheidungsprozesse in
+      verschiedenen Bereichen wie Hydrologie, Infrastruktur- und Verkehrsplanung, Stadt- und Regionalplanung, Umweltmanagement, Katastrophenmanagement,
+      Ressourcenmanagement, Kartographie und Bildverarbeitung, Geologie und Geomorphologie und Archäologie.</li>
+    </ol>
+
+    <p>Zusammenfassend lässt sich sagen, dass die Visualisierung von Höhendaten unerlässlich ist, um die Erdoberfläche zu verstehen, komplexe räumliche Analysen
+    durchzuführen, fundierte Entscheidungen in Planung und Management zu treffen und Informationen effektiv zu kommunizieren.</p>
+
+    <h3>Höhenschichtlinien</h3>
+
+    <p>Höhenschichtlinien, auch Isohypsen oder Niveaulinien genannt, sind Linien, die Punkte gleicher Höhe über einem Bezugsniveau (Meeresspiegel) miteinander
+    verbinden. Eine Schar von Höhenlinien zusammen bildet das Höhenprofil eines Gebiets.</p>
+
+    <p>Die Interpretation von Höhenschichtlinien ermöglicht Rückschlüsse auf die Geländetopografie. Die Form und der Abstand der Linien geben Aufschluss über das
+    Relief. Liegen die Höhenlinien eng beieinander, deutet dies auf steiles Gelände hin, während ein größerer Abstand flaches Gelände anzeigt. Geschlossene
+    Höhenlinien stellen Kuppen oder Gipfel dar, wenn die Höhe nach innen zunimmt. Gleichmäßig gebogene Linien, die hintereinanderliegen, kennzeichnen oft eine
+    Senke oder ein Tal.</p>
+
+    <p>Höhenschichtlinien haben vielfältige Anwendungsmöglichkeiten. Sie dienen als quantitative Darstellung des Geländes und ermöglichen die Ableitung von
+    Geländeneigung, Höhenunterschieden und der Steilheit. Höhenlinien werden oft in Kombination mit anderen Darstellungsformen wie der Schummerung verwendet, um
+    einen besseren räumlichen Eindruck des Reliefs zu vermitteln.</p>
+
+    <img src="./images/aequidistanz-525x600.svg" width="500" alt="Grafik zur Veranschaulichung von Äquidistanz und Höhenlinien.">
+    <p><small>Grafik von Jeffdelonge (CC BY-SA 3.0, <a href="https://de.wikipedia.org/wiki/%C3%84quidistanz_(Kartografie)" target="_blank">Wikipedia</a>) zur
+    Veranschaulichung von Äquidistanz (h) und Höhenlinien.</small>
+    </p>
+
+    <p>Das Erscheinungsbild der Höhenschichtlinien kann durch den Parameter <strong>Äquidistanz</strong> gesteuert werden:</p>
+
+    <ul>
+      <li><strong>Definition:</strong> Die Äquidistanz bezeichnet den konstanten Höhenunterschied zwischen zwei benachbarten Höhenlinien auf einer Karte.
+      Höhenlinien verbinden Punkte gleicher Höhe.</li>
+
+      <li><strong>Wertebereich:</strong> Die kleinste mögliche Äquidistanz beträgt 0.2 Meter. Die größte mögliche Äquidistanz beträgt 25.0 Meter.</li>
+    </ul>
+
+    <p>Bei Höhenschichtlinien mit sehr kleinen Äquidistanzen, insbesondere im Nahbereich, können auch geringe Höhenunterschiede und feine Geländestrukturen
+    detailliert dargestellt werden. Moderne digitale Geländemodelle (DGM1) ermöglichen die Ableitung von Höhenschichtlinien mit sehr geringen Äquidistanzen,
+    beispielsweise 0.5 Meter. Dies erlaubt eine sehr präzise Darstellung des Geländes. Allerdings kann die Darstellung in sehr steilem Gelände bei kleinen
+    Äquidistanzen unübersichtlich werden, da die Linien sehr dicht zusammenrücken.</p>
+
+    <p><strong>Eingabe:</strong> Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Höhenschichtlinien erstellt werden.
+    Mögliche Eingabeformate:</p>
+
+    <ul>
+      <li>Lon/Lat-Koordinaten (WGS84, EPSG:4326)</li>
+
+      <li>UTM-Koordinaten (EPSG:25832 / EPSG:25833)</li>
+    </ul>
+
+    <p><strong>Ausgabe:</strong> Erzeugt werden Höhenschichtlinien im GeoJSON-Format. Dabei wird jede Höhenschichtlinie durch Koordinaten repräsentiert, die dem
+    gewählten Eingabeformat entsprechen. Mögliche Ausgabeformate:</p>
+
+    <ul>
+      <li>Lon/Lat-Koordinaten (WGS84, EPSG:4326)</li>
+
+      <li>UTM-Koordinaten (EPSG:25832 / EPSG:25833)</li>
+    </ul>
+
+    <img src="./images/hoehenschichtlinien-500x400.png" alt="Höhenschichtlinien für einen Kartenausschnitt am Langenberg (NRW).">
+    <p><small>Höhenschichtlinien für eine Datenkachel am Langenberg (NRW) mit einer Äquidistanz von 5.0 Metern.</small>
+    </p>
+
+    <p>Die Höhenlinien auf dieser Webseite sind in erster Linie für die Nutzung im Nahbereich gedacht. Es lassen sich Höhenlinien für jeweils eine Kachel von 1x1
+    km abrufen. Durch das Wiederholen des Vorgangs können die Höhenlinien für einen lokalen Bereich angezeigt werden. Prinzipbedingt entstehen durch dieses
+    Vorgehensmodell am Rand zwischen benachbarten Kacheln geringfügige, unvermeidbare Artefakte.</p>
+
+    <h2>TODO: Bild mit Schummerung einfügen.</h2>
+
+    <h3>Schummerung</h3>
+
+    <p>Die Schummerung ist eine zentrale Technik in der Kartographie und Geovisualisierung, um die Geländetopographie anschaulich darzustellen. Sie erzeugt einen
+    räumlichen Eindruck von Höhenunterschieden, indem sie Licht- und Schatteneffekte simuliert, so als würde das Gelände von einer imaginären Lichtquelle
+    beleuchtet. Dies hilft, die Formen des Geländes wie Hügel, Täler, Bergrücken, Kuppen und Senken leichter zu erkennen und zu verstehen.</p>
+
+    <p>Ähnlich wie bei Höhenlinien, die absolute Höhen durch Linien gleicher Höhe verbinden, visualisiert die Schummerung das relative Relief und die Neigung des
+    Geländes. Sie ist eine qualitative Methode, die keine exakten Höhenwerte liefert, aber ein intuitives Bild der Landoberfläche vermittelt.</p>
+
+    <p>Wesentliche Aspekte und Vorteile der Schummerung sind:</p>
+
+    <ul>
+      <li><strong>Verbessertes Geländeverständnis:</strong> Durch die Simulation von Licht und Schatten werden dreidimensionale Formen auf einer zweidimensionalen
+      Karte sichtbar gemacht, was das Verständnis der Topographie erheblich erleichtert.</li>
+
+      <li><strong>Hervorhebung von Strukturen:</strong> Die Schummerung kann selbst subtile Geländemerkmale hervorheben, die in anderen Darstellungen
+      möglicherweise nicht so deutlich erkennbar sind.</li>
+
+      <li><strong>Grundlage für Karten:</strong> Oft wird die Schummerung als Hintergrundebene in thematischen Karten verwendet, um den räumlichen Kontext für
+      andere dargestellte Informationen zu bieten.</li>
+
+      <li><strong>Ergänzung zu anderen Methoden:</strong> In Kombination mit anderen Visualisierungen wie Höhenlinien oder Farbhöhenschichten bietet die
+      Schummerung einen umfassenderen und anschaulicheren Eindruck des Geländes. Höhenlinien liefern die quantitativen Höheninformationen, während die Schummerung
+      das visuelle Relief hinzufügt.</li>
+    </ul>
+
+    <p>Die wichtigsten Parameter, die das Erscheinungsbild der Schummerung steuern, sind:</p>
+
+    <ul>
+      <li><strong>Azimut der Lichtquelle:</strong> Dieser Parameter gibt die horizontale Richtung an, aus der das Licht kommt, gemessen in Grad im Uhrzeigersinn
+      von Norden (0°). 0° bedeutet Licht aus dem Norden, 90° aus Osten, 180° aus Süden und 270° aus Westen. Der Standardwert ist oft 315°, da eine Beleuchtung aus
+      Nordwesten für das menschliche Auge am natürlichsten und anschaulichsten wirkt und das Relief am besten hervorgehoben wird. Eine Beleuchtung aus Nordwesten
+      (315°) beleuchtet Nordwesthänge hell und lässt Südwesthänge im Schatten liegen, was ein plastisches Bild erzeugt.</li>
+
+      <li><strong>Höhe der Lichtquelle:</strong> Dieser Parameter bestimmt den vertikalen Winkel der Lichtquelle über dem Horizont, gemessen in Grad (0° ist
+      Horizont, 90° ist senkrecht von oben). Eine niedrigere Höhe (z. B. 0°) erzeugt längere Schatten und betont subtilere Geländefunktionen, kann aber auch zu
+      starken Schattenwürfen führen. Eine höhere Höhe (z. B. 90°) beleuchtet das Gelände gleichmäßiger, wodurch weniger ausgeprägte Schatten entstehen. Ein
+      üblicher Standardwert ist 45°.</li>
+
+      <li><strong>Vertikale Überhöhung:</strong> Mit diesem Faktor wird die Höhe des Geländes vor der Berechnung der Schummerung multipliziert. Ein Wert größer als
+      1 überhöht das Relief künstlich und lässt auch in flacheren Gebieten stärkere Schatten entstehen, was die Sichtbarkeit des Geländes verbessern kann. Ein Wert
+      von 1 bedeutet keine Überhöhung.</li>
+
+      <li><strong>Algorithmus (Horn | ZevenbergenThorne):</strong> Wählt den Algorithmus zur Berechnung der Steigung und Ausrichtung, die für die Schummerung
+      verwendet werden. Horns Algorithmus wird oft für raueres Gelände empfohlen, während ZevenbergenThorne für glattere Landschaften besser geeignet sein
+      kann.</li>
+
+      <li>
+        <strong>Schummerungsvarianten:</strong>
+        <ul>
+          <li><strong>regular:</strong> Klassisch, basierend auf einer einzigen Lichtquelle, gut für schnelle Übersicht.</li>
+
+          <li><strong>multidirectional:</strong> Verbessert die Detailerkennung durch mehrere Lichtquellen, ideal für detaillierte Reliefkarten. Hinweis: Der Wert
+          für den Azimut der Lichtquelle wird ignoriert.</li>
+
+          <li><strong>combined:</strong> Fokus auf Kombination von Neigung und Beleuchtung, kann spezifische visuelle Effekte hervorheben.</li>
+
+          <li><strong>igor:</strong> Erzeugt eine weichere, subtilere Schummerung, die sich gut als Hintergrund für weitere Kartenebenen eignet. Hinweis: Der Wert
+          für die Höhe der Lichtquelle wird ignoriert.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><strong>Eingabe:</strong> Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Schummerung erstellt wird. Mögliche
+    Eingabeformate:</p>
+
+    <ul>
+      <li>Lon/Lat-Koordinaten (WGS84, EPSG:4326)</li>
+
+      <li>UTM-Koordinaten (EPSG:25832 / EPSG:25833)</li>
+    </ul>
+
+    <p><strong>Ausgabe:</strong> Abhängig vom Eingabeformat werden unterschiedliche Ausgabeformate erzeugt:</p>
+
+    <ul>
+      <li>PNG in der Projektion EPSG:3857 (Webmercator) mit expliziter Georeferenzierung durch Lon/Lat-Koordinaten (WGS84, EPSG:4326)</li>
+
+      <li>GeoTIFF in der Projektion der DGM1-Ausgangsdaten (EPSG:25832 / EPSG:25833) mit impliziter Georeferenzierung in den Metadaten</li>
+    </ul>
+
+    <p>Die Nutzung der Schummerung auf dieser Webseite ist in erster Linie für den Nahbereich gedacht. Es lässt sich die Schummerung für jeweils eine Kachel von
+    1x1 km abrufen. Durch das Wiederholen des Vorgangs kann die Schummerung für einen lokalen Bereich angezeigt werden.</p>
+
+    <h2>TODO: Bild mit Höhenschichtlinien und Schummerung einfügen.</h2>
+
+    <h3>Kombination von Höhenschichtlinien und Schummerung</h3>
+
+    <p>Die Stärke der kombinierten Darstellung liegt in der Verbindung der jeweiligen Vorteile beider Methoden:</p>
+
+    <ul>
+      <li><strong>Verbessertes räumliches Verständnis:</strong> Höhenlinien allein vermitteln oft kein unmittelbares räumliches Gefühl für das Gelände. Die
+      Schummerung fügt die notwendige visuelle Plastizität hinzu und ermöglicht eine intuitive Erfassung von Geländeformen wie Hügeln, Tälern und Senken.</li>
+
+      <li><strong>Erhöhte Lesbarkeit und Interpretation:</strong> In Bereichen mit geringen Höhenunterschieden oder sehr dicht liegenden Höhenlinien kann die
+      Übersichtlichkeit leiden. Die Schummerung hilft, auch subtile Reliefdetails hervorzuheben und die Lesbarkeit der Karte insgesamt zu verbessern.</li>
+
+      <li><strong>Quantitative und qualitative Information:</strong> Die Kombination liefert sowohl exakte Höhenwerte (durch Höhenlinien) als auch einen
+      anschaulichen qualitativen Eindruck der Geländeform (durch Schummerung). Dies ermöglicht eine umfassendere Analyse und Interpretation des Geländes.</li>
+
+      <li><strong>Ansprechende Kartengestaltung:</strong> Die Integration von Schummerung macht Karten visuell attraktiver und intuitiver nutzbar. Sie trägt dazu
+      bei, dass die Aussagekraft des dargestellten Inhalts besser zur Geltung kommt.</li>
+    </ul>
+  </div>
+</body>
+</html>

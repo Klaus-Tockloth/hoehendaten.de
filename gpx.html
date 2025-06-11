@@ -1,56 +1,95 @@
 <!DOCTYPE html>
 <html lang="de">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Höhendaten - GPX</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Höhendaten - GPX</title>
+  <meta name="description" content=
+  "Ermitteln Sie die exakte Höhe für alle Punkte in Deutschland für ihre gesamte GPX-Datei. Laden Sie anschließend die geänderte GPX-Datei herunter.">
+  <meta name="keywords" content=
+  "Höhendaten, GPX-Datei, Lon/Lat, Geokoordinaten, Höhe ermitteln, Deutschland, Höheninformationen ergänzen, Höheninformationen ersetzen">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
 
-      <meta name="description" content="Ermitteln Sie die exakte Höhe für alle Punkte in Deutschland für ihre gesamte GPX-Datei. Laden Sie anschließend die geänderte GPX-Datei herunter.">
-      <meta name="keywords" content="Höhendaten, GPX-Datei, Lon/Lat, Geokoordinaten, Höhe ermitteln, Deutschland, Höheninformationen ergänzen, Höheninformationen ersetzen">
-      <meta name="robots" content="index, follow">
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
 
-      <link rel="stylesheet" href="style.css">
-   </head>
-   <body>
-       <nav>
-         <ul>
-            <li><a href="index.html">Start</a></li>
-            <li><a href="karte.html">Karte</a></li>
-            <li><a href="dud.html">DuD</a></li>
-            <li class="dropdown">
-               <a href="javascript:void(0);" class="dropbtn">Dienste</a>
-               <ul class="dropdown-content">
-                  <li><a href="punkt.html">Punkt Lon/Lat</a></li>
-                  <li><a href="punkt_utm.html">Punkt UTM</a></li>
-                  <li><a href="gpx.html">GPX-Datei</a></li>
-               </ul>
-            </li>
-            <li><a href="api.html">API</a></li>
-            <li><a href="impressum.html">Impressum</a></li>
-         </ul>
-      </nav>
-      <div class="container">
-         <h2>Höheninformationen zu allen Punkten einer GPX-Datei</h2>
-         <!-- Bereich für die Eingabefelder (Datei) -->
-         <div class="input-section section-box">
-            <h3>Eingabe</h3>
-            <div class="input-group">
-               <label for="gpxFile">GPX-Datei:</label>
-               <input type="file" id="gpxFile" accept=".gpx">
-            </div>
-         </div>
-         <!-- Bereich für den Button -->
-         <div class="button-section section-box">
-            <button id="queryButton">Abfrage der Höhendaten</button>
-         </div>
-         <!-- Bereich für die Ausgabe -->
-         <div class="output-section section-box">
-            <h3>Ergebnis</h3>
-            <div id="results"></div>
-         </div>
+      <li>
+        <a href="abbildung.html">Abbildung</a>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="punkt.html">Punkt Lon/Lat</a>
+          </li>
+
+          <li>
+            <a href="punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="hoehenlinien.html">Höhenlinien</a>
+          </li>
+          <li>
+            <a href="schummerung.html">Schummerung</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="api.html">API</a>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Höheninformationen zu allen Punkten einer GPX-Datei</h2>
+    <!-- Bereich für die Eingabefelder (Datei) -->
+
+    <div class="input-section section-box">
+      <h3>Eingabe</h3>
+
+      <div class="input-group">
+        <label for="gpxFile">GPX-Datei:</label> <input type="file" id="gpxFile" accept=".gpx">
       </div>
+    </div>
+    <!-- Bereich für den Button -->
 
-      <script>
+    <div class="button-section section-box">
+      <button id="queryButton">Abfrage der Höhendaten</button>
+    </div>
+    <!-- Bereich für die Ausgabe -->
+
+    <div class="output-section section-box">
+      <h3>Ergebnis</h3>
+
+      <div id="results">
+      </div>
+    </div>
+  </div>
+  <script>
          // Wait for the DOM to be fully loaded
          document.addEventListener('DOMContentLoaded', () => {
              // Get references to the HTML elements
@@ -210,8 +249,8 @@
                               resultsHtml += '<table class="results-table">';
                               const attributes = data.Attributes;
 
-                              if (attributes.GPXPoints !== undefined) resultsHtml += `<tr><td><strong>Anzahl Punkte in der GPX-Datei</strong></td><td>${attributes.GPXPoints}</td></tr>`;
-                              if (attributes.DGMPoints !== undefined) resultsHtml += `<tr><td><strong>Anzahl Punkte mit DGM-Höhendaten</strong></td><td>${attributes.DGMPoints}</td></tr>`;
+                              if (attributes.GPXPoints !== undefined) resultsHtml += `<tr><td><strong>GPX-Punkte</strong></td><td>${attributes.GPXPoints}</td></tr>`;
+                              if (attributes.DGMPoints !== undefined) resultsHtml += `<tr><td><strong>DGM-Punkte</strong></td><td>${attributes.DGMPoints}</td></tr>`;
 
                               if (Array.isArray(attributes.Attributions) && attributes.Attributions.length > 0) {
                                   resultsHtml += `<tr><td><strong>Attribution(en)</strong></td><td>`;
@@ -297,9 +336,9 @@
                  reader.readAsArrayBuffer(file);
              });
          });
-      </script>
-      <footer>
-         <p>&copy; 2025 - Höhendaten für Deutschland</p>
-      </footer>
-   </body>
+  </script>
+  <footer>
+    <p>© 2025 - Höhendaten für Deutschland</p>
+  </footer>
+</body>
 </html>
