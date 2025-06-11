@@ -1,6 +1,6 @@
 /*
 Purpose:
-- Standardstil für die Webseite 'elevation.printmaps-osm.de'.
+- Standardstil für die Webseite 'hoehendaten.de'.
 
 Releases:
 - v1.0.0 - 2025-05-25: initial release
@@ -36,7 +36,10 @@ body {
 .container {
 	max-width: 100%;
 	margin: 0em;
-	padding: 1em;
+	padding-top: 0em;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-bottom: 0em;
 	background-color: #fff;
 }
 
@@ -87,16 +90,11 @@ hr {
 	margin-top: 1.5em;
 }
 
-h2 {
-	color: #555;
-	margin-top: 0;
-	margin-bottom: 0.5em;
-}
-
+h2,
 h3,
 h4 {
 	color: #555;
-	margin-top: 1.0em;
+	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 }
 
@@ -153,8 +151,8 @@ footer {
 	text-align: center;
 	border-top: 1px solid #eee;
 	color: #777;
-	font-size: 0.9em;
-	padding: 10px;
+	font-size: 0.8em;
+	padding: 0px;
 	margin-top: 0;
 	background-color: #fff;
 	flex-shrink: 0;
@@ -176,7 +174,7 @@ footer {
 
 .input-group label {
 	display: inline-block;
-	width: 150px; /* increased width for labels to accommodate longer text */
+	width: 150px;
 	margin-right: 10px;
 	font-weight: bold;
 	text-align: right;
@@ -220,12 +218,8 @@ footer {
 }
 
 #results {
-  	margin-top: 5px;
-    margin-bottom: 5px;
-	padding: 10px;
-	border: 1px solid #ccc;
-	background-color: #fff;
-	border-radius: 4px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 	box-sizing: border-box;
 	width: 100%;
 }
@@ -234,26 +228,9 @@ footer {
     margin-top: 0;
 }
 
-#results .contour-info-box:last-child {
-    margin-bottom: 0;
-}
-
 #results.loading {
 	border-color: #007bff;
-	background-color: #e9f2ff;
 	color: #007bff;
-}
-
-#results.success {
-	border-color: #ccc;
-	background-color: #e9ffe9;
-	color: #333;
-}
-
-#results.error {
-	border-color: #ccc;
-	background-color: #ffecec;
-	color: #333;
 }
 
 #results .status-message {
@@ -286,12 +263,13 @@ footer {
 }
 
 #results.error pre {
-	background-color: #fdd;
+	background-color: #f7f7f7;
 	border-color: red;
 	color: #333;
 }
 
 pre {
+
 	background-color: #f7f7f7;
 	font-family: monospace;
 	color: darkred;
@@ -375,11 +353,6 @@ nav ul li.dropdown:hover .dropdown-content {
     margin-top: 0;
 }
 
-/* kein oberer Abstand für H4-Elemente innerhalb der Kontur-Infobox */
-.contour-info-box h4 {
-    margin-top: 0em;
-}
-
 .input-group select {
     width: 100%;
     padding: 8px;
@@ -393,13 +366,6 @@ nav ul li.dropdown:hover .dropdown-content {
    padding: 8px;
    border: 1px solid #ccc;
    box-sizing: border-box;
-}
-
-.hillshade-info-box {
-    background-color: #f0f0f0;
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
 }
 
 .results-table {

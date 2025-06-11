@@ -65,11 +65,11 @@
   </nav>
 
   <div class="container">
-    <h2>Höheninformationen zu allen Punkten einer GPX-Datei</h2>
+    <h3>Höheninformationen zu allen Punkten einer GPX-Datei</h3>
     <!-- Bereich für die Eingabefelder (Datei) -->
 
     <div class="input-section section-box">
-      <h3>Eingabe</h3>
+      <!-- <h3>Eingabe</h3> -->
 
       <div class="input-group">
         <label for="gpxFile">GPX-Datei:</label> <input type="file" id="gpxFile" accept=".gpx">
@@ -83,7 +83,7 @@
     <!-- Bereich für die Ausgabe -->
 
     <div class="output-section section-box">
-      <h3>Ergebnis</h3>
+      <!-- <h3>Ergebnis</h3> -->
 
       <div id="results">
       </div>
@@ -253,14 +253,14 @@
                               if (attributes.DGMPoints !== undefined) resultsHtml += `<tr><td><strong>DGM-Punkte</strong></td><td>${attributes.DGMPoints}</td></tr>`;
 
                               if (Array.isArray(attributes.Attributions) && attributes.Attributions.length > 0) {
-                                  resultsHtml += `<tr><td><strong>Attribution(en)</strong></td><td>`;
+                                  resultsHtml += `<tr><td><strong>Attribution</strong></td><td>`;
                                   attributes.Attributions.forEach((attr, index) => {
                                       resultsHtml += `${attr}${index < attributes.Attributions.length - 1 ? '<br>' : ''}`;
                                   });
                                   resultsHtml += `</td></tr>`;
                               } else if (attributes.Attributions !== undefined) {
                                    // Handle case where Attributions is not an array or is empty but the field exists
-                                   resultsHtml += `<tr><td><strong>Attribution(en)</strong></td><td>Keine Attributionen verfügbar oder das Format der Attributionen ist unerwartet.</td></tr>`;
+                                   resultsHtml += `<tr><td><strong>Attribution</strong></td><td>Keine Attributionen verfügbar oder das Format der Attributionen ist unerwartet.</td></tr>`;
                               }
 
                               resultsHtml += '</table>';
@@ -297,6 +297,7 @@
 
                                        // --- Generate output filename based on the new logic ---
                                        const originalFileName = file.name;
+                               
                                        const lastDotIndex = originalFileName.lastIndexOf('.');
                                        let outputFileName;
 

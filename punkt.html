@@ -63,11 +63,11 @@
   </nav>
 
   <div class="container">
-    <h2>Höheninformationen zu einem Lon/Lat-Punkt</h2>
+    <h3>Höheninformationen zu einem Lon/Lat-Punkt</h3>
     <!-- Bereich für die Eingabefelder -->
 
     <div class="input-section section-box">
-      <h3>Eingabe</h3>
+      <!-- <h3>Eingabe</h3> -->
       <!-- Der amtlich vermessene GPS-Referenzpunkt (9.738032, 52.36644) in Hannover,
              eine ebenerdig im Boden eingelassene Platte, weist eine Höhe von 53.636 m aus. -->
 
@@ -87,8 +87,7 @@
     <!-- Bereich für die Ausgabe -->
 
     <div class="output-section section-box">
-      <h3>Ergebnis</h3>
-      <!-- Geändert von h2 zu h3, um Hierarchie zu verdeutlichen -->
+      <!-- <h3>Ergebnis</h3> -->
 
       <div id="results">
       </div>
@@ -262,6 +261,7 @@
                      // --- Handle Network Errors or Errors Thrown Before Fetch/Processing ---
                      console.error("Fehler bei Abruf oder Verarbeitung:", error); // Log the error for debugging
                      displayResult('error', `<p class="status-message">Fehler beim Abfragen der API oder während der Verarbeitung:</p><p>${error.message}</p>`);
+
                  }
              });
          });

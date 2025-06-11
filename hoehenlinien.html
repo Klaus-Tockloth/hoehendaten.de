@@ -64,7 +64,7 @@
   </nav>
 
   <div class="container">
-    <h2>Höhenlinien für einen Kartenausschnitt von 1x1 km</h2>
+    <h3>Höhenlinien für einen Kartenausschnitt von 1x1 km</h3>
 
     <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Höhenlinien werden für die Kachel generiert, in der der
     Referenzpunkt enthalten ist. Die Koordinaten der errechneten Höhenlinien entsprechen dem gewählten Eingabe-Koordinatensystem: EPSG:4326 für Lon/Lat und
@@ -72,7 +72,7 @@
     <!-- Bereich für die Eingabefelder -->
 
     <div class="input-section section-box">
-      <h3>Eingabe</h3>
+      <!-- <h3>Eingabe</h3> -->
 
       <p><b>Option 1: Lon/Lat-Koordinaten</b>
       </p>
@@ -120,7 +120,7 @@
     <!-- Bereich für die Ausgabe -->
 
     <div class="output-section section-box">
-      <h3>Ergebnis</h3>
+      <!-- <h3>Ergebnis</h3> -->
 
       <div id="results">
       </div>
@@ -291,10 +291,9 @@
                          resultsHtml += '</table>';
 
                          if (attributes.Contours && Array.isArray(attributes.Contours) && attributes.Contours.length > 0) {
-                             resultsHtml += '<h4>Generierte Höhenlinien-Dateien:</h4>';
+                             resultsHtml += '<h4 style="margin-top: 1.5em;">Generierte Höhenlinien-Dateien:</h4>';
                              attributes.Contours.forEach((contour, index) => {
-                                 resultsHtml += `<div class="contour-info-box section-box" style="background-color: #f0f0f0; margin-top:10px;">`;
-                                 resultsHtml += `<h4>Datei ${index + 1}</h4>`;
+                                 resultsHtml += `<h4 style="margin-top: 1.5em;">Datei ${index + 1}</h4>`;
                                  resultsHtml += '<table class="results-table">';
                                  if (contour.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${contour.TileIndex}</td></tr>`;
                                  if (contour.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${contour.Actuality}</td></tr>`;
@@ -313,8 +312,6 @@
                                          const blob = new Blob([byteArray], { type: 'application/geo+json' }); // Annahme: GeoJSON
                                          const downloadUrl = URL.createObjectURL(blob);
 
-                                         // Original: const outputFileName = `${contour.TileIndex}.geojson`;
-                                         // Modifiziert: Dateiname mit Origin (kleingeschrieben)
                                          const originPart = contour.Origin ? `.${contour.Origin.toLowerCase()}` : '';
                                          const outputFileName = `${contour.TileIndex}${originPart}.geojson`;
 
@@ -325,7 +322,6 @@
                                  } else {
                                      resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${contour.TileIndex || 'Unbekannt'}.</p>`;
                                  }
-                                 resultsHtml += `</div>`;
                              });
                          } else {
                              resultsHtml += '<p>Keine Höhenlinien-Daten in der Antwort enthalten.</p>';

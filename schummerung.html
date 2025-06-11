@@ -14,7 +14,8 @@
   <nav>
     <ul>
       <li>
-        <a href="index.html">Start</a>
+        <a href="index.html">Start
+</a>
       </li>
 
       <li>
@@ -64,7 +65,7 @@
   </nav>
 
   <div class="container">
-    <h2>Schummerung für einen Kartenausschnitt von 1x1 km</h2>
+    <h3>Schummerung für einen Kartenausschnitt von 1x1 km</h3>
 
     <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Schummerung wird für die Kachel generiert, in der der
     Referenzpunkt enthalten ist. Die Ausgabe erfolgt im GeoTIFF-Format (wenn UTM-Koordinaten eingegeben wurden) oder im PNG-Format (wenn Lon/Lat-Koordinaten
@@ -72,7 +73,7 @@
     <!-- Bereich für die Eingabefelder -->
 
     <div class="input-section section-box">
-      <h3>Eingabe</h3>
+      <!-- <h3>Eingabe</h3> -->
 
       <p><b>Option 1: Lon/Lat-Koordinaten</b>
       </p>
@@ -150,7 +151,7 @@
     <!-- Bereich für die Ausgabe -->
 
     <div class="output-section section-box">
-      <h3>Ergebnis</h3>
+      <!-- <h3>Ergebnis</h3> -->
 
       <div id="results">
       </div>
@@ -389,10 +390,9 @@
                          resultsHtml += '</table>';
 
                          if (attributes.Hillshades && Array.isArray(attributes.Hillshades) && attributes.Hillshades.length > 0) {
-                             resultsHtml += '<h4>Generierte Schummerung(en):</h4>';
+                             resultsHtml += '<h4 style="margin-top: 1.5em;">Generierte Schummerung(en):</h4>';
                              attributes.Hillshades.forEach((hillshade, index) => {
-                                 resultsHtml += `<div class="hillshade-info-box">`;
-                                 resultsHtml += `<h4>Abbildung ${index + 1}</h4>`;
+                                 resultsHtml += `<h4 style="margin-top: 1.5em;">Abbildung ${index + 1}</h4>`;
                                  resultsHtml += '<table class="results-table">';
                                  if (hillshade.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${hillshade.TileIndex}</td></tr>`;
                                  if (hillshade.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${hillshade.Actuality}</td></tr>`;
@@ -449,7 +449,6 @@
                                  } else {
                                      resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${hillshade.TileIndex || 'Unbekannt'}.</p>`;
                                  }
-                                 resultsHtml += `</div>`;
                              });
                          } else {
                              resultsHtml += '<p>Keine Schummerungs-Daten in der Antwort enthalten.</p>';
