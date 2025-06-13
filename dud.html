@@ -47,10 +47,11 @@
           <li>
             <a href="hoehenlinien.html">Höhenlinien</a>
           </li>
-           <li>
+
+          <li>
             <a href="schummerung.html">Schummerung</a>
           </li>
-       </ul>
+        </ul>
       </li>
 
       <li>
@@ -66,6 +67,8 @@
   <div class="container">
     <h2>Dies und Das</h2>
 
+    <hr>
+
     <h3>Möglichkeiten der Nutzung der Höhendaten</h3>
 
     <ul>
@@ -77,6 +80,8 @@
 
       <li>Nutzung des Application Programming Interfaces (API).</li>
     </ul>
+
+    <hr>
 
     <h3>Airborne Laser Scanning (ALS)</h3>
 
@@ -96,6 +101,8 @@
     um die Daten exakt zu verorten. Die Komplexität der Daten und die Notwendigkeit, präzise Ergebnisse zu erzielen, machen diese Nachbearbeitung zu einem
     anspruchsvollen Teil des ALS-Verfahrens. Trotzdem hat sich ALS aufgrund seiner Fähigkeit, auch unter Vegetationsbedeckung detaillierte Geländedaten zu liefern,
     in vielen Bereichen wie der Forstwirtschaft, Archäologie, Stadtplanung und dem Umweltmonitoring etabliert.</p>
+
+    <hr>
 
     <h3>Qualitätskriterien der DGM1-Daten</h3>
 
@@ -171,6 +178,9 @@
       </ul>
     </ul>
     <img src="./images/dgm-raster-297x288.png" class="img-special-size" alt="Schematische Darstellung eines DGM Rasters mit 10x10 Pixeln.">
+
+    <hr>
+
     <h3>Absolute Genauigkeit der Daten</h3>
 
     <p>Das DGM1 in Deutschland bietet eine hohe absolute Höhengenauigkeit, die typischerweise im Bereich von ±15 cm bis ±30 cm liegt, abhängig von der
@@ -185,6 +195,13 @@
     Fehler hier weniger stark auswirken. Die relative Genauigkeit kann man zum Beispiel selbst beurteilen, indem man die Höhenwerte für die Laufbahn einer offenen
     Sportanlage ermittelt. Bei einer planen Laufbahn sollten sich nur sehr geringe Höhenunterschiede ergeben.</p>
 
+    <hr>
+    <img src="./images/details-punkt-500x400.png" alt="Details zu einem Punkt auf einer Karte mit Höheninformationen.">
+    <p><small>Details zu einem Punkt.</small>
+    </p>
+
+    <hr>
+
     <h3>Rückgabewerte der API</h3>
 
     <p>Das Application Programming Interface (API) gibt die Höhendaten als unveränderte Gleitkommazahl an den Aufrufer zurück. Beispiel: 53.62300109863281
@@ -196,6 +213,8 @@
     Lon/Lat-Koordinaten, die mit einer Genauigkeit von jeweils 7 Nachkommastellen ausgegeben werden. Dies entspricht in Deutschland in etwa einer Genauigkeit von
     einem Zentimeter.</p>
 
+    <hr>
+
     <h3>Basisdaten</h3>
 
     <p>Die Höhendaten werden von den Landesvermessungsämtern der Bundesländer zur Verfügung gestellt. In der Regel als Kacheln von 1x1km im GeoTIFF-Format und
@@ -205,17 +224,24 @@
     ergeben sich, homogen für ein Bundesland, Kacheln in den UTM-Zonen 32 oder 33. Kacheln, die Gebiete mehrerer Bundesländer abdecken, werden von allen
     betroffenen Bundesländern (zwei oder drei) bereitgestellt. Messpunkte jenseits der Bundeslandgrenze werden in der Regel mit NoData-Werten (meist -9999)
     gefüllt.</p>
+
+    <hr>
     <img src="./images/details-linie-500x400.png" alt="Details zu einer Strecke auf einer Karte, inklusive Höhendifferenz und Distanz.">
     <p><small>Details zu einer Strecke.</small>
     </p>
+
+    <hr>
 
     <h3>Anmerkungen und Anregungen</h3>
 
     <p>Wir freuen uns auf <a href="mailto:printmaps.service@gmail.com">Feedback</a>.</p>
   </div>
 
-  <footer>
-    <p>© 2025 - Höhendaten für Deutschland</p>
-  </footer>
+  <div class="container">
+    <hr>
+
+    <p style="text-align:center; color: #777"><small>© 2025 - Höhendaten für Deutschland</small>
+    </p>
+  </div>
 </body>
 </html>
