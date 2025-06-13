@@ -67,50 +67,45 @@
   <div class="container">
     <h3>Höhenlinien für einen Kartenausschnitt von 1x1 km</h3>
 
-    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Höhenlinien werden für die Kachel generiert, in der der
-    Referenzpunkt enthalten ist. Die Koordinaten der errechneten Höhenlinien entsprechen dem gewählten Eingabe-Koordinatensystem: EPSG:4326 für Lon/Lat und
-    EPSG:25832 oder EPSG:25833 für UTM.</p>
+    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Höhenlinien werden für die Kachel generiert, in der sich der
+    Referenzpunkt befindet. Die Koordinaten der errechneten Höhenlinien entsprechen dem gewählten Eingabe-Koordinatensystem: EPSG:4326 für Lon/Lat und EPSG:25832
+    oder EPSG:25833 für UTM.</p>
     <!-- Bereich für die Eingabefelder -->
 
     <div class="input-section section-box">
       <!-- <h3>Eingabe</h3> -->
 
-      <p><b>Option 1: Lon/Lat-Koordinaten</b>
-      </p>
+      <p>Option 1: Lon/Lat-Koordinaten</p>
       <!-- Langenberg (Rothaargebirge, höchster Berg in NRW) -->
 
       <div class="input-group">
-        <label for="longitude">Longitude:</label> <input type="text" id="longitude" value="8.558333">
+        <label for="longitude">Longitude</label> <input type="text" id="longitude" value="8.558333">
       </div>
 
       <div class="input-group">
-        <label for="latitude">Latitude:</label> <input type="text" id="latitude" value="51.276389">
-      </div>
-
-      <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
-
-      <p><b>Option 2: UTM-Koordinaten</b>
-      </p>
-
-      <div class="input-group">
-        <label for="zone">Zone:</label> <input type="text" id="zone" value="">
-      </div>
-
-      <div class="input-group">
-        <label for="easting">Easting:</label> <input type="text" id="easting" value="">
-      </div>
-
-      <div class="input-group">
-        <label for="northing">Northing:</label> <input type="text" id="northing" value="">
+        <label for="latitude">Latitude</label> <input type="text" id="latitude" value="51.276389">
       </div>
 
       <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
 
-      <p><b>Parameter für Höhenlinien</b>
-      </p>
+      <p>Option 2: UTM-Koordinaten</p>
 
       <div class="input-group">
-        <label for="equidistance">Äquidistanz (m):</label> <input type="text" id="equidistance" value="5.0" placeholder="z.B. 5.0 oder 10.0">
+        <label for="zone">Zone</label> <input type="text" id="zone" value="">
+      </div>
+
+      <div class="input-group">
+        <label for="easting">Easting</label> <input type="text" id="easting" value="">
+      </div>
+
+      <div class="input-group">
+        <label for="northing">Northing</label> <input type="text" id="northing" value="">
+      </div>
+
+      <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
+
+      <div class="input-group">
+        <label for="equidistance">Äquidistanz</label> <input type="text" id="equidistance" value="5.0" placeholder="z.B. 5.0 oder 10.0">
       </div>
     </div>
     <!-- Bereich für den Button -->
@@ -288,7 +283,7 @@
                          if (attributes.Zone) resultsHtml += `<tr><td><strong>Zone</strong></td><td>${attributes.Zone}</td></tr>`;
                          if (attributes.Easting) resultsHtml += `<tr><td><strong>Easting</strong></td><td>${attributes.Easting}</td></tr>`;
                          if (attributes.Northing) resultsHtml += `<tr><td><strong>Northing</strong></td><td>${attributes.Northing}</td></tr>`;
-                         if (attributes.Equidistance) resultsHtml += `<tr><td><strong>Äquidistanz (m)</strong></td><td>${attributes.Equidistance}</td></tr>`;
+                         if (attributes.Equidistance) resultsHtml += `<tr><td><strong>Äquidistanz</strong></td><td>${attributes.Equidistance}</td></tr>`;
                          resultsHtml += '</table>';
 
                          if (attributes.Contours && Array.isArray(attributes.Contours) && attributes.Contours.length > 0) {
@@ -384,8 +379,7 @@
   <div class="container">
     <hr>
 
-    <p style="text-align:center; color: #777"><small>© 2025 - Höhendaten für Deutschland</small>
-    </p>
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
   </div>
 </body>
 </html>

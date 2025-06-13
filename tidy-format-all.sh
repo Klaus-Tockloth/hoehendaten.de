@@ -6,6 +6,7 @@
 #
 # Version:
 # - v1.0.0 - 2025/06/06 initial release
+# - v1.1.0 - 2025/06/13 website added
 #
 # Prerequisites:
 # - tidy-html5 installed
@@ -36,4 +37,6 @@ tidy -config tidy-config.txt -quiet -modify index.html
 tidy -config tidy-config.txt -quiet -modify punkt_utm.html
 
 tidy -config tidy-config.txt -quiet -modify punkt.html
+
+tidy -config tidy-config.txt -quiet -modify schummerung.html
 

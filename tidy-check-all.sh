@@ -6,6 +6,7 @@
 #
 # Version:
 # - v1.0.0 - 2025/06/06 initial release
+# - v1.1.0 - 2025/06/13 website added
 #
 # Prerequisites:
 # - tidy-html5 installed
@@ -35,4 +36,6 @@ tidy -errors -quiet karte.html
 tidy -errors -quiet punkt_utm.html
 
 tidy -errors -quiet punkt.html
+
+tidy -errors -quiet schummerung.html
 
