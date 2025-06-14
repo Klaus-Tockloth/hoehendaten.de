@@ -71,6 +71,7 @@ L.control.locate({
     position: 'topleft',
     keepCurrentZoomLevel: true,
     drawCircle: true,
+    showCompass: false,
     strings: {
         title: "Zeige meinen aktuellen Standort an.",
         popup: "Sie befinden sich im Umkreis von {distance} Metern um den markierten Mittelpunkt."
