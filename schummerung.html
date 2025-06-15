@@ -120,11 +120,11 @@
       </div>
 
       <div class="input-group">
-        <label for="azimuthOfLight">Azimut</label> <input type="text" id="azimuthOfLight" value="315">
+        <label for="azimuthOfLight">Azimut°</label> <input type="text" id="azimuthOfLight" value="315">
       </div>
 
       <div class="input-group">
-        <label for="altitudeOfLight">Höhe</label> <input type="text" id="altitudeOfLight" value="45">
+        <label for="altitudeOfLight">Höhe°</label> <input type="text" id="altitudeOfLight" value="45">
       </div>
 
       <div class="input-group">
@@ -321,8 +321,8 @@
                              if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
                              if (errorAttributes.VerticalExaggeration !== undefined) errorHtml += `<tr><td><strong>Überhöhung</strong></td><td>${errorAttributes.VerticalExaggeration}</td></tr>`;
                              // Display Azimuth/Altitude from error response if they were part of the request attributes
-                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut</strong></td><td>${errorAttributes.AzimuthOfLight}</td></tr>`;
-                             if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe</strong></td><td>${errorAttributes.AltitudeOfLight}</td></tr>`;
+                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut°</strong></td><td>${errorAttributes.AzimuthOfLight}</td></tr>`;
+                             if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe°</strong></td><td>${errorAttributes.AltitudeOfLight}</td></tr>`;
                              if (errorAttributes.ShadingVariant !== undefined) errorHtml += `<tr><td><strong>Variante</strong></td><td>${errorAttributes.ShadingVariant}</td></tr>`;
 
                              if (errorAttributes.Error) {
@@ -355,8 +355,8 @@
                              if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
                              if (errorAttributes.VerticalExaggeration !== undefined) errorHtml += `<tr><td><strong>Überhöhung</strong></td><td>${errorAttributes.VerticalExaggeration}</td></tr>`;
                               // Display Azimuth/Altitude from the error response if they were sent in the request
-                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut/strong></td><td>${errorAttributes.AzimuthOfLight}°</td></tr>`;
-                             if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe</strong></td><td>${errorAttributes.AltitudeOfLight}°</td></tr>`;
+                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut°/strong></td><td>${errorAttributes.AzimuthOfLight}°</td></tr>`;
+                             if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe°</strong></td><td>${errorAttributes.AltitudeOfLight}°</td></tr>`;
                              if (errorAttributes.ShadingVariant !== undefined) errorHtml += `<tr><td><strong>Variante</strong></td><td>${errorAttributes.ShadingVariant}</td></tr>`;
 
                              if (errorAttributes.Error) {
@@ -384,8 +384,8 @@
                          if (attributes.GradientAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Algorithmus</strong></td><td>${attributes.GradientAlgorithm}</td></tr>`;
                          if (attributes.VerticalExaggeration !== undefined) resultsHtml += `<tr><td><strong>Überhöhung</strong></td><td>${attributes.VerticalExaggeration}</td></tr>`;
                           // Only show Azimuth/Altitude in the result if they were actually used (not disabled/ignored by ShadingVariant)
-                         if (attributes.ShadingVariant !== 'multidirectional' && attributes.AzimuthOfLight !== undefined) resultsHtml += `<tr><td><strong>Azimut</strong></td><td>${attributes.AzimuthOfLight}°</td></tr>`;
-                         if (attributes.ShadingVariant !== 'igor' && attributes.AltitudeOfLight !== undefined) resultsHtml += `<tr><td><strong>Höhe</strong></td><td>${attributes.AltitudeOfLight}°</td></tr>`;
+                         if (attributes.ShadingVariant !== 'multidirectional' && attributes.AzimuthOfLight !== undefined) resultsHtml += `<tr><td><strong>Azimut°</strong></td><td>${attributes.AzimuthOfLight}°</td></tr>`;
+                         if (attributes.ShadingVariant !== 'igor' && attributes.AltitudeOfLight !== undefined) resultsHtml += `<tr><td><strong>Höhe°</strong></td><td>${attributes.AltitudeOfLight}°</td></tr>`;
                          if (attributes.ShadingVariant !== undefined) resultsHtml += `<tr><td><strong>Variante</strong></td><td>${attributes.ShadingVariant}</td></tr>`;
 
                          resultsHtml += '</table>';
