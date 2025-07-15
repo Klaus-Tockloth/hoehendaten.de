@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API - UTMPointRequest</title>
+  <meta name="description" content=
+  "API-Dokumentation für den 'UTMPointRequest'. Ermöglicht die Abfrage von Höheninformationen für einen Punkt mittels UTM-Koordinaten (Zone, Easting, Northing).">
+  <meta name="keywords" content="Höhendaten, API, UTMPointRequest, UTM, Easting, Northing, Zone, Punktabfrage, Höhe, Elevation, Programmierschnittstelle">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Application Programming Interface (API)</h2>
+
+    <hr>
+
+    <h3 class="request">API-Attribute 'UTMPointRequest'</h3>
+
+    <p>Der API-Aufruf 'UTMPointRequest' dient der Abfrage der Höheninformation für einen einzelnen Punkt, der mittels UTM-Koordinaten (Zone, Easting, Northing)
+    definiert ist. Ähnlich wie beim 'PointRequest' umfasst die Antwort die ermittelte Höhe in Metern sowie Metadaten wie Aktualität, Herkunft und Attribution der
+    Höhendaten.</p>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Anfrage (UTMPointRequest)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>int</td>
+          <td>UTM Zone (32/33)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>float</td>
+          <td>Easting, X, Ostwert</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+    <h3 class="response">API-Attribute 'UTMPointResponse'</h3>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Antwort (UTMPointResponse)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>UTM Zone</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Easting, X, Ostwert</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Elevation</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Höhenwert (Meter)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Actuality</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Aktualität der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Origin</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Herkunft der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Attribution</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Attribution der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>TileIndex</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Index des Quelldaten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>IsError</td>
+          <td>
+          </td>
+          <td>bool</td>
+          <td>Fehler (ja/nein)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Error</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Fehlerdetails</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Code</td>
+          <td>string</td>
+          <td>Fehlernummer</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Title</td>
+          <td>string</td>
+          <td>Fehlerbeschreibung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Details</td>
+          <td>string</td>
+          <td>Fehlerdetaillierung</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+
+    <h4 class="request">UTMPointRequest (Beispiel)</h4>
+
+    <pre class="request"><code>
+#!/bin/bash
+#
+# Abfrage der Höhendaten für einen UTM Punkt
+
+postdata=$(cat &lt;&lt;EOF
+{
+  "Type": "UTMPointRequest",
+  "ID": "GPS-Referenzpunkt Hannover",
+  "Attributes": {
+      "Zone": 32,
+      "Easting": 550251.23,
+      "Northing": 5802052.35
+  }
+}
+EOF
+)
+
+echo "postdata =\n$postdata"
+
+curl \
+--silent \
+--include \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--data "$postdata" \
+https://api.hoehendaten.de:14444/v1/utmpoint
+
+</code></pre>
+    <hr>
+    <h4 class="response">UTMPointResponse:</h4>
+
+    <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 446
+date: Mon, 02 Jun 2025 06:53:41 GMT
+
+{
+  "Type": "UTMPointResponse",
+  "ID": "GPS-Referenzpunkt Hannover",
+  "Attributes": {
+    "Zone": 32,
+    "Easting": 550251.23,
+    "Northing": 5802052.35,
+    "Elevation": 53.62300109863281,
+    "Actuality": "2016-04-18",
+    "Origin": "DE-NI",
+    "Attribution": "© GeoBasis-DE / LGLN (2025), cc-by/4.0",
+    "TileIndex": "32_550_5802",
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+
+</code></pre>
+    <h4>Anmerkungen</h4>
+
+    <ul>
+      <li>Aus den Eingaben werden direkt die Höhendaten ermittelt.</li>
+
+      <li>Es findet keine Transformation der Eingabedaten statt.</li>
+
+      <li>Die Eingaben müssen dem CRS der Quelldaten entsprechen.</li>
+    </ul>
+
+    <hr>
+    <h3>UTM-Zonen</h3>
+
+    <p>Deutschland befindet sich überwiegend in der Zone 32 (6-12°). Marginale Flächen im Westen von Nordrhein-Westfalen befinden sich in der Zone 31 (0-6°).
+    Größere Gebiete im Osten von Deutschland befinden sich in der Zone 33 (12-18°). Bundesländer mit Flächen in zwei Zonen ordnen ihr gesamtes Gebiet logisch einer
+    einzigen Zone zu und dementsprechend sind die UTM-Koordinaten zu wählen.</p>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Bundesland</th>
+            <th>Zone 32</th>
+            <th>Zone 33</th>
+            <th>DGM1-Daten</th>
+            <th>Anmerkungen</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Baden-Württemberg</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Bayern</td>
+            <td>Ja</td>
+            <td>Ja</td>
+            <td>32</td>
+            <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
+          </tr>
+
+          <tr>
+            <td>Berlin</td>
+            <td>Nein</td>
+            <td>Ja</td>
+            <td>Die Daten für Berlin sind in den Daten für Brandenburg enthalten (Zone 33).</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Brandenburg</td>
+            <td>Ja</td>
+            <td>Ja</td>
+            <td>33</td>
+            <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
+          </tr>
+
+          <tr>
+            <td>Bremen</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Hamburg</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Hessen</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Mecklenburg-Vorpommern</td>
+            <td>Ja</td>
+            <td>Ja</td>
+            <td>33</td>
+            <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
+          </tr>
+
+          <tr>
+            <td>Niedersachsen</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Nordrhein-Westfalen</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>NRW hat marginale Flächen in der Zone 31. Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
+          </tr>
+
+          <tr>
+            <td>Rheinland-Pfalz</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Saarland</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Sachsen</td>
+            <td>Ja</td>
+            <td>Ja</td>
+            <td>33</td>
+            <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
+          </tr>
+
+          <tr>
+            <td>Sachsen-Anhalt</td>
+            <td>Ja</td>
+            <td>Ja</td>
+            <td>32</td>
+            <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
+          </tr>
+
+          <tr>
+            <td>Schleswig-Holstein</td>
+            <td>Ja</td>
+            <td>Nein</td>
+            <td>32</td>
+            <td>-</td>
+          </tr>
+
+          <tr>
+            <td>Thüringen</td>
+            <td>Ja</td>
+            <td>Ja</td>
+            <td>32</td>
+            <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

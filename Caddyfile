@@ -1,0 +1,15 @@
+http://localhost:8080 {
+    # Setzen Sie das Root-Verzeichnis auf den Ordner mit den gebuildeten Angular-Dateien
+    root * /Users/klaustockloth/entw-hoehendaten.de
+
+    # Behandelt das Client-seitige Routing von Angular
+    # Versucht zuerst, die angeforderte Datei/den Pfad zu bedienen.
+    # Wenn nicht gefunden, wird auf /index.html zurückgefallen.
+    try_files {path} {uri} /index.html
+
+    # Stellt statische Dateien aus dem Root-Verzeichnis bereit (entweder die gefundene Datei oder index.html)
+    file_server
+
+    # Optionale Komprimierung (empfohlen für Performance)
+    # encode gzip
+}

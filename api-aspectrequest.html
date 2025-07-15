@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API - AspectRequest</title>
+  <meta name="description" content=
+  "API-Dokumentation für den 'AspectRequest'. Erzeugt Hangexpositionsdaten für einen Kartenausschnitt im PNG- oder GeoTIFF-Format basierend auf Lon/Lat oder UTM.">
+  <meta name="keywords" content=
+  "Höhendaten, API, AspectRequest, Hangexposition, PNG, GeoTIFF, Lon/Lat, UTM, Programmierschnittstelle, GradientAlgorithm, Horn, ZevenbergenThorne">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Application Programming Interface (API)</h2>
+
+    <hr>
+
+    <h3 class="request">API-Attribute 'AspectRequest'</h3>
+
+    <p>Der API-Aufruf 'AspectRequest' generiert eine kolorierten Hangexpositionsabbildung (aspect) für einen Kartenausschnitt von 1x1 km. Der Kartenausschnitt wird
+    durch einen beliebigen Referenzpunkt bestimmt. Der Referenzpunkt kann in den Koordinatensystemen Longitude/Latitude oder UTM angegeben werden. Die Antwort
+    enthält die kolorierten Hangexpositionsabbildung im GeoTIFF- oder PNG-Format (Base64-kodiert), sowie Metadaten zur Quelle und Attributierung.</p>
+
+    <p>Die Hangexposition kann mit verschiedenen Algorithmen berechnet werden. Es ist eine Farbtextdatei für die Kolorierung zu übergeben. Die Antwort kann Daten
+    für eine, zwei oder drei Kacheln enthalten, falls eine Landesgrenze den Bereich schneidet.</p>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Anfrage (AspectRequest)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Eindeutige ID der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>int</td>
+          <td>UTM Zone Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>float</td>
+          <td>Easting, X, Ostwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>float</td>
+          <td>Längengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>float</td>
+          <td>Breitengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GradientAlgorithm</td>
+          <td>string</td>
+          <td>Algorithmus zur Berechnung der Hangexposition ('Horn' oder 'ZevenbergenThorne')</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ColorTextFileContent</td>
+          <td>[]string</td>
+          <td>Inhalt der Farbtextdatei für die Kolorierung der Hangexposition</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+    <h3 class="response">API-Attribute 'AspectResponse'</h3>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Antwort (AspectResponse)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>UTM Zone des angefragten Referenzpunkts</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Easting, X, Ostwert des angefragten Referenzpunkts</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert des angefragten Referenzpunkts</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Längengrad des angefragten Referenzpunkts (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Breitengrad des angefragten Referenzpunkts (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GradientAlgorithm</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Algorithmus zur Berechnung der Hangexposition</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ColorTextFileContent</td>
+          <td>
+          </td>
+          <td>[]string</td>
+          <td>Inhalt der Farbtextdatei für die Kolorierung der Hangexposition</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Aspects</td>
+          <td>
+          </td>
+          <td>[]struct</td>
+          <td>Array von kolorierten Hangexpositionsabbildungen</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Data</td>
+          <td>string (Base64)</td>
+          <td>Kolorierte Hangexpositionsabbildung für die Kachel</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>DataFormat</td>
+          <td>string</td>
+          <td>Format der Daten (GeoTIFF oder PNG)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Actuality</td>
+          <td>string</td>
+          <td>Aktualität der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Origin</td>
+          <td>string</td>
+          <td>Herkunft der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Attribution</td>
+          <td>string</td>
+          <td>Attribution der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>TileIndex</td>
+          <td>string</td>
+          <td>Index der Quelldatenkachel</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>BoundingBox</td>
+          <td>struct</td>
+          <td>WGS84 Georeferenz (relevant bei PNG)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>IsError</td>
+          <td>
+          </td>
+          <td>bool</td>
+          <td>Fehler (ja/nein)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Error</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Fehlerdetails</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Code</td>
+          <td>string</td>
+          <td>Fehlernummer</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Title</td>
+          <td>string</td>
+          <td>Fehlerbeschreibung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Details</td>
+          <td>string</td>
+          <td>Fehlerdetaillierung</td>
+        </tr>
+      </table>
+    </div>
+
+    <p>Eingabe:</p>
+
+    <ul>
+      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Hangexpositionsdaten erstellt werden.</li>
+
+      <li>Mögliche Koordinatensysteme:</li>
+
+      <ul>
+        <li>Lon/Lat-Koordinaten (WGS84, EPSG:4326).</li>
+
+        <li>UTM-Koordinaten (EPSG:25832 / EPSG:25833).</li>
+      </ul>
+    </ul>
+
+    <p>Ausgabe:</p>
+
+    <ul>
+      <li>Abhängig vom Eingabeformat werden unterschiedliche Ausgabeformate erzeugt:</li>
+
+      <ul>
+        <li>PNG in der Projektion EPSG:3857 (Webmercator) mit expliziter Georeferenzierung durch Lon/Lat-Koordinaten (WGS84, EPSG:4326).</li>
+
+        <li>GeoTIFF in der Projektion der DGM1-Ausgangsdaten (EPSG:25832 / EPSG:25833) mit impliziter Georeferenzierung in den Metadaten.</li>
+      </ul>
+    </ul>
+
+    <p>Anmerkungen:</p>
+
+    <ul>
+      <li>Ein Kartenausschnitt wird in der Regel durch genau eine Kachel repräsentiert.</li>
+
+      <li>Verläuft eine Landesgrenze durch eine Kachel, wird sie von allen betroffenen Bundesländer (2 oder 3) zur Verfügung gestellt.</li>
+
+      <li>Entsprechend enthält das Feld 'Attributes.Aspects' die Daten für eine, zwei oder maximal drei Kacheln.</li>
+
+      <li>Der Body der Antwort ist komprimiert (gzip).</li>
+    </ul>
+
+    <hr>
+
+    <h4 class="request">AspectRequest (Beispiel)</h4>
+
+    <pre class="request"><code>
+#!/bin/bash
+#
+# Abfrage der Hangexposition für eine Kachel mit 1000x1000 Meter. 
+
+# Kachel durch UTM-Koordinaten referenziert.
+postdata=$(cat &lt;&lt;EOF
+{
+  "Type": "AspectRequest",
+  "ID": "Hegekopf, Edersee, Hessen",
+  "Attributes": {
+    "Zone": 0,
+    "Easting": 0.0,
+    "Northing": 0.0,
+    "Longitude": 8.964229,
+    "Latitude": 51.185913,
+    "GradientAlgorithm": "ZevenbergenThorne",
+    "ColorTextFileContent": [
+      "# Winkel- und Farbschema für die Abbildung von Hangexpositionen.",
+      "# Musterdefinition als Basis für eigene Anpassungen.",
+      "# Format: Wert Rot Grün Blau Alpha",
+      "0 190 190 220 255",
+      "22.5 180 220 200 255",
+      "67.5 255 255 180 255",
+      "112.5 255 220 160 255",
+      "157.5 255 180 120 255",
+      "202.5 245 190 130 255",
+      "247.5 200 210 230 255",
+      "292.5 190 190 220 255",
+      "337.5 190 190 220 255",
+      "360.0 190 190 220 255",
+      "nv 0 0 0 0"
+    ]
+  }
+}
+EOF
+)
+
+echo "postdata =\n$postdata"
+
+curl \
+--silent \
+--include \
+--compressed \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--header "Accept-Encoding: gzip" \
+--data "$postdata" \
+https://api.hoehendaten.de:14444/v1/aspect
+
+</code></pre>
+    <hr>
+    <h4 class="response">AspectResponse:</h4>
+
+    <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-encoding: gzip
+content-type: application/json; charset=utf-8
+date: Thu, 10 Jul 2025 09:18:12 GMT
+
+{
+  "Type": "AspectResponse",
+  "ID": "Hegekopf, Edersee, Hessen",
+  "Attributes": {
+    "Zone": 0,
+    "Easting": 0,
+    "Northing": 0,
+    "Longitude": 8.964229,
+    "Latitude": 51.185913,
+    "GradientAlgorithm": "ZevenbergenThorne",
+    "ColorTextFileContent": [
+      "# Winkel- und Farbschema für die Abbildung von Hangexpositionen.",
+      "# Musterdefinition als Basis für eigene Anpassungen.",
+      "# Format: Wert Rot Grün Blau Alpha",
+      "0 190 190 220 255",
+      "22.5 180 220 200 255",
+      "67.5 255 255 180 255",
+      "112.5 255 220 160 255",
+      "157.5 255 180 120 255",
+      "202.5 245 190 130 255",
+      "247.5 200 210 230 255",
+      "292.5 190 190 220 255",
+      "337.5 190 190 220 255",
+      "360.0 190 190 220 255",
+      "nv 0 0 0 0"
+    ],
+    "Aspects": [
+      {
+        "Data": "iVBORw0KGgoAAAANSUhEUgAAA+cAAAPqCA ... BPfB8AAAAASUVORK5CYII=",
+        "DataFormat": "png",
+        "Actuality": "2021-04-26",
+        "Origin": "DE-HE",
+        "Attribution": "Geobasisdaten © Hessische Verwaltung für Bodenmanagement und Geoinformation, dl-de/by-2-0",
+        "TileIndex": "32_497_5670",
+        "BoundingBox": {
+          "MinLon": 8.95707049585795,
+          "MaxLon": 8.971385896601037,
+          "MinLat": 51.18141399484732,
+          "MaxLat": 51.190410580109756
+        }
+      }
+    ],
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+
+</code></pre>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - Hangexposition</title>
+  <meta name="description" content=
+  "Lernen Sie die Bedeutung der Hangexposition (Ausrichtung des Hanges) für Landwirtschaft, Ökologie und Naturgefahren kennen und wie sie visualisiert wird.">
+  <meta name="keywords" content=
+  "Hangexposition, Ausrichtung, Aspect, Himmelsrichtung, DGM, Visualisierung, Sonneneinstrahlung, Mikroklima, Landwirtschaft, Ökologie, Naturgefahren">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Hangexposition</h3>
+
+    <p>Eine detaillierte Hangexpositionskarte ist ein wertvolles Werkzeug für vielfältige Analysen und Planungen. Sie liefert entscheidende Informationen über die
+    Sonneneinstrahlung sowie die Temperatur- und Feuchtigkeitsverhältnisse. Zu den wichtigsten Anwendungsbereichen gehören:</p>
+
+    <ul>
+      <li><strong>Land- und Forstwirtschaft:</strong> Die Ausrichtung eines Hanges ist entscheidend für die Auswahl geeigneter Pflanzen und Anbaumethoden (z. B.
+      Weinbau an Südhängen) und die Beurteilung der Trockenheitstoleranz von Wäldern.</li>
+
+      <li><strong>Hydrologie:</strong> Die Hangexposition beeinflusst den Wasserabfluss, Erosionsprozesse und die Schneeschmelze, was für das Wassermanagement von
+      Bedeutung ist.</li>
+
+      <li><strong>Naturgefahren:</strong> Sie ist ein kritischer Faktor bei der Bewertung von Lawinengefahr (Nordhänge), der Ausbreitung von Waldbränden (Südhänge)
+      und der Stabilität von Permafrostböden.</li>
+
+      <li><strong>Bauplanung:</strong> Die Karte ermöglicht eine optimierte Ausrichtung von Gebäuden zur passiven Solarenergienutzung und zur Steigerung der
+      Energieeffizienz.</li>
+
+      <li><strong>Ökologie:</strong> Die Exposition bestimmt das Mikroklima und damit die Verteilung von Tier- und Pflanzenarten sowie die Ausbildung spezifischer
+      Lebensräume.</li>
+
+      <li><strong>Erneuerbare Energien:</strong> Sie ist essenziell für die Standortwahl und Ausrichtung von Photovoltaikanlagen, um den Energieertrag zu
+      maximieren.</li>
+    </ul>
+
+    <hr>
+
+    <h3>Winkelbereich zu Farbe</h3>
+
+    <p>Aus den Höheninformationen werden Hangexpositionswinkel in Dezimalgrad (mit Nachkommastellen) errechnet. Es werden Winkel zwischen 0° und &lt;360° erwartet.
+    Zusätzlich definiert der Benutzer eine Farbsteuerdatei für Winkelbereiche und Farben. Welche Farben und Winkelbereiche sinnvoll sind, ist vom jeweiligen
+    Anwendungsfall abhängig. Soll ein Winkelbereich gar nicht dargestellt werden, wählt man eine volltransparente Farbe.</p>
+
+    <hr>
+
+    <h3>Beispiel</h3>
+
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Winkel°</th>
+          <th>RGBA</th>
+          <th>Farbe</th>
+          <th>Farbname</th>
+          <th>Bemerkung</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>0</td>
+          <td>190 190 220 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(190, 190, 220, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Lavendel</td>
+          <td>Nord, von 0° bis &lt;22.5°.</td>
+        </tr>
+
+        <tr>
+          <td>22.5</td>
+          <td>180 220 200 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(180, 220, 200, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Mintgrün</td>
+          <td>Nordost, von 22.5° bis &lt;67.5°.</td>
+        </tr>
+
+        <tr>
+          <td>67.5</td>
+          <td>255 255 180 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(255, 255, 180, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Hellgelb</td>
+          <td>Ost, von 67.5° bis &lt;112.5°.</td>
+        </tr>
+
+        <tr>
+          <td>112.5</td>
+          <td>255 220 160 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(255, 220, 160, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Orange</td>
+          <td>Südost, von 112.5° bis &lt;157.5°.</td>
+        </tr>
+
+        <tr>
+          <td>157.5</td>
+          <td>255 180 120 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(255, 180, 120, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Lachsrosa</td>
+          <td>Süd, von 157.5° bis &lt;202.5°.</td>
+        </tr>
+
+        <tr>
+          <td>202.5</td>
+          <td>245 190 130 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(245, 190, 130, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Sandbraun</td>
+          <td>Südwest, von 202.5° bis &lt;247.5°.</td>
+        </tr>
+
+        <tr>
+          <td>247.5</td>
+          <td>200 210 230 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(200, 210, 230, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Blaugrau</td>
+          <td>West, von 247.5° bis &lt;292.5°.</td>
+        </tr>
+
+        <tr>
+          <td>292.5</td>
+          <td>190 190 220 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(190, 190, 220, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Lavendel</td>
+          <td>Nordwest, von 292.5° bis &lt;337.5°.</td>
+        </tr>
+
+        <tr>
+          <td>337.5</td>
+          <td>190 190 220 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(190, 190, 220, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Lavendel</td>
+          <td>Nord, von 337.5° bis &lt;360°.</td>
+        </tr>
+
+        <tr>
+          <td>360</td>
+          <td>190 190 220 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(190, 190, 220, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Helles Lavendel</td>
+          <td>Ab 360° und darüber hinaus.</td>
+        </tr>
+
+        <tr>
+          <td>nv</td>
+          <td>0 0 0 0</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 0); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Transparent</td>
+          <td>Sonderbehandlung für "No Value".</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Die Himmelsrichtungen werden in einem 360°-Kreis angegeben, wobei Norden den Referenzpunkt bei 0° bildet und die Gradzahlen im Uhrzeigersinn ansteigen. Die
+    Haupthimmelsrichtungen und ihre Winkelbereiche (in 45°-Schritten) sind:</p>
+
+    <ul>
+      <li><strong>Nord (N)</strong>: 337.5° bis 22.5° (Mitte 0°)</li>
+
+      <li><strong>Nordost (NO)</strong>: 22.5° bis 67.5° (Mitte 45°)</li>
+
+      <li><strong>Ost (O)</strong>: 67.5° bis 112.5° (Mitte 90°)</li>
+
+      <li><strong>Südost (SO)</strong>: 112.5° bis 157.5° (Mitte 135°)</li>
+
+      <li><strong>Süd (S)</strong>: 157.5° bis 202.5° (Mitte 180°)</li>
+
+      <li><strong>Südwest (SW)</strong>: 202.5° bis 247.5° (Mitte 225°)</li>
+
+      <li><strong>West (W)</strong>: 247.5° bis 292.5° (Mitte 270°)</li>
+
+      <li><strong>Nordwest (NW)</strong>: 292.5° bis 337.5° (Mitte 315°)</li>
+    </ul>
+
+    <p>Für eine feinere Unterteilung gibt es auch Zwischenhimmelsrichtungen wie Nordnordost (NNO) bei 22.5°, Ostnordost (ONO) bei 67.5°, usw., die jeweils in
+    22.5°-Schritten voneinander abweichen.</p>
+
+    <hr>
+
+    <h3>Schummerung versus Hangexposition</h3>
+    <img src="./images/edersee-schummerung-500x400.png" alt="Schummerung für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Schummerung für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+    <img src="./images/edersee-hangexposition-500x400.png" alt="Hangneigung für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Hangexposition für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+
+    <hr>
+
+    <h3>Farbkonzept</h3>
+
+    <p>Himmelsrichtungen und assoziierte Farben:</p>
+
+    <ul>
+      <li><strong>Norden (0°/360°)</strong>:&nbsp;Kühle Farben wie Blau oder Dunkelblau. Diese Assoziation rührt oft daher, dass Nordhänge weniger Sonnenlicht
+      erhalten und kühler sind.</li>
+
+      <li><strong>Osten (90°)</strong>:&nbsp;Frische Farben wie Grün oder Türkis. Assoziiert mit der Morgensonne.</li>
+
+      <li><strong>Süden (180°)</strong>:&nbsp;Warme Farben wie Gelb, Orange oder Hellbraun. Diese Hänge erhalten die meiste Sonneneinstrahlung.</li>
+
+      <li><strong>Westen (270°)</strong>:&nbsp;Kräftige Farben wie Rot oder Magenta. Assoziiert mit der Abendsonne.</li>
+
+      <li><strong>Zwischenhimmelsrichtungen</strong>:&nbsp;Farbverläufe zwischen den Hauptrichtungen.</li>
+    </ul>
+
+    <p>Flache Bereiche:</p>
+
+    <ul>
+      <li>Eine neutrale Farbe wie Grau oder Weiß, um anzuzeigen, dass keine eindeutige Himmelsrichtung vorliegt.</li>
+    </ul>
+
+    <hr>
+
+    <h3>Hänge</h3>
+
+    <p>Je nach Exposition ist der Einfluss der Sonneneinstrahlung auf einen Hang unterschiedlich:</p>
+
+    <ul>
+      <li><strong>Schatt-Hänge</strong> (Nord, Nordwest, Nordost): Bekommen wenig bis gar keine direkte Sonne.</li>
+
+      <li><strong>Sonnen-Hänge</strong> (Süd, Südwest, Südost): Starke Sonneneinstrahlung.</li>
+
+      <li><strong>Ost-Hänge</strong>: Bekommen die Morgensonne.</li>
+
+      <li><strong>West-Hänge</strong>: Bekommen die Nachmittagssonne.</li>
+    </ul>
+
+    <hr>
+
+    <h3>Dienst Kolorierung</h3>
+
+    <p>Über den Dienst <strong>Kolorierung</strong> können Farbsteuerdateien definiert, eingelesen, editiert und gespeichert werden.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

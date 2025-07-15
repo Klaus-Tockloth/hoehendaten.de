@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - TPI - Topographic Position Index</title>
+  <meta name="description" content=
+  "Erfahren Sie, wie der Topographic Position Index (TPI) die relative Position eines Punktes im Gelände beschreibt und zur detaillierten Analyse von Mikro-Geländeformen genutzt wird.">
+  <meta name="keywords" content=
+  "Topographic Position Index, TPI, Geländeposition, DGM, Geomorphologie, Reliefanalyse, Kuppe, Tal, Senke, Grat, Mikro-Geländeformen">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>TPI - Topographic Position Index: Detaillierte Geländeanalyse</h3>
+
+    <p>Der Topographic Position Index (TPI) ist ein geomorphometrisches Maß, das die Höhenlage eines Punkts im Verhältnis zu seiner Umgebung in einem digitalen
+    Geländemodell (DGM) beschreibt. Bei DGM1-Höhendaten mit einer Auflösung von 1 Meter ergeben TPI-Visualisierungen extrem detaillierte Einblicke in die
+    Geländestruktur. Die wichtigsten Anwendungsmöglichkeiten für TPI-Visualisierungen:</p>
+
+    <p><strong>1. Detaillierte Landformen-Klassifikation und Geomorphologische Analyse</strong>
+    </p>
+
+    <ul>
+      <li><strong>Identifikation von Mikro-Geländeformen:</strong> Mit 1-Meter-Auflösung können selbst kleinste Geländeformen wie Rinnen, kleine Kuppen, Mulden,
+      Terrassen, Bergrücken, Täler, Schultern und Fußhänge präzise identifiziert und kartiert werden. Dies ist auf feinerer Skala möglich als mit gröberen
+      DGM.</li>
+
+      <li><strong>Abgrenzung von Entwässerungsnetzen:</strong> Kleine Bachläufe, Erosionsrinnen und Senken werden sichtbar, was für die detaillierte hydrologische
+      Modellierung und das Verständnis von Abflussprozessen entscheidend ist.</li>
+
+      <li><strong>Erkennung von anthropogenen Strukturen:</strong> Auch sehr kleine künstliche Geländeformen wie ehemalige Wallanlagen, Gräben, kleine Dämme,
+      Wegränder oder Poldereinfassungen können detektiert werden. Dies ist besonders wertvoll für Archäologie und Stadtplanung.</li>
+
+      <li><strong>Analyse von Steilhängen und Böschungen:</strong> Präzise Abgrenzung von Erosionsflächen, Rutschhängen oder stabilisierungsbedürftigen
+      Bereichen.</li>
+    </ul>
+
+    <p><strong>2. Hydrologische Modellierung und Wasserwirtschaft</strong>
+    </p>
+
+    <ul>
+      <li><strong>Detaillierte Fließweganalyse:</strong> Präzise Bestimmung von Abflussrouten auf Oberflächen, die für die Modellierung von Starkregenereignissen,
+      Sturzfluten und die Vorhersage von Überschwemmungsgebieten entscheidend ist.</li>
+
+      <li><strong>Identifikation von Versickerungs- und Abflussbereichen:</strong> TPI hilft, Bereiche zu identifizieren, in denen Wasser tendenziell stagniert
+      (negative TPI-Werte in Senken) oder schnell abfließt (positive TPI-Werte auf Kuppen und Hängen).</li>
+
+      <li><strong>Standortanalyse für Wassermanagement-Infrastruktur:</strong> Optimale Platzierung von Regenwasserrückhaltebecken, Drainagesystemen oder
+      Erosionsschutzmaßnahmen.</li>
+
+      <li><strong>Mikro-Einzugsgebietsanalyse:</strong> Für sehr kleine Einzugsgebiete oder Parzellen, z.B. in der Landwirtschaft.</li>
+    </ul>
+
+    <p><strong>3. Forstwirtschaft und Ökologie</strong>
+    </p>
+
+    <ul>
+      <li><strong>Habitatanalyse auf Mikroebene:</strong> TPI kann subtile topographische Variationen aufzeigen, die sich auf Mikroklima, Bodenfeuchte und damit
+      auf die Verteilung von Pflanzenarten und die Eignung als Lebensraum auswirken.</li>
+
+      <li><strong>Baumstandort-Optimierung:</strong> Verständnis, wie die Topographie das Wachstum von Bäumen beeinflusst (z.B. Senken mit höherer Feuchtigkeit,
+      exponierte Kuppen).</li>
+
+      <li><strong>Waldwegplanung:</strong> Optimierung von Wegen, um Steigungen und Erosionsrisiken zu minimieren.</li>
+
+      <li><strong>Wildtierkorridore:</strong> Identifikation von Geländeeigenschaften, die die Bewegung von Wildtieren beeinflussen.</li>
+    </ul>
+
+    <p><strong>4. Landwirtschaft und Bodenschutz</strong>
+    </p>
+
+    <ul>
+      <li><strong>Erosionsrisikobewertung:</strong> Detaillierte Identifikation von potenziellen Erosionsrinnen und Bereichen mit hoher Abtragsgefahr. Dies
+      ermöglicht gezielte Schutzmaßnahmen.</li>
+
+      <li><strong>Präzisionslandwirtschaft:</strong> Optimierung der Aussaat, Düngung und Bewässerung basierend auf mikroskaligen Geländevariationen, die sich auf
+      die Bodenfeuchte und Nährstoffverteilung auswirken.</li>
+
+      <li><strong>Bodenkartierung:</strong> Unterstützung bei der Kartierung von Bodentypen, da die Topographie einen starken Einfluss auf die Bodenbildung
+      hat.</li>
+    </ul>
+
+    <p><strong>5. Stadtplanung und Bauwesen</strong>
+    </p>
+
+    <ul>
+      <li><strong>Detaillierte Geländeformanalyse für Bauprojekte:</strong> Vor der Erschließung neuer Gebiete zur besseren Einschätzung von Erdbewegungen,
+      Drainage und Baugrund.</li>
+
+      <li><strong>Sichtbarkeitsanalysen auf Gebäudeebene:</strong> Die feine Auflösung ermöglicht es, die Sichtbeziehungen zwischen einzelnen Gebäuden oder sehr
+      kleinen Objekten zu analysieren.</li>
+
+      <li><strong>Infrastrukturplanung:</strong> Optimale Verlegung von Leitungen, Straßen oder Fußwegen unter Berücksichtigung feinster Höhenunterschiede.</li>
+
+      <li><strong>Analyse von Stadtklimaeffekten:</strong> Verständnis, wie kleine topographische Merkmale den Luftfluss und damit die Temperaturverteilung im
+      städtischen Raum beeinflussen können.</li>
+    </ul>
+
+    <p><strong>6. Archäologie und Denkmalpflege</strong>
+    </p>
+
+    <ul>
+      <li><strong>Identifikation verborgener Strukturen:</strong> Kleine Erhebungen oder Senken, die auf alte Siedlungen, Gräben, Befestigungsanlagen oder
+      Feldgrenzen hindeuten, können präzise sichtbar gemacht werden, auch wenn sie am Boden kaum erkennbar sind.</li>
+
+      <li><strong>Rekonstruktion historischer Landschaften:</strong> Analyse von Veränderungen der Geländeform über die Zeit.</li>
+    </ul>
+
+    <p><strong>7. Katastrophenmanagement und Risikobewertung</strong>
+    </p>
+
+    <ul>
+      <li><strong>Rutschhang-Analyse:</strong> Detaillierte Identifikation von Bereichen mit erhöhter Instabilität oder Anfälligkeit für Erdrutsche.</li>
+
+      <li><strong>Feuerwehreinsatzplanung:</strong> Verständnis des Geländes für die Ausbreitung von Waldbränden.</li>
+    </ul>
+
+    <p><strong>Berechnungsgrundlage:</strong>
+    </p>
+
+    <p>Der TPI berechnet die Differenz zwischen der Höhe eines zentralen Pixels und der mittleren Höhe der umgebenden Pixel in einem definierten Fenster von 3x3
+    Pixel.</p>
+
+    <p><strong>Interpretation der Werte:</strong>
+    </p>
+
+    <ul>
+      <li><strong>Positive Werte:</strong> Der zentrale Punkt liegt höher als seine Umgebung (z. B. auf Bergkämmen, Kuppen).</li>
+
+      <li><strong>Negative Werte:</strong> Der zentrale Punkt liegt tiefer als seine Umgebung (z. B. in Tälern, Gräben, Senken).</li>
+
+      <li><strong>Werte nahe Null:</strong> Das Gelände ist flach oder hat eine konstante Hangneigung.</li>
+    </ul>
+
+    <p><strong>Erwarteter Wertebereich für DGM1-Daten:</strong>
+    </p>
+
+    <p>Der Wertebereich ist theoretisch unbegrenzt, wird aber praktisch durch das lokale Relief limitiert. Durch die hohe Auflösung des DGM1 reagiert der TPI
+    bereits auf kleinste Geländeänderungen.</p>
+
+    <ul>
+      <li><strong>In flachem bis leicht hügeligem Gelände</strong> (z. B. Ackerland, sanfte Hügel) sind typische Wertebereiche oft sehr gering und bewegen sich
+      beispielsweise zwischen <strong>-2 und +2 Metern</strong>.</li>
+
+      <li><strong>In Mittelgebirgen oder stark bewegtem Gelände</strong> können die Werte deutlich größer sein, etwa im Bereich von <strong>-15 bis +15
+      Metern</strong>.</li>
+
+      <li><strong>In extremem Gelände</strong> wie alpinen Regionen, Steinbrüchen oder an künstlichen Böschungen können die Werte auch darüber hinausgehen, da der
+      Höhenunterschied zu den direkten Nachbarpixeln (im 3x3 Meter-Fenster) beträchtlich sein kann.</li>
+    </ul>
+
+    <p>DGM1-Höhendaten in Kombination mit TPI-Visualisierungen, bieten eine beispiellose Detailtiefe für die Geländeanalyse und eröffnen neue Möglichkeiten in
+    vielen wissenschaftlichen und angewandten Bereichen.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

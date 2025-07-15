@@ -1,0 +1,130 @@
+<svg width="500" height="360" viewBox="0 0 530 320" xmlns="http://www.w3.org/2000/svg" style="background-color:white;">
+  <defs>
+    <filter id="drop-shadow-final" x="-50%" y="-50%" width="200%" height="200%">
+      <feOffset dx="5" dy="9" in="SourceAlpha" result="offset"/>
+      <feGaussianBlur in="offset" stdDeviation="4.5" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Unteres 8x8 Raster -->
+  <g id="raster" transform="translate(40, 190)">
+    <g>
+      <!-- Subtile Schatten -->
+      <path d="M 140.0,35.0 L 168.0,21.0 L 196.0,35.0 L 168.0,49.0 Z" fill="rgba(0,0,0,0.15)"/>
+      <path d="M 224.0,35.0 L 252.0,21.0 L 280.0,35.0 L 252.0,49.0 Z" fill="rgba(0,0,0,0.15)"/>
+      
+      <!-- unteres 8x8-Gitter -->
+      <g stroke="#e0c29e" stroke-width="1.5" stroke-linejoin="miter">
+        <g fill="#a1cb82">
+          <!-- Reihe 0 -->
+          <path d="M 0 0 L 28 -14 L 56 0 L 28 14 Z"/>
+          <path d="M 28 -14 L 56 -28 L 84 -14 L 56 0 Z"/>
+          <path d="M 56 -28 L 84 -42 L 112 -28 L 84 -14 Z"/>
+          <path d="M 84 -42 L 112 -56 L 140 -42 L 112 -28 Z"/>
+          <path d="M 112 -56 L 140 -70 L 168 -56 L 140 -42 Z"/>
+          <path d="M 140 -70 L 168 -84 L 196 -70 L 168 -56 Z"/>
+          <path d="M 168 -84 L 196 -98 L 224 -84 L 196 -70 Z"/>
+          <path d="M 196 -98 L 224 -112 L 252 -98 L 224 -84 Z"/>
+
+          <!-- Reihe 1 -->
+          <path d="M 28 14 L 56 0 L 84 14 L 56 28 Z"/>
+          <path d="M 56 0 L 84 -14 L 112 0 L 84 14 Z"/>
+          <path d="M 84 -14 L 112 -28 L 140 -14 L 112 0 Z"/>
+          <path d="M 112 -28 L 140 -42 L 168 -28 L 140 -14 Z"/>
+          <path d="M 140 -42 L 168 -56 L 196 -42 L 168 -28 Z"/>
+          <path d="M 168 -56 L 196 -70 L 224 -56 L 196 -42 Z"/>
+          <path d="M 196 -70 L 224 -84 L 252 -70 L 224 -56 Z"/>
+          <path d="M 224 -84 L 252 -98 L 280 -84 L 252 -70 Z"/>
+
+          <!-- Reihe 2 -->
+          <path d="M 56 28 L 84 14 L 112 28 L 84 42 Z"/>
+          <path d="M 84 14 L 112 0 L 140 14 L 112 28 Z"/>
+          <path d="M 112 0 L 140 -14 L 168 0 L 140 14 Z"/>
+          <path d="M 140 -14 L 168 -28 L 196 -14 L 168 0 Z"/>
+          <path d="M 168 -28 L 196 -42 L 224 -28 L 196 -14 Z"/>
+          <path d="M 196 -42 L 224 -56 L 252 -42 L 224 -28 Z"/>
+          <path d="M 224 -56 L 252 -70 L 280 -56 L 252 -42 Z"/>
+          <path d="M 252 -70 L 280 -84 L 308 -70 L 280 -56 Z"/>
+
+          <!-- Reihe 3 -->
+          <path d="M 84 42 L 112 28 L 140 42 L 112 56 Z"/>
+          <path d="M 112 28 L 140 14 L 168 28 L 140 42 Z"/>
+          <path d="M 140 14 L 168 0 L 196 14 L 168 28 Z"/>
+          <path d="M 168 0 L 196 -14 L 224 0 L 196 14 Z"/>
+          <path d="M 196 -14 L 224 -28 L 252 -14 L 224 0 Z"/>
+          <path d="M 224 -28 L 252 -42 L 280 -28 L 252 -14 Z"/>
+          <path d="M 252 -42 L 280 -56 L 308 -42 L 280 -28 Z"/>
+          <path d="M 280 -56 L 308 -70 L 336 -56 L 308 -42 Z"/>
+
+          <!-- Reihe 4 -->
+          <path d="M 112 56 L 140 42 L 168 56 L 140 70 Z"/>
+          <path d="M 140 42 L 168 28 L 196 42 L 168 56 Z"/>
+          <path d="M 168 28 L 196 14 L 224 28 L 196 42 Z"/>
+          <path d="M 196 14 L 224 0 L 252 14 L 224 28 Z"/>
+          <path d="M 224 0 L 252 -14 L 280 0 L 252 14 Z"/>
+          <path d="M 252 -14 L 280 -28 L 308 -14 L 280 0 Z"/>
+          <path d="M 280 -28 L 308 -42 L 336 -28 L 308 -14 Z"/>
+          <path d="M 308 -42 L 336 -56 L 364 -42 L 336 -28 Z"/>
+
+          <!-- Reihe 5 -->
+          <path d="M 140 70 L 168 56 L 196 70 L 168 84 Z"/>
+          <path d="M 168 56 L 196 42 L 224 56 L 196 70 Z"/>
+          <path d="M 196 42 L 224 28 L 252 42 L 224 56 Z"/>
+          <path d="M 224 28 L 252 14 L 280 28 L 252 42 Z"/>
+          <path d="M 252 14 L 280 0 L 308 14 L 280 28 Z"/>
+          <path d="M 280 0 L 308 -14 L 336 0 L 308 14 Z"/>
+          <path d="M 308 -14 L 336 -28 L 364 -14 L 336 0 Z"/>
+          <path d="M 336 -28 L 364 -42 L 392 -28 L 364 -14 Z"/>
+
+          <!-- Reihe 6 -->
+          <path d="M 168 84 L 196 70 L 224 84 L 196 98 Z"/>
+          <path d="M 196 70 L 224 56 L 252 70 L 224 84 Z"/>
+          <path d="M 224 56 L 252 42 L 280 56 L 252 70 Z"/>
+          <path d="M 252 42 L 280 28 L 308 42 L 280 56 Z"/>
+          <path d="M 280 28 L 308 14 L 336 28 L 308 42 Z"/>
+          <path d="M 308 14 L 336 0 L 364 14 L 336 28 Z"/>
+          <path d="M 336 0 L 364 -14 L 392 0 L 364 14 Z"/>
+          <path d="M 364 -14 L 392 -28 L 420 -14 L 392 0 Z"/>
+
+          <!-- Reihe 7 (unterste) -->
+          <path d="M 196 98 L 224 84 L 252 98 L 224 112 Z"/>
+          <path d="M 224 84 L 252 70 L 280 84 L 252 98 Z"/>
+          <path d="M 252 70 L 280 56 L 308 70 L 280 84 Z"/>
+          <path d="M 280 56 L 308 42 L 336 56 L 308 70 Z"/>
+          <path d="M 308 42 L 336 28 L 364 42 L 336 56 Z"/>
+          <path d="M 336 28 L 364 14 L 392 28 L 364 42 Z"/>
+          <path d="M 364 14 L 392 0 L 420 14 L 392 28 Z"/>
+          <path d="M 392 0 L 420 -14 L 448 0 L 420 14 Z"/>
+        </g>
+        <!-- rotes Quadrat -->
+        <path d="M 196 -70 L 224 -84 L 252 -70 L 224 -56 Z" fill="#b91c1c"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- oberes 3x3-Gitter -->
+  <g id="filter" transform="translate(182, 45)" filter="url(#drop-shadow-final)">
+    <g stroke="#e0c29e" stroke-width="1.5" stroke-linejoin="miter">
+      <g fill="#fdfdfd">
+        <path d="M 0.0,0.0 L 28.0,-14.0 L 56.0,0.0 L 28.0,14.0 Z"/>
+        <path d="M 28.0,-14.0 L 56.0,-28.0 L 84.0,-14.0 L 56.0,0.0 Z"/>
+        <path d="M 56.0,-28.0 L 84.0,-42.0 L 112.0,-28.0 L 84.0,-14.0 Z"/>
+
+        <path d="M 28.0,14.0 L 56.0,0.0 L 84.0,14.0 L 56.0,28.0 Z"/>
+        <path d="M 84.0,-14.0 L 112.0,-28.0 L 140.0,-14.0 L 112.0,0.0 Z"/>
+
+        <path d="M 56.0,28.0 L 84.0,14.0 L 112.0,28.0 L 84.0,42.0 Z"/>
+        <path d="M 84.0,14.0 L 112.0,0.0 L 140.0,14.0 L 112.0,28.0 Z"/>
+        <path d="M 112.0,0.0 L 140.0,-14.0 L 168.0,0.0 L 140.0,14.0 Z"/>
+      </g>
+      <!-- rotes Quadrat -->
+      <path d="M 56.0,0.0 L 84.0,-14.0 L 112.0,0.0 L 84.0,14.0 Z" fill="#b91c1c"/>
+    </g>
+  </g>
+
+</svg>

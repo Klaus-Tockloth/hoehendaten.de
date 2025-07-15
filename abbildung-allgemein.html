@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - Allgemein</title>
+  <meta name="description" content=
+  "Erfahren Sie mehr über die Bedeutung und die vielfältigen Gründe für die Visualisierung von Höhendaten zur Analyse und zum Verständnis der Topographie, einschliesslich der Anwendung des 3x3-Meter-Fensters und der Gradientenalgorithmen wie Horn und Zevenbergen &amp; Thorne.">
+  <meta name="keywords" content=
+  "Höhendaten Visualisierung, Abbildung, Topographie, Gelände, DGM, Digitales Geländemodell, Geodaten, Analyse, Verständnis, 3x3-Meter-Fenster, Geländeschattierung, Horn Algorithmus, Zevenbergen Thorne Algorithmus, Reliefanalyse">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Visualisierung von Höhendaten</h3>
+
+    <p>Die Abbildung bzw. Visualisierung von Höhendaten ist aus vielfältigen Gründen sinnvoll und entscheidend für das Verständnis und die Analyse unserer Umwelt.
+    Wesentliche Gründe dafür sind:</p>
+
+    <ol>
+      <li><strong>Verständnis des Geländes:</strong> Durch die Visualisierung werden Höhenunterschiede, Geländeformen wie Hügel, Täler und Gebirgskämme sowie die
+      allgemeine Topographie eines Gebiets veranschaulicht und leichter verständlich gemacht. Dies hilft, die physischen Eigenschaften der Landschaft zu erfassen
+      und wie sie geformt wurde.</li>
+
+      <li><strong>Vereinfachung komplexer Daten:</strong> Rohdaten von Höhenmessungen, wie Punktwolken, können überwältigend und schwer direkt interpretierbar
+      sein. Visualisierungen, wie z. B. digitale Höhenmodelle, digitale Oberflächenmodelle oder digitale Geländemodelle, sowie traditionelle Methoden wie
+      Höhenlinien (Konturlinien), machen diese komplexen Informationen zugänglich und ermöglichen es, sie sofort zu erfassen.</li>
+
+      <li><strong>Unterstützung bei Analysen:</strong> Visualisierte Höhendaten sind die Grundlage für verschiedene geografische Analysen. Sie ermöglichen
+      Geländeanalyse, die Identifizierung von Mustern und Trends und die Berechnung von Oberflächeneigenschaften.</li>
+
+      <li><strong>Breite Anwendungspalette:</strong> Die Visualisierung ist entscheidend für zahlreiche praktische Anwendungen und Entscheidungsprozesse in
+      verschiedenen Bereichen wie Hydrologie, Infrastruktur- und Verkehrsplanung, Stadt- und Regionalplanung, Umweltmanagement, Katastrophenmanagement,
+      Ressourcenmanagement, Kartographie und Bildverarbeitung, Geologie und Geomorphologie und Archäologie.</li>
+    </ol>
+
+    <p>Zusammenfassend lässt sich sagen, dass die Visualisierung von Höhendaten unerlässlich ist, um die Erdoberfläche zu verstehen, komplexe räumliche Analysen
+    durchzuführen, fundierte Entscheidungen in Planung und Management zu treffen und Informationen effektiv zu kommunizieren.</p>
+
+    <hr>
+
+    <h3>3x3-Meter-Fenster</h3>
+
+    <p>Bei der Analyse von digitalen Geländemodellen (DGM), wie dem DGM1 mit einer Gitterweite von einem Meter, ist das 3x3-Meter-Fenster eine grundlegende Methode
+    zur Berechnung verschiedener topographischer Indizes. Diese auch als "Kernel" oder "Fokus-Filter" bezeichnete Strategie analysiert für jeden Pixel des
+    Geländemodells dessen direkte Nachbarschaft, um lokale geomorphologische Eigenschaften zu quantifizieren.</p>
+
+    <p>Das 3x3-Fenster besteht aus einem zentralen Pixel und seinen acht unmittelbaren Nachbarn. Dieses Fenster verschiebt sich Zelle für Zelle über das gesamte
+    Raster des DGM. Für jede Position wird aus den neun Höhenwerten innerhalb des Fensters ein neuer Wert für den zentralen Pixel berechnet, der dann in einer
+    neuen Rasterdatei für den jeweiligen Index gespeichert wird. Das Ergebnis hängt von der spezifischen Berechnungsmethode des Indexes ab.</p>
+    <img src="./images/3x3-fenster.svg" alt="Skizze des sich verschiebenden 3x3-Meter-Fensters.">
+    <p><small>Skizze des sich verschiebenden 3x3-Meter-Fensters.</small>
+    </p>
+
+    <p>Zusammenfassend lässt sich sagen, dass die 3x3-Meter-Fenster-Strategie eine fundamentale Technik der digitalen Reliefanalyse ist, die es ermöglicht, aus
+    reinen Höhendaten aussagekräftige, abgeleitete Informationen über die Morphologie des Geländes zu gewinnen.</p>
+
+    <hr>
+
+    <h3>(Gradienten-) Algorithmen</h3>
+
+    <p>Es stehen zwei Algorithmen zur Berechnung der Geländeschattierung zur Verfügung: 'Horn' und 'ZevenbergenThorne'. Der Hauptunterschied zwischen ihnen liegt
+    in der Art und Weise, wie sie die lokalen Steigungs- und Ausrichtungsderivate (Gradienten) aus den Höhendaten (DGM) berechnen und für welche Landschaftstypen
+    sie jeweils optimal geeignet sind.</p>
+
+    <p><strong>1. Zevenbergen & Thorne Algorithmus</strong>
+    </p>
+
+    <ul>
+      <li><strong>Charakteristik:</strong> Dieser Algorithmus ist mathematisch präziser und verwendet eine Methode, die besonders gut für glatte oder sanfte
+      Landschaften geeignet ist. Er neigt dazu, die Daten zu glätten, da er weniger Datenpunkte (oft nur vier direkte Nachbarzellen) zur Berechnung verwendet.</li>
+
+      <li>
+        <strong>Optimal für Landschaftstypen:</strong>
+        <ul>
+          <li><strong>Glatte, sanfte Gelände:</strong> Ideal für Gebiete mit geringen Höhenunterschieden, wie Flachland, sanfte Hügel oder Plateaus, bei denen eine
+          detaillierte, aber nicht übertriebene Darstellung feiner Geländeformen gewünscht ist.</li>
+
+          <li><strong>Hochauflösende DGMs auf glatten Oberflächen:</strong> Bei sehr detaillierten Höhenmodellen von glatten Oberflächen kann Zevenbergen & Thorne
+          präzisere Ergebnisse liefern, da er kleinere Variationen nicht überbetont.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><strong>2. Horn's Algorithmus</strong>
+    </p>
+
+    <ul>
+      <li><strong>Charakteristik:</strong> Horn's Algorithmus ist eine weit verbreitete Methode, die eine 3x3-Fenster-Matrix verwendet, um lokale Derivate zu
+      approximieren. Er berücksichtigt alle acht Nachbarzellen zur Berechnung von Steigung und Ausrichtung. Er wird oft als Standardalgorithmus in vielen
+      GIS-Anwendungen verwendet.</li>
+
+      <li>
+        <strong>Optimal für Landschaftstypen:</strong>
+        <ul>
+          <li><strong>Raues, zerklüftetes Gelände:</strong> Dieser Algorithmus ist besser für Gebiete mit großen und abrupten Höhenunterschieden geeignet, wie
+          Gebirge, Schluchten oder stark erodierte Landschaften.</li>
+
+          <li><strong>Gelände mit hoher Variabilität der Hangneigung:</strong> Horn's Algorithmus betont Täler, Grate, Gipfel, Senken und Kuppen stärker, was ihn
+          ideal für die Visualisierung komplexer topografischer Merkmale macht.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>Zusammenfassend lässt sich sagen, dass die Wahl des Algorithmus davon abhängt, welche Art von Geländemerkmalen hervorgehoben werden soll. Für eine möglichst
+    realistische Darstellung ist es ratsam, den Algorithmus zu wählen, der am besten zum Charakter der Landschaft passt.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

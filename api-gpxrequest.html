@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API - GPXRequest</title>
+  <meta name="description" content=
+  "API-Dokumentation für den 'GPXRequest'. Verarbeitet GPX-Dateien und ergänzt die exakten Höhendaten für jeden Koordinatenpunkt.">
+  <meta name="keywords" content="Höhendaten, API, GPXRequest, GPX, Base64, Webservice, DGM, Geodaten, Programmierschnittstelle">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Application Programming Interface (API)</h2>
+
+    <hr>
+
+    <h3 class="request">API-Attribute 'GPXRequest'</h3>
+
+    <p>Der API-Aufruf 'GPXRequest' verarbeitet eine hochgeladene GPX-Datei. Für jeden Punkt innerhalb der GPX-Datei werden die entsprechenden Höheninformationen
+    abgefragt und in die Datei integriert. Die Antwort enthält die aktualisierte GPX-Datei (Base64-kodiert) sowie Statistiken zur Anzahl der Punkte und den
+    verwendeten Datenquellen mit deren Attributionen.</p>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Anfrage (GPXRequest)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GPXData</td>
+          <td>string</td>
+          <td>GPX-Datei (Base64-Kodierung)</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+    <h3 class="response">API-Attribute 'GPXResponse'</h3>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Antwort (GPXResponse)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GPXData</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>GPX-Datei (Base64-Kodierung)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GPXPoints</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Anzahl Punkte in der GPX-Datei</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>DGMPoints</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Anzahl Punkte mit DGM-Höhendaten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Attributions</td>
+          <td>
+          </td>
+          <td>[]string</td>
+          <td>Attributionen der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>IsError</td>
+          <td>
+          </td>
+          <td>bool</td>
+          <td>Fehler (ja/nein)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Error</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Fehlerdetails</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Code</td>
+          <td>string</td>
+          <td>Fehlernummer</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Title</td>
+          <td>string</td>
+          <td>Fehlerbeschreibung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Details</td>
+          <td>string</td>
+          <td>Fehlerdetaillierung</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+
+    <h4 class="request">GPXRequest (Beispiel)</h4>
+
+    <pre class="request"><code>
+#!/bin/bash
+#
+# Abfrage der Höhendaten für alle Punkte einer GPX-Datei
+
+gpxdata=$(cat &lt;&lt;EOF
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1"&gt;
+  &lt;wpt lat="51.276389" lon="8.558333"&gt;
+    &lt;name&gt;Langenberg (Rothaargebirge, höchster Berg in NRW)&lt;/name&gt;
+  &lt;/wpt&gt;
+  &lt;wpt lat="51.179444" lon="8.488889"&gt;
+    &lt;name&gt;Kahler Asten (Rothaargebirge, zweithöchster Berg in NRW)&lt;/name&gt;
+  &lt;/wpt&gt;
+&lt;/gpx&gt;
+EOF
+)
+gpxdataBase64=$(base64 -w 0 &lt;&lt;&lt; "$gpxdata")
+
+postdata=$(cat &lt;&lt;EOF
+{
+  "Type": "GPXRequest",
+  "ID": "rothaargebirge.gpx",
+  "Attributes": {
+      "GPXData": "$gpxdataBase64"
+  }
+}
+EOF
+)
+
+echo "postdata =\n$postdata"
+
+curl \
+--silent \
+--include \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--data "$postdata" \
+https://api.hoehendaten.de:14444/v1/gpx
+
+</code></pre>
+    <hr>
+    <h4 class="response">GPXResponse ('GPXData' gekürzt)</h4>
+
+    <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 1531
+date: Tue, 22 Apr 2025 08:08:23 GMT
+
+{
+  "Type": "GPXResponse",
+  "ID": "rothaargebirge.gpx",
+  "Attributes": {
+    "GPXData": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iV...yMDIxLTAzPC9kZXNjPgoJPC93cHQ+CjwvZ3B4Pg==",
+    "GPXPoints": 2,
+    "DGMPoints": 2,
+    "Attributions": [
+      "DE-NW: © GeoBasis-DE / NRW (2025), dl-zero-de/2.0, www.geobasis.nrw.de"
+    ],
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+        </code></pre>
+    <hr>
+    <h4 class="response">Erzeugte GPX-Datei</h4>
+
+    <pre class="response"><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;gpx  xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://github.com/tkrajina/gpxgo"&gt;
+    &lt;metadata&gt;
+        &lt;desc&gt;Die Höhenangaben (ele) basieren auf DGM-Daten mit hoher Genauigkeit.&lt;/desc&gt;
+        &lt;author&gt;&lt;/author&gt;
+        &lt;copyright author="DE-NW: © GeoBasis-DE / NRW (2025), dl-zero-de/2.0, www.geobasis.nrw.de"&gt;&lt;/copyright&gt;
+    &lt;/metadata&gt;
+    &lt;wpt lat="51.276389" lon="8.558333"&gt;
+        &lt;ele&gt;843.07&lt;/ele&gt;
+        &lt;name&gt;Langenberg (Rothaargebirge, höchster Berg in NRW)&lt;/name&gt;
+        &lt;desc&gt;ele: DE-NW, 2021-03&lt;/desc&gt;
+    &lt;/wpt&gt;
+    &lt;wpt lat="51.179444" lon="8.488889"&gt;
+        &lt;ele&gt;839.83&lt;/ele&gt;
+        &lt;name&gt;Kahler Asten (Rothaargebirge, zweithöchster Berg in NRW)&lt;/name&gt;
+        &lt;desc&gt;ele: DE-NW, 2021-03&lt;/desc&gt;
+    &lt;/wpt&gt;
+&lt;/gpx&gt;
+            </code></pre>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

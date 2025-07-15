@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API - HillshadeRequest</title>
+  <meta name="description" content=
+  "API-Dokumentation für den 'HillshadeRequest'. Generiert eine Schummerungsabbildung (Hillshade) als GeoTIFF oder PNG für einen Kartenausschnitt.">
+  <meta name="keywords" content="Höhendaten, API, HillshadeRequest, Schummerung, Hillshade, GeoTIFF, PNG, Geodaten, Programmierschnittstelle">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Application Programming Interface (API)</h2>
+
+    <hr>
+
+    <h3 class="request">API-Attribute 'HillshadeRequest'</h3>
+
+    <p>Der API-Aufruf 'HillshadeRequest' generiert eine Schummerungsabbildung (Hillshade) für einen Kartenausschnitt von 1x1 km. Der Kartenausschnitt wird durch
+    einen beliebigen Referenzpunkt bestimmt. Der Referenzpunkt kann in den Koordinatensystemen Longitude/Latitude oder UTM angegeben werden. Die Antwort enthält
+    die Schummerungsabbildung im GeoTIFF- oder PNG-Format (Base64-kodiert) sowie Metadaten zur Quelle und Attributierung.</p>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Anfrage (HillshadeRequest)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Eindeutige ID der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>float</td>
+          <td>Längengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>float</td>
+          <td>Breitengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>int</td>
+          <td>UTM Zone Referenzpunkt (32 oder 33)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>float</td>
+          <td>Easting, X, Ostwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GradientAlgorithm</td>
+          <td>string</td>
+          <td>Algorithmus Berechnung Gradient ("Horn" oder "ZevenbergenThorne")</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>VerticalExaggeration</td>
+          <td>float</td>
+          <td>Vertikale Überhöhung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>AzimuthOfLight</td>
+          <td>uint</td>
+          <td>Azimut der Lichtquelle (0-360 Grad, im Uhrzeigersinn von Nord)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>AltitudeOfLight</td>
+          <td>uint</td>
+          <td>Höhe der Lichtquelle über dem Horizont (0-90 Grad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ShadingVariant</td>
+          <td>string</td>
+          <td>Schattierungsvariante ("regular", "combined", "multidirectional", "igor")</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+    <h3 class="response">API-Attribute 'HillshadeResponse'</h3>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Antwort (HillshadeResponse)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Längengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Breitengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>UTM Zone Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Easting, X, Ostwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GradientAlgorithm</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Algorithmus Berechnung Gradient</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>VerticalExaggeration</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Vertikale Überhöhung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>AzimuthOfLight</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>uint</td>
+          <td>Azimut der Lichtquelle</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>AltitudeOfLight</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>uint</td>
+          <td>Höhe der Lichtquelle über dem Horizont</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ShadingVariant</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Schattierungsvariante</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Hillshades</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>[]struct</td>
+          <td>Array von Hillshade-Objekten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Data</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Schummerungsabbildung für die Kachel</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>DataFormat</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Format der Daten (GeoTIFF oder PNG)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Actuality</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Aktualität der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Origin</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Herkunft der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Attribution</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Attribution der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>TileIndex</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Index der Quelldatenkachel</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>BoundingBox</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>WGS84 Georeferenz (relevant bei PNG)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MinLon</td>
+          <td>float</td>
+          <td>Minimale Longitude (links unten)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MaxLon</td>
+          <td>float</td>
+          <td>Maximale Longitude (rechts oben)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MinLat</td>
+          <td>float</td>
+          <td>Minimale Latitude (links unten)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MaxLat</td>
+          <td>float</td>
+          <td>Maximale Latitude (rechts oben)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>IsError</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>bool</td>
+          <td>Fehler (ja/nein)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Error</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Fehlerdetails</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Code</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlernummer</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Title</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlerbeschreibung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Details</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlerdetaillierung</td>
+        </tr>
+      </table>
+    </div>
+
+    <p>Eingabe:</p>
+
+    <ul>
+      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Schummerung erstellt wird.</li>
+
+      <li>Mögliche Koordinatensysteme:</li>
+
+      <ul>
+        <li>Lon/Lat-Koordinaten (WGS84, EPSG:4326).</li>
+
+        <li>UTM-Koordinaten (EPSG:25832 / EPSG:25833).</li>
+      </ul>
+    </ul>
+
+    <p>Ausgabe:</p>
+
+    <ul>
+      <li>Abhängig vom Eingabeformat werden unterschiedliche Ausgabeformate erzeugt:</li>
+
+      <ul>
+        <li>PNG in der Projektion EPSG:3857 (Webmercator) mit expliziter Georeferenzierung durch Lon/Lat-Koordinaten (WGS84, EPSG:4326).</li>
+
+        <li>GeoTIFF in der Projektion der DGM1-Ausgangsdaten (EPSG:25832 / EPSG:25833) mit impliziter Georeferenzierung in den Metadaten.</li>
+      </ul>
+    </ul>
+
+    <p>Anmerkungen:</p>
+
+    <ul>
+      <li>Ein Kartenausschnitt wird in der Regel durch genau eine Kachel repräsentiert.</li>
+
+      <li>Verläuft eine Landesgrenze durch eine Kachel, wird sie durch alle betroffenen Bundesländer (2 oder 3) zur Verfügung gestellt.</li>
+
+      <li>Entsprechend enthält das Feld 'Attributes.Hillshades' die Daten für eine, zwei oder maximal drei Kacheln.</li>
+
+      <li>Der Body der Antwort ist komprimiert (gzip).</li>
+    </ul>
+
+    <hr>
+
+    <h4 class="request">HillshadeRequest (Beispiel):</h4>
+
+    <pre class="request"><code>
+#!/bin/bash
+#
+# Abfrage der Schummerung für eine Kachel mit 1000x1000 Meter. 
+
+# Kachel durch UTM-Koordinaten referenziert.
+postdataUTM=$(cat &lt;&lt;EOF
+{
+  "Type": "HillshadeRequest",
+  "ID": "Klettersteinbruch Brumleytal",
+  "Attributes": {
+    "Zone": 32,
+    "Easting": 409000.0,
+    "Northing": 5790000.0,
+    "Longitude": 0.0,
+    "Latitude": 0.0,
+    "GradientAlgorithm": "Horn",
+    "VerticalExaggeration": 1.0,
+    "AzimuthOfLight": 315,
+    "AltitudeOfLight": 45,
+    "ShadingVariant": "regular"
+  }
+}
+EOF
+)
+
+# oder
+
+# Kachel durch Lon/Lat-Koordinaten referenziert.
+postdataLonLat=$(cat &lt;&lt;EOF
+{
+  "Type": "HillshadeRequest",
+  "ID": "Langenberg (Rothaargebirge, höchster Berg in NRW)",
+  "Attributes": {
+    "Zone": 0,
+    "Easting": 0.0,
+    "Northing": 0.0,
+    "Longitude": 8.558333,
+    "Latitude": 51.276389,
+    "GradientAlgorithm": "ZevenbergenThorne",
+    "VerticalExaggeration": 1.0,
+    "AzimuthOfLight": 315,
+    "AltitudeOfLight": 45,
+    "ShadingVariant": "regular"
+  }
+}
+EOF
+)
+
+echo "postdata =\n$postdataUTM"
+
+curl \
+--silent \
+--include \
+--compressed \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--header "Accept-Encoding: gzip" \
+--data "$postdataUTM" \
+https://api.hoehendaten.de:14444/v1/hillshade
+
+</code></pre>
+    <hr>
+    <h4 class="response">HillshadeResponse:</h4>
+
+    <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-encoding: gzip
+content-type: application/json; charset=utf-8
+date: Mon, 09 Jun 2025 06:49:28 GMT
+
+{
+  "Type": "HillshadeResponse",
+  "ID": "Klettersteinbruch Brumleytal",
+  "Attributes": {
+    "Zone": 32,
+    "Easting": 409000,
+    "Northing": 5790000,
+    "Longitude": 0,
+    "Latitude": 0,
+    "GradientAlgorithm": "Horn",
+    "VerticalExaggeration": 1,
+    "AzimuthOfLight": 315,
+    "AltitudeOfLight": 45,
+    "ShadingVariant": "regular",
+    "Hillshades": [
+      {
+        "Data": "SUkqAAgAAAAQAAABAwABAAAA6AMAAAEBAwABAAAA6AMA ... mZijraSemZaXm6Kelo2CiZGMjYqDioiDjI2Ic1xVXg==",
+        "DataFormat": "geotiff",
+        "Actuality": "2024-01",
+        "Origin": "DE-NW",
+        "Attribution": "© GeoBasis-DE / NRW (2025), dl-de/by-2-0",
+        "TileIndex": "32_409_5790",
+        "BoundingBox": {
+          "MinLon": 0,
+          "MaxLon": 0,
+          "MinLat": 0,
+          "MaxLat": 0
+        }
+      }
+    ],
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+
+</code></pre>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

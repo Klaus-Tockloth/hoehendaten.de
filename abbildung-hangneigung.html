@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - Hangneigung</title>
+  <meta name="description" content=
+  "Verstehen Sie, was die Hangneigung aussagt, ihre Bedeutung für Gefahrenanalyse und Planung, und wie sie mithilfe von Farbabstufungen dargestellt wird.">
+  <meta name="keywords" content="Hangneigung, Steilheit, Slope, DGM, Visualisierung, Grad, Gefahrenanalyse, Rutschung, Erosion, Planung, Infrastruktur">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Hangneigung</h3>
+
+    <p>Eine genaue Hangneigungskarte ist ein vielseitiges Werkzeug für Analysen und Planungen. Sie visualisiert die Steilheit des Geländes und unterstützt eine
+    fundierte Entscheidungsfindung. Zu den wichtigsten Anwendungsbereichen gehören:</p>
+
+    <ul>
+      <li><strong>Gefahrenanalyse:</strong> Die Karte ist entscheidend für die Bewertung von Risiken wie Hangrutschungen, Murgängen und Lawinen sowie für die
+      Planung von Schutzmaßnahmen und die Ausweisung von Gefahrenzonen.</li>
+
+      <li><strong>Infrastrukturplanung:</strong> Sie dient der Auswahl geeigneter Standorte für Gebäude und der optimierten Planung von Verkehrswegen wie Straßen
+      und Bahnlinien, um aufwendige Erdarbeiten zu minimieren.</li>
+
+      <li><strong>Land- und Forstwirtschaft:</strong> Landwirte und Förster nutzen die Karte zur Beurteilung der Bearbeitbarkeit von Flächen und zur Optimierung
+      der Holzernte und von Rückewegen.</li>
+
+      <li><strong>Umwelt- und Naturschutz:</strong> Die Hangneigung ist ein wichtiger Faktor für die Biotopkartierung, die Bewertung von Habitaten und die Planung
+      von Renaturierungsmaßnahmen.</li>
+
+      <li><strong>Freizeit und Tourismus:</strong> Sie ermöglicht die Planung von Wander- und Radwegen mit angepassten Schwierigkeitsgraden und hilft bei der
+      Routenwahl für Outdoor-Sportarten.</li>
+    </ul>
+
+    <hr>
+
+    <h3>Winkelbereich zu Farbe</h3>
+
+    <p>Aus den Höheninformationen werden Hangneigungswinkel in Dezimalgrad (mit Nachkommastellen) errechnet. Zusätzlich definiert der Benutzer eine
+    <strong>Farbsteuerdatei</strong> für Winkelbereiche und Farben. Welche Farben und Winkelbereiche sinnvoll sind, ist vom jeweiligen Anwendungsfall abhängig.
+    Soll ein Winkelbereich gar nicht dargestellt werden, wählt man eine volltransparente Farbe.</p>
+
+    <hr>
+
+    <h3>Beispiel</h3>
+
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Winkel°</th>
+          <th>RGBA</th>
+          <th>Farbe</th>
+          <th>Farbname</th>
+          <th>Bemerkung</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>0</td>
+          <td>0 100 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(0, 100, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Dunkelgrün</td>
+          <td>Von 0° bis &lt;5°.</td>
+        </tr>
+
+        <tr>
+          <td>5</td>
+          <td>0 200 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(0, 200, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Mittelgrün</td>
+          <td>Von 5° bis &lt;10°.</td>
+        </tr>
+
+        <tr>
+          <td>10</td>
+          <td>100 255 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(100, 255, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Hellgrün</td>
+          <td>Von 10° bis &lt;20°.</td>
+        </tr>
+
+        <tr>
+          <td>20</td>
+          <td>200 200 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(200, 200, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Gelbgrün</td>
+          <td>Von 20° bis &lt;30°.</td>
+        </tr>
+
+        <tr>
+          <td>30</td>
+          <td>255 150 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(255, 150, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Orange</td>
+          <td>Von 30° bis &lt;40°.</td>
+        </tr>
+
+        <tr>
+          <td>40</td>
+          <td>255 100 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(255, 100, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Dunkelorange</td>
+          <td>Von 40° bis &lt;45°.</td>
+        </tr>
+
+        <tr>
+          <td>45</td>
+          <td>255 0 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(255, 0, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Rot</td>
+          <td>Von 45° bis &lt;60°.</td>
+        </tr>
+
+        <tr>
+          <td>60</td>
+          <td>150 0 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(150, 0, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Dunkelrot</td>
+          <td>Von 60° bis &lt;90°.</td>
+        </tr>
+
+        <tr>
+          <td>90</td>
+          <td>0 0 0 255</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 255); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Schwarz</td>
+          <td>Ab 90° und darüber hinaus.</td>
+        </tr>
+
+        <tr>
+          <td>nv</td>
+          <td>0 0 0 0</td>
+          <td>
+            <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 0); border: 1px solid #ccc;">
+            </div>
+          </td>
+          <td>Transparent</td>
+          <td>Sonderbehandlung für "No Value".</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Erläuterungen:</p>
+
+    <ul>
+      <li>Flache Bereiche (&lt;20°) werden Dunkelgrün, Mittelgrün und Hellgrün dargestellt.</li>
+
+      <li>Steilere Bereiche (&lt;40°) werden Gelbgrün und Orange dargestellt.</li>
+
+      <li>Sehr steile Bereiche (&lt;60°) werden Dunkelorange und Rot dargestellt.</li>
+
+      <li>Extrem steile Bereiche (&lt;90°) werden Dunkelrot dargestellt.</li>
+
+      <li>Bereiche mit Winkeln &gt;90° (falls vorhanden) werden Schwarz dargestellt.</li>
+
+       <li>Bereiche ohne Daten (nv) werden transparent dargestellt.</li>
+   </ul>
+
+    <hr>
+
+    <h3>Schummerung versus Hangneigung</h3>
+    <img src="./images/edersee-schummerung-500x400.png" alt="Schummerung für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Schummerung für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+    <img src="./images/edersee-hangneigung-500x400.png" alt="Hangneigung für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Hangneigung für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+
+    <hr>
+
+    <h3>Dienst Kolorierung</h3>
+
+    <p>Über den Dienst <strong>Kolorierung</strong> können Farbsteuerdateien definiert, eingelesen, editiert und gespeichert werden.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

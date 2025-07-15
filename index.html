@@ -31,8 +31,44 @@
         <a href="karte.html">Karte</a>
       </li>
 
-      <li>
-        <a href="abbildung.html">Abbildung</a>
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
       </li>
 
       <li>
@@ -43,29 +79,82 @@
         <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
         <ul class="dropdown-content">
           <li>
-            <a href="punkt.html">Punkt Lon/Lat</a>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
           </li>
 
           <li>
-            <a href="punkt_utm.html">Punkt UTM</a>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
           </li>
 
           <li>
-            <a href="gpx.html">GPX-Datei</a>
+            <a href="dienst-gpx.html">GPX-Datei</a>
           </li>
 
           <li>
-            <a href="hoehenlinien.html">Höhenlinien</a>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
           </li>
 
           <li>
-            <a href="schummerung.html">Schummerung</a>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
         </ul>
       </li>
 
-      <li>
-        <a href="api.html">API</a>
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
       </li>
 
       <li>
@@ -84,6 +173,47 @@
     <p>Alle Bundesländer in Deutschland erheben durch die Landesvermessungsämter sehr detaillierte und genaue Höhendaten. Diese Daten werden als Digitale
     Geländemodelle (DGM) frei (Open Data) zur Verfügung gestellt. Die DGM-Daten sind für eine Vielzahl von Anwendungen (z.B. Planung, Umweltanalyse, Simulation)
     unerlässlich. Dieser Webservice macht die Höhendaten auch für allgemeine Zwecke verfügbar.</p>
+
+    <hr>
+
+    <h3>Übersicht aller Funktionen dieser Webseite</h3>
+
+    <p>Verfügbar als Dienst und API:</p>
+
+    <ul>
+      <li>Höhenwert für Lon/Lat-Punkt</li>
+
+      <li>Höhenwert für UTM-Punkt</li>
+
+      <li>Höhenwerte für GPX-Datei</li>
+
+      <li>Höhenanalyse für GPX-Datei</li>
+
+      <li>Schummerung</li>
+
+      <li>Höhenschichtlinien</li>
+
+      <li>Erstellung Farbsteuerdatei (nur als Dienst)</li>
+
+      <li>Hangneigung</li>
+
+      <li>Hangexposition</li>
+      <!-- 
+      <li>TPI - Topographic Position Index</li>
+      <li>TRI - Topographic Ruggedness Index</li>
+      <li>RI - Roughness Index</li>
+      -->
+    </ul>
+
+    <p>Verfügbar als Kartenfunktion:</p>
+
+    <ul>
+      <li>Höhenwert für Punkt</li>
+
+      <li>Höhenwerte für Linie</li>
+    </ul>
+
+    <p>Der Benutzer kann <strong>viele Parameter</strong> beeinflussen und so die Kartenfunktionen und Dienste auf seine individuelle Nutzung hin optimieren.</p>
 
     <hr>
 
@@ -154,7 +284,7 @@
     <h3>Anzahl Messpunkte für Deutschland</h3>
 
     <p>Die Landfläche der Bundesrepublik Deutschland beträgt ungefähr 357.600 Quadratkilometer. Für jeden Quadratmeter (1x1 m) wird ein Höhenmesswert zur Verfügung
-    gestellt. Aktuell können ca. 365 Milliarden Messwerte abgerufen werden.</p>
+    gestellt, woraus sich insgesamt 367 Milliarden Höhenmesswerte ergeben.</p>
 
     <hr>
     <img src="./images/musenberg-500x400.png" alt="Karte mit einer Strecke und den Höheninformationen der Endpunkte am Musenberg.">
@@ -451,9 +581,10 @@
 
                 <li>© GDI-Th (2025), dl-de/by-2-0</li>
 
-                <li>2019-11 bis 2024-03</li>
+                <li>2013-12 bis 2024-03</li>
 
-                <li>Ein Bereich im südlichen Thüringen ist derzeit noch nicht integriert.</li>
+                <li>Die Quelldaten aus der Befliegung 2014-2019 (südliches Thüringen) wurden technisch konvertiert (XYZ -&gt; GeoTIFF) und wo erforderlich mit
+                NoData-Werten aufgefüllt.</li>
               </ul>
             </td>
           </tr>

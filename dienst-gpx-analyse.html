@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dienst - GPX-Analyse</title>
+  <meta name="description" content="Analysieren Sie Höhendaten und andere Metriken für alle Punkte in Ihrer GPX-Datei.">
+  <meta name="keywords" content="Höhendaten, GPX-Datei, Analyse, Strecke, Segment, Höhenprofil, Dauer, Distanz, Aufstieg, Abstieg">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+  <style>
+  /* Purpose: Lokale Stile exklusiv für 'dienst-gpx-analyse.html'. */
+
+  /* Überschreibt die globalen .results-table-Regeln für die Standard-Ergebnistabellen (2 Spalten), wendet sie aber NICHT auf die .point-details-table an. */
+  .results-table:not(.point-details-table) th:first-child,
+  .results-table:not(.point-details-table) td:first-child {
+    width: 30%;
+  }
+
+  .results-table:not(.point-details-table) th:nth-child(2),
+  .results-table:not(.point-details-table) td:nth-child(2) {
+    width: 70%;
+  }
+
+  .point-details-table {
+    table-layout: auto;
+  }
+
+  /* Setzt die Breite für die .point-details-table zurück, damit der Browser sie automatisch anpasst. */
+  .point-details-table.results-table th,
+  .point-details-table.results-table td {
+    width: auto;
+    padding: 4px 6px;
+  }
+
+  /* Spezifische Stilregel für die erste Spalte (Zeitstempel) der Punkt-Details-Tabelle. */
+  .point-details-table td:first-child,
+  .point-details-table th:first-child {
+    white-space: nowrap;
+    width: 160px; /* Feste Breite für die Zeitstempel-Spalte */
+  }
+
+  /* Accordion Styles */
+  .accordion {
+      background-color: #eee;
+      color: #444;
+      cursor: pointer;
+      padding: 10px 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      transition: 0.4s;
+      border-bottom: 1px solid #ddd;
+      margin-top: 5px;
+      box-sizing: border-box;
+  }
+
+  .accordion.active, .accordion:hover {
+      background-color: #ccc;
+  }
+
+  .accordion:after {
+      content: '\002B'; /* Plus-Zeichen */
+      color: #777;
+      font-weight: bold;
+      float: right;
+      margin-left: 5px;
+  }
+
+  .accordion.active:after {
+      content: "\2212"; /* Minus-Zeichen */
+  }
+
+  .panel {
+      padding: 0 18px;
+      background-color: white;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+  }
+
+  .panel table {
+      width: 100%;
+      margin-bottom: 10px;
+  }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Analyse der Höhendaten für alle Punkte einer GPX-Datei</h3>
+    <!-- Bereich für die Eingabefelder (Datei) -->
+
+    <div class="input-section section-box">
+      <p><b>GPX-Datei</b>
+      </p>
+
+      <div class="input-group">
+        <input type="file" id="gpxFile" accept=".gpx">
+      </div>
+    </div>
+    <!-- Bereich für den Button -->
+
+    <div class="button-section section-box">
+      <button id="queryButton">Analyse der Höhendaten starten</button>
+    </div>
+    <!-- Bereich für die Ausgabe -->
+
+    <div class="output-section section-box">
+      <div id="results">
+      </div>
+    </div>
+  </div>
+  <script>
+         // Wait for the DOM to be fully loaded
+         document.addEventListener('DOMContentLoaded', () => {
+             // Get references to the HTML elements
+             const gpxFileInput = document.getElementById('gpxFile');
+             const queryButton = document.getElementById('queryButton');
+             const resultsDiv = document.getElementById('results');
+
+             const apiUrl = "https://api.hoehendaten.de:14444/v1/gpxanalyze";
+
+             // Function to convert ArrayBuffer to Base64 string
+             function arrayBufferToBase64(buffer) {
+                 let binary = '';
+                 const bytes = new Uint8Array(buffer);
+                 const len = bytes.byteLength;
+                 for (let i = 0; i < len; i++) {
+                     binary += String.fromCharCode(bytes[i]);
+                 }
+                 return btoa(binary);
+             }
+
+             // New function to format seconds into HH:MM:SS
+             function formatSecondsToHMS(totalSeconds) {
+                if (totalSeconds === undefined || totalSeconds === null) {
+                    return 'N/A';
+                }
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = Math.floor(totalSeconds % 60);
+
+                const pad = (num) => num.toString().padStart(2, '0');
+
+                return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+            }
+
+             // Function to display results or errors and activate accordions
+             function displayResult(className, htmlContent) {
+                 resultsDiv.className = className; // Set a class for styling (e.g., 'success', 'error', 'loading')
+                 resultsDiv.innerHTML = htmlContent;
+                 activateAccordions(); // Activate accordions after content is loaded
+             }
+
+             // Function to activate accordion functionality
+             function activateAccordions() {
+                 const accordions = document.querySelectorAll('.accordion');
+                 accordions.forEach(accordion => {
+                     accordion.removeEventListener('click', toggleAccordion); // Prevent duplicate listeners
+                     accordion.addEventListener('click', toggleAccordion);
+                 });
+             }
+
+             // Function to toggle accordion panel
+             function toggleAccordion() {
+                 this.classList.toggle('active');
+                 const panel = this.nextElementSibling;
+                 if (panel.style.maxHeight) {
+                     panel.style.maxHeight = null;
+                 } else {
+                     panel.style.maxHeight = panel.scrollHeight + "px";
+                 }
+             }
+
+             // Add event listener to the button
+             queryButton.addEventListener('click', async () => {
+                 const file = gpxFileInput.files[0];
+                 // --- Basic Input Validation ---
+                 if (!file) {
+                     displayResult('error', '<p class="status-message">Fehler: Bitte wählen Sie eine GPX-Datei aus.</p>');
+                     return;
+                 }
+
+                 // --- Prepare Request ---
+                 displayResult('loading', '<p class="status-message">Lade ... Lese Datei ... Sende Anfrage an den Dienst ...</p>');
+
+                 const reader = new FileReader();
+
+                 reader.onloadstart = () => {
+                      displayResult('loading', '<p class="status-message">Lade ... Lese GPX-Datei ...</p>');
+                 };
+
+                 reader.onerror = (e) => {
+                     console.error("Fehler beim Lesen der Datei:", e);
+                     displayResult('error', `<p class="status-message">Fehler beim Lesen der Datei: ${e.target.error.message}</p>`);
+                 };
+
+                 reader.onload = async (e) => {
+                     try {
+                         displayResult('loading', '<p class="status-message">Lade ... Lese Datei ... Sende an den Dienst ...</p>');
+                         // Get the file content as ArrayBuffer
+                         const arrayBuffer = e.target.result;
+
+                         // Base64 encode the file content
+                         const base64GpxData = arrayBufferToBase64(arrayBuffer);
+                         if (!base64GpxData) {
+                              throw new Error("Base64-Kodierung fehlgeschlagen.");
+                         }
+
+                         // Construct the JSON payload based on the GPXAnalyzeRequest structure
+                         const requestPayload = {
+                             Type: "GPXAnalyzeRequest", // Changed Type
+                             ID: `WebApp-${Date.now()}-${Math.random().toString(36).substring(7)}`, // A simple unique ID
+                             Attributes: {
+                                 GPXData: base64GpxData
+                             }
+                         };
+
+                         // --- Send HTTPS Request ---
+                         const response = await fetch(apiUrl, {
+                             method: 'POST', // HTTP method is POST
+                             headers: {
+                                 'Content-Type': 'application/json',
+                                 'Accept': 'application/json'
+                             },
+                             body: JSON.stringify(requestPayload)
+                         });
+
+                         // --- Process Response ---
+                          let data = null;
+                          let rawText = null;
+
+                          try {
+                              // Attempt to read the response as text first in case JSON parsing fails
+                              rawText = await response.text();
+                              // Attempt to parse the text as JSON
+                              data = JSON.parse(rawText);
+                              console.log("API Response (Parsed JSON):", data);
+                          } catch (jsonError) {
+                              // JSON parsing failed, rawText still holds the response body
+                              console.warn("JSON-Parsen fehlgeschlagen:", jsonError);
+                              console.log("Rohe Antwort (Text):", rawText);
+                          }
+
+
+                          // Check for HTTP errors first
+                         if (!response.ok) {
+                             // If HTTP status is not OK (e.g., 404, 500, 400)
+                             console.error("HTTP-Fehler:", response.status);
+
+                             let errorHtml = `<p class="status-message">Serverfehler mit Status ${response.status}:</p>`;
+
+                             // If data was successfully parsed as JSON and contains error details
+                             if (data && data.Attributes && data.Attributes.IsError === true) {
+                                 const errorAttributes = data.Attributes;
+
+                                 errorHtml += '<table class="results-table">';
+                                  if (errorAttributes.Error) {
+                                      const errorDetail = errorAttributes.Error;
+                                      if (errorDetail.Code !== undefined) errorHtml += `<tr><td><strong>Fehlercode</strong></td><td>${errorDetail.Code}</td></tr>`;
+                                      if (errorDetail.Title !== undefined) errorHtml += `<tr><td><strong>Fehlertitel</strong></td><td>${errorDetail.Title}</td></tr>`;
+                                      if (errorDetail.Detail !== undefined) errorHtml += `<tr><td><strong>Fehlerdetail</strong></td><td>${errorDetail.Detail}</td></tr>`;
+                                  }
+                                  errorHtml += '</table>';
+                             } else if (rawText !== null) {
+                                 // If not a structured JSON error, display raw text if available
+                                 errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
+                             } else {
+                                  // Fallback if no raw text could be retrieved
+                                 errorHtml += `<br>Konnte die Antwort vom Server nicht lesen.`;
+                             }
+
+                             displayResult('error', errorHtml);
+                             return;
+                         }
+
+                         // --- If response is OK (status 2xx) ---
+                         if (data && data.Attributes) {
+                              // Check for Application-Level Errors in JSON (even with 2xx status)
+                             if (data.Attributes.IsError === true) {
+                                  const errorAttributes = data.Attributes;
+                                  let errorHtml = '<p class="status-message">Erfolgreiche HTTP-Antwort, aber Anwendungsfehler gemeldet.</p>';
+
+                                  errorHtml += '<table class="results-table">';
+                                   if (errorAttributes.Error) {
+                                       const errorDetail = errorAttributes.Error;
+                                       if (errorDetail.Code !== undefined) errorHtml += `<tr><td><strong>Fehlercode</strong></td><td>${errorDetail.Code}</td></tr>`;
+                                       if (errorDetail.Title !== undefined) errorHtml += `<tr><td><strong>Fehlertitel</strong></td><td>${errorDetail.Title}</td></tr>`;
+                                       if (errorDetail.Detail !== undefined) errorHtml += `<tr><td><strong>Fehlerdetail</strong></td><td>${errorDetail.Detail}</td></tr>`;
+                                   }
+                                   errorHtml += '</table>';
+
+                                   console.error("API-Anwendungsfehler trotz OK-Antwort:", data.Attributes);
+                                   displayResult('error', errorHtml);
+                                   return;
+                              }
+
+                              // If no errors, display Success and specified fields in a table
+                              let resultsHtml = '';
+                              resultsHtml += '<p class="status-message">GPX-Analyse erfolgreich:</p>';
+
+                              const analyzeResult = data.Attributes.GpxAnalyzeResult;
+
+                              if (analyzeResult) {
+                                  resultsHtml += '<h4>Allgemeine GPX-Informationen:</h4>';
+                                  resultsHtml += '<table class="results-table">';
+                                  if (analyzeResult.Version !== undefined) resultsHtml += `<tr><td><strong>Version</strong></td><td>${analyzeResult.Version}</td></tr>`;
+                                  if (analyzeResult.Name !== undefined && analyzeResult.Name !== "") resultsHtml += `<tr><td><strong>Name</strong></td><td>${analyzeResult.Name}</td></tr>`; // Added check for empty string
+                                  if (analyzeResult.Description !== undefined && analyzeResult.Description !== "") resultsHtml += `<tr><td><strong>Beschreibung</strong></td><td>${analyzeResult.Description}</td></tr>`; // Added check for empty string
+                                  if (analyzeResult.Creator !== undefined && analyzeResult.Creator !== "") resultsHtml += `<tr><td><strong>Ersteller</strong></td><td>${analyzeResult.Creator}</td></tr>`; // Added check for empty string
+                                  if (analyzeResult.Time !== null) resultsHtml += `<tr><td><strong>Zeit</strong></td><td>${new Date(analyzeResult.Time).toLocaleString()}</td></tr>`;
+                                  if (analyzeResult.TotalPoints !== undefined) resultsHtml += `<tr><td><strong>Punkte insgesamt</strong></td><td>${analyzeResult.TotalPoints}</td></tr>`;
+                                  resultsHtml += '</table>';
+
+                                  if (Array.isArray(analyzeResult.Tracks) && analyzeResult.Tracks.length > 0) {
+                                      analyzeResult.Tracks.forEach((track, trackIndex) => {
+                                          const trackHeading = track.Name ? `Track: ${track.Name}` : `Track ${trackIndex + 1}`;
+                                          resultsHtml += `<h4>${trackHeading}</h4>`;
+                                          resultsHtml += '<table class="results-table">';
+                                          if (track.Name !== undefined && track.Name !== "") resultsHtml += `<tr><td><strong>Name</strong></td><td>${track.Name}</td></tr>`;
+                                          if (track.Comment !== undefined && track.Comment !== "") resultsHtml += `<tr><td><strong>Kommentar</strong></td><td>${track.Comment}</td></tr>`;
+                                          if (track.Description !== undefined && track.Description !== "") resultsHtml += `<tr><td><strong>Beschreibung</strong></td><td>${track.Description}</td></tr>`;
+                                          if (track.Source !== undefined && track.Source !== "") resultsHtml += `<tr><td><strong>Quelle</strong></td><td>${track.Source}</td></tr>`;
+                                          if (track.Type !== undefined && track.Type !== "") resultsHtml += `<tr><td><strong>Typ</strong></td><td>${track.Type}</td></tr>`;
+                                          resultsHtml += '</table>';
+
+                                          if (Array.isArray(track.Segments) && track.Segments.length > 0) {
+                                              track.Segments.forEach((segment, segmentIndex) => {
+                                                  resultsHtml += `<h4>Segment ${segmentIndex + 1}:</h4>`;
+                                                  resultsHtml += '<table class="results-table">';
+                                                  if (segment.StartTime !== undefined) resultsHtml += `<tr><td><strong>Startzeit</strong></td><td>${new Date(segment.StartTime).toLocaleString()}</td></tr>`;
+                                                  if (segment.EndTime !== undefined) resultsHtml += `<tr><td><strong>Endzeit</strong></td><td>${new Date(segment.EndTime).toLocaleString()}</td></tr>`;
+                                                  if (segment.Duration !== undefined) resultsHtml += `<tr><td><strong>Dauer (hh:mm:ss)</strong></td><td>${formatSecondsToHMS(segment.Duration)}</td></tr>`;
+                                                  if (segment.Points !== undefined) resultsHtml += `<tr><td><strong>Punkte</strong></td><td>${segment.Points}</td></tr>`;
+                                                  // Modified lines for meters and kilometers
+                                                  if (segment.Length2D !== undefined) resultsHtml += `<tr><td><strong>Länge 2D</strong></td><td>${segment.Length2D.toFixed(2)} m (${(segment.Length2D / 1000).toFixed(2)} km)</td></tr>`;
+                                                  if (segment.Length3D !== undefined) resultsHtml += `<tr><td><strong>Länge 3D</strong></td><td>${segment.Length3D.toFixed(2)} m (${(segment.Length3D / 1000).toFixed(2)} km)</td></tr>`;
+                                                  if (segment.MovingTime !== undefined) resultsHtml += `<tr><td><strong>Zeit mit Bewegung (hh:mm:ss)</strong></td><td>${formatSecondsToHMS(segment.MovingTime)}</td></tr>`;
+                                                  if (segment.StoppedTime !== undefined) resultsHtml += `<tr><td><strong>Zeit ohne Bewegung (hh:mm:ss)</strong></td><td>${formatSecondsToHMS(segment.StoppedTime)}</td></tr>`;
+                                                  if (segment.MovingDistance !== undefined) resultsHtml += `<tr><td><strong>Distanz mit Bewegung</strong></td><td>${segment.MovingDistance.toFixed(2)} m (${(segment.MovingDistance / 1000).toFixed(2)} km)</td></tr>`;
+                                                  if (segment.StoppedDistance !== undefined) resultsHtml += `<tr><td><strong>Distanz ohne Bewegung</strong></td><td>${segment.StoppedDistance.toFixed(2)} m (${(segment.StoppedDistance / 1000).toFixed(2)} km)</td></tr>`;
+                                                  /*
+                                                  if (segment.MaxLatitude !== undefined) resultsHtml += `<tr><td><strong>Max. Breite</strong></td><td>${segment.MaxLatitude}</td></tr>`;
+                                                  if (segment.MaxLongitude !== undefined) resultsHtml += `<tr><td><strong>Max. Länge</strong></td><td>${segment.MaxLongitude}</td></tr>`;
+                                                  if (segment.MinLatitude !== undefined) resultsHtml += `<tr><td><strong>Min. Breite</strong></td><td>${segment.MinLatitude}</td></tr>`;
+                                                  if (segment.MinLongitude !== undefined) resultsHtml += `<tr><td><strong>Min. Länge</strong></td><td>${segment.MinLongitude}</td></tr>`;
+                                                  */
+                                                  if (segment.UphillUnfiltered !== undefined) resultsHtml += `<tr><td><strong>Anstieg (Rohdaten)</strong></td><td>${segment.UphillUnfiltered.toFixed(2)} m</td></tr>`;
+                                                  if (segment.DownhillUnfiltered !== undefined) resultsHtml += `<tr><td><strong>Abstieg (Rohdaten)</strong></td><td>${segment.DownhillUnfiltered.toFixed(2)} m</td></tr>`;
+                                                  if (segment.UphillWMA !== undefined) resultsHtml += `<tr><td><strong>Anstieg (Gewichtung)</strong></td><td>${segment.UphillWMA.toFixed(2)} m (Weighted Moving Average: 30,40,30)</td></tr>`;
+                                                  if (segment.DownhillWMA !== undefined) resultsHtml += `<tr><td><strong>Abstieg (Gewichtung)</td><td>${segment.DownhillWMA.toFixed(2)} m (Weighted Moving Average: 30,40,30)</td></tr>`;
+                                                  resultsHtml += '</table>';
+
+                                                  // Accordion for PointDetails
+                                                  if (Array.isArray(segment.PointDetails) && segment.PointDetails.length > 0) {
+                                                      resultsHtml += `<h4 class="accordion">Details für ${segment.PointDetails.length} Punkte anzeigen</h4>`;
+                                                      resultsHtml += `<div class="panel">`;
+                                                      // Added 'point-details-table' class to specifically target this table for styling
+                                                      resultsHtml += `<table class="results-table point-details-table"><thead><tr><th>Zeitpunkt</th><th>Differenz (s)</th><th>Latitude</th><th>Longitude</th><th>Distanz (m)</th><th>Höhe (m)</th><th>Anstieg (m)</th><th>Abstieg (m)</th></tr></thead><tbody>`;
+                                                      segment.PointDetails.forEach(point => {
+                                                          resultsHtml += `<tr>`;
+                                                          if (point.Timestamp !== undefined) resultsHtml += `<td>${new Date(point.Timestamp).toLocaleString()}</td>`;
+                                                          if (point.TimeDifference !== undefined) resultsHtml += `<td>${point.TimeDifference}</td>`;
+                                                          if (point.Latitude !== undefined) resultsHtml += `<td>${point.Latitude.toFixed(7)}</td>`;
+                                                          if (point.Longitude !== undefined) resultsHtml += `<td>${point.Longitude.toFixed(7)}</td>`;
+                                                          if (point.Distance !== undefined) resultsHtml += `<td>${point.Distance.toFixed(2)}</td>`;
+                                                          if (point.Elevation !== undefined) resultsHtml += `<td>${point.Elevation.toFixed(2)}</td>`;
+                                                          if (point.CumulativeUphill !== undefined) resultsHtml += `<td>${point.CumulativeUphill.toFixed(2)}</td>`;
+                                                          if (point.CumulativeDownhill !== undefined) resultsHtml += `<td>${point.CumulativeDownhill.toFixed(2)}</td>`;
+                                                          resultsHtml += `</tr>`;
+                                                      });
+                                                      resultsHtml += `</tbody></table></div>`;
+                                                  }
+                                              });
+                                          } else {
+                                              resultsHtml += '<p>Dieser Track enthält keine Segmente.</p>';
+                                          }
+                                      });
+                                  } else {
+                                      resultsHtml += '<p>Die GPX-Datei enthält keine Tracks.</p>';
+                                  }
+                              } else {
+                                  resultsHtml += '<p class="status-message">Keine Analyseergebnisse verfügbar.</p>';
+                              }
+
+                             // Set the content and the overall success class for the #results div
+                             displayResult('success', resultsHtml);
+                         } else {
+                              // If response is OK but expected data structure is missing
+                              let errorHtml = `<p class="status-message">Erfolgreiche HTTP-Antwort (${response.status}), aber die erwarteten Daten wurden nicht gefunden.</p>`;
+                              if (rawText !== null) {
+                                 errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
+                              }
+                              displayResult('error', errorHtml); // Display as error because expected data is missing
+                         }
+                     } catch (error) {
+                         // --- Handle Network Errors or Errors Thrown Before Fetch/Processing ---
+                         console.error("Fehler bei Abruf oder Verarbeitung:", error); // Log the error for debugging
+                         displayResult('error', `<p class="status-message">Fehler beim Abfragen der API oder während der Verarbeitung:</p><p>${error.message}</p>`);
+                     }
+                 };
+
+                 // Read the file as an ArrayBuffer
+                 reader.readAsArrayBuffer(file);
+             });
+         });
+  </script>
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dienst - Kolorierung</title>
+  <link rel="stylesheet" href="./assets/colorpicker.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Generator für Kolorierung</h3>
+
+    <p>Wählen Sie ein vordefiniertes Schema oder laden Sie eine vorhandene Steuerdatei hoch, um die Farb- und Wertzuweisungen anzupassen. Die Tabelle wird nach
+    jeder Änderung automatisch sortiert und die generierte Steuerdatei unten aktualisiert.</p>
+
+    <hr>
+
+    <div class="config-section">
+      <div>
+        <label for="schema-select">Vordefiniertes Schema auswählen:</label> <select id="schema-select">
+          <option value="slope">
+            Hangneigung
+          </option>
+          <option value="pattern">
+            Musterschema
+          </option>
+          <option value="aspect">
+            Hangexposition
+          </option>
+        </select>
+      </div>
+
+      <p><small>oder</small>
+      </p>
+
+      <div>
+        <label for="file-input">Vorhandene Steuerdatei einlesen:</label> <input type="file" id="file-input" accept=".txt,.clr,text/plain">
+      </div>
+    </div>
+
+    <textarea id="header-comment" rows="5" placeholder=
+    "Geben Sie hier Ihren Kommentar ein oder sehen Sie den Kommentar aus der geladenen Datei. Jede Zeile wird automatisch mit einem Doppelkreuz (#) versehen."></textarea>
+    <table id="color-table">
+      <thead>
+        <tr>
+          <th>Wert</th>
+          <th>Farbvergleich</th>
+          <th>Farbauswahl</th>
+          <th>Aktion</th>
+        </tr>
+      </thead>
+
+      <tbody id="color-table-body">
+        <!-- Zeilen werden per JavaScript eingefügt -->
+      </tbody>
+    </table>
+
+    <div style="margin-top: 15px;">
+      <button id="addRowButton">Zeile hinzufügen</button>
+    </div>
+
+    <div id="output-container">
+      <hr>
+      <p><strong>Generierte Steuerdatei:</strong>
+      </p>
+
+      <pre id="output"></pre><button id="downloadButton" style="margin-top: 10px;">Datei herunterladen</button>
+    </div>
+  </div>
+  <script type="module">
+    import ColorPicker from './assets/colorpicker.js'; // importiert ColorPicker als Modul
+
+    // Daten für die vordefinierten Schemata
+    const PREDEFINED_SCHEMAS = {
+        pattern: {
+            comment: `# Generisches Winkel- und Farbschema für die Abbildung von Hoehendaten.\n# Musterdefinition als Basis für eigene Anpassungen.\n# Format: Wert Rot Grün Blau Alpha`,
+            data: [
+                { angle: 0,   color: 'rgba(0, 0, 0, 1)' },
+                { angle: 10,  color: 'rgba(0, 0, 255, 1)' },
+                { angle: 20,  color: 'rgba(0, 255, 255, 1)' },
+                { angle: 30,  color: 'rgba(0, 255, 0, 1)' },
+                { angle: 40,  color: 'rgba(255, 255, 0, 1)' },
+                { angle: 50,  color: 'rgba(255, 128, 0, 1)' },
+                { angle: 60,  color: 'rgba(255, 0, 0, 1)' },
+                { angle: 70,  color: 'rgba(128, 0, 128, 1)' },
+                { angle: 80,  color: 'rgba(0, 0, 128, 1)' },
+                { angle: 90,  color: 'rgba(0, 0, 0, 1)' },
+                { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
+            ]
+        },
+        slope: {
+            comment: `# Winkel- und Farbschema für die Abbildung von Hangneigungen\n# Musterdefinition als Basis für eigene Anpassungen\n# Format: Wert Rot Grün Blau Alpha`,
+            data: [
+                { angle: 0,    color: 'rgba(0, 100, 0, 1)' },
+                { angle: 5,    color: 'rgba(0, 200, 0, 1)' },
+                { angle: 10,   color: 'rgba(100, 255, 0, 1)' },
+                { angle: 20,   color: 'rgba(200, 200, 0, 1)' },
+                { angle: 30,   color: 'rgba(255, 150, 0, 1)' },
+                { angle: 40,   color: 'rgba(255, 100, 0, 1)' },
+                { angle: 45,   color: 'rgba(255, 0, 0, 1)' },
+                { angle: 60,   color: 'rgba(150, 0, 0, 1)' },
+                { angle: 90,   color: 'rgba(0, 0, 0, 1)' },
+                { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
+            ]
+        },
+        aspect: {
+            comment: `# Winkel- und Farbschema für die Abbildung von Hangexpositionen.\n# Musterdefinition als Basis für eigene Anpassungen.\n# Format: Wert Rot Grün Blau Alpha`,
+            data: [
+                { angle: 0,    color: 'rgba(190, 190, 220, 255)' },
+                { angle: 22.5, color: 'rgba(180, 220, 200, 255)' },
+                { angle: 67.5, color: 'rgba(255, 255, 180, 255)' },
+                { angle: 112.5, color: 'rgba(255, 220, 160, 255)' },
+                { angle: 157.5, color: 'rgba(255, 180, 120, 255)' },
+                { angle: 202.5, color: 'rgba(245, 190, 130, 255)' },
+                { angle: 247.5, color: 'rgba(200, 210, 230, 255)' },
+                { angle: 292.5, color: 'rgba(190, 190, 220, 255)' },
+                { angle: 337.5, color: 'rgba(190, 190, 220, 255)' },
+                { angle: 360.0, color: 'rgba(190, 190, 220, 255)' },
+                { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
+            ]
+        }
+    };
+    
+    const GRASS_COLORS = {
+        white:   { r: 255, g: 255, b: 255 },
+        black:   { r: 0,   g: 0,   b: 0 },
+        red:     { r: 255, g: 0,   b: 0 },
+        green:   { r: 0,   g: 255, b: 0 },
+        blue:    { r: 0,   g: 0,   b: 255 },
+        yellow:  { r: 255, g: 255, b: 0 },
+        magenta: { r: 255, g: 0,   b: 255 },
+        cyan:    { r: 0,   g: 255, b: 255 },
+        aqua:    { r: 0,   g: 255, b: 255 },
+        gray:    { r: 128, g: 128, b: 128 },
+        grey:    { r: 128, g: 128, b: 128 },
+        orange:  { r: 255, g: 165, b: 0 },
+        brown:   { r: 165, g: 42,  b: 42 },
+        purple:  { r: 128, g: 0,   b: 128 },
+        violet:  { r: 128, g: 0,   b: 128 },
+        indigo:  { r: 75,  g: 0,   b: 130 }
+    };
+
+    let lastLoadedFileName = '';
+
+    /**
+     * Parst einen RGBA-Farbstring und gibt ein Objekt mit R, G, B und A Werten zurück.
+     * @param {string} rgbaStr - Der RGBA-Farbstring (z.B. "rgba(255, 0, 0, 1)").
+     * @returns {object|null} Ein Objekt mit r, g, b, a Werten oder null, falls ungültig.
+     */
+    function parseRgbaString(rgbaStr) {
+        const match = rgbaStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\)/);
+        if (match) {
+            return { r: parseInt(match[1]), g: parseInt(match[2]), b: parseInt(match[3]), a: match[4] !== undefined ? parseFloat(match[4]) : 1 };
+        }
+        return null;
+    }
+
+    /**
+     * Parst einen beliebigen Farbsting (RGBA oder vordefinierte GRASS-Farbe) und gibt ein RGBA-Objekt zurück.
+     * @param {string} colorStr - Der Farbsting.
+     * @returns {object|null} Ein RGBA-Objekt oder null, falls ungültig.
+     */
+    function parseColorString(colorStr) {
+        colorStr = colorStr.trim().toLowerCase();
+        let rgba = parseRgbaString(colorStr);
+        if (rgba) return rgba;
+        if (colorStr === 'transparent') return { r: 0, g: 0, b: 0, a: 0 };
+        return null;
+    }
+
+    /**
+     * Erstellt eine neue Tabellenzeile für einen Farb- und Wert-Eintrag.
+     * @param {object} data - Ein Objekt mit 'angle' und 'color' Werten.
+     * @returns {HTMLTableRowElement} Die erstellte Tabellenzeile.
+     */
+    function createRow(data) {
+        const row = document.createElement('tr');
+        const angleCell = document.createElement('td');
+        const angleInput = document.createElement('input');
+        angleInput.type = 'text';
+        angleInput.value = data.angle;
+        angleInput.addEventListener('change', sortTable);
+        angleCell.appendChild(angleInput);
+        row.appendChild(angleCell);
+        
+        const colorDisplayCell = document.createElement('td');
+        const colorDisplayDiv = document.createElement('div');
+        colorDisplayDiv.className = 'color-comparison-box';
+        colorDisplayDiv.style.backgroundColor = data.color;
+        colorDisplayCell.appendChild(colorDisplayDiv);
+        row.appendChild(colorDisplayCell);
+
+        const colorCell = document.createElement('td');
+        const colorInput = document.createElement('input');
+        colorInput.type = 'text';
+        colorInput.className = 'color-input';
+        
+        colorInput.setAttribute('data-colorpicker', '');
+        colorInput.value = data.color;
+        colorCell.appendChild(colorInput);
+        row.appendChild(colorCell);
+
+        const actionCell = document.createElement('td');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Zeile löschen';
+        deleteBtn.onclick = () => deleteRow(row);
+        actionCell.appendChild(deleteBtn);
+        row.appendChild(actionCell);
+
+        new ColorPicker(colorInput, {
+          toggleStyle: 'input', headless: false, enableAlpha: true, enableEyedropper: false,
+          formats: ['hex', 'rgba', 'hsv', 'hsl'], defaultFormat: 'rgba',
+          swatches: ['rgba(139, 0, 0, 1)', 'rgba(255, 0, 0, 1)', 'rgba(255, 69, 0, 1)', 'rgba(255, 165, 0, 1)',
+                     'rgba(255, 215, 0, 1)', 'rgba(255, 255, 0, 1)', 'rgba(173, 255, 47, 1)', 'rgba(144, 238, 144, 1)',
+                     'rgba(0, 255, 0, 1)', 'rgba(64, 224, 208, 1)', 'rgba(0, 255, 255, 1)', 'rgba(135, 206, 235, 1)',
+                     'rgba(0, 0, 255, 1)', 'rgba(138, 43, 226, 1)', 'rgba(75, 0, 130, 1)', 'rgba(55, 30, 70, 1)',
+                     'rgba(128, 0, 128, 1)', 'rgba(255, 0, 255, 1)'],
+          submitMode: 'confirm', showClearButton: false, dismissOnOutsideClick: true,
+          dialogPlacement: 'top', dialogOffset: 8
+        });
+
+        const updateAndGenerate = () => {
+            colorDisplayDiv.style.backgroundColor = colorInput.value;
+            generateColorFile();
+        };
+        colorInput.addEventListener('input', updateAndGenerate);
+        colorInput.addEventListener('change', updateAndGenerate);
+
+        return row;
+    }
+    
+    /**
+     * Fügt eine neue leere Zeile zur Farbtabelle hinzu.
+     */
+    function addRow() {
+        const tableBody = document.getElementById('color-table-body');
+        const newRowData = { angle: '???', color: 'rgba(255,255,255,1)' };
+        const newRow = createRow(newRowData);
+        tableBody.appendChild(newRow);
+        sortTable();
+    }
+
+    /**
+     * Löscht eine angegebene Zeile aus der Farbtabelle.
+     * @param {HTMLTableRowElement} row - Die zu löschende Tabellenzeile.
+     */
+    function deleteRow(row) {
+        row.parentNode.removeChild(row);
+        generateColorFile();
+    }
+
+    /**
+     * Sortiert die Zeilen der Farbtabelle basierend auf dem Wert (Winkel/Höhe).
+     */
+    function sortTable() {
+        const tableBody = document.getElementById('color-table-body');
+        const rows = Array.from(tableBody.querySelectorAll('tr'));
+        rows.sort((a, b) => {
+            const valA = a.querySelector('td:nth-child(1) input').value.toLowerCase();
+            const valB = b.querySelector('td:nth-child(1) input').value.toLowerCase();
+
+            const isANumeric = !isNaN(parseFloat(valA)) && isFinite(valA);
+            const isBNumeric = !isNaN(parseFloat(valB)) && isFinite(valB);
+            const isANv = valA === 'nv';
+            const isBNv = valB === 'nv';
+
+            if (isANv) return 1;
+            if (isBNv) return -1;
+            if (!isANumeric) return 1;
+            if (!isBNumeric) return -1;
+
+            return parseFloat(valA) - parseFloat(valB);
+        });
+        rows.forEach(row => tableBody.appendChild(row));
+        generateColorFile();
+    }
+
+    /**
+     * Generiert den gdaldem color-relief Steuerdatei-Inhalt basierend auf den Tabellendaten und dem Header-Kommentar.
+     */
+    function generateColorFile() {
+        const outputElement = document.getElementById('output');
+        const commentInput = document.getElementById('header-comment');
+        let headerComment = '';
+
+        if (commentInput.value.trim() !== '') {
+            headerComment = commentInput.value.split('\n')
+                .map(line => {
+                    const trimmed = line.trim();
+                    if (trimmed === '') return null;
+                    return trimmed.startsWith(';') || trimmed.startsWith('#') ? trimmed : `# ${trimmed}`;
+                })
+                .filter(Boolean)
+                .join('\n') + '\n\n';
+        }
+
+        const tableBody = document.getElementById('color-table-body');
+        const rows = tableBody.querySelectorAll('tr');
+        let colorDataContent = Array.from(rows).map(row => {
+            const angle = row.querySelector('td:nth-child(1) input').value;
+            const colorRgbaStr = row.querySelector('td:nth-child(3) .color-input').value;
+            const rgba = parseColorString(colorRgbaStr);
+            if (angle && rgba && angle.trim() !== '???') {
+                const alpha255 = Math.round(rgba.a * 255);
+                return `${angle} ${rgba.r} ${rgba.g} ${rgba.b} ${alpha255}`;
+            }
+            return null;
+        }).filter(Boolean).join('\n');
+
+        outputElement.textContent = (headerComment + colorDataContent).trim();
+    }
+
+    /**
+     * Lädt ein vordefiniertes Farbschema in die Tabelle und aktualisiert den Header-Kommentar.
+     * @param {string} schemaName - Der Name des zu ladenden Schemas.
+     */
+    function loadSchema(schemaName) {
+        const schema = PREDEFINED_SCHEMAS[schemaName];
+        if (!schema) return;
+
+        document.getElementById('header-comment').value = schema.comment.replace(/; /g, '').replace(/;/g, '');
+        
+        const tableBody = document.getElementById('color-table-body');
+        while (tableBody.firstChild) {
+            tableBody.removeChild(tableBody.firstChild);
+        }
+
+        schema.data.forEach(data => {
+            const row = createRow(data);
+            tableBody.appendChild(row);
+        });
+        sortTable(); // Sortiert und generiert die Ausgabe
+        lastLoadedFileName = ''; // Schema loaded, clear last loaded file name
+    }
+    
+    /**
+     * Lädt die generierte Steuerdatei als Textdatei herunter.
+     */
+    function downloadFile() {
+        const content = document.getElementById('output').textContent;
+        if (!content) {
+            alert("Kein Inhalt zum Herunterladen vorhanden.");
+            return;
+        }
+        let filename;
+        if (lastLoadedFileName) {
+            // Use the original filename, but ensure it ends with .txt or .clr
+            // and append a timestamp if it's the original file.
+            const nameParts = lastLoadedFileName.split('.');
+            const extension = nameParts.pop();
+            const baseName = nameParts.join('.');
+            const pad = (num) => num.toString().padStart(2, '0');
+            const now = new Date();
+            const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+
+            if (extension && (extension.toLowerCase() === 'txt' || extension.toLowerCase() === 'clr')) {
+                filename = `${baseName}_${timestamp}.${extension}`;
+            } else {
+                filename = `${lastLoadedFileName}_${timestamp}.txt`; // Fallback if extension is not txt/clr
+            }
+        } else {
+            // Fallback to default generated name if no file was loaded
+            const pad = (num) => num.toString().padStart(2, '0');
+            const now = new Date();
+            filename = `farbkonfiguration-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}.txt`;
+        }
+
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+    
+    /**
+     * Parst den Inhalt einer Farbsteuerdatei (.txt oder .clr) und lädt die Daten in die Tabelle.
+     * @param {string} fileContent - Der Textinhalt der Datei.
+     * @param {string} fileName - Der Name der geladenen Datei.
+     */
+    function parseAndLoadColorFile(fileContent, fileName) {
+        const lines = fileContent.split('\n');
+        const headerComments = [];
+        const colorEntries = [];
+
+        lines.forEach(line => {
+            const trimmedLine = line.trim();
+            if (trimmedLine === '') return;
+            if (trimmedLine.startsWith(';') || trimmedLine.startsWith('#')) {
+                headerComments.push(trimmedLine.replace(/^[;#]\s*/, ''));
+                return;
+            }
+
+            const parts = trimmedLine.split(/[,\s:]+/).filter(Boolean);
+            if (parts.length < 2) return;
+
+            const value = parts[0];
+            let rgb = null;
+            let alpha = 255;
+
+            const colorName = parts[1].toLowerCase();
+            if (parts.length === 2 && GRASS_COLORS[colorName]) {
+                rgb = GRASS_COLORS[colorName];
+            } else if (parts.length >= 4) {
+                rgb = { r: parseInt(parts[1]), g: parseInt(parts[2]), b: parseInt(parts[3]) };
+                if (parts.length >= 5) alpha = parseInt(parts[4]);
+            }
+
+            if (rgb && !isNaN(rgb.r) && !isNaN(rgb.g) && !isNaN(rgb.b) && !isNaN(alpha)) {
+                const rgbaString = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha / 255})`;
+                colorEntries.push({ angle: value, color: rgbaString });
+            }
+        });
+
+        document.getElementById('header-comment').value = headerComments.join('\n');
+        const tableBody = document.getElementById('color-table-body');
+        while (tableBody.firstChild) tableBody.removeChild(tableBody.firstChild);
+        colorEntries.forEach(entry => tableBody.appendChild(createRow(entry)));
+        
+        sortTable();
+        lastLoadedFileName = fileName; // Beibehalten für den Download-Dateinamen
+    }
+
+    /**
+     * Behandelt die Auswahl einer Datei durch den Benutzer und lädt deren Inhalt.
+     * @param {Event} event - Das Change-Event des Dateieingabefeldes.
+     */
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) {
+            lastLoadedFileName = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                parseAndLoadColorFile(e.target.result, file.name); // Pass file.name
+            } catch (error) {
+                alert("Fehler beim Parsen der Datei. Bitte stellen Sie sicher, dass sie korrekt formatiert ist.");
+                console.error("Parse Error:", error);
+                lastLoadedFileName = '';
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    /**
+     * Initialisiert Event-Listener und lädt das Standard-Schema beim Laden der Seite.
+     */
+    window.onload = () => {
+        document.getElementById('addRowButton').addEventListener('click', addRow);
+        document.getElementById('downloadButton').addEventListener('click', downloadFile);
+        document.getElementById('header-comment').addEventListener('input', generateColorFile);
+        
+        const fileInput = document.getElementById('file-input');
+        // Fügt einen Klick-Listener hinzu, um den Wert des Inputfeldes zu löschen,
+        // damit das 'change'-Event auch bei erneuter Auswahl derselben Datei ausgelöst wird.
+        fileInput.addEventListener('click', function() {
+            this.value = null; 
+        });
+        fileInput.addEventListener('change', handleFileSelect, false);
+        
+        // Event-Listener für die Schema-Auswahl
+        const schemaSelect = document.getElementById('schema-select');
+        schemaSelect.addEventListener('change', (e) => loadSchema(e.target.value));
+
+        // initiales Schema laden (Standard: Hangneigung)
+        loadSchema('slope');
+    };
+  </script>
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

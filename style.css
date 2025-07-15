@@ -8,6 +8,7 @@ Releases:
 - v1.0.2 - 2025-06-07: improvements
 - v1.0.3 - 2025-06-13: improvements
 - v1.0.4 - 2025-06-15: improvements
+- v1.1.0 - 2025-07-12: styles added
 
 Copyright:
 - © 2025 | Klaus Tockloth
@@ -302,7 +303,8 @@ nav ul .dropdown-content {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
+  /* min-width: 160px; */
+  white-space: nowrap; 
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   list-style: none;
@@ -392,4 +394,63 @@ nav ul li.dropdown:hover .dropdown-content {
   text-align: center;
   color: #777;
   font-size: 0.8em;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.config-section {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 25px 0;
+}
+
+.config-section label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+#color-table td:first-child input {
+  width: 80px;
+}
+
+.color-comparison-box {
+  width: 150px;
+  height: 40px;
+  border: 1px solid #ccc;
+  margin: auto;
+  display: block;
+}
+
+#output-container {
+  margin-top: 30px;
+}
+
+#header-comment {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[data-colorpicker] {
+  cursor: pointer;
+}
+
+textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

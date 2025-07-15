@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - Kolorierung</title>
+  <meta name="description" content=
+  "Entdecken Sie die Prinzipien der Kolorierung für die Visualisierung von Geodaten und wie Farbsteuerdateien zur Darstellung von Werten wie Hangneigung oder -exposition eingesetzt werden.">
+  <meta name="keywords" content="Kolorierung, Farbgebung, Farbsteuerdatei, Datenvisualisierung, Geodaten, Hangneigung, Hangexposition, Karte, GDAL, RGBA">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Kolorierung</h3>
+
+    <p>Die Kolorierung von Abbildungen (Visualisierungen) spielt eine entscheidende Rolle, um komplexe Informationen zugänglich und verständlich zu machen. Oft
+    geht es darum, Muster, Trends und Ausreißer in Datensätzen schnell und intuitiv zu erkennen. Farben sind dabei ein mächtiges Werkzeug, da sie es uns
+    ermöglichen, unterschiedliche Kategorien zu unterscheiden, Wertebereiche darzustellen und Hierarchien zu verdeutlichen.</p>
+
+    <p>Um die Aussagekraft von Abbildungen zu maximieren, sollten einige Prinzipien beachtet werden:</p>
+
+    <ul>
+      <li><strong>Intuitivität:</strong> Farben sollten eine logische Verbindung zu den dargestellten Daten haben (z.B. Blautöne für Wasser, Rottöne für
+      Hitze/Gefahr).</li>
+
+      <li><strong>Art der Daten:</strong> Für quantitative Daten (z.B. Hangneigung in Grad) eignen sich sequentielle oder divergierende Paletten. Für qualitative
+      Daten (z.B. Hangexposition) sind qualitative Paletten besser geeignet.</li>
+
+      <li><strong>Weniger ist oft mehr:</strong> Eine zu große Anzahl von Farben kann verwirrend wirken. Konzentrieren Sie sich auf die wesentlichen
+      Informationen.</li>
+    </ul>
+
+    <p>Die Kolorierung von Datenvisualisierungen ist weit mehr als nur ästhetisches Design; sie ist ein fundamentaler Bestandteil der Informationsvermittlung.
+    Durch den gezielten Einsatz von Farben können wir wertvolle Einblicke gewinnen, fundierte Entscheidungen treffen und das Potenzial unserer Daten voll
+    ausschöpfen.</p>
+
+    <hr>
+
+    <h3>Farbsteuerdatei</h3>
+
+    <p>Alle Abbildungen die Farben zur Visulisierung von Sachverhalten nutzen, erwarten als Parameter eine Farbsteuerdatei. Spezifikation:</p>
+
+    <ul>
+      <li><strong>Grundlegende Struktur:</strong> Die textbasierte Farbkonfigurationsdatei enthält im Allgemeinen vier Spalten pro Zeile: den Rasterwert und die
+      entsprechenden Rot-, Grün- und Blau-Komponenten (Werte zwischen 0 und 255).</li>
+
+      <li><strong>Rasterwert:</strong> Der Rasterwert kann ein beliebiger Fließkommawert oder das Schlüsselwort&nbsp;nv&nbsp;für den NoData-Wert sein. Der
+      Rasterwert kann auch als Prozentsatz ausgedrückt werden, wobei 0 % den Minimalwert und 100 % den Maximalwert im Raster darstellen.</li>
+
+      <li><strong>Alpha-Komponente:</strong> Eine zusätzliche Spalte kann optional für die Alpha-Komponente hinzugefügt werden. Wenn sie nicht angegeben ist, wird
+      volle Deckkraft (255) angenommen.</li>
+
+      <li><strong>Trennzeichen:</strong> Als Feldtrennzeichen werden verschiedene Zeichen akzeptiert: Komma, Leerzeichen und Doppelpunkt.</li>
+
+      <li><strong>Farbnamen:</strong> Gängige Farben können auch durch ihren Namen anstelle des RGBA-Wertes angegeben werden. Eine unterstützte Liste umfasst:
+      white,&nbsp;black,&nbsp;red,&nbsp;green,&nbsp;blue,&nbsp;yellow,&nbsp;magenta,&nbsp;cyan,&nbsp;aqua,&nbsp;grey/gray,&nbsp;orange,&nbsp;brown,&nbsp;purple/violet&nbsp;und&nbsp;indigo.</li>
+    </ul>
+
+    <hr>
+
+    <h3>Beispiel</h3>
+
+    <pre><code>
+# Winkel- und Farbschema für die Abbildung von Hangneigungen
+# Musterdefinition als Basis für eigene Anpassungen
+# Format: Wert Rot Grün Blau Alpha
+
+0 0 100 0 255
+5 0 200 0 255
+10 100 255 0 255
+20 200 200 0 255
+30 255 150 0 255
+40 255 100 0 255
+45 255 0 0 255
+60 150 0 0 255
+90 0 0 0 255
+nv 0 0 0 0
+</code></pre>
+    <p>Erläuterungen:</p>
+
+    <ul>
+      <li>Der erste Wert in jeder Zeile definiert den unteren Schwellenwert des Bereichs, für den die nachfolgende Farbe gilt.</li>
+
+      <li>Dieser Bereich erstreckt sich bis zum (exklusiven) Wert des nächsten definierten Schwellenwerts.</li>
+
+      <li>Für den letzten definierten Wert (hier 90) gilt die Farbe für alle Werte von diesem Wert an aufwärts.</li>
+
+      <li>'nv' ist eine Sonderbehandlung für "No Data / No Value" Werte.</li>
+    </ul>
+
+    <hr>
+
+    <h3>Dienst Kolorierung</h3>
+
+    <p>Über den Dienst <strong>Kolorierung</strong> können Farbsteuerdateien definiert, eingelesen, editiert und gespeichert werden.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

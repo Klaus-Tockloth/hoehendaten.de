@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - TRI - Topographic Ruggedness Index</title>
+  <meta name="description" content=
+  "Entdecken Sie den Topographic Ruggedness Index (TRI) zur Quantifizierung der Unebenheit des Geländes und seine vielfältigen Anwendungen in Ökologie, Hydrologie und Planung.">
+  <meta name="keywords" content=
+  "Topographic Ruggedness Index, TRI, Geländerauheit, Unebenheit, DGM, Geomorphologie, Reliefanalyse, Zerklüftung, Habitatmodellierung">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>TRI - Topographic Ruggedness Index: Quantifizierung der Unebenheit des Geländes</h3>
+
+    <p>Der Topographic Ruggedness Index (TRI) ist ein weiteres geomorphometrisches Maß, das die Heterogenität oder Unebenheit des Geländes quantifiziert. Im
+    Gegensatz zum TPI, der die relative Position eines Punktes zu seiner Umgebung misst, quantifiziert der TRI die absolute Änderung der Höhe zwischen einem
+    zentralen Pixel und seinen umliegenden Pixeln (normalerweise die acht Nachbarn). Ein hoher TRI-Wert weist auf ein raues, zerklüftetes Gelände hin, während ein
+    niedriger Wert auf eine ebene oder glatte Oberfläche schließen lässt.</p>
+
+    <p>Bei sehr genauen DGM1-Höhendaten (1 Meter Auflösung) ermöglichen TRI-Visualisierungen extrem detaillierte Einblicke in die Geländerauigkeit und eröffnen
+    eine Vielzahl von Anwendungsmöglichkeiten:</p>
+
+    <ol>
+      <li>
+        <p><strong>Detaillierte Geländeklassifikation und Geomorphologische Analyse</strong>
+        </p>
+
+        <ul>
+          <li><strong>Identifikation von Mikrorauigkeiten:</strong> Mit 1m-Daten können selbst kleinste Felsvorsprünge, Schutthalden, Steine, Wurzelwerk, kleine
+          Erosionsfurchen oder andere Bodenunregelmäßigkeiten sichtbar gemacht werden, die die Oberflächenrauigkeit auf kleinster Skala beeinflussen.</li>
+
+          <li><strong>Abgrenzung von morphologischen Einheiten:</strong> Präzise Abgrenzung von Bereichen mit unterschiedlicher Rauigkeit, wie z.B. Felswänden,
+          Geröllfeldern, sanften Hängen, Plateaus, Talsohlen oder Flachland.</li>
+
+          <li><strong>Charakterisierung von Hängen:</strong> Unterscheidung zwischen glatten, gleichmäßigen Hängen und solchen mit ausgeprägter Struktur (z.B.
+          Terrassen, Stufen, kleine Rutschungen).</li>
+
+          <li><strong>Kartierung von Georisiken:</strong> Identifikation von Bereichen, die aufgrund ihrer extremen Rauigkeit anfällig für Steinschlag, Felsstürze
+          oder Murgänge sind.</li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Ökologie und Habitatmodellierung</strong>
+        </p>
+
+        <ul>
+          <li><strong>Detaillierte Habitat-Heterogenität:</strong> Die Oberflächenrauigkeit beeinflusst Mikroklima (Windexposition, Sonneneinstrahlung,
+          Schattenwurf), Bodenfeuchte und damit die Verteilung von Pflanzen- und Tierarten. TRI-Daten können hier sehr spezifische Mikrohabitate
+          identifizieren.</li>
+
+          <li><strong>Vorhersage von Artenverteilung:</strong> Viele Arten bevorzugen oder meiden bestimmte Grade der Geländerauigkeit. TRI kann helfen,
+          potenzielle Verbreitungsgebiete für Pflanzen, Insekten oder kleine Wirbeltiere zu modellieren.</li>
+
+          <li><strong>Analyse von Rückzugsgebieten:</strong> Sehr unwegsames, raues Gelände kann Rückzugsorte für bestimmte Tierarten bieten oder als Schutz vor
+          menschlicher Störung dienen.</li>
+
+          <li><strong>Feinräumliche Vegetationsmodellierung:</strong> Zusammenhang zwischen Geländerauigkeit und Vegetationsdichte oder -zusammensetzung.</li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Hydrologie und Erosionsmodellierung</strong>
+        </p>
+
+        <ul>
+          <li><strong>Detaillierte Oberflächenabflussmodellierung:</strong> Die Rauigkeit beeinflusst die Geschwindigkeit und das Muster des Oberflächenabflusses.
+          Hohe Rauigkeit kann den Abfluss verlangsamen und die Infiltration fördern, während glatte Oberflächen den schnellen Abfluss begünstigen.</li>
+
+          <li><strong>Erosionsrisikobewertung auf Mikroebene:</strong> Identifikation von Bereichen, die aufgrund ihrer spezifischen Rauigkeit besonders anfällig
+          für Bodenerosion durch Wasser oder Wind sind.</li>
+
+          <li><strong>Standortanalyse für Erosionsschutzmaßnahmen:</strong> Präzise Platzierung von kleinen Erosionsschutzstrukturen, wie z.B. Faschinen oder
+          <strong>kleinen</strong> Dämmen in landwirtschaftlichen Flächen.</li>
+
+          <li><strong>Modellierung der Wasserretention:</strong> Raues Gelände kann mehr Wasser zurückhalten als glattes.</li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Ingenieurwesen und Bauwesen</strong>
+        </p>
+
+        <ul>
+          <li><strong>Baustellenplanung und Erdbewegungen:</strong> Extrem detaillierte Planung von Aushub und Aufschüttung. Identifikation von sehr unebenen
+          Bereichen, die zusätzliche Vorbereitung erfordern.</li>
+
+          <li><strong>Infrastrukturtrassierung:</strong> Optimale Routenführung für Straßen, Pipelines oder Stromleitungen, um Bereiche extrem hoher Rauigkeit (die
+          hohe Baukosten verursachen würden) zu vermeiden.</li>
+
+          <li><strong>Sicherheitsbewertung:</strong> Analyse von Zugänglichkeit und Begehbarkeit für Wartungsarbeiten oder Rettungseinsätze in unwegsamem
+          Gelände.</li>
+
+          <li><strong>Stabilitätsanalysen von Böschungen:</strong> Detaillierte Bewertung der Oberflächenstruktur von Böschungen im Hinblick auf deren
+          Stabilität.</li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Outdoor-Sport und Tourismus</strong>
+        </p>
+
+        <ul>
+          <li><strong>Routenplanung für Wanderer/Kletterer:</strong> Detaillierte Karten, die die "Rauigkeit" von Wegen oder Kletterrouten anzeigen, um
+          Schwierigkeitsgrade besser einzuschätzen.</li>
+
+          <li><strong>Geländegängigkeit für Offroad-Fahrzeuge:</strong> Bewertung der Eignung von Gelände für Geländefahrzeuge, Mountainbikes etc.</li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Militär und Sicherheit</strong>
+        </p>
+
+        <ul>
+          <li><strong>Bewegungsanalysen:</strong> Planung von Bewegungsmöglichkeiten für Personal und Fahrzeuge in unwegsamem Gelände.</li>
+
+          <li><strong>Versteckmöglichkeiten:</strong> Identifikation von Bereichen mit hoher Rauigkeit, die Deckung und Versteckmöglichkeiten bieten.</li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Archäologie</strong>
+        </p>
+
+        <ul>
+          <li><strong>Detektion und Kartierung von Mikroreliefs:</strong> Suche nach subtilen, von Menschenhand geschaffenen Geländeunregelmäßigkeiten (z.B.
+          Pflugspuren, Grabungshinterlassenschaften, Fundamentreste), die auf menschliche Aktivität hindeuten.</li>
+        </ul>
+      </li>
+    </ol>
+
+    <p><strong>Wichtige Aspekte bei TRI mit 1m-DGM:</strong>
+    </p>
+
+    <ul>
+      <li><strong>Fenstergröße:</strong> Ähnlich wie beim TPI ist die Fenstergröße (standardmäßig 3x3 für gdaldem tri) entscheidend. Ein kleines Fenster betont die
+      mikroskalige Rauigkeit. Für die Erkennung größerer, aber immer noch detaillierter Geländestrukturen müsste man eventuell andere Methoden oder Aggregationen
+      in Betracht ziehen, da gdaldem tri nur die direkte Nachbarschaft betrachtet.</li>
+
+      <li><strong>Rauschfilterung:</strong> Bei so hochauflösenden Daten kann auch feines Rauschen im DGM zu hohen TRI-Werten führen. Eine leichte Glättung des DGM
+      vor der TRI-Berechnung kann sinnvoll sein, um geomorphologisch irrelevantes Rauschen zu reduzieren.</li>
+
+      <li><strong>Interpretation der Werte:</strong> Die absoluten TRI-Werte hängen stark von der Auflösung des DGM ab. Ein TRI-Wert von 5 Metern bei 1m-Auflösung
+      bedeutet eine extreme lokale Rauigkeit, während der gleiche Wert bei einem 10m-DGM eine deutlich geringere Heterogenität anzeigen würde. Die Interpretation
+      muss immer im Kontext der Datengrundlage erfolgen.</li>
+    </ul>
+
+    <p><strong>Berechnungsgrundlage:</strong>
+    </p>
+
+    <p>Der TRI misst die Rauheit des Geländes als mittlere Höhendifferenz zwischen einem zentralen Pixel und seinen umgebenden 8 Zellen (Pixeln). Es wird der
+    Algorithmus von Riley verwendet, der die Quadratwurzel aus der Summe der quadrierten Höhendifferenzen zum zentralen Pixel berechnet. Der Index ist immer
+    positiv.</p>
+
+    <p><strong>Interpretation der Werte:</strong>
+    </p>
+
+    <ul>
+      <li><strong>Ein Wert von 0</strong> bedeutet, dass das Gelände vollkommen flach ist (alle neun Pixel im 3x3-Fenster haben dieselbe Höhe).</li>
+
+      <li><strong>Größere Werte</strong> deuten auf ein raueres, unebeneres Gelände hin.</li>
+    </ul>
+
+    <p><strong>Erwarteter Wertebereich für DGM1-Daten:</strong> Der Wertebereich ist stark von der Geländerauheit und der Auflösung abhängig.</p>
+
+    <ul>
+      <li><strong>In flachen Gebieten</strong> wird der TRI-Wert nahe bei <strong>0</strong> liegen.</li>
+
+      <li><strong>In leicht unebenem oder hügeligem Gelände</strong> können Werte im niedrigen einstelligen Bereich (z. B. <strong>0 bis 5</strong>) typisch
+      sein.</li>
+
+      <li><strong>In sehr steilem und zerklüftetem Gelände</strong> (z. B. Felswände, Blockhalden, Canyons) können die Werte deutlich ansteigen. Da die
+      Höhendifferenzen zum Quadrat in die Berechnung eingehen, können hier auch Werte von <strong>über 20</strong> und mehr erreicht werden.</li>
+    </ul>
+
+    <p>TRI-Visualisierungen aus DGM1-Daten sind ein sehr mächtiges Werkzeug, um die Komplexität und Unebenheit der Erdoberfläche auf einer bisher unerreichten
+    Detailebene zu erfassen und zu analysieren.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

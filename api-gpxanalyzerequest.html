@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API - GPXAnalyzeRequest</title>
+  <meta name="description" content=
+  "API-Dokumentation für den 'GPXAnalyzeRequest'. Analysiert eine GPX-Datei und liefert detaillierte Metriken zu Tracks, Segmenten und Punkten.">
+  <meta name="keywords" content=
+  "Höhendaten, API, GPXAnalyzeRequest, GPX, Base64, Webservice, Geodaten, Programmierschnittstelle, Analyse, Track, Segment, Höhenprofil, Dauer, Distanz, Aufstieg, Abstieg">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+          <!--
+          <li>
+            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+          </li>
+          <li>
+            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
+          </li>
+          <li>
+            <a href="abbildung-ri.html">RI - Roughness Index</a>
+          </li>
+           -->
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Application Programming Interface (API)</h2>
+
+    <hr>
+
+    <h3 class="request">API-Attribute 'GPXAnalyzeRequest'</h3>
+
+    <p>Der API-Aufruf 'GPXAnalyzeRequest' analysiert eine hochgeladene GPX-Datei und liefert detaillierte Metriken zu den enthaltenen Tracks, Segmenten und
+    einzelnen Punkten. Die Antwort enthält neben den Analysedaten auch die ursprüngliche GPX-Datei (Base64-kodiert).</p>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Anfrage (GPXAnalyzeRequest)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GPXData</td>
+          <td>string</td>
+          <td>GPX-Datei (Base64-Kodierung)</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+    <h3 class="response">API-Attribute 'GPXAnalyzeResponse'</h3>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th><!-- Zusätzliche Spalte für korrekte Einrückung der tiefsten Ebenen -->
+
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Antwort (GPXAnalyzeResponse)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GPXData</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Ursprüngliche GPX-Datei (Base64-Kodierung)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GpxAnalyzeResult</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Struktur mit den Analyseergebnissen der GPX-Datei</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Version</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>GPX-Version</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Name</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Name der GPX-Datei/Route/Track</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Description</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Beschreibung der GPX-Datei/Route/Track</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Creator</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Ersteller der GPX-Datei</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Time</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Zeitstempel der GPX-Datei (ISO 8601)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>TotalPoints</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Gesamtzahl der Punkte in der GPX-Datei</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Tracks</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>[]struct</td>
+          <td>Array von Track-Objekten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Name</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Name des Tracks</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Comment</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Kommentar zum Track</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Description</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Beschreibung des Tracks</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Source</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Quelle des Tracks</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ des Tracks</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Segments</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>[]struct</td>
+          <td>Array von Segment-Objekten innerhalb des Tracks</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>StartTime</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Startzeit des Segments (ISO 8601)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>EndTime</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Endzeit des Segments (ISO 8601)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Duration</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Gesamtdauer des Segments in Sekunden</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Points</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Anzahl der Punkte im Segment</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Length2D</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>2D-Länge des Segments in Metern</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Length3D</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>3D-Länge des Segments in Metern (unter Berücksichtigung der Höhe)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MovingTime</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Zeit in Bewegung in Sekunden</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>StoppedTime</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Zeit ohne Bewegung in Sekunden</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MovingDistance</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Distanz in Bewegung in Metern</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>StoppedDistance</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Distanz ohne Bewegung in Metern (oft 0 oder sehr klein)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MaxLatitude</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Maximale Breitengrad im Segment</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MaxLongitude</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Maximale Längengrad im Segment</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MinLatitude</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Minimale Breitengrad im Segment</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MinLongitude</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Minimale Längengrad im Segment</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>UphillWMA</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Kumulierter Anstieg unter Verwendung des Weighted Moving Average-Algorithmus</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>DownhillWMA</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Kumulierter Abstieg unter Verwendung des Weighted Moving Average-Algorithmus</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>UphillUnfiltered</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Kumulierter Anstieg (Rohdaten)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>DownhillUnfiltered</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Kumulierter Abstieg (Rohdaten)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>PointDetails</td>
+          <td>
+          </td>
+          <td>[]struct</td>
+          <td>Array von detaillierten Informationen zu einzelnen Punkten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Timestamp</td>
+          <td>string</td>
+          <td>Zeitstempel des Punktes (ISO 8601)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>TimeDifference</td>
+          <td>int</td>
+          <td>Zeitunterschied zum vorherigen Punkt in Sekunden</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>float</td>
+          <td>Breitengrad des Punktes</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>float</td>
+          <td>Längengrad des Punktes</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Distance</td>
+          <td>float</td>
+          <td>Distanz zum vorherigen Punkt in Metern</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Elevation</td>
+          <td>float</td>
+          <td>Höhe des Punktes in Metern</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>CumulativeUphill</td>
+          <td>float</td>
+          <td>Kumulierter Anstieg bis zu diesem Punkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>CumulativeDownhill</td>
+          <td>float</td>
+          <td>Kumulierter Abstieg bis zu diesem Punkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>IsError</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>bool</td>
+          <td>Fehler (ja/nein)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Error</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Fehlerdetails</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Code</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlernummer</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Title</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlerbeschreibung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Detail</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlerdetaillierung</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+
+    <h4 class="request">GPXAnalyzeRequest (Beispiel)</h4>
+
+    <pre class="request"><code>
+#!/bin/bash
+#
+# Analyse der Höhendaten für alle Punkte einer GPX-Datei
+
+gpxdata=$(cat &lt;&lt;EOF
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1"&gt;
+  &lt;trk&gt;
+    &lt;name&gt;Ahornweg-Bad-Iburg&lt;/name&gt;
+    &lt;trkseg&gt;
+                        &lt;trkpt lat="52.15532" lon="8.0607952"&gt;
+                                &lt;ele&gt;142.7689971923828&lt;/ele&gt;
+                                &lt;time&gt;2024-06-28T07:24:09Z&lt;/time&gt;
+                        &lt;/trkpt&gt;
+                        &lt;trkpt lat="52.1553277" lon="8.0608346"&gt;
+                                &lt;ele&gt;154.16900634765625&lt;/ele&gt;
+                                &lt;time&gt;2024-06-28T07:24:19Z&lt;/time&gt;
+                        &lt;/trkpt&gt;
+                        &lt;trkpt lat="52.1553271" lon="8.0609262"&gt;
+                                &lt;ele&gt;153.83700561523438&lt;/ele&gt;
+                                &lt;time&gt;2024-06-28T07:24:29Z&lt;/time&gt;
+                        &lt;/trkpt&gt;
+                        &lt;trkpt lat="52.155319" lon="8.0610889"&gt;
+                                &lt;ele&gt;162.6750030517578&lt;/ele&gt;
+                                &lt;time&gt;2024-06-28T07:24:39Z&lt;/time&gt;
+                        &lt;/trkpt&gt;
+                        &lt;trkpt lat="52.1553107" lon="8.0612431"&gt;
+                                &lt;ele&gt;162.12899780273438&lt;/ele&gt;
+                                &lt;time&gt;2024-06-28T07:24:49Z&lt;/time&gt;
+                        &lt;/trkpt&gt;
+                        &lt;trkpt lat="52.1553158" lon="8.0613957"&gt;
+                                &lt;ele&gt;164.51400756835938&lt;/ele&gt;
+                                &lt;time&gt;2024-06-28T07:24:59Z&lt;/time&gt;
+                        &lt;/trkpt&gt;
+    &lt;/trkseg&gt;
+  &lt;/trk&gt;
+&lt;/gpx&gt;
+EOF
+)
+gpxdataBase64=$(base64 -w 0 &lt;&lt;&lt; "$gpxdata")
+
+postdata=$(cat &lt;&lt;EOF
+{
+  "Type": "GPXAnalyzeRequest",
+  "ID": "Ahornweg-Bad-Iburg.gpx",
+  "Attributes": {
+      "GPXData": "$gpxdataBase64"
+  }
+}
+EOF
+)
+
+echo "postdata =\n$postdata"
+
+curl \
+--silent \
+--include \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--data "$postdata" \
+https://api.hoehendaten.de:14444/v1/gpxanalyze
+
+</code></pre>
+    <hr>
+    <h4 class="response">GPXAnalyzeResponse ('GPXData' gekürzt)</h4>
+
+    <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+date: Sat, 12 Jul 2025 12:37:51 GMT
+
+{
+  "Type": "GPXAnalyzeResponse",
+  "ID": "Ahornweg-Bad-Iburg.gpx",
+  "Attributes": {
+    "GPXData": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGlu ... DwvdHJrc2VnPjogICAgPC90cms+CjwvZ3B4Pgo=",
+    "GpxAnalyzeResult": {
+      "Version": "1.1",
+      "Name": "",
+      "Description": "",
+      "Creator": "",
+      "Time": null,
+      "TotalPoints": 6,
+      "Tracks": [
+        {
+          "Name": "Ahornweg-Bad-Iburg",
+          "Comment": "",
+          "Description": "",
+          "Source": "",
+          "Type": "",
+          "Segments": [
+            {
+              "StartTime": "2024-06-28T07:24:09Z",
+              "EndTime": "2024-06-28T07:24:59Z",
+              "Duration": 50,
+              "Points": 6,
+              "Length2D": 41.16449954193156,
+              "Length3D": 53.46380403166227,
+              "MovingTime": 50,
+              "StoppedTime": 0,
+              "MovingDistance": 53.46380403166227,
+              "StoppedDistance": 0,
+              "MaxLatitude": 52.1553277,
+              "MaxLongitude": 8.0613957,
+              "MinLatitude": 52.1553107,
+              "MinLongitude": 8.0607952,
+              "UphillWMA": 21.745010375976562,
+              "DownhillWMA": 0,
+              "UphillUnfiltered": 22.623016357421875,
+              "DownhillUnfiltered": 0.8780059814453125,
+              "PointDetails": [
+                {
+                  "Timestamp": "2024-06-28T07:24:09Z",
+                  "TimeDifference": 0,
+                  "Latitude": 52.15532,
+                  "Longitude": 8.0607952,
+                  "Distance": 0,
+                  "Elevation": 142.7689971923828,
+                  "CumulativeUphill": 0,
+                  "CumulativeDownhill": 0
+                },
+                {
+                  "Timestamp": "2024-06-28T07:24:19Z",
+                  "TimeDifference": 10,
+                  "Latitude": 52.1553277,
+                  "Longitude": 8.0608346,
+                  "Distance": 2.8190652003863166,
+                  "Elevation": 154.16900634765625,
+                  "CumulativeUphill": 11.400009155273438,
+                  "CumulativeDownhill": 0
+                },
+                {
+                  "Timestamp": "2024-06-28T07:24:29Z",
+                  "TimeDifference": 10,
+                  "Latitude": 52.1553271,
+                  "Longitude": 8.0609262,
+                  "Distance": 6.245155614033292,
+                  "Elevation": 153.83700561523438,
+                  "CumulativeUphill": 11.400009155273438,
+                  "CumulativeDownhill": 0.332000732421875
+                },
+                {
+                  "Timestamp": "2024-06-28T07:24:39Z",
+                  "TimeDifference": 10,
+                  "Latitude": 52.155319,
+                  "Longitude": 8.0610889,
+                  "Distance": 11.12847938455032,
+                  "Elevation": 162.6750030517578,
+                  "CumulativeUphill": 20.238006591796875,
+                  "CumulativeDownhill": 0.332000732421875
+                },
+                {
+                  "Timestamp": "2024-06-28T07:24:49Z",
+                  "TimeDifference": 10,
+                  "Latitude": 52.1553107,
+                  "Longitude": 8.0612431,
+                  "Distance": 10.552918214471484,
+                  "Elevation": 162.12899780273438,
+                  "CumulativeUphill": 20.238006591796875,
+                  "CumulativeDownhill": 0.8780059814453125
+                },
+                {
+                  "Timestamp": "2024-06-28T07:24:59Z",
+                  "TimeDifference": 10,
+                  "Latitude": 52.1553158,
+                  "Longitude": 8.0613957,
+                  "Distance": 10.418881128490147,
+                  "Elevation": 164.51400756835938,
+                  "CumulativeUphill": 22.623016357421875,
+                  "CumulativeDownhill": 0.8780059814453125
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+</code></pre>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>
