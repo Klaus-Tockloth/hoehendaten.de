@@ -183,20 +183,22 @@
 
     <textarea id="header-comment" rows="5" placeholder=
     "Geben Sie hier Ihren Kommentar ein oder sehen Sie den Kommentar aus der geladenen Datei. Jede Zeile wird automatisch mit einem Doppelkreuz (#) versehen."></textarea>
-    <table id="color-table">
-      <thead>
-        <tr>
-          <th>Wert</th>
-          <th>Farbvergleich</th>
-          <th>Farbauswahl</th>
-          <th>Aktion</th>
-        </tr>
-      </thead>
+    <div class="table-responsive">
+      <table id="color-table">
+        <thead>
+          <tr>
+            <th>Wert</th>
+            <th>Farbvergleich</th>
+            <th>Farbauswahl</th>
+            <th>Aktion</th>
+          </tr>
+        </thead>
 
-      <tbody id="color-table-body">
-        <!-- Zeilen werden per JavaScript eingefügt -->
-      </tbody>
-    </table>
+        <tbody id="color-table-body">
+          <!-- Zeilen werden per JavaScript eingefügt -->
+        </tbody>
+      </table>
+    </div>
 
     <div style="margin-top: 15px;">
       <button id="addRowButton">Zeile hinzufügen</button>
@@ -204,6 +206,7 @@
 
     <div id="output-container">
       <hr>
+
       <p><strong>Generierte Steuerdatei:</strong>
       </p>
 

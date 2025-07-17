@@ -292,15 +292,40 @@
             function updateInputStates() {
                 const selectedVariant = shadingVariantSelect.value;
 
-                // Reset disabled state
-                azimuthOfLightInput.disabled = false;
-                altitudeOfLightInput.disabled = false;
-
-                // Apply disabling based on variant
+                // Handle AzimuthOfLight
                 if (selectedVariant === 'multidirectional') {
+                    // Store current value if it's a number and not "nicht anwendbar"
+                    if (!isNaN(parseFloat(azimuthOfLightInput.value)) && azimuthOfLightInput.value.trim() !== "nicht anwendbar") {
+                         azimuthOfLightInput.dataset.originalValue = azimuthOfLightInput.value;
+                    } else if (!azimuthOfLightInput.dataset.originalValue) {
+                         // If no original value is set (e.g., initial load and it's already multi), store default
+                         azimuthOfLightInput.dataset.originalValue = "315";
+                    }
+                    azimuthOfLightInput.value = "nicht anwendbar";
                     azimuthOfLightInput.disabled = true;
-                } else if (selectedVariant === 'igor') {
+                } else {
+                    azimuthOfLightInput.disabled = false;
+                    // Restore original value or default
+                    azimuthOfLightInput.value = azimuthOfLightInput.dataset.originalValue || "315";
+                    delete azimuthOfLightInput.dataset.originalValue; // Clean up the data attribute
+                }
+
+                // Handle AltitudeOfLight
+                if (selectedVariant === 'igor') {
+                    // Store current value if it's a number and not "nicht anwendbar"
+                    if (!isNaN(parseFloat(altitudeOfLightInput.value)) && altitudeOfLightInput.value.trim() !== "nicht anwendbar") {
+                         altitudeOfLightInput.dataset.originalValue = altitudeOfLightInput.value;
+                    } else if (!altitudeOfLightInput.dataset.originalValue) {
+                         // If no original value is set (e.g., initial load and it's already igor), store default
+                         altitudeOfLightInput.dataset.originalValue = "45";
+                    }
+                    altitudeOfLightInput.value = "nicht anwendbar";
                     altitudeOfLightInput.disabled = true;
+                } else {
+                    altitudeOfLightInput.disabled = false;
+                    // Restore original value or default
+                    altitudeOfLightInput.value = altitudeOfLightInput.dataset.originalValue || "45";
+                    delete altitudeOfLightInput.dataset.originalValue; // Clean up the data attribute
                 }
             }
 
@@ -320,10 +345,11 @@
 
                  const gradientAlgorithm = gradientAlgorithmSelect.value;
                  const verticalExaggeration = parseFloat(verticalExaggerationInput.value);
-                 // Parse Azimuth and Altitude even if they are disabled, as the API expects the parameter in the payload.
-                 // The API is responsible for ignoring them based on the ShadingVariant.
-                 const azimuthOfLight = parseInt(azimuthOfLightInput.value, 10);
-                 const altitudeOfLight = parseInt(altitudeOfLightInput.value, 10);
+
+                 // Retrieve the actual numerical value for Azimuth and Altitude.
+                 // If the field displays "nicht anwendbar", use the original stored value or the default.
+                 const azimuthOfLight = azimuthOfLightInput.disabled ? parseFloat(azimuthOfLightInput.dataset.originalValue || "315") : parseInt(azimuthOfLightInput.value, 10);
+                 const altitudeOfLight = altitudeOfLightInput.disabled ? parseFloat(altitudeOfLightInput.dataset.originalValue || "45") : parseInt(altitudeOfLightInput.value, 10);
                  const shadingVariant = shadingVariantSelect.value;
 
 
@@ -444,7 +470,7 @@
                              if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
                              if (errorAttributes.VerticalExaggeration !== undefined) errorHtml += `<tr><td><strong>Überhöhung</strong></td><td>${errorAttributes.VerticalExaggeration}</td></tr>`;
                               // Display Azimuth/Altitude from the error response if they were sent in the request
-                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut°/strong></td><td>${errorAttributes.AzimuthOfLight}°</td></tr>`;
+                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut°</strong></td><td>${errorAttributes.AzimuthOfLight}°</td></tr>`;
                              if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe°</strong></td><td>${errorAttributes.AltitudeOfLight}°</td></tr>`;
                              if (errorAttributes.ShadingVariant !== undefined) errorHtml += `<tr><td><strong>Variante</strong></td><td>${errorAttributes.ShadingVariant}</td></tr>`;
 
@@ -473,8 +499,18 @@
                          if (attributes.GradientAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Algorithmus</strong></td><td>${attributes.GradientAlgorithm}</td></tr>`;
                          if (attributes.VerticalExaggeration !== undefined) resultsHtml += `<tr><td><strong>Überhöhung</strong></td><td>${attributes.VerticalExaggeration}</td></tr>`;
                           // Only show Azimuth/Altitude in the result if they were actually used (not disabled/ignored by ShadingVariant)
-                         if (attributes.ShadingVariant !== 'multidirectional' && attributes.AzimuthOfLight !== undefined) resultsHtml += `<tr><td><strong>Azimut°</strong></td><td>${attributes.AzimuthOfLight}°</td></tr>`;
-                         if (attributes.ShadingVariant !== 'igor' && attributes.AltitudeOfLight !== undefined) resultsHtml += `<tr><td><strong>Höhe°</strong></td><td>${attributes.AltitudeOfLight}°</td></tr>`;
+                         // Here we check against the _actual_ values from the API response, which should reflect what was used.
+                         // For Azimuth, if multidirectional was selected, it will likely return a default like 315, even if not explicitly used for calculation.
+                         // For Altitude, if igor was selected, it will likely return 45.
+                         // It's generally better to show what the API processed, rather than trying to replicate client-side logic.
+                         // However, if the goal is to show what the user *provided* or what was *relevant* to the specific variant,
+                         // you could use a similar check as in `updateInputStates` or `requestPayload`.
+                         // For displaying results, it's safer to rely on the API's returned attributes.
+                         // The current implementation here simply displays what the API returned for AzimuthOfLight and AltitudeOfLight.
+                         // If the API explicitly says they were "0" or a specific "ignored" value when not applicable, you could adapt.
+                         // Given the API likely returns the default or the passed value regardless of it being used, displaying it is fine.
+                         if (attributes.AzimuthOfLight !== undefined) resultsHtml += `<tr><td><strong>Azimut°</strong></td><td>${attributes.AzimuthOfLight}°</td></tr>`;
+                         if (attributes.AltitudeOfLight !== undefined) resultsHtml += `<tr><td><strong>Höhe°</strong></td><td>${attributes.AltitudeOfLight}°</td></tr>`;
                          if (attributes.ShadingVariant !== undefined) resultsHtml += `<tr><td><strong>Variante</strong></td><td>${attributes.ShadingVariant}</td></tr>`;
 
                          resultsHtml += '</table>';

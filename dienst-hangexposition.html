@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .results-table pre {
-      max-height: 10em;
+      max-height: 12em;
       overflow-y: auto;
       white-space: pre-wrap;
       word-break: break-all;
@@ -36,6 +36,25 @@
     .input-group select {
       width: calc(100% - 10px);
       box-sizing: border-box;
+    }
+
+    .input-group.color-scheme-input-group {
+        display: block;
+    }
+
+    .input-group.color-scheme-input-group label {
+        width: auto;
+        margin-bottom: 5px;
+    }
+
+    .input-group.color-scheme-input-group input[type="file"],
+    .input-group.color-scheme-input-group textarea {
+        width: 100%; /* volle Breite für Dateiauswahl und Textarea */
+        box-sizing: border-box;
+    }
+
+    .input-group.color-scheme-input-group input[type="file"] {
+        margin-bottom: 10px;
     }
   </style>
 </head>
@@ -230,13 +249,10 @@
           </option>
         </select>
       </div>
+      <!-- Kombinierter Bereich für Farbdatei und Farbschema -->
 
-      <div class="input-group">
-        <label for="colorFileInput">Farbdatei</label> <input type="file" id="colorFileInput" accept=".txt">
-      </div>
-
-      <div class="input-group">
-        <label for="colorTextFileContent">Farbschema</label> 
+      <div class="input-group color-scheme-input-group">
+        <label for="colorTextFileContent">Farbschema</label> <input type="file" id="colorFileInput" accept=".txt"> 
 
         <textarea id="colorTextFileContent" rows="10"># Winkel- und Farbschema für die Abbildung von Hangexpositionen
 # Winkel- und Farbschema für die Abbildung von Hangexpositionen.

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .results-table pre {
-      max-height: 10em;
+      max-height: 12em;
       overflow-y: auto;
       white-space: pre-wrap;
       word-break: break-all;
@@ -20,22 +20,41 @@
       border: 1px solid #ddd;
       background-color: #f9f9f9;
     }
-    
+
     .input-group textarea {
       width: calc(100% - 10px);
       box-sizing: border-box;
     }
-    
+
     .input-group label {
       display: block;
       margin-bottom: 5px;
     }
-    
+
     .input-group input[type="text"],
     .input-group input[type="number"],
     .input-group select {
       width: calc(100% - 10px);
       box-sizing: border-box;
+    }
+
+    .input-group.color-scheme-input-group {
+        display: block;
+    }
+
+    .input-group.color-scheme-input-group label {
+        width: auto;
+        margin-bottom: 5px;
+    }
+
+    .input-group.color-scheme-input-group input[type="file"],
+    .input-group.color-scheme-input-group textarea {
+        width: 100%; /* volle Breite für Dateiauswahl und Textarea */
+        box-sizing: border-box;
+    }
+
+    .input-group.color-scheme-input-group input[type="file"] {
+        margin-bottom: 10px;
     }
   </style>
 </head>
@@ -230,13 +249,10 @@
           </option>
         </select>
       </div>
+      <!-- Kombinierter Bereich für Farbdatei und Farbschema -->
 
-      <div class="input-group">
-        <label for="colorFileInput">Farbdatei</label> <input type="file" id="colorFileInput" accept=".txt">
-      </div>
-
-      <div class="input-group">
-        <label for="colorTextFileContent">Farbschema</label> 
+      <div class="input-group color-scheme-input-group">
+        <label for="colorTextFileContent">Farbschema</label> <input type="file" id="colorFileInput" accept=".txt"> 
 
         <textarea id="colorTextFileContent" rows="10"># Winkel- und Farbschema für die Abbildung von Hangneigungen
 # Musterdefinition als Basis für eigene Anpassungen
@@ -529,7 +545,7 @@ nv 0 0 0 0</textarea>
                          displayResult('success', resultsHtml);
 
                      } else {
-                         let errorHtml = `<p class="status-message">Erfolgreiche HTTP-Antwort (${response.status}), aber die erwarteten Daten wurden nicht gefunden.</p>`;
+                         let errorHtml = `<p class="status-message">Erfolgreiche HTTP-Antwort (${response.status}), aber die erwarteten Daten wurden nicht gefunden.</p不斷>.`;
                          if (rawText !== null) {
                             errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
                          }
