@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dienst - Hangneigung</title>
+  <title>Hangneigung (Dienst)</title>
   <meta name="description" content=
   "Generieren Sie Hangneigungsabbildungen (Slope) für einen Kartenausschnitt in Deutschland basierend auf Koordinaten, einem Algorithmus und einem Farbtextschema.">
   <meta name="keywords" content=
@@ -56,6 +56,25 @@
     .input-group.color-scheme-input-group input[type="file"] {
         margin-bottom: 10px;
     }
+
+    .radio-group {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+
+    .radio-group label {
+        display: inline-block;
+        margin-right: 15px;
+        font-weight: normal;
+    }
+
+    .radio-group input[type="radio"] {
+        margin-right: 5px;
+    }
   </style>
 </head>
 <body>
@@ -70,7 +89,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -95,26 +114,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -122,6 +134,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -151,11 +167,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -167,6 +187,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -192,6 +216,10 @@
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
           </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
         </ul>
       </li>
 
@@ -205,8 +233,8 @@
     <h3>Hangneigung für einen Kartenausschnitt von 1x1 km</h3>
 
     <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Hangneigung wird für die Kachel generiert, in der sich der
-    Referenzpunkt befindet. Die Ausgabe erfolgt im GeoTIFF-Format (wenn UTM-Koordinaten eingegeben wurden) oder im PNG-Format (wenn Lon/Lat-Koordinaten eingegeben
-    wurden). Zusätzlich muss ein Farbtextschema für die Kolorierung angegeben werden.</p>
+    Referenzpunkt befindet. Das Ausgabeformat wird automatisch je nach gewähltem Eingabekoordinatensystem festgelegt: GeoTIFF für UTM-Koordinaten und PNG für
+    Lon/Lat-Koordinaten. Zusätzlich muss ein Farbtextschema für die Kolorierung angegeben werden.</p>
     <!-- Bereich für die Eingabefelder -->
 
     <div class="input-section section-box">
@@ -269,6 +297,14 @@
 90 0 0 0 255
 nv 0 0 0 0</textarea>
       </div>
+      <!-- Neuer Bereich für Farbzuweisung -->
+
+      <div class="radio-group">
+        <p><strong>Farbzuweisung</strong>
+        </p>
+        <label><input type="radio" name="coloringAlgorithm" value="interpolation" checked> Lineare Interpolation</label> <label><input type="radio" name=
+        "coloringAlgorithm" value="rounding"> Nächstgelegene Farbe</label>
+      </div>
     </div>
     <!-- Bereich für den Button -->
 
@@ -293,6 +329,8 @@ nv 0 0 0 0</textarea>
              const gradientAlgorithmSelect = document.getElementById('gradientAlgorithm');
              const colorFileInput = document.getElementById('colorFileInput');
              const colorTextFileContentInput = document.getElementById('colorTextFileContent');
+             const coloringAlgorithmRadios = document.querySelectorAll('input[name="coloringAlgorithm"]');
+
 
              const queryButton = document.getElementById('queryButton');
              const resultsDiv = document.getElementById('results');
@@ -342,6 +380,14 @@ nv 0 0 0 0</textarea>
 
                  const gradientAlgorithm = gradientAlgorithmSelect.value;
                  const colorTextFileContent = colorTextFileContentInput.value.split('\n'); // Inhalt des Textbereichs wird immer verwendet
+                 
+                 let selectedColoringAlgorithm = '';
+                 for (const radio of coloringAlgorithmRadios) {
+                     if (radio.checked) {
+                         selectedColoringAlgorithm = radio.value;
+                         break;
+                     }
+                 }
 
 
                  let useLonLat = !isNaN(longitude) && !isNaN(latitude) && longitudeInput.value.trim() !== "" && latitudeInput.value.trim() !== "";
@@ -364,7 +410,8 @@ nv 0 0 0 0</textarea>
                          Easting: useUtm ? easting : 0.0,
                          Northing: useUtm ? northing : 0.0,
                          GradientAlgorithm: gradientAlgorithm,
-                         ColorTextFileContent: colorTextFileContent
+                         ColorTextFileContent: colorTextFileContent,
+                         ColoringAlgorithm: selectedColoringAlgorithm // Hinzugefügt
                      }
                  };
 
@@ -414,9 +461,9 @@ nv 0 0 0 0</textarea>
                              if (errorAttributes.Easting !== undefined && errorAttributes.Easting !== 0) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
                              if (errorAttributes.Northing !== undefined && errorAttributes.Northing !== 0) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
                              if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
-                             // GEÄNDERT: \\n zu \n für korrekte Zeilenumbrüche
-                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`; // FIXED
-                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`; // Added fallback for non-array
+                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`;
+                             if (errorAttributes.ColoringAlgorithm !== undefined) errorHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${errorAttributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                              if (errorAttributes.Error) {
                                  const errorDetail = errorAttributes.Error;
@@ -446,9 +493,9 @@ nv 0 0 0 0</textarea>
                              if (errorAttributes.Easting !== undefined && errorAttributes.Easting !== 0) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
                              if (errorAttributes.Northing !== undefined && errorAttributes.Northing !== 0) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
                              if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
-                             // GEÄNDERT: \\n zu \n für korrekte Zeilenumbrüche
-                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`; // FIXED
-                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`; // Added fallback for non-array
+                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`;
+                             if (errorAttributes.ColoringAlgorithm !== undefined) errorHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${errorAttributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                              if (errorAttributes.Error) {
                                  const errorDetail = errorAttributes.Error;
@@ -473,8 +520,9 @@ nv 0 0 0 0</textarea>
                          if (attributes.Easting !== undefined && attributes.Easting !== 0) resultsHtml += `<tr><td><strong>Easting</strong></td><td>${attributes.Easting}</td></tr>`;
                          if (attributes.Northing !== undefined && attributes.Northing !== 0) resultsHtml += `<tr><td><strong>Northing</strong></td><td>${attributes.Northing}</td></tr>`;
                          if (attributes.GradientAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Algorithmus</strong></td><td>${attributes.GradientAlgorithm}</td></tr>`;
-                         if (Array.isArray(attributes.ColorTextFileContent)) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent.join('\n')}</pre></td></tr>`; // FIXED
-                         else if (attributes.ColorTextFileContent !== undefined) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent}</pre></td></tr>`; // Added fallback for non-array
+                         if (Array.isArray(attributes.ColorTextFileContent)) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                         else if (attributes.ColorTextFileContent !== undefined) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent}</pre></td></tr>`;
+                         if (attributes.ColoringAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${attributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                          resultsHtml += '</table>';
 
@@ -545,7 +593,7 @@ nv 0 0 0 0</textarea>
                          displayResult('success', resultsHtml);
 
                      } else {
-                         let errorHtml = `<p class="status-message">Erfolgreiche HTTP-Antwort (${response.status}), aber die erwarteten Daten wurden nicht gefunden.</p不斷>.`;
+                         let errorHtml = `<p class="status-message">Erfolgreiche HTTP-Antwort (${response.status}), aber die erwarteten Daten wurden nicht gefunden.</p>`;
                          if (rawText !== null) {
                             errorHtml += `<br>Antwort vom Server (Roh):<br><pre>${rawText}</pre>`;
                          }

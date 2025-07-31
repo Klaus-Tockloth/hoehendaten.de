@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - TRI - Topographic Ruggedness Index</title>
+  <meta name="description" content=
+  "Entdecken Sie den Topographic Ruggedness Index (TRI) zur Quantifizierung der Unebenheit des Geländes und seine vielfältigen Anwendungen in Ökologie, Hydrologie und Planung.">
+  <meta name="keywords" content=
+  "Topographic Ruggedness Index, TRI, Geländerauheit, Unebenheit, DGM, Geomorphologie, Reliefanalyse, Zerklüftung, Habitatmodellierung">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tri.html">TRI</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="dud.html">DuD</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="dienst-tri.html">TRI</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
+
+          <li>
+            <a href="api-trirequest.html">TRIRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>TRI - Topographic Ruggedness Index: Quantifizierung der Unebenheit des Geländes</h3>
+
+    <p>Der Topographic Ruggedness Index (TRI) ist ein geomorphometrisches Maß, das die Heterogenität oder Unebenheit des Geländes quantifiziert. Er berechnet für
+    jeden Punkt die absolute Höhenänderung zu seinen direkten Nachbarpunkten. Ein hoher TRI-Wert weist auf ein raues, unebenes Gelände hin, während ein niedriger
+    Wert eine ebene oder glatte Oberfläche anzeigt. In Verbindung mit hochauflösenden DGM1-Höhendaten ermöglicht der TRI sehr detaillierte Einblicke in die
+    Geländebeschaffenheit. Zu den wichtigsten Anwendungsbereichen gehören:</p>
+
+    <ul>
+      <li><strong>Geomorphologische Analyse:</strong> Mit DGM1-basierten TRI-Werten lassen sich kleinste morphologische Strukturen wie Erosionsrinnen,
+      Terrassenkanten oder subtile Verwerfungen präzise abgrenzen. Dies ist entscheidend für die detaillierte Gefahrenanalyse von Steinschlag oder Murgängen.</li>
+
+      <li><strong>Ökologie und Habitatmodellierung:</strong> Die Oberflächenrauigkeit beeinflusst das Mikroklima und die Standortbedingungen für Pflanzen und
+      Tiere. Der TRI aus DGM1-Daten kann kleinräumige Habitate, wie sie für bestimmte Insekten-, Amphibien- oder Pflanzenarten wichtig sind, identifizieren.</li>
+
+      <li><strong>Hydrologie und Erosionsmodellierung:</strong> Die Rauheit des Geländes beeinflusst den Oberflächenabfluss und die Bodenerosion. Ein
+      hochauflösender TRI ermöglicht eine genauere Modellierung von Abflussgeschwindigkeiten und potenziellen Erosionsherden.</li>
+
+      <li><strong>Ingenieur- und Bauwesen:</strong> Bei der Planung von Infrastruktur wie Straßen oder Leitungen können durch die detaillierte Analyse unebene und
+      kostenintensive Bereiche exakt identifiziert und umgangen werden.</li>
+
+      <li><strong>Land- und Forstwirtschaft:</strong> Die Befahrbarkeit von Flächen mit Maschinen und die Planung von Rückewegen können optimiert werden, indem
+      sehr raue oder steile Kleinstrukturen erkannt werden.</li>
+
+      <li><strong>Archäologie:</strong> Mit dem TRI aus DGM1-Daten können minimale, von Menschen geschaffene Reliefveränderungen wie alte Ackerterrassen,
+      Wallanlagen oder Fundamentreste sichtbar gemacht werden, die am Boden kaum noch zu erkennen sind.</li>
+    </ul>
+
+    <p><strong>Wichtig:</strong> Der TRI bewertet die Oberflächentextur und -heterogenität, unabhängig von der allgemeinen Hangneigung. Eine flache Ebene kann
+    <strong>rau</strong> sein, also viele kleine Unebenheiten aufweisen, während ein steiler Hang <strong>glatt</strong> sein kann.</p>
+
+    <hr>
+
+    <h3>Berechnungsgrundlage (Wilson-Algorithmus)</h3>
+
+    <p>Der TRI wird nach dem Algorithmus von Wilson berechnet. Dieser misst die Rauheit des Geländes als Quadratwurzel der Summe der quadrierten Höhendifferenzen
+    zwischen einem zentralen Punkt und seinen acht umgebenden Nachbarpunkten. Die Formel lautet:</p>
+    <img src="./images/tri-wilson-600x260.png" alt="TRI-Algorithmus nach Wilson." style="max-width: 300px; height: auto;">
+    <p><small>TRI-Algorithmus nach Wilson.</small>
+    </p>
+
+    <p>Dabei ist <i>z<sub>xy</sub></i> die Höhe des zentralen Punktes und <i>z<sub>i</sub></i> sind die Höhen der acht Nachbarpunkte.</p>
+
+    <hr>
+
+    <h3>Beispielberechnungen für einen Ausschnitt von 3x3 Punkten</h3>
+
+    <p><strong>Flaches Gelände:</strong> Ein komplett flaches Areal, wie eine Wasseroberfläche oder eine landwirtschaftliche Ebene.</p>
+
+    <table>
+      <tr>
+        <td>10.0</td>
+        <td>10.0</td>
+        <td>10.0</td>
+      </tr>
+
+      <tr>
+        <td>10.0</td>
+        <td><strong>10.0</strong>
+        </td>
+        <td>10.0</td>
+      </tr>
+
+      <tr>
+        <td>10.0</td>
+        <td>10.0</td>
+        <td>10.0</td>
+      </tr>
+    </table>
+
+    <p>Punkt <i>z<sub>xy</sub></i> = 10.0, TRI = 0</p>
+
+    <p><strong>Leicht welliges Gelände / sanfte Böschung:</strong> Eine leichte, gleichmäßige Neigung mit einem Höhenunterschied von 20 cm pro Meter.</p>
+
+    <table>
+      <tr>
+        <td>10.4</td>
+        <td>10.3</td>
+        <td>10.2</td>
+      </tr>
+
+      <tr>
+        <td>10.3</td>
+        <td><strong>10.2</strong>
+        </td>
+        <td>10.1</td>
+      </tr>
+
+      <tr>
+        <td>10.2</td>
+        <td>10.1</td>
+        <td>10.0</td>
+      </tr>
+    </table>
+
+    <p>Punkt <i>z<sub>xy</sub></i> = 10.2, TRI = 0.45</p>
+
+    <p><strong>Kleiner Erdwall / lokale Unebenheit:</strong> Ein kleiner, menschengemachter Erdwall oder eine natürliche Erhebung von einem halben Meter Höhe.</p>
+
+    <table>
+      <tr>
+        <td>10.0</td>
+        <td>10.0</td>
+        <td>11.0</td>
+      </tr>
+
+      <tr>
+        <td>10.0</td>
+        <td><strong>10.5</strong>
+        </td>
+        <td>10.0</td>
+      </tr>
+
+      <tr>
+        <td>10.0</td>
+        <td>10.0</td>
+        <td>10.0</td>
+      </tr>
+    </table>
+
+    <p>Punkt <i>z<sub>xy</sub></i> = 10.5, TRI = 1.41</p>
+
+    <p><strong>Steile Kante / Böschung:</strong> Eine steilere Böschung oder ein kleiner Absatz mit 2 Metern Höhenunterschied zum direkt angrenzenden Gelände. Dies
+    ist eine deutlich wahrnehmbare Kante im Gelände.</p>
+
+    <table>
+      <tr>
+        <td>10.0</td>
+        <td>10.0</td>
+        <td>10.0</td>
+      </tr>
+
+      <tr>
+        <td>10.0</td>
+        <td><strong>10.0</strong>
+        </td>
+        <td>10.0</td>
+      </tr>
+
+      <tr>
+        <td>12.0</td>
+        <td>12.0</td>
+        <td>12.0</td>
+      </tr>
+    </table>
+
+    <p>Punkt <i>z<sub>xy</sub></i> = 10.0, TRI = 3.46</p>
+
+    <p><strong>Sehr steile Felskante (Extrembeispiel):</strong> Eine fast senkrechte Kante von 5 Metern Höhe, wie sie in einem Steinbruch oder an einer Felswand
+    vorkommen kann.</p>
+
+    <table>
+      <tr>
+        <td>10.0</td>
+        <td>10.0</td>
+        <td>10.0</td>
+      </tr>
+
+      <tr>
+        <td>10.0</td>
+        <td><strong>10.0</strong>
+        </td>
+        <td>10.0</td>
+      </tr>
+
+      <tr>
+        <td>15.0</td>
+        <td>15.0</td>
+        <td>15.0</td>
+      </tr>
+    </table>
+
+    <p>Punkt <i>z<sub>xy</sub></i> = 10.0, TRI = 8.66</p>
+
+    <hr>
+
+    <h3>Typische Landschaften und deren TRI-Wertebereiche</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left">TRI-Wert</th>
+            <th style="text-align:left">Beschreibung</th>
+            <th style="text-align:left">Charakteristika und Beispiele</th>
+            <th style="text-align:left">Lage in Deutschland</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
+            </td>
+            <td style="text-align:left"><strong>Eben bis minimal uneben</strong>
+            </td>
+            <td style="text-align:left">
+              Sehr glatte Oberflächen, kaum wahrnehmbare Höhendifferenzen.
+              <p>Beispiele: Flussauen, sehr große Ackerflächen, große Parkplätze, Sportplätze, Seen/Wasseroberflächen (wenn in den DGM-Daten vorhanden).</p>
+            </td>
+            <td style="text-align:left">Elbtalaue (z.B. Brandenburg, Sachsen-Anhalt, Niedersachsen), Teile der Lüneburger Heide (Niedersachsen), Rheinebene (z.B.
+            Baden-Württemberg, Rheinland-Pfalz), Bodensee-Uferbereiche (Baden-Württemberg).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
+            </td>
+            <td style="text-align:left"><strong>Leicht uneben / geringe Rauheit</strong>
+            </td>
+            <td style="text-align:left">
+              Leichte, aber spürbare Höhendifferenzen, fein texturiert.
+              <p>Beispiele: Sanfte Hügel, Ackerflächen mit feiner Bodenbearbeitung, große Rasenflächen, leicht unebene Wege, subtile Geländewellen.</p>
+            </td>
+            <td style="text-align:left">Brandenburg (abseits der Auen), Münchner Schotterebene (Bayern), Teile des Kraichgaus (Baden-Württemberg), Niederrheinische
+            Bucht (Nordrhein-Westfalen).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
+            </td>
+            <td style="text-align:left"><strong>Mäßig uneben / moderate Rauheit</strong>
+            </td>
+            <td style="text-align:left">
+              Deutlich wahrnehmbare Unebenheiten und lokale Geländeformen, anstrengend beim Begehen.
+              <p>Beispiele: Waldgebiete mit moderatem Unterholz und Wurzelstöcken, kleinere Felsbrocken, leicht erodierte Bereiche, kleinere Gräben, Dämme,
+              kleinteilige städtische Bereiche (z.B. alte Stadtkerne mit Treppen, Absätzen).</p>
+            </td>
+            <td style="text-align:left">Mittelgebirgsvorländer (z.B. Schwarzwaldrand, Harzvorland, Erzgebirgsvorland), Schwäbische Alb (Baden-Württemberg), Teile
+            des Sauerlands (Nordrhein-Westfalen).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
+            </td>
+            <td style="text-align:left"><strong>Ausgeprägt uneben / hohe Rauheit</strong>
+            </td>
+            <td style="text-align:left">
+              Starke lokale Höhenunterschiede, markante Geländeformen, erfordert Trittsicherheit.
+              <p>Beispiele: Gebiete mit vielen großen Felsbrocken, Blockhalden, stark erodierten Hängen, komplexes Waldgelände mit Windwürfen, kleinere felsige
+              Aufschlüsse, ausgeprägte Gräben, Böschungen von Baugruben und kleineren Steinbrüchen.</p>
+            </td>
+            <td style="text-align:left">Sächsische Schweiz (Sachsen), Teile des Harzes (Sachsen-Anhalt, Niedersachsen), Bayerischer Wald (Bayern), Eifel
+            (Rheinland-Pfalz).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
+            </td>
+            <td style="text-align:left"><strong>Extrem rau und komplex</strong>
+            </td>
+            <td style="text-align:left">
+              Maximale lokale Zerklüftung, abrupte Höhenwechsel, oft vertikale oder überhängende Formen.
+              <p>Beispiele: Steile Felswände, massive Blockschuttfelder, tiefe, enge Schluchten, Klippen, aktive Steinbruchbereiche, sehr steile künstliche
+              Abbruchkanten (Autobahnen, große Bauwerke).</p>
+            </td>
+            <td style="text-align:left">Alpen (Bayerische Alpen, z.B. Wettersteingebirge, Berchtesgadener Alpen), Große aktive Steinbrüche (bundesweit), Schluchten
+            in Mittelgebirgen (z.B. Partnachklamm, Höllentalklamm in den Alpen, Wutachschlucht im Schwarzwald).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <h3>Wertebereich zu Farbe</h3>
+
+    <p>Aus den Höheninformationen werden TRI-Werte errechnet. Zusätzlich definiert der Benutzer eine <strong>Farbsteuerdatei</strong> für Wertebereiche und Farben.
+    Welche Farben und Wertebereiche sinnvoll sind, ist vom jeweiligen Anwendungsfall und von der Geländebeschaffenheit des Untersuchungsgebiets abhängig. Es
+    empfiehlt sich, die Verteilung der TRI-Werte (z. B. über ein Histogramm) zu analysieren, um eine passende Klassifizierung zu finden. Soll ein Wertebereich
+    nicht dargestellt werden, wählt man eine volltransparente Farbe.</p>
+
+    <hr>
+
+    <h3>Beispiel für eine Farbsteuerdatei</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>TRI</th>
+            <th>RGBA</th>
+            <th>Farbe</th>
+            <th>Farbname</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>0.00</td>
+            <td>173 216 230 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(173, 216, 230, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Hellblau</td>
+          </tr>
+
+          <tr>
+            <td>0.05</td>
+            <td>144 206 205 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(144, 206, 205, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Blasseres Türkis</td>
+          </tr>
+
+          <tr>
+            <td>0.10</td>
+            <td>115 196 180 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(115, 196, 180, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Mittleres Türkis</td>
+          </tr>
+
+          <tr>
+            <td>0.15</td>
+            <td>86 186 155 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(86, 186, 155, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Kräftiges Türkis/Grün</td>
+          </tr>
+
+          <tr>
+            <td>0.20</td>
+            <td>57 176 130 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(57, 176, 130, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkleres Türkis/Grün</td>
+          </tr>
+
+          <tr>
+            <td>0.25</td>
+            <td>28 166 105 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(28, 166, 105, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkelgrünlich-Türkis</td>
+          </tr>
+
+          <tr>
+            <td>0.30</td>
+            <td>0 156 80 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 156, 80, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Intensives Grün</td>
+          </tr>
+
+          <tr>
+            <td>0.35</td>
+            <td>0 146 55 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 146, 55, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkleres Grün</td>
+          </tr>
+
+          <tr>
+            <td>0.40</td>
+            <td>0 136 30 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 136, 30, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Sehr dunkles Grün</td>
+          </tr>
+
+          <tr>
+            <td>0.45</td>
+            <td>28 126 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(28, 126, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkles Olivgrün</td>
+          </tr>
+
+          <tr>
+            <td>0.50</td>
+            <td>57 116 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(57, 116, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Olivgrün</td>
+          </tr>
+
+          <tr>
+            <td>0.55</td>
+            <td>86 106 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(86, 106, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Hellbraunes Oliv</td>
+          </tr>
+
+          <tr>
+            <td>0.60</td>
+            <td>115 96 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(115, 96, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Gold-Oliv</td>
+          </tr>
+
+          <tr>
+            <td>0.65</td>
+            <td>144 86 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(144, 86, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Orange-Braun</td>
+          </tr>
+
+          <tr>
+            <td>0.70</td>
+            <td>173 76 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(173, 76, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Rostorange</td>
+          </tr>
+
+          <tr>
+            <td>0.75</td>
+            <td>202 66 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(202, 66, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkelorange</td>
+          </tr>
+
+          <tr>
+            <td>0.80</td>
+            <td>231 56 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(231, 56, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Kräftiges Orange</td>
+          </tr>
+
+          <tr>
+            <td>0.85</td>
+            <td>255 46 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 46, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Leuchtendes Rot-Orange</td>
+          </tr>
+
+          <tr>
+            <td>0.90</td>
+            <td>255 36 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 36, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Intensives Rot</td>
+          </tr>
+
+          <tr>
+            <td>0.95</td>
+            <td>255 26 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 26, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkelrot</td>
+          </tr>
+
+          <tr>
+            <td>1.00</td>
+            <td>255 16 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 16, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Sehr Dunkelrot</td>
+          </tr>
+
+          <tr>
+            <td>1.20</td>
+            <td>240 10 5 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(240, 10, 5, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Fast Schwarzrot</td>
+          </tr>
+
+          <tr>
+            <td>1.40</td>
+            <td>220 5 10 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(220, 5, 10, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkelbraunrot</td>
+          </tr>
+
+          <tr>
+            <td>1.60</td>
+            <td>180 0 15 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(180, 0, 15, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Sehr dunkles Rotbraun</td>
+          </tr>
+
+          <tr>
+            <td>1.80</td>
+            <td>140 0 20 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(140, 0, 20, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Tiefes Weinrot</td>
+          </tr>
+
+          <tr>
+            <td>2.00</td>
+            <td>100 0 25 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(100, 0, 25, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Sehr dunkles Weinrot</td>
+          </tr>
+
+          <tr>
+            <td>2.20</td>
+            <td>80 0 35 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(80, 0, 35, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Noch tieferes Weinrot/Purpur</td>
+          </tr>
+
+          <tr>
+            <td>2.40</td>
+            <td>60 0 45 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(60, 0, 45, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkles Violett/Aubergine</td>
+          </tr>
+
+          <tr>
+            <td>2.60</td>
+            <td>40 0 55 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(40, 0, 55, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Sehr dunkles Violett</td>
+          </tr>
+
+          <tr>
+            <td>2.80</td>
+            <td>20 0 65 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(20, 0, 65, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Fast Schwarzblau/Violett</td>
+          </tr>
+
+          <tr>
+            <td>3.00</td>
+            <td>0 0 75 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 75, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Sehr dunkles Nachtblau</td>
+          </tr>
+
+          <tr>
+            <td>3.20</td>
+            <td>0 0 60 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 60, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Extrem dunkles Blau</td>
+          </tr>
+
+          <tr>
+            <td>3.40</td>
+            <td>0 0 45 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 45, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Sehr sehr dunkles Blau</td>
+          </tr>
+
+          <tr>
+            <td>3.60</td>
+            <td>0 0 30 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 30, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Extrem tiefes Dunkelblau</td>
+          </tr>
+
+          <tr>
+            <td>3.80</td>
+            <td>0 0 15 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 15, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Kaum noch als Blau erkennbar</td>
+          </tr>
+
+          <tr>
+            <td>4.00</td>
+            <td>0 0 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Reines Schwarz</td>
+          </tr>
+
+          <tr>
+            <td>nv</td>
+            <td>0 0 0 0</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 0); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Transparent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <h3>TRI versus Schummerung</h3>
+    <img src="./images/edersee-tri-500x400.png" alt="Topographic Ruggedness Index (TRI) für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Topographic Ruggedness Index (TRI) für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+
+    <p>Der TRI bewertet die Oberflächentextur und -heterogenität, <strong>unabhängig</strong> von der allgemeinen Hangneigung. Eine flache Ebene kann
+    <strong>rau</strong> sein, also viele kleine Unebenheiten aufweisen, während ein steiler Hang <strong>glatt</strong> sein kann. Es gibt also <strong>keinen
+    Zusammenhang</strong> zwischen den Abbildungen 'TRI' und 'Schummerung'. Die Abbildung der Schummerung dient einzig der Orientierung.</p>
+    <img src="./images/edersee-schummerung-500x400.png" alt="Schummerung für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Schummerung für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+
+    <hr>
+
+    <h3>Dienst Kolorierung</h3>
+
+    <p>Über den Dienst <strong>Kolorierung</strong> können Farbsteuerdateien definiert, eingelesen, editiert und gespeichert werden.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

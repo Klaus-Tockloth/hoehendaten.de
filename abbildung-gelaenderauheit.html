@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geländerauheit (Abbildung)</title>
+  <meta name="description" content=
+  "Erfahren Sie mehr über den Roughness Index (RI), ein Maß für die maximale lokale Geländerauheit, seine Berechnung und spezifische Anwendungsfälle bei hochauflösenden DGM-Daten.">
+  <meta name="keywords" content="Roughness Index, RI, Rauheitsindex, Geländerauheit, Unebenheit, DGM, Geomorphologie, Reliefanalyse, Steinschlag, Klippen">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="grundlagen.html">Grundlagen</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Geländerauheit</h3>
+
+    <p>Die Geländerauheit ist ein geomorphometrisches Maß, das die maximale lokale Unebenheit des Geländes quantifiziert. Zur Berechnung der Geländerauheit wird
+    für jeden Punkt die größte Höhendifferenz zwischen dem höchsten und dem niedrigsten Höhenwert innerhalb eines 3x3-Messpunkte-Fensters (entspricht bei DGM1
+    einem 3x3-Meter-Ausschnitt) ermittelt.</p>
+
+    <p>Eine hohe Geländerauheit weist auf eine sehr abrupte und ausgeprägte lokale Höhenänderung hin, wie sie an Kanten, Felsvorsprüngen oder sehr steilen,
+    stufigen Hängen vorkommt. Bei hochauflösenden DGM1-Höhendaten ermöglicht die Geländerauheit detaillierte Einblicke in extrem feine, scharfe und abrupte
+    Geländeformen. Zu den wichtigsten Anwendungsbereichen gehören:</p>
+
+    <ul>
+      <li><strong>Detaillierte Geomorphologische Analyse von Steil- und Felsstrukturen:</strong> Abbildungen zur Geländerauheit heben sehr scharfe Höhenänderungen
+      hervor, die auf Felswände, Überhänge oder ausgeprägte Absätze im Gelände hindeuten.</li>
+
+      <li><strong>Risikobewertung und Naturgefahren:</strong> Bereiche mit sehr hoher Geländerauheit sind prädestiniert für Felsabgänge. Die 1m-Auflösung
+      ermöglicht die Identifikation einzelner Felsblöcke oder instabiler Kanten. Auch die Analyse von Erdrutschgebieten und die Bewertung der Lawinengefahr
+      profitieren von detaillierten Rauigkeitsdaten.</li>
+
+      <li><strong>Ingenieurwesen, Bauwesen und Infrastrukturplanung:</strong> Die Geländerauheit hilft, Bereiche mit extremen Höhenunterschieden auf kleinster
+      Skala zu identifizieren, die zusätzliche Maßnahmen bei Fundamentierung oder Aushub erfordern (z.B. große Felsblöcke, die entfernt werden müssen). Auch die
+      Planung von Trassen für Pipelines oder Straßen in schwierigem Gelände kann optimiert werden.</li>
+
+      <li><strong>Land- und Forstwirtschaft:</strong> Die Zugänglichkeit für schwere Geräte und die Planung von Rückewegen können durch die Erkennung sehr rauer
+      Kleinstrukturen verbessert werden.</li>
+
+      <li><strong>Outdoor-Sport und militärische Anwendungen:</strong> Die Geländerauheit ermöglicht eine präzise Routenplanung für Kletterer, Bergsteiger und
+      Wanderer durch Kennzeichnung von Klippen oder Blockfeldern. Für militärische Zwecke kann er die Mobilität im Gelände bewerten und Engpässe
+      identifizieren.</li>
+
+      <li><strong>Hydrodynamische Modellierung auf Mikroebene:</strong> Geländerauheit in und um kleine Bachbetten oder Entwässerungsrinnen können wichtige
+      Informationen über die Sohlrauigkeit und damit den Strömungswiderstand liefern, was für die detaillierte Modellierung von Strömungsgeschwindigkeiten relevant
+      ist.</li>
+    </ul>
+
+    <p><strong>Wichtig:</strong> Die Geländerauheit bewertet die maximale lokale Höhendifferenz. Eine flache Ebene kann <strong>rau</strong> sein (viele kleine,
+    aber maximal unterschiedliche Unebenheiten), während ein steiler, aber glatter Hang eine niedrigere Geländerauheit aufweisen kann als eine zerklüftete, aber
+    insgesamt weniger steile Fläche.</p>
+
+    <hr>
+
+    <h3>Berechnungsgrundlage</h3>
+
+    <p>Die Geländerauheit wird als die Differenz zwischen dem höchsten und dem niedrigsten Höhenwert innerhalb des 3x3-Messwerte-Fensters definiert.</p>
+
+    <p>Die Formel lautet:</p>
+
+    <p><i>Geländerauheit = Z<sub>max</sub> - Z<sub>min</sub></i>
+    </p>
+
+    <p>Dabei ist <i>Z<sub>max</sub></i> der höchste Höhenwert und <i>Z<sub>min</sub></i> der niedrigste Höhenwert innerhalb des 3x3-Messwerte-Fensters um den
+    zentralen Punkt.</p>
+
+    <hr>
+
+    <h3>Wertebereiche der Geländerauheit bei DGM1</h3>
+
+    <p>Die theoretischen Werte der Geländerauheit reichen von 0 Meter bis zu den maximal möglichen Höhendifferenzen innerhalb eines 3x3-Meter-Fensters in der
+    deutschen Landschaft.</p>
+
+    <p><strong>Minimum (0 Meter):</strong> Ein Wert von 0 würde bedeuten, dass alle Höhenwerte im 3x3-Fenster identisch sind. Dies ist bei realen Geländedaten
+    extrem selten, da selbst auf scheinbar "flachen" Oberflächen minimale Höhenunterschiede (z.B. durch kleine Unebenheiten, Messrauschen) existieren. Im Idealfall
+    einer perfekt planen Fläche wäre die Geländerauheit 0.</p>
+
+    <p><strong>Maximum:</strong> Das Maximum hängt stark von der Topographie ab. In Deutschland können die Höhendifferenzen in einem 3x3-Meter-Fenster (entspricht
+    9 DGM1-Pixeln) erheblich variieren.</p>
+
+    <p><strong>Flache Gebiete (z.B. Norddeutsche Tiefebene, Ackerland):</strong> In sehr flachen Bereichen werden die Geländerauheit-Werte typischerweise im
+    Bereich von wenigen Zentimetern bis zu vielleicht 1-2 Metern liegen. Hier würden kleine Geländemulden, Ackerfurchen, leichte Böschungen oder kleine künstliche
+    Erhebungen (z.B. ein Maulwurfshügel, ein liegender Baumstamm) die Rauheit ausmachen.</p>
+
+    <p><strong>Hügeliges Gelände (z.B. Mittelgebirge, Voralpenland):</strong> Hier können die Geländerauheit-Werte schon deutlich höher ausfallen. In einem
+    3x3-Meter-Fenster könnten kleine Felsen, steilere Hanganschnitte, Bachufer oder umgestürzte Bäume zu Höhendifferenzen von mehreren Metern (z.B. 2-5 Meter)
+    führen.</p>
+
+    <p><strong>Extrem zerklüftetes Gelände (z.B. Steilhänge, Felsformationen):</strong> Obwohl Deutschland keine Hochgebirge hat, können in sehr steilen Felswänden
+    oder stark erodierten Schluchten (z.B. in manchen Teilen des Elbsandsteingebirges oder alpinen Vorgebirgen) auf einer 3x3-Meter-Fläche auch 5 Meter und mehr an
+    Höhendifferenz auftreten, wenn ein Pixel direkt auf einem Felsvorsprung und ein anderes in einer Spalte liegt. Dies ist jedoch die Ausnahme.</p>
+
+    <hr>
+
+    <h3>Klassifikation der Wertebereiche (beispielhaft):</h3>
+
+    <p>Die Klassifikation von Geländerauheit-Werten ist stark an den Anwendungsbereich und die typische Topographie des Untersuchungsgebiets gebunden. Es gibt
+    keine universell gültigen Schwellenwerte, da "rau" in der Norddeutschen Tiefebene etwas völlig anderes bedeutet als in den Alpen.</p>
+
+    <p>Hier sind jedoch beispielhafte Klassifikationen, die man bei DGM1-Daten anwenden könnte, basierend auf typischen Landschaftsformen in Deutschland:</p>
+
+    <p><strong>Sehr Geringe Rauheit (Nahezu eben):</strong>
+    </p>
+
+    <ul>
+      <li><strong>Wertebereich:</strong> Geländerauheit &lt; 0.2 Meter (20 cm)</li>
+
+      <li><strong>Interpretation:</strong> Sehr flache, ebene Flächen wie frisch geegte Felder, große asphaltierte Flächen (ohne starke Neigung), oder flache
+      Gewässerufer. Minimale oder kaum wahrnehmbare Höhenunterschiede.</li>
+    </ul>
+
+    <p><strong>Geringe Rauheit (Leicht uneben):</strong>
+    </p>
+
+    <ul>
+      <li><strong>Wertebereich:</strong> 0.2 Meter ≤ Geländerauheit &lt; 0.5 Meter (20 - 50 cm)</li>
+
+      <li><strong>Interpretation:</strong> Typisch für Ackerland mit Furchen, Weideland, leicht geneigte Wiesen, sehr flache Böschungen, Parkflächen mit kleinen
+      Unebenheiten. Geringe, aber wahrnehmbare Geländeunregelmäßigkeiten.</li>
+    </ul>
+
+    <p><strong>Mittlere Rauheit (Deutlich uneben):</strong>
+    </p>
+
+    <ul>
+      <li><strong>Wertebereich:</strong> 0.5 Meter ≤ Geländerauheit &lt; 2.0 Meter (50 cm - 2 Meter)</li>
+
+      <li><strong>Interpretation:</strong> Häufig in Mittelgebirgsregionen, Waldgebieten mit umgestürzten Bäumen oder kleinen Felsen, Uferbereiche von Bächen und
+      Flüssen mit kleinen Erosionskanten, Bereiche mit einzelnen Gebäuderesten (wenn nicht aus dem DGM1 gefiltert). Hier sind die Höhenunterschiede bereits
+      deutlich sichtbar und beeinflussen die Begehbarkeit.</li>
+    </ul>
+
+    <p><strong>Hohe Rauheit (Stark zerklüftet):</strong>
+    </p>
+
+    <ul>
+      <li><strong>Wertebereich:</strong> 2.0 Meter ≤ Geländerauheit &lt; 5.0 Meter (2 - 5 Meter)</li>
+
+      <li><strong>Interpretation:</strong> Steilere Hangbereiche, kleinere Steinbrüche, bewaldete Steilhänge mit Felsaufschlüssen, erodierte Schluchten, sehr
+      unwegsames Gelände. Solche Bereiche sind oft schwierig zu begehen.</li>
+    </ul>
+
+    <p><strong>Sehr Hohe Rauheit (Extrem zerklüftet):</strong>
+    </p>
+
+    <ul>
+      <li><strong>Wertebereich:</strong> Geländerauheit ≥ 5.0 Meter</li>
+
+      <li><strong>Interpretation:</strong> Sehr steile Felswände, aktive Steinbrüche, stark erodierte Klippen oder extreme Abbruchkanten. Diese Bereiche sind
+      typischerweise nur punktuell in Deutschland zu finden und repräsentieren extreme vertikale Variationen auf kleinstem Raum.</li>
+    </ul>
+
+    <hr>
+
+    <h3>Typische Landschaften und deren Rauheit</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left">Geländerauheit (m)</th>
+            <th style="text-align:left">Beschreibung</th>
+            <th style="text-align:left">Charakteristika und Beispiele</th>
+            <th style="text-align:left">Lage in Deutschland</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>0.0 - &lt; 0.2</strong>
+            </td>
+            <td style="text-align:left"><strong>Sehr Geringe Rauheit (Nahezu eben)</strong>
+            </td>
+            <td style="text-align:left">
+              Sehr glatte Oberflächen, kaum wahrnehmbare Höhendifferenzen.
+              <p>Beispiele: Flussauen, sehr große Ackerflächen, große Parkplätze, Sportplätze, Seen/Wasseroberflächen.</p>
+            </td>
+            <td style="text-align:left">Elbtalaue (z.B. Brandenburg, Sachsen-Anhalt, Niedersachsen), Teile der Lüneburger Heide (Niedersachsen), Rheinebene (z.B.
+            Baden-Württemberg, Rheinland-Pfalz), Bodensee-Uferbereiche (Baden-Württemberg).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>0.2 - &lt; 0.5</strong>
+            </td>
+            <td style="text-align:left"><strong>Geringe Rauheit (Leicht uneben)</strong>
+            </td>
+            <td style="text-align:left">
+              Leichte, aber spürbare Höhendifferenzen, fein texturiert.
+              <p>Beispiele: Sanfte Hügel, Ackerflächen mit feiner Bodenbearbeitung, große Rasenflächen, leicht unebene Wege, subtile Geländewellen.</p>
+            </td>
+            <td style="text-align:left">Brandenburg (abseits der Auen), Münchner Schotterebene (Bayern), Teile des Kraichgaus (Baden-Württemberg), Niederrheinische
+            Bucht (Nordrhein-Westfalen).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>0.5 - &lt; 2.0</strong>
+            </td>
+            <td style="text-align:left"><strong>Mittlere Rauheit (Deutlich uneben)</strong>
+            </td>
+            <td style="text-align:left">
+              Deutlich wahrnehmbare Unebenheiten und lokale Geländeformen, anstrengend beim Begehen.
+              <p>Beispiele: Waldgebiete mit moderatem Unterholz und Wurzelstöcken, kleinere Felsbrocken, leicht erodierte Bereiche, kleinere Gräben, Dämme,
+              kleinteilige städtische Bereiche (z.B. alte Stadtkerne mit Treppen, Absätzen).</p>
+            </td>
+            <td style="text-align:left">Mittelgebirgsvorländer (z.B. Schwarzwaldrand, Harzvorland, Erzgebirgsvorland), Schwäbische Alb (Baden-Württemberg), Teile
+            des Sauerlands (Nordrhein-Westfalen).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>2.0 - &lt; 5.0</strong>
+            </td>
+            <td style="text-align:left"><strong>Hohe Rauheit (Stark zerklüftet)</strong>
+            </td>
+            <td style="text-align:left">
+              Starke lokale Höhenunterschiede, markante Geländeformen, erfordert Trittsicherheit.
+              <p>Beispiele: Gebiete mit vielen großen Felsbrocken, Blockhalden, stark erodierten Hängen, komplexes Waldgelände mit Windwürfen, kleinere felsige
+              Aufschlüsse, ausgeprägte Gräben, Böschungen von Baugruben und kleineren Steinbrüchen.</p>
+            </td>
+            <td style="text-align:left">Sächsische Schweiz (Sachsen), Teile des Harzes (Sachsen-Anhalt, Niedersachsen), Bayerischer Wald (Bayern), Eifel
+            (Rheinland-Pfalz).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>≥ 5.0</strong>
+            </td>
+            <td style="text-align:left"><strong>Sehr Hohe Rauheit (Extrem zerklüftet)</strong>
+            </td>
+            <td style="text-align:left">
+              Maximale lokale Zerklüftung, abrupte Höhenwechsel, oft vertikale oder überhängende Formen.
+              <p>Beispiele: Steile Felswände, massive Blockschuttfelder, tiefe, enge Schluchten, Klippen, aktive Steinbruchbereiche, sehr steile künstliche
+              Abbruchkanten (Autobahnen, große Bauwerke).</p>
+            </td>
+            <td style="text-align:left">Alpen (Bayerische Alpen, z.B. Wettersteingebirge, Berchtesgadener Alpen), Große aktive Steinbrüche (bundesweit), Schluchten
+            in Mittelgebirgen (z.B. Partnachklamm, Höllentalklamm in den Alpen, Wutachschlucht im Schwarzwald).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <h3>Wertebereich zu Farbe</h3>
+
+    <p>Aus den Höheninformationen werden RI-Werte errechnet. Zusätzlich definiert der Benutzer eine <strong>Farbsteuerdatei</strong> für Wertebereiche und Farben.
+    Welche Farben und Wertebereiche sinnvoll sind, ist vom jeweiligen Anwendungsfall und von der Geländebeschaffenheit des Untersuchungsgebiets abhängig. Es
+    empfiehlt sich, die Verteilung der RI-Werte (z. B. über ein Histogramm) zu analysieren, um eine passende Klassifizierung zu finden. Soll ein Wertebereich nicht
+    dargestellt werden, wählt man eine volltransparente Farbe.</p>
+
+    <hr>
+
+    <h3>Beispiel für eine Farbsteuerdatei</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Rauheit</th>
+            <th>RGBA</th>
+            <th>Farbe</th>
+            <th>Farbname</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>0.00</td>
+            <td>173 216 230 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(173, 216, 230, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Hellblau</td>
+          </tr>
+
+          <tr>
+            <td>0.20</td>
+            <td>57 176 130 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(57, 176, 130, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Grün</td>
+          </tr>
+
+          <tr>
+            <td>0.35</td>
+            <td>28 126 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(28, 126, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkles Grün</td>
+          </tr>
+
+          <tr>
+            <td>0.50</td>
+            <td>255 200 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 200, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Goldgelb</td>
+          </tr>
+
+          <tr>
+            <td>1.25</td>
+            <td>255 165 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 165, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Leuchtendes Orange</td>
+          </tr>
+
+          <tr>
+            <td>2.00</td>
+            <td>255 0 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Leuchtendes Rot</td>
+          </tr>
+
+          <tr>
+            <td>3.50</td>
+            <td>180 0 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(180, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkelrot</td>
+          </tr>
+
+          <tr>
+            <td>5.00</td>
+            <td>0 0 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Schwarz</td>
+          </tr>
+
+          <tr>
+            <td>nv</td>
+            <td>0 0 0 0</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 0); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Transparent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <h3>Geländerauheit versus Schummerung</h3>
+    <img src="./images/edersee-gelaenderauheit-500x400.png" alt="Geländerauheit für eine Datenkachel am Edersee (Hessen)." style="max-width: 500px; height: auto;">
+    <p><small>Geländerauheit für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+
+    <p>Die Geländerauheit bewertet die maximale lokale Höhendifferenz und somit abrupte, scharfe Änderungen im Gelände, <strong>unabhängig</strong> von der
+    allgemeinen Hangneigung. Eine flache Ebene kann <strong>rau</strong> sein (d.h. viele kleine, aber extreme Unebenheiten aufweisen), während ein steiler Hang
+    <strong>glatt</strong> sein kann.</p>
+
+    <p>Es gibt also <strong>keinen direkten Zusammenhang</strong> zwischen den Abbildungen 'Geländerauheit' und 'Schummerung'. Die Abbildung der Schummerung dient
+    einzig der Orientierung und der visuellen Vergleichbarkeit.</p>
+    <img src="./images/edersee-schummerung-500x400.png" alt="Schummerung für eine Datenkachel am Edersee (Hessen)." style="max-width: 500px; height: auto;">
+    <p><small>Schummerung für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+
+    <hr>
+
+    <h3>Dienst Kolorierung</h3>
+
+    <p>Über den Dienst <strong>Kolorierung</strong> können Farbsteuerdateien definiert, eingelesen, editiert und gespeichert werden.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

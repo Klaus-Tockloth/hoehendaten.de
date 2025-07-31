@@ -3,12 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abbildung - Kolorierung</title>
+  <title>Kolorierung (Abbildung)</title>
   <meta name="description" content=
   "Entdecken Sie die Prinzipien der Kolorierung für die Visualisierung von Geodaten und wie Farbsteuerdateien zur Darstellung von Werten wie Hangneigung oder -exposition eingesetzt werden.">
   <meta name="keywords" content="Kolorierung, Farbgebung, Farbsteuerdatei, Datenvisualisierung, Geodaten, Hangneigung, Hangexposition, Karte, GDAL, RGBA">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
+  <style>
+         .option-section {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .example-table {
+            background-color: #e9e9e9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .example-item {
+            margin-bottom: 5px;
+        }
+  </style>
 </head>
 <body>
   <nav>
@@ -22,7 +43,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -47,26 +68,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -74,6 +88,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -103,11 +121,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -119,6 +141,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -143,6 +169,10 @@
 
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
           </li>
         </ul>
       </li>
@@ -181,7 +211,7 @@
 
     <h3>Farbsteuerdatei</h3>
 
-    <p>Alle Abbildungen die Farben zur Visulisierung von Sachverhalten nutzen, erwarten als Parameter eine Farbsteuerdatei. Spezifikation:</p>
+    <p>Alle Abbildungen, die Farben zur Visualisierung von Sachverhalten nutzen, erwarten als Parameter eine Farbsteuerdatei. Spezifikation:</p>
 
     <ul>
       <li><strong>Grundlegende Struktur:</strong> Die textbasierte Farbkonfigurationsdatei enthält im Allgemeinen vier Spalten pro Zeile: den Rasterwert und die
@@ -230,6 +260,142 @@ nv 0 0 0 0
 
       <li>'nv' ist eine Sonderbehandlung für "No Data / No Value" Werte.</li>
     </ul>
+
+    <hr>
+
+    <h3>Farbzuweisung mittels linearer Interpolation</h3>
+
+    <p>Diese Option interpoliert die Farben linear zwischen den Farbtabellen-Einträgen. Das bedeutet, wenn ein Höhenwert zwischen zwei definierten Farbpunkten
+    liegt, wird eine Mischung der beiden Farben verwendet. Dies führt zu einem weichen Farbverlauf. Ideal zum Beispiel für Abbildungen, bei denen fließende
+    Übergänge zwischen Höhenlagen dargestellt werden sollen.</p>
+
+    <p><strong>Beispiel zur Verdeutlichung des Sachverhalts</strong>
+    </p>
+
+    <pre><code>
+0   white   # Höhe 0m ist weiß
+100 red     # Höhe 100m ist rot
+200 blue    # Höhe 200m ist blau
+
+</code></pre>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Höhe</th>
+            <th>Farbe</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>0m</td>
+            <td>Weiß (entspricht genau dem Eintrag in der Farbtabelle)</td>
+          </tr>
+
+          <tr>
+            <td>50m</td>
+            <td>Ein sanfter Übergang zwischen Weiß und Rot, also ein Rosa-Ton. (50m ist genau die Hälfte zwischen 0m (weiß) und 100m (rot), also wird die Farbe
+            halbiert gemischt.)</td>
+          </tr>
+
+          <tr>
+            <td>100m</td>
+            <td>Rot (entspricht genau dem Eintrag in der Farbtabelle)</td>
+          </tr>
+
+          <tr>
+            <td>150m</td>
+            <td>Ein sanfter Übergang zwischen Rot und Blau, also ein Violett-Ton.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Beispiel für eine kolorierte Hangneigungskachel</strong>
+    </p>
+    <img src="./images/32_497_5670_hangneigung.linear_interpolation-500x500.png" alt="Kolorierung der Hangneigung mittels linearer Interpolation.">
+    <p><small>Kolorierung der Hangneigung mittels linearer Interpolation.</small>
+    </p>
+
+    <hr>
+
+    <h3>Farbzuweisung mittels nächstgelegener Farbzuweisung</h3>
+
+    <p>Jeder Höhenwert erhält die Farbe des <strong>nächstgelegenen</strong> Eintrags in der Farbtabelle. Es wird nicht interpoliert, sondern der nächste
+    definierte Punkt als Referenz genommen. Dies kann zu "gestuften" oder "bandförmigen" Farbdarstellungen führen. Ideal zum Beispiel für Abbildungen, bei denen
+    klare, scharfe Grenzen zwischen Höhenbereichen visualisiert werden sollen, z. B. für Schwellenwerte oder Klassifizierungen.</p>
+
+    <p><strong>Beispiel zur Verdeutlichung des Sachverhalts</strong>
+    </p>
+
+    <pre><code>
+0   white   # Höhe 0m ist weiß
+100 red     # Höhe 100m ist rot
+200 blue    # Höhe 200m ist blau
+
+</code></pre>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Höhe</th>
+            <th>Farbe</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>0m</td>
+            <td>Weiß (nächstgelegener Eintrag ist 0m)</td>
+          </tr>
+
+          <tr>
+            <td>49m</td>
+            <td>Weiß (49m ist näher an 0m als an 100m)</td>
+          </tr>
+
+          <tr>
+            <td>50m</td>
+            <td>Rot (50m ist exakt in der Mitte; in der Praxis wird oft zum nächsthöheren Wert gerundet.)</td>
+          </tr>
+
+          <tr>
+            <td>51m</td>
+            <td>Rot (51m ist näher an 100m als an 0m)</td>
+          </tr>
+
+          <tr>
+            <td>100m</td>
+            <td>Rot (nächstgelegener Eintrag ist 100m)</td>
+          </tr>
+
+          <tr>
+            <td>149m</td>
+            <td>Rot (149m ist näher an 100m als an 200m)</td>
+          </tr>
+
+          <tr>
+            <td>150m</td>
+            <td>Blau (150m ist exakt in der Mitte; in der Praxis wird oft zum nächsthöheren Wert gerundet.)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Beispiel für eine kolorierte Hangneigungskachel</strong>
+    </p>
+    <img src="./images/32_497_5670_hangneigung.nearest_color_entry-500x500.png" alt="Kolorierung der Hangneigung mittels nächstgelegener Farbzuweisung.">
+    <p><small>Kolorierung der Hangneigung mittels nächstgelegener Farbzuweisung.</small>
+    </p>
+
+    <hr>
+
+    <h3>Kombination aus Farbsteuerdatei und Farbzuweisung</h3>
+
+    <p>Bei bekannten Datenwerten ermöglicht eine geeignete Kombination aus granularer Farbsteuerdatei und geeignetem Farbzuweisungsalgorithmus oft sehr
+    detaillierte und informative Abbildungen. Um dorthin zu gelangen bedarf es meist einiger empirischer Versuche. Diese lassen sich aber mit den Möglichkeiten auf
+    dieser Webseite recht schnell und einfach durchführen.</p>
 
     <hr>
 

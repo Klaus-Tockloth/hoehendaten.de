@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>API - AspectRequest</title>
+  <title>AspectRequest (API)</title>
   <meta name="description" content=
   "API-Dokumentation für den 'AspectRequest'. Erzeugt Hangexpositionsdaten für einen Kartenausschnitt im PNG- oder GeoTIFF-Format basierend auf Lon/Lat oder UTM.">
   <meta name="keywords" content=
@@ -23,7 +23,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -48,26 +48,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -75,6 +68,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -104,11 +101,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -120,6 +121,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -145,6 +150,10 @@
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
           </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
         </ul>
       </li>
 
@@ -161,9 +170,10 @@
 
     <h3 class="request">API-Attribute 'AspectRequest'</h3>
 
-    <p>Der API-Aufruf 'AspectRequest' generiert eine kolorierten Hangexpositionsabbildung (aspect) für einen Kartenausschnitt von 1x1 km. Der Kartenausschnitt wird
-    durch einen beliebigen Referenzpunkt bestimmt. Der Referenzpunkt kann in den Koordinatensystemen Longitude/Latitude oder UTM angegeben werden. Die Antwort
-    enthält die kolorierten Hangexpositionsabbildung im GeoTIFF- oder PNG-Format (Base64-kodiert), sowie Metadaten zur Quelle und Attributierung.</p>
+    <p>Der API-Aufruf 'AspectRequest' generiert eine kolorierte Hangexpositionsabbildung (aspect) für einen Kartenausschnitt von 1x1 km. Der Kartenausschnitt wird
+    durch einen beliebigen Referenzpunkt bestimmt. Der angegebene Referenzpunkt (Lon/Lat oder UTM) dient zur Identifizierung der relevanten 1x1 km Kachel, für die
+    die Abbildung generiert wird. Die Antwort enthält die kolorierten Hangexpositionsabbildung im GeoTIFF- oder PNG-Format (Base64-kodiert), sowie Metadaten zur
+    Quelle und Attributierung.</p>
 
     <p>Die Hangexposition kann mit verschiedenen Algorithmen berechnet werden. Es ist eine Farbtextdatei für die Kolorierung zu übergeben. Die Antwort kann Daten
     für eine, zwei oder drei Kacheln enthalten, falls eine Landesgrenze den Bereich schneidet.</p>
@@ -255,6 +265,14 @@
           <td>ColorTextFileContent</td>
           <td>[]string</td>
           <td>Inhalt der Farbtextdatei für die Kolorierung der Hangexposition</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ColoringAlgorithm</td>
+          <td>string</td>
+          <td>Algorithmus für Zuweisung 'Wert zu Farbe' ('interpolation' oder 'rounding')</td>
         </tr>
       </table>
     </div>
@@ -371,6 +389,16 @@
           </td>
           <td>[]string</td>
           <td>Inhalt der Farbtextdatei für die Kolorierung der Hangexposition</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ColoringAlgorithm</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Algorithmus für Zuweisung 'Wert zu Farbe'</td>
         </tr>
 
         <tr>
@@ -508,7 +536,7 @@
     <p>Eingabe:</p>
 
     <ul>
-      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Hangexpositionsdaten erstellt werden.</li>
+      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Hangexpositionsabbildungen erstellt werden.</li>
 
       <li>Mögliche Koordinatensysteme:</li>
 
@@ -552,7 +580,6 @@
 #
 # Abfrage der Hangexposition für eine Kachel mit 1000x1000 Meter. 
 
-# Kachel durch UTM-Koordinaten referenziert.
 postdata=$(cat &lt;&lt;EOF
 {
   "Type": "AspectRequest",
@@ -579,13 +606,14 @@ postdata=$(cat &lt;&lt;EOF
       "337.5 190 190 220 255",
       "360.0 190 190 220 255",
       "nv 0 0 0 0"
-    ]
+    ],
+    "ColoringAlgorithm": "interpolation"
   }
 }
 EOF
 )
 
-echo "postdata =\n$postdata"
+echo "postdata = $postdata"
 
 curl \
 --silent \
@@ -638,6 +666,7 @@ date: Thu, 10 Jul 2025 09:18:12 GMT
       "360.0 190 190 220 255",
       "nv 0 0 0 0"
     ],
+    "ColoringAlgorithm": "interpolation",
     "Aspects": [
       {
         "Data": "iVBORw0KGgoAAAANSUhEUgAAA+cAAAPqCA ... BPfB8AAAAASUVORK5CYII=",

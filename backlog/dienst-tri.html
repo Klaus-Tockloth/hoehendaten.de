@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hangexposition (Dienst)</title>
+  <title>Dienst - Topographic Ruggedness Index</title>
   <meta name="description" content=
-  "Generieren Sie Hangexpositionsabbildungen (Aspect) für einen Kartenausschnitt in Deutschland basierend auf Koordinaten, einem Algorithmus und einem Farbtextschema.">
-  <meta name="keywords" content=
-  "Höhendaten, Hangexposition, Aspect, DGM, UTM, Lon/Lat, Abbildung, Visualisierung, Geodaten, Deutschland, Farbschema, Horn, ZevenbergenThorne">
+  "Generieren Sie Abbildungen des Topographic Ruggedness Index (TRI) für einen Kartenausschnitt in Deutschland basierend auf Koordinaten und einem Farbtextschema.">
+  <meta name="keywords" content="Höhendaten, Topographic Ruggedness Index, TRI, DGM, UTM, Lon/Lat, Abbildung, Visualisierung, Geodaten, Deutschland, Farbschema">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
   <style>
@@ -20,17 +19,17 @@
       border: 1px solid #ddd;
       background-color: #f9f9f9;
     }
-
+    
     .input-group textarea {
       width: calc(100% - 10px);
       box-sizing: border-box;
     }
-
+    
     .input-group label {
       display: block;
       margin-bottom: 5px;
     }
-
+    
     .input-group input[type="text"],
     .input-group input[type="number"],
     .input-group select {
@@ -57,7 +56,6 @@
         margin-bottom: 10px;
     }
 
-    /* Neuer Stil für die Farbzuweisung */
     .radio-group {
         margin-top: 15px;
         margin-bottom: 15px;
@@ -119,11 +117,15 @@
           <li>
             <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
+
+          <li>
+            <a href="abbildung-tri.html">TRI</a>
+          </li>
         </ul>
       </li>
 
       <li>
-        <a href="grundlagen.html">Grundlagen</a>
+        <a href="dud.html">DuD</a>
       </li>
 
       <li class="dropdown">
@@ -171,6 +173,10 @@
 
           <li>
             <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="dienst-tri.html">TRI</a>
           </li>
         </ul>
       </li>
@@ -221,6 +227,10 @@
           <li>
             <a href="api-roughnessrequest.html">RoughnessRequest</a>
           </li>
+
+          <li>
+            <a href="api-trirequest.html">TRIRequest</a>
+          </li>
         </ul>
       </li>
 
@@ -231,11 +241,11 @@
   </nav>
 
   <div class="container">
-    <h3>Hangexposition für einen Kartenausschnitt von 1x1 km</h3>
+    <h3>Topographic Ruggedness Index für einen Kartenausschnitt von 1x1 km</h3>
 
-    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Hangexposition wird für die Kachel generiert, in der sich der
-    Referenzpunkt befindet. Das Ausgabeformat wird automatisch je nach gewähltem Eingabekoordinatensystem festgelegt: GeoTIFF für UTM-Koordinaten und PNG für
-    Lon/Lat-Koordinaten. Zusätzlich muss ein Farbtextschema für die Kolorierung angegeben werden.</p>
+    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Der Topographic Ruggedness Index (TRI) wird für die Kachel generiert,
+    in der sich der Referenzpunkt befindet. Die Ausgabe erfolgt im GeoTIFF-Format (wenn UTM-Koordinaten eingegeben wurden) oder im PNG-Format (wenn
+    Lon/Lat-Koordinaten eingegeben wurden). Zusätzlich muss ein Farbtextschema für die Kolorierung angegeben werden.</p>
     <!-- Bereich für die Eingabefelder -->
 
     <div class="input-section section-box">
@@ -267,47 +277,18 @@
       </div>
 
       <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
-
-      <div class="input-group">
-        <label for="gradientAlgorithm">Algorithmus</label> <select id="gradientAlgorithm">
-          <option value="Horn">
-            Horn
-          </option>
-          <option value="ZevenbergenThorne" selected>
-            ZevenbergenThorne
-          </option>
-        </select>
-      </div>
       <!-- Kombinierter Bereich für Farbdatei und Farbschema -->
 
       <div class="input-group color-scheme-input-group">
         <label for="colorTextFileContent">Farbschema</label> <input type="file" id="colorFileInput" accept=".txt"> 
 
-        <textarea id="colorTextFileContent" rows="10"># Winkel- und Farbschema für die Abbildung von Hangexpositionen
-# Winkel- und Farbschema für die Abbildung von Hangexpositionen.
-# Musterdefinition als Basis für eigene Anpassungen.
+        <textarea id="colorTextFileContent" rows="10"># Farbdefinition für TRI - Topographic Ruggedness Index
 # Format: Wert Rot Grün Blau Alpha
-
-# Nord (Teil 1), Schatten: 0 ... &lt;22.5, Farbe kühl
-# Nordost, Schatten: 22.5 ... &lt;67.5, Farbe Übergang zu morgens
-# Ost, Morgensonne: 67.5 ... &lt;112.5, Farbe hell, gelblich
-# Südost, Sonne: 112.5 ... &lt;157.5, Farbe warm werdend
-# Süd, Sonne: 157.5 ... &lt;202.5, Farbe warm, kräftig
-# Südwest, Sonne: 202.5 ... &lt;247.5, Farbe weiterhin warm
-# West, Nachmittagssonne: 247.5 ... &lt;292.5, Farbe abkühlend
-# Nordwest, Schatten: 292.5 ... &lt;337.5, Farbe kühl
-# Nord (Teil 2), Schatten: 337.5 ... &lt;360.0, Farbe kühl
-
-0 190 190 220 255
-22.5 180 220 200 255
-67.5 255 255 180 255
-112.5 255 220 160 255
-157.5 255 180 120 255
-202.5 245 190 130 255
-247.5 200 210 230 255
-292.5 190 190 220 255
-337.5 190 190 220 255
-360.0 190 190 220 255
+0 154 205 50 255
+0.5 50 150 50 255
+2 255 165 0 255
+5 255 0 0 255
+10 139 0 0 255
 nv 0 0 0 0</textarea>
       </div>
       <!-- Neuer Bereich für Farbzuweisung -->
@@ -322,7 +303,7 @@ nv 0 0 0 0</textarea>
     <!-- Bereich für den Button -->
 
     <div class="button-section section-box">
-      <button id="queryButton">Abfrage der Hangexposition</button>
+      <button id="queryButton">Abfrage des Topographic Ruggedness Index</button>
     </div>
     <!-- Bereich für die Ausgabe -->
 
@@ -339,15 +320,15 @@ nv 0 0 0 0</textarea>
              const eastingInput = document.getElementById('easting');
              const northingInput = document.getElementById('northing');
 
-             const gradientAlgorithmSelect = document.getElementById('gradientAlgorithm');
              const colorFileInput = document.getElementById('colorFileInput');
              const colorTextFileContentInput = document.getElementById('colorTextFileContent');
-             const coloringAlgorithmRadios = document.querySelectorAll('input[name="coloringAlgorithm"]'); // Neu
+             const coloringAlgorithmRadios = document.querySelectorAll('input[name="coloringAlgorithm"]');
+
 
              const queryButton = document.getElementById('queryButton');
              const resultsDiv = document.getElementById('results');
 
-             const apiUrl = 'https://api.hoehendaten.de:14444/v1/aspect'; // URL für Aspect
+             const apiUrl = 'https://api.hoehendaten.de:14444/v1/tri';
 
              function displayResult(className, htmlContent) {
                  resultsDiv.className = className;
@@ -390,10 +371,8 @@ nv 0 0 0 0</textarea>
                  const easting = parseFloat(eastingInput.value);
                  const northing = parseFloat(northingInput.value);
 
-                 const gradientAlgorithm = gradientAlgorithmSelect.value;
                  const colorTextFileContent = colorTextFileContentInput.value.split('\n'); // Inhalt des Textbereichs wird immer verwendet
-
-                 // Neu: Wert für ColoringAlgorithm ermitteln
+                 
                  let selectedColoringAlgorithm = '';
                  for (const radio of coloringAlgorithmRadios) {
                      if (radio.checked) {
@@ -401,7 +380,6 @@ nv 0 0 0 0</textarea>
                          break;
                      }
                  }
-
 
                  let useLonLat = !isNaN(longitude) && !isNaN(latitude) && longitudeInput.value.trim() !== "" && latitudeInput.value.trim() !== "";
                  let useUtm = !isNaN(zone) && (zone === 32 || zone === 33) && !isNaN(easting) && !isNaN(northing) && zoneInput.value.trim() !== "" && eastingInput.value.trim() !== "" && northingInput.value.trim() !== "";
@@ -414,17 +392,16 @@ nv 0 0 0 0</textarea>
                  displayResult('loading', '<p class="status-message">Lade ... Sende Anfrage an den Dienst ...</p>');
 
                  const requestPayload = {
-                     Type: "AspectRequest", // Type bleibt AspectRequest
-                     ID: "WebApp-Aspect-" + Date.now() + "-" + Math.random().toString(36).substring(7),
+                     Type: "TRIRequest",
+                     ID: "WebApp-TRI-" + Date.now() + "-" + Math.random().toString(36).substring(7),
                      Attributes: {
                          Longitude: useLonLat ? longitude : 0.0,
                          Latitude: useLonLat ? latitude : 0.0,
                          Zone: useUtm ? zone : 0,
                          Easting: useUtm ? easting : 0.0,
                          Northing: useUtm ? northing : 0.0,
-                         GradientAlgorithm: gradientAlgorithm,
                          ColorTextFileContent: colorTextFileContent,
-                         ColoringAlgorithm: selectedColoringAlgorithm // Neu hinzugefügt
+                         ColoringAlgorithm: selectedColoringAlgorithm // Hinzugefügt
                      }
                  };
 
@@ -473,11 +450,9 @@ nv 0 0 0 0</textarea>
                              if (errorAttributes.Zone !== undefined && errorAttributes.Zone !== 0) errorHtml += `<tr><td><strong>Zone</strong></td><td>${errorAttributes.Zone}</td></tr>`;
                              if (errorAttributes.Easting !== undefined && errorAttributes.Easting !== 0) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
                              if (errorAttributes.Northing !== undefined && errorAttributes.Northing !== 0) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
-                             if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
-                             // GEÄNDERT: \\n zu \n für korrekte Zeilenumbrüche
-                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`; // FIXED
-                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`; // Added fallback for non-array
-                             if (errorAttributes.ColoringAlgorithm !== undefined) errorHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${errorAttributes.ColoringAlgorithm}</td></tr>`; // Neu
+                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`;
+                             if (errorAttributes.ColoringAlgorithm !== undefined) errorHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${errorAttributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                              if (errorAttributes.Error) {
                                  const errorDetail = errorAttributes.Error;
@@ -506,11 +481,9 @@ nv 0 0 0 0</textarea>
                              if (errorAttributes.Zone !== undefined && errorAttributes.Zone !== 0) errorHtml += `<tr><td><strong>Zone</strong></td><td>${errorAttributes.Zone}</td></tr>`;
                              if (errorAttributes.Easting !== undefined && errorAttributes.Easting !== 0) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
                              if (errorAttributes.Northing !== undefined && errorAttributes.Northing !== 0) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
-                             if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
-                             // GEÄNDERT: \\n zu \n für korrekte Zeilenumbrüche
-                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`; // FIXED
-                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`; // Added fallback for non-array
-                             if (errorAttributes.ColoringAlgorithm !== undefined) errorHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${errorAttributes.ColoringAlgorithm}</td></tr>`; // Neu
+                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`;
+                             if (errorAttributes.ColoringAlgorithm !== undefined) errorHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${errorAttributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                              if (errorAttributes.Error) {
                                  const errorDetail = errorAttributes.Error;
@@ -525,7 +498,7 @@ nv 0 0 0 0</textarea>
                              return;
                          }
 
-                         let resultsHtml = '<p class="status-message">Hangexposition erfolgreich verarbeitet:</p>';
+                         let resultsHtml = '<p class="status-message">Topographic Ruggedness Index erfolgreich verarbeitet:</p>';
                          resultsHtml += '<table class="results-table">';
                          const attributes = data.Attributes;
                           // Display input parameters that were used
@@ -534,37 +507,36 @@ nv 0 0 0 0</textarea>
                          if (attributes.Zone !== undefined && attributes.Zone !== 0) resultsHtml += `<tr><td><strong>Zone</strong></td><td>${attributes.Zone}</td></tr>`;
                          if (attributes.Easting !== undefined && attributes.Easting !== 0) resultsHtml += `<tr><td><strong>Easting</strong></td><td>${attributes.Easting}</td></tr>`;
                          if (attributes.Northing !== undefined && attributes.Northing !== 0) resultsHtml += `<tr><td><strong>Northing</strong></td><td>${attributes.Northing}</td></tr>`;
-                         if (attributes.GradientAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Algorithmus</strong></td><td>${attributes.GradientAlgorithm}</td></tr>`;
-                         if (Array.isArray(attributes.ColorTextFileContent)) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent.join('\n')}</pre></td></tr>`; // FIXED
-                         else if (attributes.ColorTextFileContent !== undefined) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent}</pre></td></tr>`; // Added fallback for non-array
-                         if (attributes.ColoringAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${attributes.ColoringAlgorithm}</td></tr>`; // Neu
+                         if (Array.isArray(attributes.ColorTextFileContent)) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                         else if (attributes.ColorTextFileContent !== undefined) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent}</pre></td></tr>`;
+                         if (attributes.ColoringAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${attributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                          resultsHtml += '</table>';
 
-                         if (attributes.Aspects && Array.isArray(attributes.Aspects) && attributes.Aspects.length > 0) {
-                             resultsHtml += '<h4 style="margin-top: 1.5em;">Generierte Hangexposition(en):</h4>';
-                             attributes.Aspects.forEach((aspect, index) => {
+                         if (attributes.TRIs && Array.isArray(attributes.TRIs) && attributes.TRIs.length > 0) {
+                             resultsHtml += '<h4 style="margin-top: 1.5em;">Generierter Topographic Ruggedness Index (TRI):</h4>';
+                             attributes.TRIs.forEach((tri, index) => {
                                  resultsHtml += `<h4 style="margin-top: 1.5em;">Abbildung ${index + 1}</h4>`;
                                  resultsHtml += '<table class="results-table">';
-                                 if (aspect.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${aspect.TileIndex}</td></tr>`;
-                                 if (aspect.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${aspect.Actuality}</td></tr>`;
-                                 if (aspect.Origin !== undefined) resultsHtml += `<tr><td><strong>Ursprung</strong></td><td>${aspect.Origin}</td></tr>`;
-                                 if (aspect.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${aspect.Attribution}</td></tr>`;
-                                 if (aspect.DataFormat !== undefined) resultsHtml += `<tr><td><strong>Format</strong></td><td>${aspect.DataFormat}</td></tr>`;
+                                 if (tri.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${tri.TileIndex}</td></tr>`;
+                                 if (tri.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${tri.Actuality}</td></tr>`;
+                                 if (tri.Origin !== undefined) resultsHtml += `<tr><td><strong>Ursprung</strong></td><td>${tri.Origin}</td></tr>`;
+                                 if (tri.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${tri.Attribution}</td></tr>`;
+                                 if (tri.DataFormat !== undefined) resultsHtml += `<tr><td><strong>Format</strong></td><td>${tri.DataFormat}</td></tr>`;
 
                                  // Display Bounding Box if available (relevant for PNG)
-                                  if (aspect.BoundingBox && (aspect.BoundingBox.MinLon !== 0 || aspect.BoundingBox.MinLat !== 0 || aspect.BoundingBox.MaxLon !== 0 || aspect.BoundingBox.MaxLat !== 0)) {
+                                  if (tri.BoundingBox && (tri.BoundingBox.MinLon !== 0 || tri.BoundingBox.MinLat !== 0 || tri.BoundingBox.MaxLon !== 0 || tri.BoundingBox.MaxLat !== 0)) {
                                      resultsHtml += `<tr><td colspan="2"><strong>Bounding Box (WGS84):</strong></td></tr>`;
-                                     resultsHtml += `<tr><td>MinLon</td><td>${aspect.BoundingBox.MinLon}</td></tr>`;
-                                     resultsHtml += `<tr><td>MaxLon</td><td>${aspect.BoundingBox.MaxLon}</td></tr>`;
-                                     resultsHtml += `<tr><td>MinLat</td><td>${aspect.BoundingBox.MinLat}</td></tr>`;
-                                     resultsHtml += `<tr><td>MaxLat</td><td>${aspect.BoundingBox.MaxLat}</td></tr>`;
+                                     resultsHtml += `<tr><td>MinLon</td><td>${tri.BoundingBox.MinLon}</td></tr>`;
+                                     resultsHtml += `<tr><td>MaxLon</td><td>${tri.BoundingBox.MaxLon}</td></tr>`;
+                                     resultsHtml += `<tr><td>MinLat</td><td>${tri.BoundingBox.MinLat}</td></tr>`;
+                                     resultsHtml += `<tr><td>MaxLat</td><td>${tri.BoundingBox.MaxLat}</td></tr>`;
                                   }
 
                                  resultsHtml += '</table>';
 
-                                 if (aspect.Data && aspect.TileIndex && aspect.DataFormat) {
-                                     const decodedBinaryString = base64ToBinaryString(aspect.Data);
+                                 if (tri.Data && tri.TileIndex && tri.DataFormat) {
+                                     const decodedBinaryString = base64ToBinaryString(tri.Data);
                                      if (decodedBinaryString) {
                                          const byteNumbers = new Array(decodedBinaryString.length);
                                          for (let i = 0; i < decodedBinaryString.length; i++) {
@@ -575,13 +547,14 @@ nv 0 0 0 0</textarea>
                                          let mimeType = 'application/octet-stream'; // Default
                                          let fileExtension = 'bin';
 
-                                         switch(aspect.DataFormat.toLowerCase()) {
+                                         switch(tri.DataFormat.toLowerCase()) {
                                              case 'geotiff':
                                                  mimeType = 'image/tiff';
                                                  fileExtension = 'tif';
                                                  break;
                                              case 'png':
                                                  mimeType = 'image/png';
+
                                                  fileExtension = 'png';
                                                  break;
                                          }
@@ -591,19 +564,19 @@ nv 0 0 0 0</textarea>
                                          const downloadUrl = URL.createObjectURL(blob);
 
                                          // Filename: TileIndex + optional Origin + Format extension
-                                         const originPart = aspect.Origin ? `.${aspect.Origin.toLowerCase()}` : '' ;
-                                         const outputFileName = `${aspect.TileIndex}${originPart}.hangexposition.${fileExtension}`;
+                                         const originPart = tri.Origin ? `.${tri.Origin.toLowerCase()}` : '' ;
+                                         const outputFileName = `${tri.TileIndex}${originPart}.tri.${fileExtension}`;
 
                                          resultsHtml += `<p class="download-link-area"><a href="${downloadUrl}" download="${outputFileName}">Download '${outputFileName}'</a></p>`;
                                      } else {
-                                         resultsHtml += `<p class="status-message error-message">Fehler: Hangexpositionsdaten (Base64) für Tile ${aspect.TileIndex} konnten nicht dekodiert werden.</p>`;
+                                         resultsHtml += `<p class="status-message error-message">Fehler: TRI-Daten (Base64) für Tile ${tri.TileIndex} konnten nicht dekodiert werden.</p>`;
                                      }
                                  } else {
-                                     resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${aspect.TileIndex || 'Unbekannt'}.</p>`;
+                                     resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${tri.TileIndex || 'Unbekannt'}.</p>`;
                                  }
                              });
                          } else {
-                             resultsHtml += '<p>Keine Hangexpositions-Daten in der Antwort enthalten.</p>';
+                             resultsHtml += '<p>Keine TRI-Daten in der Antwort enthalten.</p>';
                          }
                          displayResult('success', resultsHtml);
 
@@ -645,7 +618,7 @@ nv 0 0 0 0</textarea>
                 }
             });
             eastingInput.addEventListener('input', () => {
-                 if(zoneInput.value.trim() !== "" || eastingInput.value.trim() !== "" || northingInput.value.trim() !== "") {
+                 if(eastingInput.value.trim() !== "" || zoneInput.value.trim() !== "" || northingInput.value.trim() !== "") {
                     longitudeInput.value = "";
                     latitudeInput.value = "";
                 }

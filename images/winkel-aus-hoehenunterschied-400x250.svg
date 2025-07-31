@@ -1,0 +1,42 @@
+<svg width="400" height="250" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="14">
+  <title>Veranschaulichung Steigungswinkel</title>
+  <desc>Diagramm zur Berechnung des Steigungswinkels aus dem Höhenunterschied und dem horizontalen Abstand von 1 Meter.</desc>
+
+  <!-- Definition für Pfeilspitze -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
+        markerWidth="6" markerHeight="6"
+        orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Rechtwinkliges Dreieck -->
+  <!-- Horizontale Linie (Abstand) -->
+  <line x1="50" y1="200" x2="300" y2="200" stroke="#333" stroke-width="2" />
+  <!-- Vertikale Linie (Höhenunterschied) -->
+  <line x1="300" y1="200" x2="300" y2="50" stroke="#333" stroke-width="2" />
+  <!-- Hypotenuse (Geländeoberfläche) -->
+  <line x1="50" y1="200" x2="300" y2="50" stroke="#c0392b" stroke-width="3" />
+
+  <!-- Beschriftungen -->
+  <text x="175" y="220" text-anchor="middle">Abstand (1 m)</text>
+  <text x="310" y="125" text-anchor="start">ΔHöhe</text>
+  
+  
+  <!-- <text x="160" y="110" fill="#c0392b" font-weight="bold">Geländeoberfläche</text> -->
+<!-- Geländeoberfläche Text im gleichen Winkel wie die Hypotenuse -->
+  <!-- Berechnung des Winkels: atan2(y2-y1, x2-x1) = atan2(50-200, 300-50) = atan2(-150, 250) ≈ -30.96 Grad -->
+  <!-- Mittelpunkt der Hypotenuse für Textplatzierung: ((50+300)/2, (200+50)/2) = (175, 125) -->
+  <text x="170" y="125" fill="#c0392b" font-weight="bold" text-anchor="middle" transform="rotate(-30.9637565 155 125)">Geländeoberfläche</text>
+
+  <!-- Winkelanzeige -->
+  <path d="M 80 200 A 30 30 0 0 1 75.98 171.7" fill="none" stroke="blue" stroke-width="1.5"/>
+  <text x="90" y="190" fill="blue" font-weight="bold">α</text>
+  
+  <!-- Formel -->
+   <text x="50" y="40" font-size="16">
+      α = arctan (ΔHöhe / 1m)
+  </text>
+
+</svg>

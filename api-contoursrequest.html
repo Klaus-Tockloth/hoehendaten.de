@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>API - ContoursRequest</title>
+  <title>ContoursRequest (API)</title>
   <meta name="description" content=
   "API-Dokumentation für den 'ContoursRequest'. Erzeugt Höhenlinien für einen Kartenausschnitt im GeoJSON-Format basierend auf Lon/Lat oder UTM.">
   <meta name="keywords" content="Höhendaten, API, ContoursRequest, Höhenlinien, GeoJSON, Äquidistanz, Lon/Lat, UTM, Programmierschnittstelle">
@@ -22,7 +22,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -47,26 +47,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -74,6 +67,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -103,11 +100,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -119,6 +120,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -143,6 +148,10 @@
 
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
           </li>
         </ul>
       </li>
@@ -478,7 +487,7 @@
     <p>Eingabe:</p>
 
     <ul>
-      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Höhenschichtlinien erstellt werden.</li>
+      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Höhenschichtabbildungen erstellt werden.</li>
 
       <li>Mögliche Eingabeformate:</li>
 
@@ -564,7 +573,7 @@ postdataLonLat=$(cat &lt;&lt;EOF
 EOF
 )
 
-echo "postdata =\n$postdataLonLat"
+echo "postdata = $postdataLonLat"
 
 curl \
 --silent \

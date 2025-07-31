@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start (Höhendaten)</title>
   <meta name="description" content=
   "Greifen Sie auf detaillierte und genaue Höhendaten (Digitale Geländemodelle - DGM) für ganz Deutschland zu. Basierend auf Open Data der Landesvermessungsämter.">
   <meta name="keywords" content="Höhendaten, Deutschland, DGM, Digitales Geländemodell, Open Data, Geodaten, Höhe, Relief, Topographie, Landesvermessungsämter">
@@ -17,7 +18,6 @@
   "Dieser Webservice macht die von den Landesvermessungsämtern als Open Data zur Verfügung gestellten, detaillierten Höhendaten (Digitale Geländemodelle - DGM) für Deutschland allgemein verfügbar.">
   <meta property="og:site_name" content="Höhendaten für Deutschland">
   <meta property="og:locale" content="de_DE">
-  <title>Höhendaten - Start</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -32,7 +32,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -57,26 +57,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -84,6 +77,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -113,11 +110,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -129,6 +130,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -153,6 +158,10 @@
 
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
           </li>
         </ul>
       </li>
@@ -195,14 +204,11 @@
 
       <li>Erstellung Farbsteuerdatei (nur als Dienst)</li>
 
-      <li>Hangneigung</li>
+      <li>kolorierte Hangneigung</li>
 
-      <li>Hangexposition</li>
-      <!-- 
-      <li>TPI - Topographic Position Index</li>
-      <li>TRI - Topographic Ruggedness Index</li>
-      <li>RI - Roughness Index</li>
-      -->
+      <li>kolorierte Hangexposition</li>
+
+      <li>kolorierte Geländerauheit</li>
     </ul>
 
     <p>Verfügbar als Kartenfunktion:</p>
@@ -213,7 +219,7 @@
       <li>Höhenwerte für Linie</li>
     </ul>
 
-    <p>Der Benutzer kann <strong>viele Parameter</strong> beeinflussen und so die Kartenfunktionen und Dienste auf seine individuelle Nutzung hin optimieren.</p>
+    <p>Der Benutzer kann <strong>zahlreiche Parameter</strong> beeinflussen und so die Kartenfunktionen und Dienste auf seine individuelle Nutzung hin optimieren.</p>
 
     <hr>
 
@@ -266,17 +272,17 @@
     </div>
 
     <p>Die Angaben zur Genauigkeit sind generalisiert und beziehen sich auf die Gesamtheit aller Messwerte mit einer statistischen Sicherheit (Konfidenzniveau) von
-    95 Prozent. Für Messwerte die aus neueren ALS-Befliegungen stammen, sind verbesserte Genauigkeiten anzunehmen. Exakte Angaben zur Genauigkeit der Messpunte
+    95 Prozent. Für Messwerte, die aus neueren ALS-Befliegungen stammen, sind verbesserte Genauigkeiten zu erwarten. Exakte Angaben zur Genauigkeit der Messpunkte
     sind den Metadaten der jeweils zuständigen Bundesländer zu entnehmen.</p>
 
     <p>Die relative Genauigkeit nahe beieinanderliegender Messwerte ist als wesentlich höher einzuschätzen. Die Frage "Wohin fließt das Wasser?" kann im Nahbereich
-    recht verläßlich beantwortet werden.</p>
+    sehr zuverlässig beantwortet werden.</p>
 
     <hr>
 
     <h3>Aktualität der erhobenen Daten</h3>
 
-    <p>Die Höhendaten werden von den Bundesländer oft in einem regelmäßigen Turnus (z.B. 5 Jahre) neu erhoben. Die Angaben zur Aktualität der Daten wurden aus den
+    <p>Die Höhendaten werden von den Bundesländern oft in einem regelmäßigen Turnus (z.B. 5 Jahre) neu erhoben. Die Angaben zur Aktualität der Daten wurden aus den
     verfügbaren Informationen (z.B. Metadaten) über die Ursprungsdaten abgeleitet.</p>
 
     <hr>
@@ -295,7 +301,7 @@
 
     <h3>Bereitstellung der Höhendaten</h3>
 
-    <p>Die Höhendaten (DGM1) werden von den Landesvermessungsämter der 16 Bundesländer erhoben und als Open Data bereit gestellt:</p>
+    <p>Die Höhendaten (DGM1) werden von den Landesvermessungsämtern der 16 Bundesländer erhoben und als Open Data bereitgestellt:</p>
 
     <div class="table-responsive">
       <table>

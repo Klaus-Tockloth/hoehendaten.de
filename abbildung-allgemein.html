@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abbildung - Allgemein</title>
+  <title>Allgemein (Abbildung)</title>
   <meta name="description" content=
-  "Erfahren Sie mehr über die Bedeutung und die vielfältigen Gründe für die Visualisierung von Höhendaten zur Analyse und zum Verständnis der Topographie, einschliesslich der Anwendung des 3x3-Meter-Fensters und der Gradientenalgorithmen wie Horn und Zevenbergen &amp; Thorne.">
+  "Erfahren Sie mehr über die Bedeutung und die vielfältigen Gründe für die Visualisierung von Höhendaten zur Analyse und zum Verständnis der Topographie, einschließlich der Anwendung des 3x3-Meter-Fensters und der Gradientenalgorithmen wie Horn und Zevenbergen-Thorne.">
   <meta name="keywords" content=
-  "Höhendaten Visualisierung, Abbildung, Topographie, Gelände, DGM, Digitales Geländemodell, Geodaten, Analyse, Verständnis, 3x3-Meter-Fenster, Geländeschattierung, Horn Algorithmus, Zevenbergen Thorne Algorithmus, Reliefanalyse">
+  "Höhendaten Visualisierung, Abbildung, Topographie, Gelände, DGM, Digitales Geländemodell, Geodaten, Analyse, Verständnis, 3x3-Meter-Fenster, Geländeschattierung, Horn-Algorithmus, Zevenbergen-Thorne-Algorithmus, Reliefanalyse">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -23,7 +23,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -48,26 +48,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -75,6 +68,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -104,11 +101,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -120,6 +121,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -145,6 +150,10 @@
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
           </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
         </ul>
       </li>
 
@@ -162,14 +171,14 @@
 
     <ol>
       <li><strong>Verständnis des Geländes:</strong> Durch die Visualisierung werden Höhenunterschiede, Geländeformen wie Hügel, Täler und Gebirgskämme sowie die
-      allgemeine Topographie eines Gebiets veranschaulicht und leichter verständlich gemacht. Dies hilft, die physischen Eigenschaften der Landschaft zu erfassen
-      und wie sie geformt wurde.</li>
+      allgemeine Topographie eines Gebiets veranschaulicht und verständlicher gemacht. Dies hilft, die physischen Eigenschaften der Landschaft sowie ihre
+      Entstehung und Formgebung zu erfassen.</li>
 
-      <li><strong>Vereinfachung komplexer Daten:</strong> Rohdaten von Höhenmessungen, wie Punktwolken, können überwältigend und schwer direkt interpretierbar
-      sein. Visualisierungen, wie z. B. digitale Höhenmodelle, digitale Oberflächenmodelle oder digitale Geländemodelle, sowie traditionelle Methoden wie
-      Höhenlinien (Konturlinien), machen diese komplexen Informationen zugänglich und ermöglichen es, sie sofort zu erfassen.</li>
+      <li><strong>Vereinfachung komplexer Daten:</strong> Rohdaten von Höhenmessungen, wie Punktwolken, können überwältigend und schwer zu interpretieren sein.
+      Visualisierungen, wie z. B. digitale Höhenmodelle, digitale Oberflächenmodelle oder digitale Geländemodelle, sowie traditionelle Methoden wie Höhenlinien
+      (Konturlinien), machen diese komplexen Informationen zugänglich und ermöglichen es, sie sofort zu erfassen.</li>
 
-      <li><strong>Unterstützung bei Analysen:</strong> Visualisierte Höhendaten sind die Grundlage für verschiedene geografische Analysen. Sie ermöglichen
+      <li><strong>Unterstützung bei Analysen:</strong> Visualisierte Höhendaten sind die Grundlage für verschiedene geografische Analysen. Sie ermöglichen die
       Geländeanalyse, die Identifizierung von Mustern und Trends und die Berechnung von Oberflächeneigenschaften.</li>
 
       <li><strong>Breite Anwendungspalette:</strong> Die Visualisierung ist entscheidend für zahlreiche praktische Anwendungen und Entscheidungsprozesse in
@@ -185,11 +194,11 @@
     <h3>3x3-Meter-Fenster</h3>
 
     <p>Bei der Analyse von digitalen Geländemodellen (DGM), wie dem DGM1 mit einer Gitterweite von einem Meter, ist das 3x3-Meter-Fenster eine grundlegende Methode
-    zur Berechnung verschiedener topographischer Indizes. Diese auch als "Kernel" oder "Fokus-Filter" bezeichnete Strategie analysiert für jeden Pixel des
+    zur Berechnung verschiedener topographischer Indizes. Diese auch als "Kernel" oder "Fokus-Filter" bezeichnete Strategie analysiert für jeden Messwert des
     Geländemodells dessen direkte Nachbarschaft, um lokale geomorphologische Eigenschaften zu quantifizieren.</p>
 
-    <p>Das 3x3-Fenster besteht aus einem zentralen Pixel und seinen acht unmittelbaren Nachbarn. Dieses Fenster verschiebt sich Zelle für Zelle über das gesamte
-    Raster des DGM. Für jede Position wird aus den neun Höhenwerten innerhalb des Fensters ein neuer Wert für den zentralen Pixel berechnet, der dann in einer
+    <p>Das 3x3-Fenster besteht aus einem zentralen Messwert und seinen acht unmittelbaren Nachbarn. Dieses Fenster verschiebt sich Zelle für Zelle über das gesamte
+    Raster des DGM. Für jede Position wird aus den neun Höhenwerten innerhalb des Fensters ein neuer Wert für den zentralen Messwert berechnet, der dann in einer
     neuen Rasterdatei für den jeweiligen Index gespeichert wird. Das Ergebnis hängt von der spezifischen Berechnungsmethode des Indexes ab.</p>
     <img src="./images/3x3-fenster.svg" alt="Skizze des sich verschiebenden 3x3-Meter-Fensters.">
     <p><small>Skizze des sich verschiebenden 3x3-Meter-Fensters.</small>
@@ -202,11 +211,11 @@
 
     <h3>(Gradienten-) Algorithmen</h3>
 
-    <p>Es stehen zwei Algorithmen zur Berechnung der Geländeschattierung zur Verfügung: 'Horn' und 'ZevenbergenThorne'. Der Hauptunterschied zwischen ihnen liegt
-    in der Art und Weise, wie sie die lokalen Steigungs- und Ausrichtungsderivate (Gradienten) aus den Höhendaten (DGM) berechnen und für welche Landschaftstypen
-    sie jeweils optimal geeignet sind.</p>
+    <p>Es stehen zwei Algorithmen zur Berechnung der Geländeschattierung zur Verfügung: Horn und Zevenbergen-Thorne. Der Hauptunterschied zwischen ihnen liegt in
+    der Art und Weise, wie sie die lokalen Steigungs- und Ausrichtungsderivate (Gradienten) aus den Höhendaten (DGM) berechnen und für welche Landschaftstypen sie
+    jeweils optimal geeignet sind.</p>
 
-    <p><strong>1. Zevenbergen & Thorne Algorithmus</strong>
+    <p><strong>1. Zevenbergen-Thorne-Algorithmus</strong>
     </p>
 
     <ul>
@@ -216,20 +225,20 @@
       <li>
         <strong>Optimal für Landschaftstypen:</strong>
         <ul>
-          <li><strong>Glatte, sanfte Gelände:</strong> Ideal für Gebiete mit geringen Höhenunterschieden, wie Flachland, sanfte Hügel oder Plateaus, bei denen eine
-          detaillierte, aber nicht übertriebene Darstellung feiner Geländeformen gewünscht ist.</li>
+          <li><strong>Glattes, sanftes Gelände:</strong> Ideal für Gebiete mit geringen Höhenunterschieden, wie Flachland, sanfte Hügel oder Plateaus, bei denen
+          eine detaillierte, aber nicht übertriebene Darstellung feiner Geländeformen gewünscht ist.</li>
 
-          <li><strong>Hochauflösende DGMs auf glatten Oberflächen:</strong> Bei sehr detaillierten Höhenmodellen von glatten Oberflächen kann Zevenbergen & Thorne
-          präzisere Ergebnisse liefern, da er kleinere Variationen nicht überbetont.</li>
+          <li><strong>Hochauflösende DGMs auf glatten Oberflächen:</strong> Bei sehr detaillierten Höhenmodellen von glatten Oberflächen kann der
+          Zevenbergen-Thorne-Algorithmus präzisere Ergebnisse liefern, da er kleinere Variationen nicht überbetont.</li>
         </ul>
       </li>
     </ul>
 
-    <p><strong>2. Horn's Algorithmus</strong>
+    <p><strong>2. Horn-Algorithmus</strong>
     </p>
 
     <ul>
-      <li><strong>Charakteristik:</strong> Horn's Algorithmus ist eine weit verbreitete Methode, die eine 3x3-Fenster-Matrix verwendet, um lokale Derivate zu
+      <li><strong>Charakteristik:</strong> Der Horn-Algorithmus ist eine weit verbreitete Methode, die eine 3x3-Fenster-Matrix verwendet, um lokale Derivate zu
       approximieren. Er berücksichtigt alle acht Nachbarzellen zur Berechnung von Steigung und Ausrichtung. Er wird oft als Standardalgorithmus in vielen
       GIS-Anwendungen verwendet.</li>
 
@@ -239,7 +248,7 @@
           <li><strong>Raues, zerklüftetes Gelände:</strong> Dieser Algorithmus ist besser für Gebiete mit großen und abrupten Höhenunterschieden geeignet, wie
           Gebirge, Schluchten oder stark erodierte Landschaften.</li>
 
-          <li><strong>Gelände mit hoher Variabilität der Hangneigung:</strong> Horn's Algorithmus betont Täler, Grate, Gipfel, Senken und Kuppen stärker, was ihn
+          <li><strong>Gelände mit hoher Variabilität der Hangneigung:</strong> Der Horn-Algorithmus betont Täler, Grate, Gipfel, Senken und Kuppen stärker, was ihn
           ideal für die Visualisierung komplexer topografischer Merkmale macht.</li>
         </ul>
       </li>

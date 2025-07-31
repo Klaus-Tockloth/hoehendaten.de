@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abbildung - Hangneigung</title>
+  <title>Hangneigung (Abbildung)</title>
   <meta name="description" content=
   "Verstehen Sie, was die Hangneigung aussagt, ihre Bedeutung für Gefahrenanalyse und Planung, und wie sie mithilfe von Farbabstufungen dargestellt wird.">
   <meta name="keywords" content="Hangneigung, Steilheit, Slope, DGM, Visualisierung, Grad, Gefahrenanalyse, Rutschung, Erosion, Planung, Infrastruktur">
@@ -22,7 +22,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -47,26 +47,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -74,6 +67,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -103,11 +100,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -119,6 +120,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -143,6 +148,10 @@
 
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
           </li>
         </ul>
       </li>
@@ -175,6 +184,96 @@
       <li><strong>Freizeit und Tourismus:</strong> Sie ermöglicht die Planung von Wander- und Radwegen mit angepassten Schwierigkeitsgraden und hilft bei der
       Routenwahl für Outdoor-Sportarten.</li>
     </ul>
+
+    <hr>
+
+    <h3>Höhendifferenz zwischen benachbarten Punkten und deren Winkel</h3>
+
+    <p>Im DGM1 beträgt der horizontale Abstand zwischen einem Gitterpunkt und seinen direkten (horizontalen und vertikalen) Nachbarn konstant 1 Meter. Für
+    diagonale Nachbarpunkte beträgt der Abstand ca. 1.41 Meter. Aus dem Höhenunterschied zu einem direkten Nachbarpunkt lässt sich der Steigungs- oder
+    Gefällewinkel (α) berechnen: α = arctan (ΔHöhe / 1m)</p>
+    <img src="./images/winkel-aus-hoehenunterschied-400x250.svg" alt="Veranschaulichung Steigungswinkel." style="max-width: 300px; height: auto;">
+    <p><small>Veranschaulichung Steigungswinkel.</small>
+    </p>
+
+    <p>Die prozentuale Steigung gibt das Verhältnis des Höhenunterschieds zur horizontalen Strecke in Prozent an. Sie wird berechnet, indem der Höhenunterschied
+    durch die horizontale Strecke geteilt und das Ergebnis mit 100 multipliziert wird. Bei einem horizontalen Abstand von 1 Meter (100 cm) zwischen direkten
+    Nachbarpunkten entspricht ein Höhenunterschied von beispielsweise 10 cm einer prozentualen Steigung von 10 %. Ein Höhenunterschied von 100 cm auf 100 cm
+    horizontaler Strecke entspricht einer Steigung von 100 %, was einem Winkel von 45° entspricht.</p>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>ΔHöhe</th>
+            <th>Winkel α</th>
+            <th>Prozentuale Steigung</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>10 cm</td>
+            <td>5.71°</td>
+            <td>10 %</td>
+          </tr>
+
+          <tr>
+            <td>20 cm</td>
+            <td>11.31°</td>
+            <td>20 %</td>
+          </tr>
+
+          <tr>
+            <td>30 cm</td>
+            <td>16.70°</td>
+            <td>30 %</td>
+          </tr>
+
+          <tr>
+            <td>40 cm</td>
+            <td>21.80°</td>
+            <td>40 %</td>
+          </tr>
+
+          <tr>
+            <td>50 cm</td>
+            <td>26.57°</td>
+            <td>50 %</td>
+          </tr>
+
+          <tr>
+            <td>100 cm</td>
+            <td>45.00°</td>
+            <td>100 %</td>
+          </tr>
+
+          <tr>
+            <td>200 cm</td>
+            <td>63.43°</td>
+            <td>200 %</td>
+          </tr>
+
+          <tr>
+            <td>300 cm</td>
+            <td>71.57°</td>
+            <td>300 %</td>
+          </tr>
+
+          <tr>
+            <td>400 cm</td>
+            <td>75.96°</td>
+            <td>400 %</td>
+          </tr>
+
+          <tr>
+            <td>500 cm</td>
+            <td>78.69°</td>
+            <td>500 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <hr>
 
@@ -317,11 +416,13 @@
     <p>Erläuterungen:</p>
 
     <ul>
-      <li>Flache Bereiche (&lt;20°) werden Dunkelgrün, Mittelgrün und Hellgrün dargestellt.</li>
+      <li>Flache Bereiche (0° bis &lt;20°) , die typischerweise leicht begehbar sind und geringe Erosionsgefahr aufweisen, werden in verschiedenen Grüntönen
+      abgebildet.</li>
 
       <li>Steilere Bereiche (&lt;40°) werden Gelbgrün und Orange dargestellt.</li>
 
-      <li>Sehr steile Bereiche (&lt;60°) werden Dunkelorange und Rot dargestellt.</li>
+      <li>Sehr steile Bereiche (40° bis &lt;60°) weisen auf anspruchsvolles Gelände hin und werden in warmen Orange- und Rottönen dargestellt, um auf erhöhte
+      Schwierigkeit oder potenzielle Gefahren wie Steinschlag hinzuweisen.</li>
 
       <li>Extrem steile Bereiche (&lt;90°) werden Dunkelrot dargestellt.</li>
 

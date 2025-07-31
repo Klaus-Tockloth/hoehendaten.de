@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UTMPointRequest (API)</title>
+  <title>RoughnessRequest (API)</title>
   <meta name="description" content=
-  "API-Dokumentation für den 'UTMPointRequest'. Ermöglicht die Abfrage von Höheninformationen für einen Punkt mittels UTM-Koordinaten (Zone, Easting, Northing).">
-  <meta name="keywords" content="Höhendaten, API, UTMPointRequest, UTM, Easting, Northing, Zone, Punktabfrage, Höhe, Elevation, Programmierschnittstelle">
+  "API-Dokumentation für den 'RoughnessRequest'. Erzeugt Topographic Roughness-Daten (Geländerauheit) für einen Kartenausschnitt im PNG- oder GeoTIFF-Format basierend auf Lon/Lat oder UTM.">
+  <meta name="keywords" content="Höhendaten, API, RoughnessRequest, Topographic Roughness, Geländerauheit, PNG, GeoTIFF, Lon/Lat, UTM, Programmierschnittstelle">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -167,11 +167,15 @@
 
     <hr>
 
-    <h3 class="request">API-Attribute 'UTMPointRequest'</h3>
+    <h3 class="request">API-Attribute 'RoughnessRequest'</h3>
 
-    <p>Der API-Aufruf 'UTMPointRequest' dient der Abfrage der Höheninformation für einen einzelnen Punkt, der mittels UTM-Koordinaten (Zone, Easting, Northing)
-    definiert ist. Ähnlich wie beim 'PointRequest' umfasst die Antwort die ermittelte Höhe in Metern sowie Metadaten wie Aktualität, Herkunft und Attribution der
-    Höhendaten.</p>
+    <p>Der API-Aufruf 'RoughnessRequest' generiert eine kolorierte Abbildung der Geländerauheit für einen Kartenausschnitt von 1x1 km. Der Kartenausschnitt wird
+    durch einen beliebigen Referenzpunkt bestimmt. Der angegebene Referenzpunkt (Lon/Lat oder UTM) dient zur Identifizierung der relevanten 1x1 km Kachel, für die
+    die Abbildung generiert wird. Die Antwort enthält die kolorierte Rauheits-Abbildung im GeoTIFF- oder PNG-Format (Base64-kodiert), sowie Metadaten zur Quelle
+    und Attributierung.</p>
+
+    <p>Es ist eine Farbtextdatei für die Kolorierung zu übergeben. Die Antwort kann Daten für eine, zwei oder drei Kacheln enthalten, falls eine Landesgrenze den
+    Bereich schneidet.</p>
 
     <div class="table-responsive">
       <table>
@@ -187,7 +191,7 @@
           <td>
           </td>
           <td>string</td>
-          <td>Typ der Anfrage (UTMPointRequest)</td>
+          <td>Typ der Anfrage (RoughnessRequest)</td>
         </tr>
 
         <tr>
@@ -195,7 +199,7 @@
           <td>
           </td>
           <td>string</td>
-          <td>ID der Anfrage</td>
+          <td>Eindeutige ID der Anfrage</td>
         </tr>
 
         <tr>
@@ -211,7 +215,7 @@
           </td>
           <td>Zone</td>
           <td>int</td>
-          <td>UTM Zone (32/33)</td>
+          <td>UTM Zone Referenzpunkt</td>
         </tr>
 
         <tr>
@@ -219,7 +223,7 @@
           </td>
           <td>Easting</td>
           <td>float</td>
-          <td>Easting, X, Ostwert</td>
+          <td>Easting, X, Ostwert Referenzpunkt</td>
         </tr>
 
         <tr>
@@ -227,14 +231,46 @@
           </td>
           <td>Northing</td>
           <td>float</td>
-          <td>Northing, Y, Nordwert</td>
+          <td>Northing, Y, Nordwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>float</td>
+          <td>Längengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>float</td>
+          <td>Breitengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ColorTextFileContent</td>
+          <td>[]string</td>
+          <td>Inhalt der Farbtextdatei für die Kolorierung der Rauheit</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ColoringAlgorithm</td>
+          <td>string</td>
+          <td>Algorithmus für Zuweisung 'Wert zu Farbe' ('interpolation' oder 'rounding')</td>
         </tr>
       </table>
     </div>
 
     <hr>
 
-    <h3 class="response">API-Attribute 'UTMPointResponse'</h3>
+    <h3 class="response">API-Attribute 'RoughnessResponse'</h3>
 
     <div class="table-responsive">
       <table>
@@ -253,7 +289,7 @@
           <td>
           </td>
           <td>string</td>
-          <td>Typ der Antwort (UTMPointResponse)</td>
+          <td>Typ der Antwort (RoughnessResponse)</td>
         </tr>
 
         <tr>
@@ -283,7 +319,7 @@
           <td>
           </td>
           <td>int</td>
-          <td>UTM Zone</td>
+          <td>UTM Zone des angefragten Referenzpunkts</td>
         </tr>
 
         <tr>
@@ -293,7 +329,7 @@
           <td>
           </td>
           <td>float</td>
-          <td>Easting, X, Ostwert</td>
+          <td>Easting, X, Ostwert des angefragten Referenzpunkts</td>
         </tr>
 
         <tr>
@@ -303,25 +339,85 @@
           <td>
           </td>
           <td>float</td>
-          <td>Northing, Y, Nordwert</td>
+          <td>Northing, Y, Nordwert des angefragten Referenzpunkts</td>
         </tr>
 
         <tr>
           <td>
           </td>
-          <td>Elevation</td>
+          <td>Longitude</td>
           <td>
           </td>
           <td>float</td>
-          <td>Höhenwert (Meter)</td>
+          <td>Längengrad des angefragten Referenzpunkts (Dezimalgrad)</td>
         </tr>
 
         <tr>
           <td>
           </td>
-          <td>Actuality</td>
+          <td>Latitude</td>
           <td>
           </td>
+          <td>float</td>
+          <td>Breitengrad des angefragten Referenzpunkts (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ColorTextFileContent</td>
+          <td>
+          </td>
+          <td>[]string</td>
+          <td>Inhalt der Farbtextdatei für die Kolorierung der Rauheit</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>ColoringAlgorithm</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Algorithmus für Zuweisung 'Wert zu Farbe'</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Roughnesses</td>
+          <td>
+          </td>
+          <td>[]struct</td>
+          <td>Array von kolorierten Geländerauheits-Abbildungen</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Data</td>
+          <td>string (Base64)</td>
+          <td>Kolorierte Geländerauheitsabbildung für die Kachel</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>DataFormat</td>
+          <td>string</td>
+          <td>Format der Daten (GeoTIFF oder PNG)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Actuality</td>
           <td>string</td>
           <td>Aktualität der Daten</td>
         </tr>
@@ -329,9 +425,9 @@
         <tr>
           <td>
           </td>
-          <td>Origin</td>
           <td>
           </td>
+          <td>Origin</td>
           <td>string</td>
           <td>Herkunft der Daten</td>
         </tr>
@@ -339,9 +435,9 @@
         <tr>
           <td>
           </td>
-          <td>Attribution</td>
           <td>
           </td>
+          <td>Attribution</td>
           <td>string</td>
           <td>Attribution der Daten</td>
         </tr>
@@ -349,11 +445,21 @@
         <tr>
           <td>
           </td>
-          <td>TileIndex</td>
           <td>
           </td>
+          <td>TileIndex</td>
           <td>string</td>
-          <td>Index der Quelldaten</td>
+          <td>Index der Quelldatenkachel</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>BoundingBox</td>
+          <td>struct</td>
+          <td>WGS84 Georeferenz (relevant bei PNG)</td>
         </tr>
 
         <tr>
@@ -408,23 +514,77 @@
       </table>
     </div>
 
+    <p>Eingabe:</p>
+
+    <ul>
+      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Geländerauheitsabbildungen erstellt werden.</li>
+
+      <li>Mögliche Koordinatensysteme:</li>
+
+      <ul>
+        <li>Lon/Lat-Koordinaten (WGS84, EPSG:4326).</li>
+
+        <li>UTM-Koordinaten (EPSG:25832 / EPSG:25833).</li>
+      </ul>
+    </ul>
+
+    <p>Ausgabe:</p>
+
+    <ul>
+      <li>Abhängig vom Eingabeformat werden unterschiedliche Ausgabeformate erzeugt:</li>
+
+      <ul>
+        <li>PNG in der Projektion EPSG:3857 (Webmercator) mit expliziter Georeferenzierung durch Lon/Lat-Koordinaten (WGS84, EPSG:4326).</li>
+
+        <li>GeoTIFF in der Projektion der DGM1-Ausgangsdaten (EPSG:25832 / EPSG:25833) mit impliziter Georeferenzierung in den Metadaten.</li>
+      </ul>
+    </ul>
+
+    <p>Anmerkungen:</p>
+
+    <ul>
+      <li>Ein Kartenausschnitt wird in der Regel durch genau eine Kachel repräsentiert.</li>
+
+      <li>Verläuft eine Landesgrenze durch eine Kachel, wird sie von allen betroffenen Bundesländer (2 oder 3) zur Verfügung gestellt.</li>
+
+      <li>Entsprechend enthält das Feld 'Attributes.Roughnesses' die Daten für eine, zwei oder maximal drei Kacheln.</li>
+
+      <li>Der Body der Antwort ist komprimiert (gzip).</li>
+    </ul>
+
     <hr>
 
-    <h4 class="request">UTMPointRequest (Beispiel)</h4>
+    <h4 class="request">RoughnessRequest (Beispiel)</h4>
 
     <pre class="request"><code>
 #!/bin/bash
 #
-# Abfrage der Höhendaten für einen UTM Punkt
+# Abfrage Rauheit für eine Kachel mit 1000x1000 Meter.
 
 postdata=$(cat &lt;&lt;EOF
 {
-  "Type": "UTMPointRequest",
-  "ID": "GPS-Referenzpunkt Hannover",
+  "Type": "RoughnessRequest",
+  "ID": "Hegekopf, Edersee, Hessen",
   "Attributes": {
-      "Zone": 32,
-      "Easting": 550251.23,
-      "Northing": 5802052.35
+    "Zone": 0,
+    "Easting": 0.0,
+    "Northing": 0.0,
+    "Longitude": 8.964229,
+    "Latitude": 51.185913,
+    "ColorTextFileContent": [
+      "# Farbdefinition für Geländerauheit",
+      "# Format: Wert Rot Grün Blau Alpha",
+      "0.00 173 216 230 255",
+      "0.20 57 176 130 255",
+      "0.35 28 126 0 255",
+      "0.50 255 200 0 255",
+      "1.25 255 165 0 255",
+      "2.00 255 0 0 255",
+      "3.50 180 0 0 255",
+      "5.00 0 0 0 255",
+      "nv 0 0 0 0"
+    ],
+    "ColoringAlgorithm": "interpolation"
   }
 }
 EOF
@@ -435,38 +595,67 @@ echo "postdata = $postdata"
 curl \
 --silent \
 --include \
+--compressed \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
+--header "Accept-Encoding: gzip" \
 --data "$postdata" \
-https://api.hoehendaten.de:14444/v1/utmpoint
+https://api.hoehendaten.de:14444/v1/roughness
 
 </code></pre>
 
     <hr>
 
-    <h4 class="response">UTMPointResponse:</h4>
+    <h4 class="response">RoughnessResponse:</h4>
 
     <pre class="response"><code>
-HTTP/2 200
+HTTP/2 200 
 access-control-allow-headers: Content-Type
 access-control-allow-methods: POST
 access-control-allow-origin: *
+content-encoding: gzip
 content-type: application/json; charset=utf-8
-content-length: 446
-date: Mon, 02 Jun 2025 06:53:41 GMT
+date: Tue, 29 Jul 2025 13:42:56 GMT
 
 {
-  "Type": "UTMPointResponse",
-  "ID": "GPS-Referenzpunkt Hannover",
+  "Type": "RoughnessResponse",
+  "ID": "Hegekopf, Edersee, Hessen",
   "Attributes": {
-    "Zone": 32,
-    "Easting": 550251.23,
-    "Northing": 5802052.35,
-    "Elevation": 53.62300109863281,
-    "Actuality": "2016-04-18",
-    "Origin": "DE-NI",
-    "Attribution": "© GeoBasis-DE / LGLN (2025), cc-by/4.0",
-    "TileIndex": "32_550_5802",
+    "Zone": 0,
+    "Easting": 0,
+    "Northing": 0,
+    "Longitude": 8.964229,
+    "Latitude": 51.185913,
+    "ColorTextFileContent": [
+      "# Farbdefinition für Geländerauheit",
+      "# Format: Wert Rot Grün Blau Alpha",
+      "0.00 173 216 230 255",
+      "0.20 57 176 130 255",
+      "0.35 28 126 0 255",
+      "0.50 255 200 0 255",
+      "1.25 255 165 0 255",
+      "2.00 255 0 0 255",
+      "3.50 180 0 0 255",
+      "5.00 0 0 0 255",
+      "nv 0 0 0 0"
+    ],
+    "ColoringAlgorithm": "interpolation",
+    "Roughnesses": [
+      {
+        "Data": "iVBORw0KGgoAAAANSUhEUgAAA+cAAAPqCAYAAADxYC5iA ... uE+4z62ub9l//grYOddyi5WEqgAAAABJRU5ErkJggg==",
+        "DataFormat": "png",
+        "Actuality": "2021-04-26",
+        "Origin": "DE-HE",
+        "Attribution": "Geobasisdaten © Hessische Verwaltung für Bodenmanagement und Geoinformation, dl-de/by-2-0",
+        "TileIndex": "32_497_5670",
+        "BoundingBox": {
+          "MinLon": 8.95707049585795,
+          "MaxLon": 8.971385896601037,
+          "MinLat": 51.18141399484732,
+          "MaxLat": 51.190410580109756
+        }
+      }
+    ],
     "IsError": false,
     "Error": {
       "Code": "",
@@ -474,170 +663,9 @@ date: Mon, 02 Jun 2025 06:53:41 GMT
       "Detail": ""
     }
   }
-}
+}       
 
 </code></pre>
-    <h4>Anmerkungen</h4>
-
-    <ul>
-      <li>Aus den Eingaben werden direkt die Höhendaten ermittelt.</li>
-
-      <li>Es findet keine Transformation der Eingabedaten statt.</li>
-
-      <li>Die Eingaben müssen dem CRS der Quelldaten entsprechen.</li>
-    </ul>
-
-    <hr>
-
-    <h3>UTM-Zonen</h3>
-
-    <p>Deutschland befindet sich überwiegend in der Zone 32 (6-12°). Marginale Flächen im Westen von Nordrhein-Westfalen befinden sich in der Zone 31 (0-6°).
-    Größere Gebiete im Osten von Deutschland befinden sich in der Zone 33 (12-18°). Bundesländer mit Flächen in zwei Zonen ordnen ihr gesamtes Gebiet logisch einer
-    einzigen Zone zu und dementsprechend sind die UTM-Koordinaten zu wählen.</p>
-
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>Bundesland</th>
-            <th>Zone 32</th>
-            <th>Zone 33</th>
-            <th>DGM1-Daten</th>
-            <th>Anmerkungen</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>Baden-Württemberg</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Bayern</td>
-            <td>Ja</td>
-            <td>Ja</td>
-            <td>32</td>
-            <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
-          </tr>
-
-          <tr>
-            <td>Berlin</td>
-            <td>Nein</td>
-            <td>Ja</td>
-            <td>Die Daten für Berlin sind in den Daten für Brandenburg enthalten (Zone 33).</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Brandenburg</td>
-            <td>Ja</td>
-            <td>Ja</td>
-            <td>33</td>
-            <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
-          </tr>
-
-          <tr>
-            <td>Bremen</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Hamburg</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Hessen</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Mecklenburg-Vorpommern</td>
-            <td>Ja</td>
-            <td>Ja</td>
-            <td>33</td>
-            <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
-          </tr>
-
-          <tr>
-            <td>Niedersachsen</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Nordrhein-Westfalen</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>NRW hat marginale Flächen in der Zone 31. Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
-          </tr>
-
-          <tr>
-            <td>Rheinland-Pfalz</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Saarland</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Sachsen</td>
-            <td>Ja</td>
-            <td>Ja</td>
-            <td>33</td>
-            <td>Alle Flächen werden logisch der Zone 33 zugeordnet.</td>
-          </tr>
-
-          <tr>
-            <td>Sachsen-Anhalt</td>
-            <td>Ja</td>
-            <td>Ja</td>
-            <td>32</td>
-            <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
-          </tr>
-
-          <tr>
-            <td>Schleswig-Holstein</td>
-            <td>Ja</td>
-            <td>Nein</td>
-            <td>32</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Thüringen</td>
-            <td>Ja</td>
-            <td>Ja</td>
-            <td>32</td>
-            <td>Alle Flächen werden logisch der Zone 32 zugeordnet.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
   <div class="container">

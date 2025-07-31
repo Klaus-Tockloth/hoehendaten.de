@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dienst - Kolorierung</title>
+  <title>Kolorierung (Dienst)</title>
   <link rel="stylesheet" href="./assets/colorpicker.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -19,7 +19,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -44,26 +44,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -71,6 +64,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -100,11 +97,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -116,6 +117,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -140,6 +145,10 @@
 
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
           </li>
         </ul>
       </li>
@@ -169,6 +178,9 @@
           </option>
           <option value="aspect">
             Hangexposition
+          </option>
+          <option value="roughness">
+            Geländerauheit
           </option>
         </select>
       </div>
@@ -262,6 +274,20 @@
                 { angle: 292.5, color: 'rgba(190, 190, 220, 255)' },
                 { angle: 337.5, color: 'rgba(190, 190, 220, 255)' },
                 { angle: 360.0, color: 'rgba(190, 190, 220, 255)' },
+                { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
+            ]
+        },
+        roughness: {
+            comment: `# Farbdefinition für Geländerauheit\n# Format: Wert Rot Grün Blau Alpha`,
+            data: [
+                { angle: 0.00, color: 'rgba(173, 216, 230, 1)' },
+                { angle: 0.20, color: 'rgba(57, 176, 130, 1)' },
+                { angle: 0.35, color: 'rgba(28, 126, 0, 1)' },
+                { angle: 0.50, color: 'rgba(255, 200, 0, 1)' },
+                { angle: 1.25, color: 'rgba(255, 165, 0, 1)' },
+                { angle: 2.00, color: 'rgba(255, 0, 0, 1)' },
+                { angle: 3.50, color: 'rgba(180, 0, 0, 1)' },
+                { angle: 5.00, color: 'rgba(0, 0, 0, 1)' },
                 { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
             ]
         }

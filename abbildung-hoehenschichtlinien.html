@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abbildung - Höhenschichtlinien</title>
+  <title>Höhenschichtlinien (Abbildung)</title>
   <meta name="description" content=
   "Erfahren Sie alles über Höhenschichtlinien (Isohypsen), ihre Interpretation, die Bedeutung der Äquidistanz und ihre Anwendung in der topographischen Darstellung.">
   <meta name="keywords" content="Höhenschichtlinien, Höhenlinien, Isohypsen, Konturlinien, Äquidistanz, DGM, Topographie, Gelände, Karte, Visualisierung">
@@ -22,7 +22,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -47,26 +47,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -74,6 +67,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -103,11 +100,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -119,6 +120,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -143,6 +148,10 @@
 
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
           </li>
         </ul>
       </li>
@@ -184,7 +193,7 @@
     <h3>Allgemein</h3>
 
     <p>Höhenschichtlinien, auch Isohypsen oder Niveaulinien genannt, sind Linien, die Punkte gleicher Höhe über einem Bezugsniveau (Meeresspiegel) miteinander
-    verbinden. Eine Schar von Höhenlinien zusammen bildet das Höhenprofil eines Gebiets.</p>
+    verbinden. Höhenlinien bilden in ihrer Gesamtheit das Höhenprofil eines Gebiets.</p>
 
     <p>Die Interpretation von Höhenschichtlinien ermöglicht Rückschlüsse auf die Geländetopografie. Die Form und der Abstand der Linien geben Aufschluss über das
     Relief. Liegen die Höhenlinien eng beieinander, deutet dies auf steiles Gelände hin, während ein größerer Abstand flaches Gelände anzeigt. Geschlossene
@@ -203,7 +212,7 @@
     <h3>Erscheinungsbild</h3>
 
     <p>Das Erscheinungsbild der Höhenschichtlinien wird durch den Parameter <strong>Äquidistanz</strong> gesteuert. Die Äquidistanz bezeichnet den konstanten
-    Höhenunterschied zwischen zwei benachbarten Höhenlinien auf einer Karte. Höhenlinien verbinden Punkte gleicher Höhe.</p>
+    Höhenunterschied zwischen zwei benachbarten Höhenlinien, die jeweils Punkte gleicher Höhe miteinander verbinden.</p>
 
     <p>Bei Höhenschichtlinien mit sehr kleinen Äquidistanzen, insbesondere im Nahbereich, können auch geringe Höhenunterschiede und feine Geländestrukturen
     detailliert dargestellt werden. Moderne digitale Geländemodelle (DGM1) ermöglichen die Ableitung von Höhenschichtlinien mit sehr geringen Äquidistanzen,

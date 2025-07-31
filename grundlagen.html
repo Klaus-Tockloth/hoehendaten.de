@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Höhendaten - Dies und Das</title>
+  <title>Grundlagen (Höhendaten)</title>
   <meta name="description" content=
   "Erfahren Sie mehr über die Herkunft und Qualität der Höhendaten (DGM) für Deutschland, inklusive LiDAR, Genauigkeitskriterien und UTM-Zonen.">
   <meta name="keywords" content="Höhendaten, DGM, LiDAR, ALS, Qualität, Genauigkeit, Aktualität, UTM Zonen, Deutschland, Geodaten">
@@ -22,7 +22,7 @@
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Abbildungen ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="abbildung-allgemein.html">Allgemein</a>
@@ -47,26 +47,19 @@
           <li>
             <a href="abbildung-hangexposition.html">Hangexposition</a>
           </li>
-          <!--
+
           <li>
-            <a href="abbildung-tpi.html">TPI - Topographic Position Index</a>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
           </li>
-          <li>
-            <a href="abbildung-tri.html">TRI - Topographic Ruggedness Index</a>
-          </li>
-          <li>
-            <a href="abbildung-ri.html">RI - Roughness Index</a>
-          </li>
-           -->
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">Dienste ›</a>
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="dienst-punkt.html">Punkt Lon / Lat</a>
@@ -74,6 +67,10 @@
 
           <li>
             <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
           </li>
 
           <li>
@@ -103,11 +100,15 @@
           <li>
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
         </ul>
       </li>
 
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropbtn">API ›</a>
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
         <ul class="dropdown-content">
           <li>
             <a href="api-allgemein.html">Allgemein</a>
@@ -119,6 +120,10 @@
 
           <li>
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
           <li>
@@ -144,6 +149,10 @@
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
           </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
         </ul>
       </li>
 
@@ -154,7 +163,7 @@
   </nav>
 
   <div class="container">
-    <h2>Dies und Das</h2>
+    <h2>Grundlagen</h2>
 
     <hr>
 
@@ -195,7 +204,7 @@
 
     <h3>Qualitätskriterien der DGM1-Daten</h3>
 
-    <p>Die Bundesländer sind bestrebt folgende Kriterien einzuhalten:</p>
+    <p>Die Bundesländer streben die Einhaltung folgender Kriterien an:</p>
 
     <ul>
       <li>Genauigkeit der georeferenzierten Höhe:</li>
@@ -205,7 +214,7 @@
 
         <li>bei stark geneigtem Gelände mit dichter Vegetation: bis zu ±10 cm + 20 % der Rasterweite (entspricht bis zu ±30 cm)</li>
 
-        <li>Die Angaben zur geometrischen Genauigkeit beziehen sich auf eine Sicherheitswahrscheinlichkeit von 95% (2σ).</li>
+        <li>Die Angaben zur geometrischen Genauigkeit basieren auf einer statistischen Sicherheit von 95% (2σ).</li>
       </ul>
 
       <li>Genauigkeit der georeferenzierten Lage:</li>
@@ -217,7 +226,7 @@
       <li>Aktualität der Daten:</li>
 
       <ul>
-        <li>Die Grundaktualität der Daten beträgt 10 Jahre.</li>
+        <li>Eine Grundaktualität der Daten von 10 Jahren wird angestrebt.</li>
 
         <li>Für hochwasser- und bodensenkungsgefährdete Gebiete wird eine Aktualität von 3 Jahren angestrebt.</li>
       </ul>
@@ -259,9 +268,9 @@
 
         <li>Die Rasterweite beträgt 1 Meter.</li>
 
-        <li>Die Rasterelementposition liegt im Zentrum auf 0,5 m Positionen (= Pixelmitte).</li>
+        <li>Die Rasterelementposition liegt im Zentrum bei 0,5 m (Pixelmitte)."</li>
 
-        <li>Der Ursprung der Kachel wird in der linken unteren Ecke des linken unteren Rasterelementes abgebildet.</li>
+        <li>Der Ursprung der Kachel befindet sich in der linken unteren Ecke des linken unteren Rasterelements.</li>
 
         <li>Die Kachelbegrenzungen sind stets auf ganzzahlige Kilometerwerte im jeweiligen Bezugssystem ausgerichtet.</li>
       </ul>
@@ -275,14 +284,14 @@
     <p>Das DGM1 in Deutschland bietet eine hohe absolute Höhengenauigkeit, die typischerweise im Bereich von ±15 cm bis ±30 cm liegt, abhängig von der
     Geländebeschaffenheit. Die absolute Lagegenauigkeit der Rohdaten (Laserscans) liegt oft bei ≤ 30 cm.</p>
 
-    <p>Die Hersteller von LiDAR-Systemen geben für aktuelle Scanner und optimalen Bedingungen, Genauigkeiten von 2-5 cm vertikal (Höhe) und 5-10 cm horizontal
-    (Lage) an. Wenn Bundesländer neue Befliegungen beauftragen, werden Genauigkeitsanforderungen spezifiziert, die oft in diesem Rahmen liegen.</p>
+    <p>Die Hersteller von LiDAR-Systemen geben für aktuelle Scanner und unter optimalen Bedingungen, Genauigkeiten von 2-5 cm vertikal (Höhe) und 5-10 cm
+    horizontal (Lage) an. Wenn Bundesländer neue Befliegungen beauftragen, werden Genauigkeitsanforderungen spezifiziert, die oft in diesem Rahmen liegen.</p>
 
     <h3>Relative Genauigkeit der Daten</h3>
 
     <p>Die relative Genauigkeit benachbarter Punkte, sowohl in Höhe als auch in Lage, wird allgemein als wesentlich höher eingeschätzt, da sich systematische
-    Fehler hier weniger stark auswirken. Die relative Genauigkeit kann man zum Beispiel selbst beurteilen, indem man die Höhenwerte für die Laufbahn einer offenen
-    Sportanlage ermittelt. Bei einer planen Laufbahn sollten sich nur sehr geringe Höhenunterschiede ergeben.</p>
+    Fehler hier weniger stark auswirken. Die relative Genauigkeit lässt sich beispielsweise selbst beurteilen, indem man die Höhenwerte für die Laufbahn einer
+    offenen Sportanlage ermittelt. Bei einer planen Laufbahn sollten sich nur sehr geringe Höhenunterschiede ergeben.</p>
 
     <hr>
     <img src="./images/details-punkt-500x400.png" alt="Details zu einem Punkt auf einer Karte mit Höheninformationen.">
@@ -306,13 +315,13 @@
 
     <h3>Basisdaten</h3>
 
-    <p>Die Höhendaten werden von den Landesvermessungsämtern der Bundesländer zur Verfügung gestellt. In der Regel als Kacheln von 1x1km im GeoTIFF-Format und
-    immer in UTM-Projektion. Die Quelldaten werden inhaltlich nicht verändert. Für einzelne Bundesländer sind jedoch Formatumwandlungen (XYZ -&gt; GeoTIFF) oder
-    Umkachelungen (2x2km -&gt; 1x1km) erforderlich. Auch das Benennungsschema der Quelldaten wird nicht geändert. Über einen einheitlichen, zusätzlichen
-    Kachelindex (zone_easting_northing) kann jede Kachel schnell gefunden werden. Jedes Bundesland ordnet sein Verwaltungsgebiet logisch einer UTM-Zone zu. Daraus
-    ergeben sich, homogen für ein Bundesland, Kacheln in den UTM-Zonen 32 oder 33. Kacheln, die Gebiete mehrerer Bundesländer abdecken, werden von allen
-    betroffenen Bundesländern (zwei oder drei) bereitgestellt. Messpunkte jenseits der Bundeslandgrenze werden in der Regel mit NoData-Werten (meist -9999)
-    gefüllt.</p>
+    <p>Die Höhendaten werden von den Landesvermessungsämtern der Bundesländer zur Verfügung gestellt. In der Regel werden sie als 1x1km-Kacheln im GeoTIFF-Format
+    und stets in UTM-Projektion bereitgestellt. Die Quelldaten werden inhaltlich nicht verändert. Für einzelne Bundesländer sind jedoch Formatumwandlungen (XYZ
+    -&gt; GeoTIFF) oder Umkachelungen (2x2km -&gt; 1x1km) erforderlich. Auch das Benennungsschema der Quelldaten wird nicht geändert. Über einen einheitlichen,
+    zusätzlichen Kachelindex (zone_easting_northing) kann jede Kachel schnell gefunden werden. Jedes Bundesland ordnet sein Verwaltungsgebiet logisch einer
+    UTM-Zone zu. Daraus ergeben sich, homogen innerhalb eines Bundeslandes, Kacheln in den UTM-Zonen 32 oder 33. Kacheln, die Gebiete mehrerer Bundesländer
+    abdecken, werden von allen betroffenen Bundesländern (zwei oder drei) bereitgestellt. Messpunkte jenseits der Bundeslandgrenze werden in der Regel mit
+    NoData-Werten (meist -9999) gefüllt.</p>
 
     <hr>
     <img src="./images/details-linie-500x400.png" alt="Details zu einer Strecke auf einer Karte, inklusive Höhendifferenz und Distanz.">
@@ -323,8 +332,9 @@
 
     <h3>Anmerkungen und Anregungen</h3>
 
-    <p>Wir freuen uns auf <a href="mailto:printmaps.service@gmail.com">Feedback</a>. Zum Beispiel zur konkreten Nutzung der Höhendaten und der verfügbaren Dienste
-    oder API-Funktionen.</p>
+    <p>Im Zusammenhang mit DGM1-Höhendaten finden sich für viele Aspekte im Internet keine oder nur wenige Referenzinformationen. Aus diesem Grund wäre eine
+    kritische Betrachtung aller Sachverhalte wünschenswert. Wir freuen uns auf <a href="mailto:printmaps.service@gmail.com">Feedback</a>. Auch zum Beispiel zur
+    konkreten Nutzung der Höhendaten, der verfügbaren Dienste oder der API-Funktionen.</p>
   </div>
 
   <div class="container">
