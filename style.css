@@ -428,6 +428,12 @@ button:hover {
   width: 4em;
 }
 
+#color-table tbody tr td:nth-child(1) input {
+  width: 100px;
+  min-width: 100px;
+  box-sizing: border-box;
+}
+
 .color-comparison-box {
   width: 150px;
   height: 36px;

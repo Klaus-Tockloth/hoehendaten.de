@@ -38,6 +38,10 @@
           </li>
 
           <li>
+            <a href="abbildung-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="abbildung-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -47,6 +51,14 @@
 
           <li>
             <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
@@ -91,6 +103,10 @@
           </li>
 
           <li>
+            <a href="dienst-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="dienst-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -100,6 +116,14 @@
 
           <li>
             <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="dienst-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="dienst-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
@@ -140,6 +164,10 @@
           </li>
 
           <li>
+            <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
+          </li>
+
+          <li>
             <a href="api-sloperequest.html">SlopeRequest</a>
           </li>
 
@@ -149,6 +177,14 @@
 
           <li>
             <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
+
+          <li>
+            <a href="api-trirequest.html">TRIRequest</a>
+          </li>
+
+          <li>
+            <a href="api-tpirequest.html">TPIRequest</a>
           </li>
         </ul>
       </li>
@@ -170,17 +206,27 @@
     <div class="config-section">
       <div>
         <label for="schema-select">Vordefiniertes Schema auswählen:</label> <select id="schema-select">
+          <option value="pattern" selected>
+            <!-- 'selected' Attribut hinzugefügt -->
+             Musterschema
+          </option>
+          <option value="colorrelief">
+            Farbrelief
+          </option>
           <option value="slope">
             Hangneigung
-          </option>
-          <option value="pattern">
-            Musterschema
           </option>
           <option value="aspect">
             Hangexposition
           </option>
           <option value="roughness">
             Geländerauheit
+          </option>
+          <option value="tri">
+            TRI (Ruggedness)
+          </option>
+          <option value="tpi">
+            TPI (Position)
           </option>
         </select>
       </div>
@@ -231,64 +277,126 @@
     // Daten für die vordefinierten Schemata
     const PREDEFINED_SCHEMAS = {
         pattern: {
-            comment: `# Generisches Winkel- und Farbschema für die Abbildung von Hoehendaten.\n# Musterdefinition als Basis für eigene Anpassungen.\n# Format: Wert Rot Grün Blau Alpha`,
+            comment: `# Farbschema für eigene Anpassungen\n# Format: Wert Rot Grün Blau Alpha`,
             data: [
-                { angle: 0,   color: 'rgba(0, 0, 0, 1)' },
-                { angle: 10,  color: 'rgba(0, 0, 255, 1)' },
-                { angle: 20,  color: 'rgba(0, 255, 255, 1)' },
-                { angle: 30,  color: 'rgba(0, 255, 0, 1)' },
-                { angle: 40,  color: 'rgba(255, 255, 0, 1)' },
-                { angle: 50,  color: 'rgba(255, 128, 0, 1)' },
-                { angle: 60,  color: 'rgba(255, 0, 0, 1)' },
-                { angle: 70,  color: 'rgba(128, 0, 128, 1)' },
-                { angle: 80,  color: 'rgba(0, 0, 128, 1)' },
-                { angle: 90,  color: 'rgba(0, 0, 0, 1)' },
-                { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
+                { value: 0,   color: 'rgba(0, 0, 0, 1)' },
+                { value: 10,  color: 'rgba(0, 0, 255, 1)' },
+                { value: 20,  color: 'rgba(0, 255, 255, 1)' },
+                { value: 30,  color: 'rgba(0, 255, 0, 1)' },
+                { value: 40,  color: 'rgba(255, 255, 0, 1)' },
+                { value: 50,  color: 'rgba(255, 128, 0, 1)' },
+                { value: 60,  color: 'rgba(255, 0, 0, 1)' },
+                { value: 70,  color: 'rgba(128, 0, 128, 1)' },
+                { value: 80,  color: 'rgba(0, 0, 128, 1)' },
+                { value: 90,  color: 'rgba(0, 0, 0, 1)' },
+                { value: 'nv', color: 'rgba(0, 0, 0, 0)' }
             ]
         },
         slope: {
-            comment: `# Winkel- und Farbschema für die Abbildung von Hangneigungen\n# Musterdefinition als Basis für eigene Anpassungen\n# Format: Wert Rot Grün Blau Alpha`,
+            comment: `# Farbschema Hangneigung\n# Format: Wert Rot Grün Blau Alpha`,
             data: [
-                { angle: 0,    color: 'rgba(0, 100, 0, 1)' },
-                { angle: 5,    color: 'rgba(0, 200, 0, 1)' },
-                { angle: 10,   color: 'rgba(100, 255, 0, 1)' },
-                { angle: 20,   color: 'rgba(200, 200, 0, 1)' },
-                { angle: 30,   color: 'rgba(255, 150, 0, 1)' },
-                { angle: 40,   color: 'rgba(255, 100, 0, 1)' },
-                { angle: 45,   color: 'rgba(255, 0, 0, 1)' },
-                { angle: 60,   color: 'rgba(150, 0, 0, 1)' },
-                { angle: 90,   color: 'rgba(0, 0, 0, 1)' },
-                { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
+                { value: 0,    color: 'rgba(0, 100, 0, 1)' },
+                { value: 5,    color: 'rgba(0, 200, 0, 1)' },
+                { value: 10,   color: 'rgba(100, 255, 0, 1)' },
+                { value: 20,   color: 'rgba(200, 200, 0, 1)' },
+                { value: 30,   color: 'rgba(255, 150, 0, 1)' },
+                { value: 40,   color: 'rgba(255, 100, 0, 1)' },
+                { value: 45,   color: 'rgba(255, 0, 0, 1)' },
+                { value: 60,   color: 'rgba(150, 0, 0, 1)' },
+                { value: 90,   color: 'rgba(0, 0, 0, 1)' },
+                { value: 'nv', color: 'rgba(0, 0, 0, 0)' }
             ]
         },
         aspect: {
-            comment: `# Winkel- und Farbschema für die Abbildung von Hangexpositionen.\n# Musterdefinition als Basis für eigene Anpassungen.\n# Format: Wert Rot Grün Blau Alpha`,
+            comment: `# Farbschema Hangexposition\n# Format: Wert Rot Grün Blau Alpha`,
             data: [
-                { angle: 0,    color: 'rgba(190, 190, 220, 255)' },
-                { angle: 22.5, color: 'rgba(180, 220, 200, 255)' },
-                { angle: 67.5, color: 'rgba(255, 255, 180, 255)' },
-                { angle: 112.5, color: 'rgba(255, 220, 160, 255)' },
-                { angle: 157.5, color: 'rgba(255, 180, 120, 255)' },
-                { angle: 202.5, color: 'rgba(245, 190, 130, 255)' },
-                { angle: 247.5, color: 'rgba(200, 210, 230, 255)' },
-                { angle: 292.5, color: 'rgba(190, 190, 220, 255)' },
-                { angle: 337.5, color: 'rgba(190, 190, 220, 255)' },
-                { angle: 360.0, color: 'rgba(190, 190, 220, 255)' },
-                { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
+                { value: 0,    color: 'rgba(190, 190, 220, 1)' },
+                { value: 22.5, color: 'rgba(180, 220, 200, 1)' },
+                { value: 67.5, color: 'rgba(255, 255, 180, 1)' },
+                { value: 112.5, color: 'rgba(255, 220, 160, 1)' },
+                { value: 157.5, color: 'rgba(255, 180, 120, 1)' },
+                { value: 202.5, color: 'rgba(245, 190, 130, 1)' },
+                { value: 247.5, color: 'rgba(200, 210, 230, 1)' },
+                { value: 292.5, color: 'rgba(190, 190, 220, 1)' },
+                { value: 337.5, color: 'rgba(190, 190, 220, 1)' },
+                { value: 360.0, color: 'rgba(190, 190, 220, 1)' },
+                { value: 'nv', color: 'rgba(0, 0, 0, 0)' }
             ]
         },
         roughness: {
-            comment: `# Farbdefinition für Geländerauheit\n# Format: Wert Rot Grün Blau Alpha`,
+            comment: `# Farbschema Geländerauheit\n# Format: Wert Rot Grün Blau Alpha`,
             data: [
-                { angle: 0.00, color: 'rgba(173, 216, 230, 1)' },
-                { angle: 0.20, color: 'rgba(57, 176, 130, 1)' },
-                { angle: 0.35, color: 'rgba(28, 126, 0, 1)' },
-                { angle: 0.50, color: 'rgba(255, 200, 0, 1)' },
-                { angle: 1.25, color: 'rgba(255, 165, 0, 1)' },
-                { angle: 2.00, color: 'rgba(255, 0, 0, 1)' },
-                { angle: 3.50, color: 'rgba(180, 0, 0, 1)' },
-                { angle: 5.00, color: 'rgba(0, 0, 0, 1)' },
-                { angle: 'nv', color: 'rgba(0, 0, 0, 0)' }
+                { value: 0.00, color: 'rgba(173, 216, 230, 1)' },
+                { value: 0.20, color: 'rgba(57, 176, 130, 1)' },
+                { value: 0.35, color: 'rgba(28, 126, 0, 1)' },
+                { value: 0.50, color: 'rgba(255, 200, 0, 1)' },
+                { value: 1.25, color: 'rgba(255, 165, 0, 1)' },
+                { value: 2.00, color: 'rgba(255, 0, 0, 1)' },
+                { value: 3.50, color: 'rgba(180, 0, 0, 1)' },
+                { value: 5.00, color: 'rgba(0, 0, 0, 1)' },
+                { value: 'nv', color: 'rgba(0, 0, 0, 0)' }
+            ]
+        },
+        colorrelief: {
+            comment: `# Farbschema Farbrelief\n# Format: Wert Rot Grün Blau Alpha`,
+            data: [
+                { value: 0,    color: 'rgba(0, 0, 139, 1)' },
+                { value: 200,  color: 'rgba(0, 191, 255, 1)' },
+                { value: 400,  color: 'rgba(34, 139, 34, 1)' },
+                { value: 600,  color: 'rgba(50, 205, 50, 1)' },
+                { value: 800,  color: 'rgba(173, 255, 47, 1)' },
+                { value: 1000, color: 'rgba(255, 255, 0, 1)' },
+                { value: 1200, color: 'rgba(255, 165, 0, 1)' },
+                { value: 1400, color: 'rgba(255, 100, 0, 1)' },
+                { value: 1600, color: 'rgba(255, 0, 0, 1)' },
+                { value: 1800, color: 'rgba(200, 0, 0, 1)' },
+                { value: 2000, color: 'rgba(139, 69, 19, 1)' },
+                { value: 2200, color: 'rgba(169, 169, 169, 1)' },
+                { value: 2400, color: 'rgba(192, 192, 192, 1)' },
+                { value: 2600, color: 'rgba(255, 255, 255, 1)' },
+                { value: 'nv', color: 'rgba(0, 0, 0, 0)' }
+            ]
+        },
+        tpi: {
+            comment: `# Farbdefinition für TPI\n# Format: Wert Rot Grün Blau Alpha\n# Senken: kleiner -0.05\n# Ebenen: -0.05 ... 0.05\n# Kuppen: größer 0.05`,
+            data: [
+                { value: -0.050001, color: 'rgba(0, 0, 0, 1)' },
+                { value: -0.05,     color: 'rgba(255, 255, 255, 1)' },
+                { value: 0.05,      color: 'rgba(255, 255, 255, 1)' },
+                { value: 0.050001,  color: 'rgba(0, 0, 0, 1)' },
+                { value: 'nv',      color: 'rgba(0, 0, 0, 0)' }
+            ]
+        },
+        tri: {
+            comment: `# Farbdefinition für TRI\n# Format: Wert Rot Grün Blau Alpha`,
+            data: [
+                { value: 0.00, color: 'rgba(173, 216, 230, 1)' },
+                { value: 0.20, color: 'rgba(57, 176, 130, 1)' },
+                { value: 0.40, color: 'rgba(104, 151, 0, 1)' },
+                { value: 0.60, color: 'rgba(255, 195, 0, 1)' },
+                { value: 0.80, color: 'rgba(255, 186, 0, 1)' },
+                { value: 1.00, color: 'rgba(255, 177, 0, 1)' },
+                { value: 1.20, color: 'rgba(255, 167, 0, 1)' },
+                { value: 1.40, color: 'rgba(255, 132, 0, 1)' },
+                { value: 1.60, color: 'rgba(255, 88, 0, 1)' },
+                { value: 1.80, color: 'rgba(255, 44, 0, 1)' },
+                { value: 2.00, color: 'rgba(255, 0, 0, 1)' },
+                { value: 2.20, color: 'rgba(245, 0, 0, 1)' },
+                { value: 2.40, color: 'rgba(235, 0, 0, 1)' },
+                { value: 2.60, color: 'rgba(225, 0, 0, 1)' },
+                { value: 2.80, color: 'rgba(215, 0, 0, 1)' },
+                { value: 3.00, color: 'rgba(205, 0, 0, 1)' },
+                { value: 3.20, color: 'rgba(195, 0, 0, 1)' },
+                { value: 3.40, color: 'rgba(185, 0, 0, 1)' },
+                { value: 3.60, color: 'rgba(168, 0, 0, 1)' },
+                { value: 3.80, color: 'rgba(144, 0, 0, 1)' },
+                { value: 4.00, color: 'rgba(120, 0, 0, 1)' },
+                { value: 4.20, color: 'rgba(96, 0, 0, 1)' },
+                { value: 4.40, color: 'rgba(72, 0, 0, 1)' },
+                { value: 4.60, color: 'rgba(48, 0, 0, 1)' },
+                { value: 4.80, color: 'rgba(24, 0, 0, 1)' },
+                { value: 5.00, color: 'rgba(0, 0, 0, 1)' },
+                { value: 'nv', color: 'rgba(0, 0, 0, 0)' }
             ]
         }
     };
@@ -342,18 +450,18 @@
 
     /**
      * Erstellt eine neue Tabellenzeile für einen Farb- und Wert-Eintrag.
-     * @param {object} data - Ein Objekt mit 'angle' und 'color' Werten.
+     * @param {object} data - Ein Objekt mit 'value' und 'color' Werten.
      * @returns {HTMLTableRowElement} Die erstellte Tabellenzeile.
      */
     function createRow(data) {
         const row = document.createElement('tr');
-        const angleCell = document.createElement('td');
-        const angleInput = document.createElement('input');
-        angleInput.type = 'text';
-        angleInput.value = data.angle;
-        angleInput.addEventListener('change', sortTable);
-        angleCell.appendChild(angleInput);
-        row.appendChild(angleCell);
+        const valueCell = document.createElement('td');
+        const valueInput = document.createElement('input');
+        valueInput.type = 'text';
+        valueInput.value = data.value;
+        valueInput.addEventListener('change', sortTable);
+        valueCell.appendChild(valueInput);
+        row.appendChild(valueCell);
         
         const colorDisplayCell = document.createElement('td');
         const colorDisplayDiv = document.createElement('div');
@@ -406,7 +514,7 @@
      */
     function addRow() {
         const tableBody = document.getElementById('color-table-body');
-        const newRowData = { angle: '???', color: 'rgba(255,255,255,1)' };
+        const newRowData = { value: '???', color: 'rgba(255,255,255,1)' };
         const newRow = createRow(newRowData);
         tableBody.appendChild(newRow);
         sortTable();
@@ -469,12 +577,12 @@
         const tableBody = document.getElementById('color-table-body');
         const rows = tableBody.querySelectorAll('tr');
         let colorDataContent = Array.from(rows).map(row => {
-            const angle = row.querySelector('td:nth-child(1) input').value;
+            const value = row.querySelector('td:nth-child(1) input').value;
             const colorRgbaStr = row.querySelector('td:nth-child(3) .color-input').value;
             const rgba = parseColorString(colorRgbaStr);
-            if (angle && rgba && angle.trim() !== '???') {
+            if (value && rgba && value.trim() !== '???') {
                 const alpha255 = Math.round(rgba.a * 255);
-                return `${angle} ${rgba.r} ${rgba.g} ${rgba.b} ${alpha255}`;
+                return `${value} ${rgba.r} ${rgba.g} ${rgba.b} ${alpha255}`;
             }
             return null;
         }).filter(Boolean).join('\n');
@@ -579,8 +687,9 @@
             }
 
             if (rgb && !isNaN(rgb.r) && !isNaN(rgb.g) && !isNaN(rgb.b) && !isNaN(alpha)) {
-                const rgbaString = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha / 255})`;
-                colorEntries.push({ angle: value, color: rgbaString });
+                const rgbaString = `rgba(${rgb.r},
+  ${rgb.g}, ${rgb.b}, ${alpha / 255})`;
+                colorEntries.push({ value: value, color: rgbaString });
             }
         });
 
@@ -636,8 +745,8 @@
         const schemaSelect = document.getElementById('schema-select');
         schemaSelect.addEventListener('change', (e) => loadSchema(e.target.value));
 
-        // initiales Schema laden (Standard: Hangneigung)
-        loadSchema('slope');
+        // initiales Schema laden (Standard: Musterschema)
+        loadSchema('pattern'); // Geändert von 'tpi' zu 'pattern'
     };
   </script>
   <div class="container">

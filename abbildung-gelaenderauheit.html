@@ -41,6 +41,10 @@
           </li>
 
           <li>
+            <a href="abbildung-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="abbildung-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -50,6 +54,14 @@
 
           <li>
             <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
@@ -94,6 +106,10 @@
           </li>
 
           <li>
+            <a href="dienst-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="dienst-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -103,6 +119,14 @@
 
           <li>
             <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="dienst-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="dienst-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
@@ -143,6 +167,10 @@
           </li>
 
           <li>
+            <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
+          </li>
+
+          <li>
             <a href="api-sloperequest.html">SlopeRequest</a>
           </li>
 
@@ -152,6 +180,14 @@
 
           <li>
             <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
+
+          <li>
+            <a href="api-trirequest.html">TRIRequest</a>
+          </li>
+
+          <li>
+            <a href="api-tpirequest.html">TPIRequest</a>
           </li>
         </ul>
       </li>
@@ -522,6 +558,40 @@
     <img src="./images/edersee-schummerung-500x400.png" alt="Schummerung für eine Datenkachel am Edersee (Hessen)." style="max-width: 500px; height: auto;">
     <p><small>Schummerung für eine Datenkachel am Edersee (Hessen).</small>
     </p>
+
+    <hr>
+
+    <h3>Abgrenzung von Geländerauheit und TRI</h3>
+
+    <p>Der Terrain Ruggedness Index (TRI) und die Geländerauheit (Roughness Index, RI) sind beides geomorphometrische Maße, die die Unebenheit des Geländes
+    quantifizieren, unterscheiden sich jedoch in der Art und Weise, wie sie diese Unebenheit erfassen und betonen.</p>
+
+    <p>Der Hauptunterschied liegt in ihrer Berechnungsmethode und der Art der Geländehomogenität, die sie hervorheben:</p>
+
+    <ul>
+      <li><strong>Terrain Ruggedness Index (TRI):</strong> Der TRI, basierend auf dem Riley-Algorithmus, misst die <strong>Heterogenität oder Unebenheit des
+      Geländes</strong>, indem er für jeden Punkt die <strong>absolute Höhenänderung zu seinen acht direkten Nachbarpunkten</strong> berechnet. Ein hoher TRI-Wert
+      weist auf ein raues, unebenes Gelände hin, während ein niedriger Wert eine ebene oder glatte Oberfläche anzeigt. Der TRI bewertet die Oberflächentextur und
+      -heterogenität, unabhängig von der allgemeinen Hangneigung. Eine flache Ebene kann "rau" sein (viele kleine Unebenheiten), während ein steiler Hang "glatt"
+      sein kann.</li>
+
+      <li><strong>Geländerauheit (Roughness Index, RI):</strong> Die Geländerauheit quantifiziert die <strong>maximale lokale Unebenheit des Geländes</strong>. Sie
+      wird berechnet, indem für jeden Punkt die <strong>größte Höhendifferenz zwischen dem höchsten und dem niedrigsten Höhenwert innerhalb eines
+      3x3-Messpunkte-Fensters</strong> ermittelt wird (Zmax - Zmin). Eine hohe Geländerauheit weist auf sehr abrupte und ausgeprägte lokale Höhenänderungen hin,
+      wie sie an Kanten, Felsvorsprüngen oder sehr steilen, stufigen Hängen vorkommen. Die Geländerauheit bewertet die maximale lokale Höhendifferenz, ebenfalls
+      unabhängig von der allgemeinen Hangneigung.</li>
+    </ul>
+
+    <p>Zusammenfassend lässt sich sagen, dass der <strong>TRI ein Maß für die durchschnittliche Variabilität der Höhen innerhalb einer lokalen Umgebung
+    ist</strong>, das die allgemeine "Zerklüftung" oder "Textur" des Geländes anzeigt. Die <strong>Geländerauheit hingegen identifiziert die extremsten lokalen
+    Höhenunterschiede</strong>, also scharfe Kanten, Abbrüche oder einzelne, markante Unebenheiten.</p>
+
+    <p>Der TRI eignet sich besonders für Anwendungen, bei denen die <strong>Gesamthäufigkeit und Verteilung kleinerer bis mittlerer Unebenheiten</strong> relevant
+    ist, und nicht nur die extremsten. Er bietet detaillierte Einblicke in die Geländebeschaffenheit, insbesondere in Verbindung mit hochauflösenden
+    DGM1-Höhendaten.</p>
+
+    <p>Die Geländerauheit ist prädestiniert für Anwendungen, bei denen die <strong>Identifikation von abrupten, scharfen und potenziell gefährlichen oder
+    hinderlichen Geländeelementen</strong> im Vordergrund steht. Sie hebt extreme lokale Höhenunterschiede hervor.</p>
 
     <hr>
 

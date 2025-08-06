@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RoughnessRequest (API)</title>
+  <title>API - TRIRequest</title>
   <meta name="description" content=
-  "API-Dokumentation für den 'RoughnessRequest'. Erzeugt Topographic Roughness-Daten (Geländerauheit) für einen Kartenausschnitt im PNG- oder GeoTIFF-Format basierend auf Lon/Lat oder UTM.">
-  <meta name="keywords" content="Höhendaten, API, RoughnessRequest, Topographic Roughness, Geländerauheit, PNG, GeoTIFF, Lon/Lat, UTM, Programmierschnittstelle">
+  "API-Dokumentation für den 'TRIRequest'. Erzeugt Terrain Ruggedness Index-Daten für einen Kartenausschnitt im PNG- oder GeoTIFF-Format basierend auf Lon/Lat oder UTM.">
+  <meta name="keywords" content="Höhendaten, API, TRIRequest, Terrain Ruggedness Index, TRI, PNG, GeoTIFF, Lon/Lat, UTM, Programmierschnittstelle">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -203,12 +203,11 @@
 
     <hr>
 
-    <h3 class="request">API-Attribute 'RoughnessRequest'</h3>
+    <h3 class="request">API-Attribute 'TRIRequest'</h3>
 
-    <p>Der API-Aufruf 'RoughnessRequest' generiert eine kolorierte Abbildung der Geländerauheit für einen Kartenausschnitt von 1x1 km. Der Kartenausschnitt wird
-    durch einen beliebigen Referenzpunkt bestimmt. Der angegebene Referenzpunkt (Lon/Lat oder UTM) dient zur Identifizierung der relevanten 1x1 km Kachel, für die
-    die Abbildung generiert wird. Die Antwort enthält die kolorierte Rauheits-Abbildung im GeoTIFF- oder PNG-Format (Base64-kodiert), sowie Metadaten zur Quelle
-    und Attributierung.</p>
+    <p>Der API-Aufruf 'TRIRequest' generiert eine kolorierte Abbildung des Terrain Ruggedness Index (TRI) für einen Kartenausschnitt von 1x1 km. Der
+    Kartenausschnitt wird durch einen beliebigen Referenzpunkt bestimmt. Der Referenzpunkt kann in den Koordinatensystemen Longitude/Latitude oder UTM angegeben
+    werden. Die Antwort enthält die kolorierte TRI-Abbildung im GeoTIFF- oder PNG-Format (Base64-kodiert), sowie Metadaten zur Quelle und Attributierung.</p>
 
     <p>Es ist eine Farbtextdatei für die Kolorierung zu übergeben. Die Antwort kann Daten für eine, zwei oder drei Kacheln enthalten, falls eine Landesgrenze den
     Bereich schneidet.</p>
@@ -227,7 +226,7 @@
           <td>
           </td>
           <td>string</td>
-          <td>Typ der Anfrage (RoughnessRequest)</td>
+          <td>Typ der Anfrage (TRIRequest)</td>
         </tr>
 
         <tr>
@@ -291,7 +290,7 @@
           </td>
           <td>ColorTextFileContent</td>
           <td>[]string</td>
-          <td>Inhalt der Farbtextdatei für die Kolorierung der Rauheit</td>
+          <td>Inhalt der Farbtextdatei für die Kolorierung des TRI</td>
         </tr>
 
         <tr>
@@ -306,7 +305,7 @@
 
     <hr>
 
-    <h3 class="response">API-Attribute 'RoughnessResponse'</h3>
+    <h3 class="response">API-Attribute 'TRIResponse'</h3>
 
     <div class="table-responsive">
       <table>
@@ -325,7 +324,7 @@
           <td>
           </td>
           <td>string</td>
-          <td>Typ der Antwort (RoughnessResponse)</td>
+          <td>Typ der Antwort (TRIResponse)</td>
         </tr>
 
         <tr>
@@ -405,7 +404,7 @@
           <td>
           </td>
           <td>[]string</td>
-          <td>Inhalt der Farbtextdatei für die Kolorierung der Rauheit</td>
+          <td>Inhalt der Farbtextdatei für die Kolorierung des TRI</td>
         </tr>
 
         <tr>
@@ -421,11 +420,11 @@
         <tr>
           <td>
           </td>
-          <td>Roughnesses</td>
+          <td>TRIs</td>
           <td>
           </td>
           <td>[]struct</td>
-          <td>Array von kolorierten Geländerauheits-Abbildungen</td>
+          <td>Array von kolorierten TRI Abbildungen</td>
         </tr>
 
         <tr>
@@ -435,7 +434,7 @@
           </td>
           <td>Data</td>
           <td>string (Base64)</td>
-          <td>Kolorierte Geländerauheitsabbildung für die Kachel</td>
+          <td>Kolorierte TRI Abbildung für die Kachel</td>
         </tr>
 
         <tr>
@@ -553,7 +552,7 @@
     <p>Eingabe:</p>
 
     <ul>
-      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Geländerauheitsabbildungen erstellt werden.</li>
+      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die TRI-Abbildungen erstellt werden.</li>
 
       <li>Mögliche Koordinatensysteme:</li>
 
@@ -583,23 +582,23 @@
 
       <li>Verläuft eine Landesgrenze durch eine Kachel, wird sie von allen betroffenen Bundesländer (2 oder 3) zur Verfügung gestellt.</li>
 
-      <li>Entsprechend enthält das Feld 'Attributes.Roughnesses' die Daten für eine, zwei oder maximal drei Kacheln.</li>
+      <li>Entsprechend enthält das Feld 'Attributes.TRIs' die Daten für eine, zwei oder maximal drei Kacheln.</li>
 
       <li>Der Body der Antwort ist komprimiert (gzip).</li>
     </ul>
 
     <hr>
 
-    <h4 class="request">RoughnessRequest (Beispiel)</h4>
+    <h4 class="request">TRIRequest (Beispiel)</h4>
 
     <pre class="request"><code>
 #!/bin/bash
 #
-# Abfrage Rauheit für eine Kachel mit 1000x1000 Meter.
+# Abfrage TRI für eine Kachel mit 1000x1000 Meter. 
 
 postdata=$(cat &lt;&lt;EOF
 {
-  "Type": "RoughnessRequest",
+  "Type": "TRIRequest",
   "ID": "Hegekopf, Edersee, Hessen",
   "Attributes": {
     "Zone": 0,
@@ -608,15 +607,33 @@ postdata=$(cat &lt;&lt;EOF
     "Longitude": 8.964229,
     "Latitude": 51.185913,
     "ColorTextFileContent": [
-      "# Farbdefinition für Geländerauheit",
+      "# Farbdefinition für TRI",
       "# Format: Wert Rot Grün Blau Alpha",
       "0.00 173 216 230 255",
       "0.20 57 176 130 255",
-      "0.35 28 126 0 255",
-      "0.50 255 200 0 255",
-      "1.25 255 165 0 255",
+      "0.40 104 151 0 255",
+      "0.60 255 195 0 255",
+      "0.80 255 186 0 255",
+      "1.00 255 177 0 255",
+      "1.20 255 167 0 255",
+      "1.40 255 132 0 255",
+      "1.60 255 88 0 255",
+      "1.80 255 44 0 255",
       "2.00 255 0 0 255",
-      "3.50 180 0 0 255",
+      "2.20 245 0 0 255",
+      "2.40 235 0 0 255",
+      "2.60 225 0 0 255",
+      "2.80 215 0 0 255",
+      "3.00 205 0 0 255",
+      "3.20 195 0 0 255",
+      "3.40 185 0 0 255",
+      "3.60 168 0 0 255",
+      "3.80 144 0 0 255",
+      "4.00 120 0 0 255",
+      "4.20 96 0 0 255",
+      "4.40 72 0 0 255",
+      "4.60 48 0 0 255",
+      "4.80 24 0 0 255",
       "5.00 0 0 0 255",
       "nv 0 0 0 0"
     ],
@@ -636,25 +653,25 @@ curl \
 --header "Accept: application/json" \
 --header "Accept-Encoding: gzip" \
 --data "$postdata" \
-https://api.hoehendaten.de:14444/v1/roughness
+https://api.hoehendaten.de:14444/v1/tri
 
 </code></pre>
 
     <hr>
 
-    <h4 class="response">RoughnessResponse:</h4>
+    <h4 class="response">TRIResponse:</h4>
 
     <pre class="response"><code>
-HTTP/2 200 
+HTTP/2 200
 access-control-allow-headers: Content-Type
 access-control-allow-methods: POST
 access-control-allow-origin: *
 content-encoding: gzip
 content-type: application/json; charset=utf-8
-date: Tue, 29 Jul 2025 13:42:56 GMT
+date: Wed, 06 Aug 2025 08:47:59 GMT
 
 {
-  "Type": "RoughnessResponse",
+  "Type": "TRIResponse",
   "ID": "Hegekopf, Edersee, Hessen",
   "Attributes": {
     "Zone": 0,
@@ -663,22 +680,40 @@ date: Tue, 29 Jul 2025 13:42:56 GMT
     "Longitude": 8.964229,
     "Latitude": 51.185913,
     "ColorTextFileContent": [
-      "# Farbdefinition für Geländerauheit",
+      "# Farbdefinition für TRI",
       "# Format: Wert Rot Grün Blau Alpha",
       "0.00 173 216 230 255",
       "0.20 57 176 130 255",
-      "0.35 28 126 0 255",
-      "0.50 255 200 0 255",
-      "1.25 255 165 0 255",
+      "0.40 104 151 0 255",
+      "0.60 255 195 0 255",
+      "0.80 255 186 0 255",
+      "1.00 255 177 0 255",
+      "1.20 255 167 0 255",
+      "1.40 255 132 0 255",
+      "1.60 255 88 0 255",
+      "1.80 255 44 0 255",
       "2.00 255 0 0 255",
-      "3.50 180 0 0 255",
+      "2.20 245 0 0 255",
+      "2.40 235 0 0 255",
+      "2.60 225 0 0 255",
+      "2.80 215 0 0 255",
+      "3.00 205 0 0 255",
+      "3.20 195 0 0 255",
+      "3.40 185 0 0 255",
+      "3.60 168 0 0 255",
+      "3.80 144 0 0 255",
+      "4.00 120 0 0 255",
+      "4.20 96 0 0 255",
+      "4.40 72 0 0 255",
+      "4.60 48 0 0 255",
+      "4.80 24 0 0 255",
       "5.00 0 0 0 255",
       "nv 0 0 0 0"
     ],
     "ColoringAlgorithm": "interpolation",
-    "Roughnesses": [
+    "TRIs": [
       {
-        "Data": "iVBORw0KGgoAAAANSUhEUgAAA+cAAAPqCAYAAADxYC5iA ... uE+4z62ub9l//grYOddyi5WEqgAAAABJRU5ErkJggg==",
+        "Data": "iVBORw0KGgoAAAANSUhEUgAAA+cAAAPqCAYAAAD ... eedf9AG/9hd/+/8Dh183naMMrV8AAAAASUVORK5CYII=",
         "DataFormat": "png",
         "Actuality": "2021-04-26",
         "Origin": "DE-HE",
@@ -699,7 +734,7 @@ date: Tue, 29 Jul 2025 13:42:56 GMT
       "Detail": ""
     }
   }
-}       
+}
 
 </code></pre>
   </div>

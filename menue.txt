@@ -28,6 +28,10 @@
           </li>
 
           <li>
+            <a href="abbildung-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="abbildung-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -37,6 +41,14 @@
 
           <li>
             <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
@@ -80,6 +92,10 @@
             <a href="dienst-kolorierung.html">Kolorierung</a>
           </li>
 
+         <li>
+            <a href="dienst-farbrelief.html">Farbrelief</a>
+          </li>
+
           <li>
             <a href="dienst-hangneigung.html">Hangneigung</a>
           </li>
@@ -90,6 +106,14 @@
 
          <li>
             <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+ 
+         <li>
+            <a href="dienst-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+         <li>
+            <a href="dienst-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
@@ -129,6 +153,10 @@
             <a href="api-hillshaderequest.html">HillshadeRequest</a>
           </li>
 
+         <li>
+            <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
+          </li>
+
           <li>
             <a href="api-sloperequest.html">SlopeRequest</a>
           </li>
@@ -139,6 +167,14 @@
           
           <li>
             <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
+
+          <li>
+            <a href="api-trirequest.html">TRIRequest</a>
+          </li>
+
+         <li>
+            <a href="api-tpirequest.html">TPIRequest</a>
           </li>
         </ul>
       </li>

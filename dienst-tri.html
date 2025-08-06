@@ -3,12 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Schummerung (Dienst)</title>
+  <title>TRI (Dienst, Terrain Ruggedness Index)</title>
   <meta name="description" content=
-  "Generieren Sie Schummerungsabbildungen (Hillshade) für einen Kartenausschnitt in Deutschland basierend auf Koordinaten und verschiedenen Visualisierungsparametern.">
-  <meta name="keywords" content="Höhendaten, Schummerung, Hillshade, DGM, UTM, Lon/Lat, Abbildung, Visualisierung, Geodaten, Deutschland">
+  "Generieren Sie Abbildungen des Terrain Ruggedness Index (TRI) für einen Kartenausschnitt in Deutschland basierend auf Koordinaten und einem Farbtextschema.">
+  <meta name="keywords" content="Höhendaten, Terrain Ruggedness Index, TRI, DGM, UTM, Lon/Lat, Abbildung, Visualisierung, Geodaten, Deutschland, Farbschema">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .results-table pre {
+      max-height: 12em;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      padding: 5px;
+      border: 1px solid #ddd;
+      background-color: #f9f9f9;
+    }
+    
+    .input-group textarea {
+      width: calc(100% - 10px);
+      box-sizing: border-box;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .input-group input[type="text"],
+    .input-group input[type="number"],
+    .input-group select {
+      width: calc(100% - 10px);
+      box-sizing: border-box;
+    }
+
+    .input-group.color-scheme-input-group {
+        display: block;
+    }
+
+    .input-group.color-scheme-input-group label {
+        width: auto;
+        margin-bottom: 5px;
+    }
+
+    .input-group.color-scheme-input-group input[type="file"],
+    .input-group.color-scheme-input-group textarea {
+        width: 100%; /* volle Breite für Dateiauswahl und Textarea */
+        box-sizing: border-box;
+    }
+
+    .input-group.color-scheme-input-group input[type="file"] {
+        margin-bottom: 10px;
+    }
+
+    .radio-group {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+
+    .radio-group label {
+        display: inline-block;
+        margin-right: 15px;
+        font-weight: normal;
+    }
+
+    .radio-group input[type="radio"] {
+        margin-right: 5px;
+    }
+  </style>
 </head>
 <body>
   <nav>
@@ -199,25 +265,23 @@
   </nav>
 
   <div class="container">
-    <h3>Schummerung für einen Kartenausschnitt von 1x1 km</h3>
+    <h3>Terrain Ruggedness Index für einen Kartenausschnitt von 1x1 km</h3>
 
-    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Die Schummerung wird für die Kachel generiert, in der sich der
-    Referenzpunkt befindet. Das Ausgabeformat wird automatisch je nach gewähltem Eingabekoordinatensystem festgelegt: GeoTIFF für UTM-Koordinaten und PNG für
-    Lon/Lat-Koordinaten.</p>
+    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Der Terrain Ruggedness Index (TRI) wird für die Kachel generiert, in
+    der sich der Referenzpunkt befindet. Die Ausgabe erfolgt im GeoTIFF-Format (wenn UTM-Koordinaten eingegeben wurden) oder im PNG-Format (wenn
+    Lon/Lat-Koordinaten eingegeben wurden). Zusätzlich muss ein Farbtextschema für die Kolorierung angegeben werden.</p>
     <!-- Bereich für die Eingabefelder -->
 
     <div class="input-section section-box">
-      <!-- <h3>Eingabe</h3> -->
-
       <p>Option 1: Lon/Lat-Koordinaten</p>
-      <!-- Langenberg (Rothaargebirge, höchster Berg in NRW) -->
+      <!-- Hegekopf, Edersee, Hessen -->
 
       <div class="input-group">
-        <label for="longitude">Longitude</label> <input type="text" id="longitude" value="8.558333">
+        <label for="longitude">Longitude</label> <input type="text" id="longitude" value="8.964229">
       </div>
 
       <div class="input-group">
-        <label for="latitude">Latitude</label> <input type="text" id="latitude" value="51.276389">
+        <label for="latitude">Latitude</label> <input type="text" id="latitude" value="51.185913">
       </div>
 
       <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
@@ -237,57 +301,59 @@
       </div>
 
       <hr style="border-top: 1px solid #ddd; margin-top: 1em; margin-bottom: 1em;">
+      <!-- Kombinierter Bereich für Farbdatei und Farbschema -->
 
-      <div class="input-group">
-        <label for="gradientAlgorithm">Algorithmus</label> <select id="gradientAlgorithm">
-          <option value="Horn">
-            Horn
-          </option>
-          <option value="ZevenbergenThorne" selected>
-            ZevenbergenThorne
-          </option>
-        </select>
+      <div class="input-group color-scheme-input-group">
+        <label for="colorTextFileContent">Farbschema</label> <input type="file" id="colorFileInput" accept=".txt"> 
+
+        <textarea id="colorTextFileContent" rows="10"># Farbdefinition für TRI
+# Format: Wert Rot Grün Blau Alpha
+0.00 173 216 230 255
+0.20 57 176 130 255
+0.40 104 151 0 255
+0.60 255 195 0 255
+0.80 255 186 0 255
+1.00 255 177 0 255
+1.20 255 167 0 255
+1.40 255 132 0 255
+1.60 255 88 0 255
+1.80 255 44 0 255
+2.00 255 0 0 255
+2.20 245 0 0 255
+2.40 235 0 0 255
+2.60 225 0 0 255
+2.80 215 0 0 255
+3.00 205 0 0 255
+3.20 195 0 0 255
+3.40 185 0 0 255
+3.60 168 0 0 255
+3.80 144 0 0 255
+4.00 120 0 0 255
+4.20 96 0 0 255
+4.40 72 0 0 255
+4.60 48 0 0 255
+4.80 24 0 0 255
+5.00 0 0 0 255
+nv 0 0 0 0
+</textarea>
       </div>
+      <!-- Neuer Bereich für Farbzuweisung -->
 
-      <div class="input-group">
-        <label for="verticalExaggeration">Überhöhung</label> <input type="text" id="verticalExaggeration" value="1.0">
-      </div>
-
-      <div class="input-group">
-        <label for="azimuthOfLight">Azimut°</label> <input type="text" id="azimuthOfLight" value="315">
-      </div>
-
-      <div class="input-group">
-        <label for="altitudeOfLight">Höhe°</label> <input type="text" id="altitudeOfLight" value="45">
-      </div>
-
-      <div class="input-group">
-        <label for="shadingVariant">Variante</label> <select id="shadingVariant">
-          <option value="regular">
-            regular
-          </option>
-          <option value="multidirectional" selected>
-            multidirectional
-          </option>
-          <option value="combined">
-            combined
-          </option>
-          <option value="igor">
-            igor
-          </option>
-        </select>
+      <div class="radio-group">
+        <p><strong>Farbzuweisung</strong>
+        </p>
+        <label><input type="radio" name="coloringAlgorithm" value="interpolation" checked> Lineare Interpolation</label> <label><input type="radio" name=
+        "coloringAlgorithm" value="rounding"> Nächstgelegene Farbe</label>
       </div>
     </div>
     <!-- Bereich für den Button -->
 
     <div class="button-section section-box">
-      <button id="queryButton">Abfrage der Schummerung</button>
+      <button id="queryButton">Abfrage des Terrain Ruggedness Index</button>
     </div>
     <!-- Bereich für die Ausgabe -->
 
     <div class="output-section section-box">
-      <!-- <h3>Ergebnis</h3> -->
-
       <div id="results">
       </div>
     </div>
@@ -300,18 +366,15 @@
              const eastingInput = document.getElementById('easting');
              const northingInput = document.getElementById('northing');
 
-             const gradientAlgorithmSelect = document.getElementById('gradientAlgorithm');
-             const verticalExaggerationInput = document.getElementById('verticalExaggeration');
-             const azimuthOfLightInput = document.getElementById('azimuthOfLight');
-             const altitudeOfLightInput = document.getElementById('altitudeOfLight');
-             const shadingVariantSelect = document.getElementById('shadingVariant');
+             const colorFileInput = document.getElementById('colorFileInput');
+             const colorTextFileContentInput = document.getElementById('colorTextFileContent');
+             const coloringAlgorithmRadios = document.querySelectorAll('input[name="coloringAlgorithm"]');
 
 
              const queryButton = document.getElementById('queryButton');
              const resultsDiv = document.getElementById('results');
 
-             // Die API URL für Schummerung (muss ggf. angepasst werden)
-             const apiUrl = 'https://api.hoehendaten.de:14444/v1/hillshade';
+             const apiUrl = 'https://api.hoehendaten.de:14444/v1/tri';
 
              function displayResult(className, htmlContent) {
                  resultsDiv.className = className;
@@ -333,53 +396,19 @@
                 }
              }
 
-            // Function to update input field states based on selected shading variant
-            function updateInputStates() {
-                const selectedVariant = shadingVariantSelect.value;
-
-                // Handle AzimuthOfLight
-                if (selectedVariant === 'multidirectional') {
-                    // Store current value if it's a number and not "nicht anwendbar"
-                    if (!isNaN(parseFloat(azimuthOfLightInput.value)) && azimuthOfLightInput.value.trim() !== "nicht anwendbar") {
-                         azimuthOfLightInput.dataset.originalValue = azimuthOfLightInput.value;
-                    } else if (!azimuthOfLightInput.dataset.originalValue) {
-                         // If no original value is set (e.g., initial load and it's already multi), store default
-                         azimuthOfLightInput.dataset.originalValue = "315";
-                    }
-                    azimuthOfLightInput.value = "nicht anwendbar";
-                    azimuthOfLightInput.disabled = true;
+            colorFileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        colorTextFileContentInput.value = e.target.result;
+                    };
+                    reader.readAsText(file);
                 } else {
-                    azimuthOfLightInput.disabled = false;
-                    // Restore original value or default
-                    azimuthOfLightInput.value = azimuthOfLightInput.dataset.originalValue || "315";
-                    delete azimuthOfLightInput.dataset.originalValue; // Clean up the data attribute
+                    // Optional: Setze den Inhalt des Textbereichs zurück, wenn keine Datei ausgewählt ist
+                    // colorTextFileContentInput.value = '';
                 }
-
-                // Handle AltitudeOfLight
-                if (selectedVariant === 'igor') {
-                    // Store current value if it's a number and not "nicht anwendbar"
-                    if (!isNaN(parseFloat(altitudeOfLightInput.value)) && altitudeOfLightInput.value.trim() !== "nicht anwendbar") {
-                         altitudeOfLightInput.dataset.originalValue = altitudeOfLightInput.value;
-                    } else if (!altitudeOfLightInput.dataset.originalValue) {
-                         // If no original value is set (e.g., initial load and it's already igor), store default
-                         altitudeOfLightInput.dataset.originalValue = "45";
-                    }
-                    altitudeOfLightInput.value = "nicht anwendbar";
-                    altitudeOfLightInput.disabled = true;
-                } else {
-                    altitudeOfLightInput.disabled = false;
-                    // Restore original value or default
-                    altitudeOfLightInput.value = altitudeOfLightInput.dataset.originalValue || "45";
-                    delete altitudeOfLightInput.dataset.originalValue; // Clean up the data attribute
-                }
-            }
-
-            // Add event listener to shading variant select
-            shadingVariantSelect.addEventListener('change', updateInputStates);
-
-            // Initial call to set correct input states on page load
-            updateInputStates();
-
+            });
 
              queryButton.addEventListener('click', async () => {
                  const longitude = parseFloat(longitudeInput.value);
@@ -388,15 +417,15 @@
                  const easting = parseFloat(eastingInput.value);
                  const northing = parseFloat(northingInput.value);
 
-                 const gradientAlgorithm = gradientAlgorithmSelect.value;
-                 const verticalExaggeration = parseFloat(verticalExaggerationInput.value);
-
-                 // Retrieve the actual numerical value for Azimuth and Altitude.
-                 // If the field displays "nicht anwendbar", use the original stored value or the default.
-                 const azimuthOfLight = azimuthOfLightInput.disabled ? parseFloat(azimuthOfLightInput.dataset.originalValue || "315") : parseInt(azimuthOfLightInput.value, 10);
-                 const altitudeOfLight = altitudeOfLightInput.disabled ? parseFloat(altitudeOfLightInput.dataset.originalValue || "45") : parseInt(altitudeOfLightInput.value, 10);
-                 const shadingVariant = shadingVariantSelect.value;
-
+                 const colorTextFileContent = colorTextFileContentInput.value.split('\n'); // Inhalt des Textbereichs wird immer verwendet
+                 
+                 let selectedColoringAlgorithm = '';
+                 for (const radio of coloringAlgorithmRadios) {
+                     if (radio.checked) {
+                         selectedColoringAlgorithm = radio.value;
+                         break;
+                     }
+                 }
 
                  let useLonLat = !isNaN(longitude) && !isNaN(latitude) && longitudeInput.value.trim() !== "" && latitudeInput.value.trim() !== "";
                  let useUtm = !isNaN(zone) && (zone === 32 || zone === 33) && !isNaN(easting) && !isNaN(northing) && zoneInput.value.trim() !== "" && eastingInput.value.trim() !== "" && northingInput.value.trim() !== "";
@@ -409,25 +438,20 @@
                  displayResult('loading', '<p class="status-message">Lade ... Sende Anfrage an den Dienst ...</p>');
 
                  const requestPayload = {
-                     Type: "HillshadeRequest",
-                     ID: "WebApp-Hillshade-" + Date.now() + "-" + Math.random().toString(36).substring(7),
+                     Type: "TRIRequest",
+                     ID: "WebApp-TRI-" + Date.now() + "-" + Math.random().toString(36).substring(7),
                      Attributes: {
-                         Longitude: useLonLat ? longitude : 0.0, // Send 0 if not used, API should ignore
-                         Latitude: useLonLat ? latitude : 0.0,   // Send 0 if not used, API should ignore
-                         Zone: useUtm ? zone : 0,                // Send 0 if not used, API should ignore
-                         Easting: useUtm ? easting : 0.0,        // Send 0 if not used, API should ignore
-                         Northing: useUtm ? northing : 0.0,      // Send 0 if not used, API should ignore
-                         GradientAlgorithm: gradientAlgorithm,
-                         VerticalExaggeration: verticalExaggeration,
-                         // Send Azimuth/Altitude regardless of disabled state; API should handle ignoring them based on ShadingVariant
-                         AzimuthOfLight: azimuthOfLight,
-                         AltitudeOfLight: altitudeOfLight,
-                         ShadingVariant: shadingVariant
+                         Longitude: useLonLat ? longitude : 0.0,
+                         Latitude: useLonLat ? latitude : 0.0,
+                         Zone: useUtm ? zone : 0,
+                         Easting: useUtm ? easting : 0.0,
+                         Northing: useUtm ? northing : 0.0,
+                         ColorTextFileContent: colorTextFileContent,
+                         ColoringAlgorithm: selectedColoringAlgorithm // Hinzugefügt
                      }
                  };
 
-                 // If UTM is primary and Lon/Lat is also filled, clear Lon/Lat for the request
-                 // to avoid ambiguity if the user filled both but intended UTM.
+                 // If UTM is primary and Lon/Lat is also filled, clear Lon/Lat for the request to avoid ambiguity if the user filled both but intended UTM.
                  if (useUtm) {
                      requestPayload.Attributes.Longitude = 0.0;
                      requestPayload.Attributes.Latitude = 0.0;
@@ -444,7 +468,7 @@
                          headers: {
                              'Content-Type': 'application/json',
                              'Accept': 'application/json',
-                             'Accept-Encoding': 'gzip' // Request gzip compression
+                             'Accept-Encoding': 'gzip'
                          },
                          body: JSON.stringify(requestPayload)
                      });
@@ -453,18 +477,12 @@
                      let rawText = null;
 
                      try {
-                         // Use response.arrayBuffer() for potentially gzipped content if fetch doesn't auto-decompress
-                         // However, fetch usually handles gzip with Accept-Encoding. Let's try parsing as text first.
-                         // If that fails or indicates gzip, we could handle it manually if needed, but typically not required.
                          rawText = await response.text();
                          data = JSON.parse(rawText);
                          console.log("API-Antwort (geparstes JSON):", data);
                      } catch (jsonError) {
                          console.warn("JSON-Parsen fehlgeschlagen:", jsonError);
                          console.log("Rohe Antwort (Text):", rawText);
-                         // If parsing fails, the rawText might be the gzipped content itself
-                         // For simplicity in this client-side script, we assume fetch handles gzip.
-                         // If not, a library for gzip decompression would be needed here.
                      }
 
                      if (!response.ok) {
@@ -478,12 +496,9 @@
                              if (errorAttributes.Zone !== undefined && errorAttributes.Zone !== 0) errorHtml += `<tr><td><strong>Zone</strong></td><td>${errorAttributes.Zone}</td></tr>`;
                              if (errorAttributes.Easting !== undefined && errorAttributes.Easting !== 0) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
                              if (errorAttributes.Northing !== undefined && errorAttributes.Northing !== 0) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
-                             if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
-                             if (errorAttributes.VerticalExaggeration !== undefined) errorHtml += `<tr><td><strong>Überhöhung</strong></td><td>${errorAttributes.VerticalExaggeration}</td></tr>`;
-                             // Display Azimuth/Altitude from error response if they were part of the request attributes
-                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut°</strong></td><td>${errorAttributes.AzimuthOfLight}</td></tr>`;
-                             if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe°</strong></td><td>${errorAttributes.AltitudeOfLight}</td></tr>`;
-                             if (errorAttributes.ShadingVariant !== undefined) errorHtml += `<tr><td><strong>Variante</strong></td><td>${errorAttributes.ShadingVariant}</td></tr>`;
+                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`;
+                             if (errorAttributes.ColoringAlgorithm !== undefined) errorHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${errorAttributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                              if (errorAttributes.Error) {
                                  const errorDetail = errorAttributes.Error;
@@ -512,12 +527,9 @@
                              if (errorAttributes.Zone !== undefined && errorAttributes.Zone !== 0) errorHtml += `<tr><td><strong>Zone</strong></td><td>${errorAttributes.Zone}</td></tr>`;
                              if (errorAttributes.Easting !== undefined && errorAttributes.Easting !== 0) errorHtml += `<tr><td><strong>Easting</strong></td><td>${errorAttributes.Easting}</td></tr>`;
                              if (errorAttributes.Northing !== undefined && errorAttributes.Northing !== 0) errorHtml += `<tr><td><strong>Northing</strong></td><td>${errorAttributes.Northing}</td></tr>`;
-                             if (errorAttributes.GradientAlgorithm !== undefined) errorHtml += `<tr><td><strong>Algorithmus</strong></td><td>${errorAttributes.GradientAlgorithm}</td></tr>`;
-                             if (errorAttributes.VerticalExaggeration !== undefined) errorHtml += `<tr><td><strong>Überhöhung</strong></td><td>${errorAttributes.VerticalExaggeration}</td></tr>`;
-                              // Display Azimuth/Altitude from the error response if they were sent in the request
-                             if (errorAttributes.AzimuthOfLight !== undefined) errorHtml += `<tr><td><strong>Azimut°</strong></td><td>${errorAttributes.AzimuthOfLight}°</td></tr>`;
-                             if (errorAttributes.AltitudeOfLight !== undefined) errorHtml += `<tr><td><strong>Höhe°</strong></td><td>${errorAttributes.AltitudeOfLight}°</td></tr>`;
-                             if (errorAttributes.ShadingVariant !== undefined) errorHtml += `<tr><td><strong>Variante</strong></td><td>${errorAttributes.ShadingVariant}</td></tr>`;
+                             if (Array.isArray(errorAttributes.ColorTextFileContent)) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                             else if (errorAttributes.ColorTextFileContent !== undefined) errorHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${errorAttributes.ColorTextFileContent}</pre></td></tr>`;
+                             if (errorAttributes.ColoringAlgorithm !== undefined) errorHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${errorAttributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                              if (errorAttributes.Error) {
                                  const errorDetail = errorAttributes.Error;
@@ -532,7 +544,7 @@
                              return;
                          }
 
-                         let resultsHtml = '<p class="status-message">Schummerung erfolgreich verarbeitet:</p>';
+                         let resultsHtml = '<p class="status-message">Terrain Ruggedness Index erfolgreich verarbeitet:</p>';
                          resultsHtml += '<table class="results-table">';
                          const attributes = data.Attributes;
                           // Display input parameters that were used
@@ -541,49 +553,36 @@
                          if (attributes.Zone !== undefined && attributes.Zone !== 0) resultsHtml += `<tr><td><strong>Zone</strong></td><td>${attributes.Zone}</td></tr>`;
                          if (attributes.Easting !== undefined && attributes.Easting !== 0) resultsHtml += `<tr><td><strong>Easting</strong></td><td>${attributes.Easting}</td></tr>`;
                          if (attributes.Northing !== undefined && attributes.Northing !== 0) resultsHtml += `<tr><td><strong>Northing</strong></td><td>${attributes.Northing}</td></tr>`;
-                         if (attributes.GradientAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Algorithmus</strong></td><td>${attributes.GradientAlgorithm}</td></tr>`;
-                         if (attributes.VerticalExaggeration !== undefined) resultsHtml += `<tr><td><strong>Überhöhung</strong></td><td>${attributes.VerticalExaggeration}</td></tr>`;
-                          // Only show Azimuth/Altitude in the result if they were actually used (not disabled/ignored by ShadingVariant)
-                         // Here we check against the _actual_ values from the API response, which should reflect what was used.
-                         // For Azimuth, if multidirectional was selected, it will likely return a default like 315, even if not explicitly used for calculation.
-                         // For Altitude, if igor was selected, it will likely return 45.
-                         // It's generally better to show what the API processed, rather than trying to replicate client-side logic.
-                         // However, if the goal is to show what the user *provided* or what was *relevant* to the specific variant,
-                         // you could use a similar check as in `updateInputStates` or `requestPayload`.
-                         // For displaying results, it's safer to rely on the API's returned attributes.
-                         // The current implementation here simply displays what the API returned for AzimuthOfLight and AltitudeOfLight.
-                         // If the API explicitly says they were "0" or a specific "ignored" value when not applicable, you could adapt.
-                         // Given the API likely returns the default or the passed value regardless of it being used, displaying it is fine.
-                         if (attributes.AzimuthOfLight !== undefined) resultsHtml += `<tr><td><strong>Azimut°</strong></td><td>${attributes.AzimuthOfLight}°</td></tr>`;
-                         if (attributes.AltitudeOfLight !== undefined) resultsHtml += `<tr><td><strong>Höhe°</strong></td><td>${attributes.AltitudeOfLight}°</td></tr>`;
-                         if (attributes.ShadingVariant !== undefined) resultsHtml += `<tr><td><strong>Variante</strong></td><td>${attributes.ShadingVariant}</td></tr>`;
+                         if (Array.isArray(attributes.ColorTextFileContent)) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent.join('\n')}</pre></td></tr>`;
+                         else if (attributes.ColorTextFileContent !== undefined) resultsHtml += `<tr><td><strong>Farbschema</strong></td><td><pre>${attributes.ColorTextFileContent}</pre></td></tr>`;
+                         if (attributes.ColoringAlgorithm !== undefined) resultsHtml += `<tr><td><strong>Farbzuweisung</strong></td><td>${attributes.ColoringAlgorithm}</td></tr>`; // Hinzugefügt
 
                          resultsHtml += '</table>';
 
-                         if (attributes.Hillshades && Array.isArray(attributes.Hillshades) && attributes.Hillshades.length > 0) {
-                             resultsHtml += '<h4 style="margin-top: 1.5em;">Generierte Schummerung(en):</h4>';
-                             attributes.Hillshades.forEach((hillshade, index) => {
+                         if (attributes.TRIs && Array.isArray(attributes.TRIs) && attributes.TRIs.length > 0) {
+                             resultsHtml += '<h4 style="margin-top: 1.5em;">Generierter Terrain Ruggedness Index (TRI):</h4>';
+                             attributes.TRIs.forEach((tri, index) => {
                                  resultsHtml += `<h4 style="margin-top: 1.5em;">Abbildung ${index + 1}</h4>`;
                                  resultsHtml += '<table class="results-table">';
-                                 if (hillshade.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${hillshade.TileIndex}</td></tr>`;
-                                 if (hillshade.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${hillshade.Actuality}</td></tr>`;
-                                 if (hillshade.Origin !== undefined) resultsHtml += `<tr><td><strong>Ursprung</strong></td><td>${hillshade.Origin}</td></tr>`;
-                                 if (hillshade.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${hillshade.Attribution}</td></tr>`;
-                                 if (hillshade.DataFormat !== undefined) resultsHtml += `<tr><td><strong>Format</strong></td><td>${hillshade.DataFormat}</td></tr>`;
+                                 if (tri.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${tri.TileIndex}</td></tr>`;
+                                 if (tri.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${tri.Actuality}</td></tr>`;
+                                 if (tri.Origin !== undefined) resultsHtml += `<tr><td><strong>Ursprung</strong></td><td>${tri.Origin}</td></tr>`;
+                                 if (tri.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${tri.Attribution}</td></tr>`;
+                                 if (tri.DataFormat !== undefined) resultsHtml += `<tr><td><strong>Format</strong></td><td>${tri.DataFormat}</td></tr>`;
 
                                  // Display Bounding Box if available (relevant for PNG)
-                                  if (hillshade.BoundingBox && (hillshade.BoundingBox.MinLon !== 0 || hillshade.BoundingBox.MinLat !== 0 || hillshade.BoundingBox.MaxLon !== 0 || hillshade.BoundingBox.MaxLat !== 0)) {
+                                  if (tri.BoundingBox && (tri.BoundingBox.MinLon !== 0 || tri.BoundingBox.MinLat !== 0 || tri.BoundingBox.MaxLon !== 0 || tri.BoundingBox.MaxLat !== 0)) {
                                      resultsHtml += `<tr><td colspan="2"><strong>Bounding Box (WGS84):</strong></td></tr>`;
-                                     resultsHtml += `<tr><td>MinLon</td><td>${hillshade.BoundingBox.MinLon}</td></tr>`;
-                                     resultsHtml += `<tr><td>MaxLon</td><td>${hillshade.BoundingBox.MaxLon}</td></tr>`;
-                                     resultsHtml += `<tr><td>MinLat</td><td>${hillshade.BoundingBox.MinLat}</td></tr>`;
-                                     resultsHtml += `<tr><td>MaxLat</td><td>${hillshade.BoundingBox.MaxLat}</td></tr>`;
+                                     resultsHtml += `<tr><td>MinLon</td><td>${tri.BoundingBox.MinLon}</td></tr>`;
+                                     resultsHtml += `<tr><td>MaxLon</td><td>${tri.BoundingBox.MaxLon}</td></tr>`;
+                                     resultsHtml += `<tr><td>MinLat</td><td>${tri.BoundingBox.MinLat}</td></tr>`;
+                                     resultsHtml += `<tr><td>MaxLat</td><td>${tri.BoundingBox.MaxLat}</td></tr>`;
                                   }
 
                                  resultsHtml += '</table>';
 
-                                 if (hillshade.Data && hillshade.TileIndex && hillshade.DataFormat) {
-                                     const decodedBinaryString = base64ToBinaryString(hillshade.Data);
+                                 if (tri.Data && tri.TileIndex && tri.DataFormat) {
+                                     const decodedBinaryString = base64ToBinaryString(tri.Data);
                                      if (decodedBinaryString) {
                                          const byteNumbers = new Array(decodedBinaryString.length);
                                          for (let i = 0; i < decodedBinaryString.length; i++) {
@@ -594,13 +593,14 @@
                                          let mimeType = 'application/octet-stream'; // Default
                                          let fileExtension = 'bin';
 
-                                         switch(hillshade.DataFormat.toLowerCase()) {
+                                         switch(tri.DataFormat.toLowerCase()) {
                                              case 'geotiff':
                                                  mimeType = 'image/tiff';
                                                  fileExtension = 'tif';
                                                  break;
                                              case 'png':
                                                  mimeType = 'image/png';
+
                                                  fileExtension = 'png';
                                                  break;
                                          }
@@ -610,19 +610,19 @@
                                          const downloadUrl = URL.createObjectURL(blob);
 
                                          // Filename: TileIndex + optional Origin + Format extension
-                                         const originPart = hillshade.Origin ? `.${hillshade.Origin.toLowerCase()}` : '' ;
-                                         const outputFileName = `${hillshade.TileIndex}${originPart}.schummerung.${fileExtension}`;
+                                         const originPart = tri.Origin ? `.${tri.Origin.toLowerCase()}` : '' ;
+                                         const outputFileName = `${tri.TileIndex}${originPart}.tri.${fileExtension}`;
 
                                          resultsHtml += `<p class="download-link-area"><a href="${downloadUrl}" download="${outputFileName}">Download '${outputFileName}'</a></p>`;
                                      } else {
-                                         resultsHtml += `<p class="status-message error-message">Fehler: Schummerungsdaten (Base64) für Tile ${hillshade.TileIndex} konnten nicht dekodiert werden.</p>`;
+                                         resultsHtml += `<p class="status-message error-message">Fehler: TRI-Daten (Base64) für Tile ${tri.TileIndex} konnten nicht dekodiert werden.</p>`;
                                      }
                                  } else {
-                                     resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${hillshade.TileIndex || 'Unbekannt'}.</p>`;
+                                     resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${tri.TileIndex || 'Unbekannt'}.</p>`;
                                  }
                              });
                          } else {
-                             resultsHtml += '<p>Keine Schummerungs-Daten in der Antwort enthalten.</p>';
+                             resultsHtml += '<p>Keine TRI-Daten in der Antwort enthalten.</p>';
                          }
                          displayResult('success', resultsHtml);
 
@@ -664,7 +664,7 @@
                 }
             });
             eastingInput.addEventListener('input', () => {
-                 if(zoneInput.value.trim() !== "" || eastingInput.value.trim() !== "" || northingInput.value.trim() !== "") {
+                 if(eastingInput.value.trim() !== "" || zoneInput.value.trim() !== "" || northingInput.value.trim() !== "") {
                     longitudeInput.value = "";
                     latitudeInput.value = "";
                 }

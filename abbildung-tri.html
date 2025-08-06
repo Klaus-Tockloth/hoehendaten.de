@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abbildung - TRI - Topographic Ruggedness Index</title>
+  <title>TRI (Abbildung, Terrain Ruggedness Index)</title>
   <meta name="description" content=
-  "Entdecken Sie den Topographic Ruggedness Index (TRI) zur Quantifizierung der Unebenheit des Geländes und seine vielfältigen Anwendungen in Ökologie, Hydrologie und Planung.">
-  <meta name="keywords" content=
-  "Topographic Ruggedness Index, TRI, Geländerauheit, Unebenheit, DGM, Geomorphologie, Reliefanalyse, Zerklüftung, Habitatmodellierung">
+  "Entdecken Sie den Terrain Ruggedness Index (TRI) zur Quantifizierung der Unebenheit des Geländes und seine vielfältigen Anwendungen in Ökologie, Hydrologie und Planung.">
+  <meta name="keywords" content="Terrain Ruggedness Index, TRI, Geländerauheit, Unebenheit, DGM, Geomorphologie, Reliefanalyse, Zerklüftung, Habitatmodellierung">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -42,6 +41,10 @@
           </li>
 
           <li>
+            <a href="abbildung-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="abbildung-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -54,13 +57,17 @@
           </li>
 
           <li>
-            <a href="abbildung-tri.html">TRI</a>
+            <a href="abbildung-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
@@ -99,6 +106,10 @@
           </li>
 
           <li>
+            <a href="dienst-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="dienst-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -111,7 +122,11 @@
           </li>
 
           <li>
-            <a href="dienst-tri.html">TRI</a>
+            <a href="dienst-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="dienst-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
@@ -152,6 +167,10 @@
           </li>
 
           <li>
+            <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
+          </li>
+
+          <li>
             <a href="api-sloperequest.html">SlopeRequest</a>
           </li>
 
@@ -166,6 +185,10 @@
           <li>
             <a href="api-trirequest.html">TRIRequest</a>
           </li>
+
+          <li>
+            <a href="api-tpirequest.html">TPIRequest</a>
+          </li>
         </ul>
       </li>
 
@@ -176,11 +199,11 @@
   </nav>
 
   <div class="container">
-    <h3>TRI - Topographic Ruggedness Index: Quantifizierung der Unebenheit des Geländes</h3>
+    <h3>TRI - Terrain Ruggedness Index</h3>
 
-    <p>Der Topographic Ruggedness Index (TRI) ist ein geomorphometrisches Maß, das die Heterogenität oder Unebenheit des Geländes quantifiziert. Er berechnet für
-    jeden Punkt die absolute Höhenänderung zu seinen direkten Nachbarpunkten. Ein hoher TRI-Wert weist auf ein raues, unebenes Gelände hin, während ein niedriger
-    Wert eine ebene oder glatte Oberfläche anzeigt. In Verbindung mit hochauflösenden DGM1-Höhendaten ermöglicht der TRI sehr detaillierte Einblicke in die
+    <p>Der Terrain Ruggedness Index (TRI) ist ein geomorphometrisches Maß, das die Heterogenität oder Unebenheit des Geländes quantifiziert. Er berechnet für jeden
+    Punkt die absolute Höhenänderung zu seinen direkten Nachbarpunkten. Ein hoher TRI-Wert weist auf ein raues, unebenes Gelände hin, während ein niedriger Wert
+    eine ebene oder glatte Oberfläche anzeigt. In Verbindung mit hochauflösenden DGM1-Höhendaten ermöglicht der TRI sehr detaillierte Einblicke in die
     Geländebeschaffenheit. Zu den wichtigsten Anwendungsbereichen gehören:</p>
 
     <ul>
@@ -208,156 +231,100 @@
 
     <hr>
 
-    <h3>Berechnungsgrundlage (Wilson-Algorithmus)</h3>
+    <h3>Berechnungsgrundlage (Riley-Algorithmus)</h3>
 
-    <p>Der TRI wird nach dem Algorithmus von Wilson berechnet. Dieser misst die Rauheit des Geländes als Quadratwurzel der Summe der quadrierten Höhendifferenzen
-    zwischen einem zentralen Punkt und seinen acht umgebenden Nachbarpunkten. Die Formel lautet:</p>
-    <img src="./images/tri-wilson-600x260.png" alt="TRI-Algorithmus nach Wilson." style="max-width: 300px; height: auto;">
-    <p><small>TRI-Algorithmus nach Wilson.</small>
+    <p>Der Terrain Ruggedness Index (TRI) basiert auf der Methode von Riley et al. (1999) und quantifiziert die Geländerauheit, indem er den Höhenunterschied
+    zwischen einem zentralen Pixel und seinen acht direkten Nachbarpixeln misst. Die Formel lautet:</p>
+    <img src="./images/tri-riley-600x200.png" alt="TRI-Algorithmus nach Riley." style="max-width: 300px; height: auto;">
+    <p><small>TRI-Algorithmus nach Riley.</small>
     </p>
 
-    <p>Dabei ist <i>z<sub>xy</sub></i> die Höhe des zentralen Punktes und <i>z<sub>i</sub></i> sind die Höhen der acht Nachbarpunkte.</p>
+    <p>Dabei ist z₀ die Höhe der zentralen Zelle und zᵢ sind die Höhe der acht umgebenden Zellen.</p>
+
+    <p>Ein TRI-Wert von 0 indiziert eine vollkommen ebene Fläche, bei der alle neun verglichenen Pixel die gleiche Höhe aufweisen. Mit zunehmender Rauheit und
+    Steilheit des Geländes steigen die TRI-Werte an.</p>
 
     <hr>
 
     <h3>Beispielberechnungen für einen Ausschnitt von 3x3 Punkten</h3>
 
-    <p><strong>Flaches Gelände:</strong> Ein komplett flaches Areal, wie eine Wasseroberfläche oder eine landwirtschaftliche Ebene.</p>
-
     <table>
       <tr>
-        <td>10.0</td>
-        <td>10.0</td>
-        <td>10.0</td>
+        <td>10.1 m</td>
+        <td>10.0 m</td>
+        <td>10.1 m</td>
       </tr>
 
       <tr>
-        <td>10.0</td>
-        <td><strong>10.0</strong>
+        <td>10.0 m</td>
+        <td><strong>10.0 m</strong>
         </td>
-        <td>10.0</td>
+        <td>10.0 m</td>
       </tr>
 
       <tr>
-        <td>10.0</td>
-        <td>10.0</td>
-        <td>10.0</td>
+        <td>10.1 m</td>
+        <td>10.0 m</td>
+        <td>10.1 m</td>
       </tr>
     </table>
 
-    <p>Punkt <i>z<sub>xy</sub></i> = 10.0, TRI = 0</p>
-
-    <p><strong>Leicht welliges Gelände / sanfte Böschung:</strong> Eine leichte, gleichmäßige Neigung mit einem Höhenunterschied von 20 cm pro Meter.</p>
+    <p>TRI = 0.2 (charakterisiert ein nahezu flaches Gelände)</p>
 
     <table>
       <tr>
-        <td>10.4</td>
-        <td>10.3</td>
-        <td>10.2</td>
+        <td>10.8 m</td>
+        <td>10.9 m</td>
+        <td>10.8 m</td>
       </tr>
 
       <tr>
-        <td>10.3</td>
-        <td><strong>10.2</strong>
+        <td>10.4 m</td>
+        <td><strong>10.5 m</strong>
         </td>
-        <td>10.1</td>
+        <td>10.4 m</td>
       </tr>
 
       <tr>
-        <td>10.2</td>
-        <td>10.1</td>
-        <td>10.0</td>
+        <td>10.1 m</td>
+        <td>10.0 m</td>
+        <td>10.1 m</td>
       </tr>
     </table>
 
-    <p>Punkt <i>z<sub>xy</sub></i> = 10.2, TRI = 0.45</p>
-
-    <p><strong>Kleiner Erdwall / lokale Unebenheit:</strong> Ein kleiner, menschengemachter Erdwall oder eine natürliche Erhebung von einem halben Meter Höhe.</p>
+    <p>TRI = 0.96 (charakterisiert eine leicht unebene, geneigte Fläche)</p>
 
     <table>
       <tr>
-        <td>10.0</td>
-        <td>10.0</td>
-        <td>11.0</td>
+        <td>12.1 m</td>
+        <td>12.0 m</td>
+        <td>11.8 m</td>
       </tr>
 
       <tr>
-        <td>10.0</td>
-        <td><strong>10.5</strong>
+        <td>11.9 m</td>
+        <td><strong>10.5 m</strong>
         </td>
-        <td>10.0</td>
+        <td>9.5 m</td>
       </tr>
 
       <tr>
-        <td>10.0</td>
-        <td>10.0</td>
-        <td>10.0</td>
+        <td>11.5 m</td>
+        <td>9.1 m</td>
+        <td>8.9 m</td>
       </tr>
     </table>
 
-    <p>Punkt <i>z<sub>xy</sub></i> = 10.5, TRI = 1.41</p>
-
-    <p><strong>Steile Kante / Böschung:</strong> Eine steilere Böschung oder ein kleiner Absatz mit 2 Metern Höhenunterschied zum direkt angrenzenden Gelände. Dies
-    ist eine deutlich wahrnehmbare Kante im Gelände.</p>
-
-    <table>
-      <tr>
-        <td>10.0</td>
-        <td>10.0</td>
-        <td>10.0</td>
-      </tr>
-
-      <tr>
-        <td>10.0</td>
-        <td><strong>10.0</strong>
-        </td>
-        <td>10.0</td>
-      </tr>
-
-      <tr>
-        <td>12.0</td>
-        <td>12.0</td>
-        <td>12.0</td>
-      </tr>
-    </table>
-
-    <p>Punkt <i>z<sub>xy</sub></i> = 10.0, TRI = 3.46</p>
-
-    <p><strong>Sehr steile Felskante (Extrembeispiel):</strong> Eine fast senkrechte Kante von 5 Metern Höhe, wie sie in einem Steinbruch oder an einer Felswand
-    vorkommen kann.</p>
-
-    <table>
-      <tr>
-        <td>10.0</td>
-        <td>10.0</td>
-        <td>10.0</td>
-      </tr>
-
-      <tr>
-        <td>10.0</td>
-        <td><strong>10.0</strong>
-        </td>
-        <td>10.0</td>
-      </tr>
-
-      <tr>
-        <td>15.0</td>
-        <td>15.0</td>
-        <td>15.0</td>
-      </tr>
-    </table>
-
-    <p>Punkt <i>z<sub>xy</sub></i> = 10.0, TRI = 8.66</p>
+    <p>TRI = 3.87 (charakterisiert eine signifikante Geländerauheit)</p>
 
     <hr>
 
-    <h3>Typische Landschaften und deren TRI-Wertebereiche</h3>
+    <h3>Typische Landschaften</h3>
 
     <div class="table-responsive">
       <table>
         <thead>
           <tr>
-            <th style="text-align:left">TRI-Wert</th>
             <th style="text-align:left">Beschreibung</th>
             <th style="text-align:left">Charakteristika und Beispiele</th>
             <th style="text-align:left">Lage in Deutschland</th>
@@ -366,8 +333,6 @@
 
         <tbody>
           <tr>
-            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
-            </td>
             <td style="text-align:left"><strong>Eben bis minimal uneben</strong>
             </td>
             <td style="text-align:left">
@@ -379,8 +344,6 @@
           </tr>
 
           <tr>
-            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
-            </td>
             <td style="text-align:left"><strong>Leicht uneben / geringe Rauheit</strong>
             </td>
             <td style="text-align:left">
@@ -392,8 +355,6 @@
           </tr>
 
           <tr>
-            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
-            </td>
             <td style="text-align:left"><strong>Mäßig uneben / moderate Rauheit</strong>
             </td>
             <td style="text-align:left">
@@ -406,8 +367,6 @@
           </tr>
 
           <tr>
-            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
-            </td>
             <td style="text-align:left"><strong>Ausgeprägt uneben / hohe Rauheit</strong>
             </td>
             <td style="text-align:left">
@@ -420,8 +379,6 @@
           </tr>
 
           <tr>
-            <td style="text-align:left; white-space: nowrap;"><strong>TODO</strong>
-            </td>
             <td style="text-align:left"><strong>Extrem rau und komplex</strong>
             </td>
             <td style="text-align:left">
@@ -456,7 +413,6 @@
             <th>TRI</th>
             <th>RGBA</th>
             <th>Farbe</th>
-            <th>Farbname</th>
           </tr>
         </thead>
 
@@ -465,370 +421,243 @@
             <td>0.00</td>
             <td>173 216 230 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(173, 216, 230, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(173, 216, 230, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Hellblau</td>
-          </tr>
-
-          <tr>
-            <td>0.05</td>
-            <td>144 206 205 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(144, 206, 205, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Blasseres Türkis</td>
-          </tr>
-
-          <tr>
-            <td>0.10</td>
-            <td>115 196 180 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(115, 196, 180, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Mittleres Türkis</td>
-          </tr>
-
-          <tr>
-            <td>0.15</td>
-            <td>86 186 155 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(86, 186, 155, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Kräftiges Türkis/Grün</td>
           </tr>
 
           <tr>
             <td>0.20</td>
             <td>57 176 130 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(57, 176, 130, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(57, 176, 130, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Dunkleres Türkis/Grün</td>
-          </tr>
-
-          <tr>
-            <td>0.25</td>
-            <td>28 166 105 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(28, 166, 105, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Dunkelgrünlich-Türkis</td>
-          </tr>
-
-          <tr>
-            <td>0.30</td>
-            <td>0 156 80 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 156, 80, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Intensives Grün</td>
-          </tr>
-
-          <tr>
-            <td>0.35</td>
-            <td>0 146 55 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 146, 55, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Dunkleres Grün</td>
           </tr>
 
           <tr>
             <td>0.40</td>
-            <td>0 136 30 255</td>
+            <td>104 151 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 136, 30, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(104, 151, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Sehr dunkles Grün</td>
-          </tr>
-
-          <tr>
-            <td>0.45</td>
-            <td>28 126 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(28, 126, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Dunkles Olivgrün</td>
-          </tr>
-
-          <tr>
-            <td>0.50</td>
-            <td>57 116 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(57, 116, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Olivgrün</td>
-          </tr>
-
-          <tr>
-            <td>0.55</td>
-            <td>86 106 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(86, 106, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Hellbraunes Oliv</td>
           </tr>
 
           <tr>
             <td>0.60</td>
-            <td>115 96 0 255</td>
+            <td>255 195 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(115, 96, 0, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(255, 195, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Gold-Oliv</td>
-          </tr>
-
-          <tr>
-            <td>0.65</td>
-            <td>144 86 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(144, 86, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Orange-Braun</td>
-          </tr>
-
-          <tr>
-            <td>0.70</td>
-            <td>173 76 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(173, 76, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Rostorange</td>
-          </tr>
-
-          <tr>
-            <td>0.75</td>
-            <td>202 66 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(202, 66, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Dunkelorange</td>
           </tr>
 
           <tr>
             <td>0.80</td>
-            <td>231 56 0 255</td>
+            <td>255 186 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(231, 56, 0, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(255, 186, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Kräftiges Orange</td>
-          </tr>
-
-          <tr>
-            <td>0.85</td>
-            <td>255 46 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(255, 46, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Leuchtendes Rot-Orange</td>
-          </tr>
-
-          <tr>
-            <td>0.90</td>
-            <td>255 36 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(255, 36, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Intensives Rot</td>
-          </tr>
-
-          <tr>
-            <td>0.95</td>
-            <td>255 26 0 255</td>
-            <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(255, 26, 0, 255); border: 1px solid #ccc;">
-              </div>
-            </td>
-            <td>Dunkelrot</td>
           </tr>
 
           <tr>
             <td>1.00</td>
-            <td>255 16 0 255</td>
+            <td>255 177 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(255, 16, 0, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(255, 177, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Sehr Dunkelrot</td>
           </tr>
 
           <tr>
             <td>1.20</td>
-            <td>240 10 5 255</td>
+            <td>255 167 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(240, 10, 5, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(255, 167, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Fast Schwarzrot</td>
           </tr>
 
           <tr>
             <td>1.40</td>
-            <td>220 5 10 255</td>
+            <td>255 132 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(220, 5, 10, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(255, 132, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Dunkelbraunrot</td>
           </tr>
 
           <tr>
             <td>1.60</td>
-            <td>180 0 15 255</td>
+            <td>255 88 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(180, 0, 15, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(255, 88, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Sehr dunkles Rotbraun</td>
           </tr>
 
           <tr>
             <td>1.80</td>
-            <td>140 0 20 255</td>
+            <td>255 44 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(140, 0, 20, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(255, 44, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Tiefes Weinrot</td>
           </tr>
 
           <tr>
             <td>2.00</td>
-            <td>100 0 25 255</td>
+            <td>255 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(100, 0, 25, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(255, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Sehr dunkles Weinrot</td>
           </tr>
 
           <tr>
             <td>2.20</td>
-            <td>80 0 35 255</td>
+            <td>245 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(80, 0, 35, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(245, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Noch tieferes Weinrot/Purpur</td>
           </tr>
 
           <tr>
             <td>2.40</td>
-            <td>60 0 45 255</td>
+            <td>235 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(60, 0, 45, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(235, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Dunkles Violett/Aubergine</td>
           </tr>
 
           <tr>
             <td>2.60</td>
-            <td>40 0 55 255</td>
+            <td>225 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(40, 0, 55, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(225, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Sehr dunkles Violett</td>
           </tr>
 
           <tr>
             <td>2.80</td>
-            <td>20 0 65 255</td>
+            <td>215 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(20, 0, 65, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(215, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Fast Schwarzblau/Violett</td>
           </tr>
 
           <tr>
             <td>3.00</td>
-            <td>0 0 75 255</td>
+            <td>205 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 75, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(205, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Sehr dunkles Nachtblau</td>
           </tr>
 
           <tr>
             <td>3.20</td>
-            <td>0 0 60 255</td>
+            <td>195 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 60, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(195, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Extrem dunkles Blau</td>
           </tr>
 
           <tr>
             <td>3.40</td>
-            <td>0 0 45 255</td>
+            <td>185 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 45, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(185, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Sehr sehr dunkles Blau</td>
           </tr>
 
           <tr>
             <td>3.60</td>
-            <td>0 0 30 255</td>
+            <td>168 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 30, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(168, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Extrem tiefes Dunkelblau</td>
           </tr>
 
           <tr>
             <td>3.80</td>
-            <td>0 0 15 255</td>
+            <td>144 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 15, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(144, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Kaum noch als Blau erkennbar</td>
           </tr>
 
           <tr>
             <td>4.00</td>
-            <td>0 0 0 255</td>
+            <td>120 0 0 255</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 255); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(120, 0, 0, 255); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Reines Schwarz</td>
+          </tr>
+
+          <tr>
+            <td>4.20</td>
+            <td>96 0 0 255</td>
+            <td>
+              <div style="width: 160px; height: 20px; background-color: rgba(96, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>4.40</td>
+            <td>72 0 0 255</td>
+            <td>
+              <div style="width: 160px; height: 20px; background-color: rgba(72, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>4.60</td>
+            <td>48 0 0 255</td>
+            <td>
+              <div style="width: 160px; height: 20px; background-color: rgba(48, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>4.80</td>
+            <td>24 0 0 255</td>
+            <td>
+              <div style="width: 160px; height: 20px; background-color: rgba(24, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>5.00</td>
+            <td>0 0 0 255</td>
+            <td>
+              <div style="width: 160px; height: 20px; background-color: rgba(0, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
           </tr>
 
           <tr>
             <td>nv</td>
             <td>0 0 0 0</td>
             <td>
-              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 0); border: 1px solid #ccc;">
+              <div style="width: 160px; height: 20px; background-color: rgba(0, 0, 0, 0); border: 1px solid #ccc;">
               </div>
             </td>
-            <td>Transparent</td>
           </tr>
         </tbody>
       </table>
@@ -837,8 +666,8 @@
     <hr>
 
     <h3>TRI versus Schummerung</h3>
-    <img src="./images/edersee-tri-500x400.png" alt="Topographic Ruggedness Index (TRI) für eine Datenkachel am Edersee (Hessen).">
-    <p><small>Topographic Ruggedness Index (TRI) für eine Datenkachel am Edersee (Hessen).</small>
+    <img src="./images/edersee-tri-500x400.png" alt="Terrain Ruggedness Index (TRI) für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Terrain Ruggedness Index (TRI) für eine Datenkachel am Edersee (Hessen).</small>
     </p>
 
     <p>Der TRI bewertet die Oberflächentextur und -heterogenität, <strong>unabhängig</strong> von der allgemeinen Hangneigung. Eine flache Ebene kann
@@ -847,6 +676,40 @@
     <img src="./images/edersee-schummerung-500x400.png" alt="Schummerung für eine Datenkachel am Edersee (Hessen).">
     <p><small>Schummerung für eine Datenkachel am Edersee (Hessen).</small>
     </p>
+
+    <hr>
+
+    <h3>Abgrenzung von TRI und Geländerauheit</h3>
+
+    <p>Der Terrain Ruggedness Index (TRI) und die Geländerauheit (Roughness Index, RI) sind beides geomorphometrische Maße, die die Unebenheit des Geländes
+    quantifizieren, unterscheiden sich jedoch in der Art und Weise, wie sie diese Unebenheit erfassen und betonen.</p>
+
+    <p>Der Hauptunterschied liegt in ihrer Berechnungsmethode und der Art der Geländehomogenität, die sie hervorheben:</p>
+
+    <ul>
+      <li><strong>Terrain Ruggedness Index (TRI):</strong> Der TRI, basierend auf dem Riley-Algorithmus, misst die <strong>Heterogenität oder Unebenheit des
+      Geländes</strong>, indem er für jeden Punkt die <strong>absolute Höhenänderung zu seinen acht direkten Nachbarpunkten</strong> berechnet. Ein hoher TRI-Wert
+      weist auf ein raues, unebenes Gelände hin, während ein niedriger Wert eine ebene oder glatte Oberfläche anzeigt. Der TRI bewertet die Oberflächentextur und
+      -heterogenität, unabhängig von der allgemeinen Hangneigung. Eine flache Ebene kann "rau" sein (viele kleine Unebenheiten), während ein steiler Hang "glatt"
+      sein kann.</li>
+
+      <li><strong>Geländerauheit (Roughness Index, RI):</strong> Die Geländerauheit quantifiziert die <strong>maximale lokale Unebenheit des Geländes</strong>. Sie
+      wird berechnet, indem für jeden Punkt die <strong>größte Höhendifferenz zwischen dem höchsten und dem niedrigsten Höhenwert innerhalb eines
+      3x3-Messpunkte-Fensters</strong> ermittelt wird (Zmax - Zmin). Eine hohe Geländerauheit weist auf sehr abrupte und ausgeprägte lokale Höhenänderungen hin,
+      wie sie an Kanten, Felsvorsprüngen oder sehr steilen, stufigen Hängen vorkommen. Die Geländerauheit bewertet die maximale lokale Höhendifferenz, ebenfalls
+      unabhängig von der allgemeinen Hangneigung.</li>
+    </ul>
+
+    <p>Zusammenfassend lässt sich sagen, dass der <strong>TRI ein Maß für die durchschnittliche Variabilität der Höhen innerhalb einer lokalen Umgebung
+    ist</strong>, das die allgemeine "Zerklüftung" oder "Textur" des Geländes anzeigt. Die <strong>Geländerauheit hingegen identifiziert die extremsten lokalen
+    Höhenunterschiede</strong>, also scharfe Kanten, Abbrüche oder einzelne, markante Unebenheiten.</p>
+
+    <p>Der TRI eignet sich besonders für Anwendungen, bei denen die <strong>Gesamthäufigkeit und Verteilung kleinerer bis mittlerer Unebenheiten</strong> relevant
+    ist, und nicht nur die extremsten. Er bietet detaillierte Einblicke in die Geländebeschaffenheit, insbesondere in Verbindung mit hochauflösenden
+    DGM1-Höhendaten.</p>
+
+    <p>Die Geländerauheit ist prädestiniert für Anwendungen, bei denen die <strong>Identifikation von abrupten, scharfen und potenziell gefährlichen oder
+    hinderlichen Geländeelementen</strong> im Vordergrund steht. Sie hebt extreme lokale Höhenunterschiede hervor.</p>
 
     <hr>
 

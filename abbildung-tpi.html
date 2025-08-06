@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPI (Abbildung, Topographic Position Index)</title>
+  <meta name="description" content=
+  "Entdecken Sie den Topographic Position Index (TPI) zur Quantifizierung der relativen Position eines Geländepunkts und seine vielfältigen Anwendungen in Ökologie, Hydrologie und Planung.">
+  <meta name="keywords" content=
+  "Topographic Position Index, TPI, relative Geländeposition, DGM, Geomorphologie, Reliefanalyse, Oberflächenformen, Habitatmodellierung">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tpi.html">TPI (Position)</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="grundlagen.html">Grundlagen</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="dienst-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="dienst-tpi.html">TPI (Position)</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
+
+          <li>
+            <a href="api-trirequest.html">TRIRequest</a>
+          </li>
+
+          <li>
+            <a href="api-tpirequest.html">TPIRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>TPI - Topographic Position Index</h3>
+
+    <p>Der Topographic Position Index (TPI) ist ein geomorphometrisches Maß, das die relative Position eines Geländepunkts im Vergleich zu seiner unmittelbaren
+    Umgebung quantifiziert. Er wird berechnet, indem die Höhe eines zentralen Messpunkts mit der mittleren Höhe seiner Nachbarpunkte in einem definierten
+    Umgebungsfenster verglichen wird. Ein positives TPI weist darauf hin, dass der Punkt höher als seine Umgebung liegt (z.B. eine Kuppe oder ein Grat), während
+    ein negatives TPI eine niedrigere Position (z.B. eine Senke oder ein Tal) anzeigt. Ein TPI-Wert nahe Null deutet auf eine ebene Fläche oder einen konstanten
+    Hang hin. In Verbindung mit hochauflösenden DGM1-Höhendaten ermöglicht der TPI sehr detaillierte Einblicke in kleinste morphologische Strukturen des
+    Geländes.</p>
+
+    <ul>
+      <li><strong>Geomorphologische Analyse:</strong> DGM1-basierte TPI-Werte sind ideal, um kleinräumige Geländeformen wie Erosionsrinnen, Mikro-Grate, Senken
+      oder subtile Übergänge präzise abzugrenzen. Dies ist entscheidend für das Verständnis lokaler Erosions- und Akkumulationsprozesse.</li>
+
+      <li><strong>Ökologie und Habitatmodellierung:</strong> Die Topographie beeinflusst Mikroklima, Bodenfeuchte und Sonneneinstrahlung. Der TPI aus DGM1-Daten
+      kann kleinräumige Habitate identifizieren, die für bestimmte Pflanzen- oder Tierarten aufgrund ihrer spezifischen Standortbedingungen wichtig sind,
+      beispielsweise feuchte Senken oder exponierte Kuppen.</li>
+
+      <li><strong>Hydrologie und Erosionsmodellierung:</strong> Der TPI ermöglicht eine genaue Modellierung von Oberflächenabflusspfaden,
+      Wasseransammlungsbereichen und potenziellen Erosionsursprüngen, indem er Senken und Grate identifiziert, die den Wasserfluss lenken oder aufhalten.</li>
+
+      <li><strong>Archäologie:</strong> Mit dem TPI aus DGM1-Daten können minimale, oft unter Vegetationsschichten verborgene, von Menschen geschaffene
+      Reliefveränderungen wie alte Wege, Gräben, Fundamentreste oder Siedlungshügel sichtbar gemacht werden, die am Boden kaum noch zu erkennen sind.</li>
+
+      <li><strong>Land- und Forstwirtschaft:</strong> Die Identifizierung von Senken, in denen sich Wasser staut, oder Kuppen, die schneller austrocknen, kann die
+      Planung von Entwässerungssystemen oder die standortgerechte Bewirtschaftung von Flächen optimieren.</li>
+    </ul>
+
+    <p><strong>Wichtig:</strong> Der TPI bewertet die relative Position eines Punktes im Verhältnis zu seinen direkten Nachbarn. Ein Punkt auf einem ansonsten
+    flachen Plateau kann als "Kuppe" klassifiziert werden, wenn seine unmittelbare Umgebung leicht abfällt. Umgekehrt kann ein Punkt am Grund eines breiten Tals
+    eine "Senke" sein, auch wenn das Tal insgesamt flach ist.</p>
+
+    <hr>
+
+    <h3>Berechnungsgrundlage (Differenz zum lokalen Mittelwert)</h3>
+
+    <p>Der TPI wird berechnet, indem die Höhe eines zentralen Punkts von der mittleren Höhe seiner umgebenden Nachbarpunkte innerhalb eines definierten Fensters
+    abgezogen wird. Für DGM1-Daten wird typischerweise ein Nahbereich mit einem 3x3-Meter-Fenster (entspricht 8 Nachbarzellen) verwendet. In diesem Fenster wird
+    für einen Messpunkt ermittelt, ob er relativ zu seiner direkten Umgebung in einer Ebene, einer Senke oder auf einer Kuppe liegt.</p>
+
+    <p>Die Formel lautet:</p>
+
+    <p style="font-family: 'Times New Roman', serif; font-size: 1.2em;">TPI = Z<sub>c</sub> - Z<sub>mean</sub></p>
+
+    <p><small>TPI-Algorithmus: TPI = Z<sub>c</sub> - Z<sub>mean</sub>, wobei Z<sub>c</sub> die Höhe des zentralen Punkts und Z<sub>mean</sub> die mittlere Höhe der
+    umgebenden Nachbarpunkte ist.</small>
+    </p>
+
+    <hr>
+
+    <h3>Senke, Ebene, Kuppe</h3>
+
+    <p>Bezogen auf die Genauigkeit der DGM1-Daten werden für die abgeleiteten TPI-Werte folgende Definitionen gewählt:</p>
+
+    <ul>
+      <li><strong>Senken:</strong> kleiner -0.05 m</li>
+
+      <li><strong>Ebenen:</strong> -0.05 m bis 0.05 m</li>
+
+      <li><strong>Kuppen:</strong> größer 0.05 m</li>
+    </ul>
+
+    <hr>
+
+    <h3>Typische Landschaften und deren TPI-Klassifizierung</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left">TPI-Bereich</th>
+            <th style="text-align:left">Beschreibung</th>
+            <th style="text-align:left">Charakteristika und Beispiele</th>
+            <th style="text-align:left">Lage in Deutschland</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>&lt; -0.05</strong>
+            </td>
+            <td style="text-align:left"><strong>Senken / Täler</strong>
+            </td>
+            <td style="text-align:left">
+              Lokale Vertiefungen, Gräben, Erosionsrinnen, Talböden, Aushubbereiche, Tümpel. Bereiche, in denen sich Wasser sammeln oder abfließen kann.
+              <p>Beispiele: Kleine Bachläufe, temporäre Wasseransammlungen in Ackerflächen, feuchte Wiesenmulden, Entwässerungsgräben.</p>
+            </td>
+            <td style="text-align:left">Spezifische Mikroformen in Flussauen (z.B. Elbtalaue), Moor- und Feuchtgebiete (z.B. Spreewald), Erosionsrinnen in
+            landwirtschaftlich genutzten Hanglagen, Gewässernähe in Mittelgebirgstälern.</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>-0.05 bis 0.05</strong>
+            </td>
+            <td style="text-align:left"><strong>Ebenen / konstante Hänge</strong>
+            </td>
+            <td style="text-align:left">
+              Relativ flache oder gleichmäßig geneigte Flächen ohne signifikante lokale Erhebungen oder Vertiefungen.
+              <p>Beispiele: Große Ackerflächen, Sportplätze, Plateaus, sanfte Hangbereiche, breite Wege.</p>
+            </td>
+            <td style="text-align:left">Rheinebene, Münchner Schotterebene, große Teile Brandenburgs, Hochflächen der Schwäbischen und Fränkischen Alb, weite
+            Ackerflächen in der Magdeburger Börde.</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>&gt; 0.05</strong>
+            </td>
+            <td style="text-align:left"><strong>Kuppen / Grate</strong>
+            </td>
+            <td style="text-align:left">
+              Lokale Erhebungen, Hügelkuppen, Grate, Böschungsoberkanten, Baumwurzeln, Felsköpfe. Bereiche, die von ihrer Umgebung abstehen.
+              <p>Beispiele: Kleine Moränenhügel, Lesesteinhaufen, erhöhte Wegränder, Erosionsleisten an Hängen, Felsnasen, Baumstümpfe.</p>
+            </td>
+            <td style="text-align:left">Kleine Hügel und Erhebungen im norddeutschen Tiefland, Kuppen in Mittelgebirgsregionen (z.B. Harz, Eifel), exponierte
+            Felsformationen (z.B. Sächsische Schweiz, Bayerische Alpen).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <h3>Wertebereich zu Farbe</h3>
+
+    <p>Aus den Höheninformationen werden TPI-Werte errechnet. Die Klassifizierung dieser Werte in "Senken", "Ebenen" und "Kuppen" ist der erste Schritt. Für die
+    visuelle Darstellung zur Erkennung großflächiger Strukturen (z.B. lange Gräben oder Grate) empfiehlt sich eine einfache Schwarz-Weiß-Darstellung. Dabei kann
+    entweder der Bereich der Senken oder der Bereich der Kuppen hervorgehoben werden, während die anderen Bereiche weiß dargestellt oder transparent gemacht
+    werden, um eine Überforderung der visuellen Wahrnehmung zu vermeiden.</p>
+
+    <p>Welche Farben und Wertebereiche sinnvoll sind, ist vom jeweiligen Anwendungsfall und von der Geländebeschaffenheit des Untersuchungsgebiets abhängig. Es
+    empfiehlt sich, die Verteilung der TPI-Werte (z. B. über ein Histogramm) zu analysieren, um eine passende Klassifizierung zu finden. Soll ein Wertebereich
+    nicht dargestellt werden, wählt man eine volltransparente Farbe.</p>
+
+    <hr>
+
+    <h3>Beispiel für eine Farbsteuerdatei</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>TPI</th>
+            <th>RGBA</th>
+            <th>Farbe</th>
+            <th>Farbname</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>-0.050001</td>
+            <td>0 0 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Schwarz (Senke)</td>
+          </tr>
+
+          <tr>
+            <td>-0.05</td>
+            <td>255 255 255 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 255, 255, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Weiß (Ebene)</td>
+          </tr>
+
+          <tr>
+            <td>0.05</td>
+            <td>255 255 255 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 255, 255, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Weiß (Ebene)</td>
+          </tr>
+
+          <tr>
+            <td>0.050001</td>
+            <td>0 0 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Schwarz (Kuppe)</td>
+          </tr>
+
+          <tr>
+            <td>nv</td>
+            <td>0 0 0 0</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 0); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Transparent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Anmerkung: Die oben gezeigte Farbsteuerdatei generiert sowohl Senken als auch Kuppen in Schwarz, während Ebenen weiß dargestellt werden. Für eine bessere
+    visuelle Bewertung sollten wahlweise die Senken oder die Kuppen durch Anpassung der Farbsteuerdatei ausgeblendet (transparent gemacht) werden, um die
+    Darstellung zu vereinfachen und die Erkennung spezifischer Merkmale zu erleichtern.</p>
+
+    <hr>
+
+    <h3>TPI versus Schummerung</h3>
+    <img src="./images/edersee-tpi-senken-500x400.png" alt="Topographic Position Index (TPI) (nur Senken) für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Topographic Position Index (TPI) (nur Senken) für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+    <img src="./images/edersee-tpi-kuppen-500x400.png" alt="Topographic Position Index (TPI) (nur Kuppen) für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Topographic Position Index (TPI) (nur Kuppen) für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+
+    <p>Der TPI bewertet die relative Geländeposition (ob ein Punkt höher, niedriger oder gleich seinen Nachbarn ist), während die Schummerung (Hillshade) die
+    Ausleuchtung des Geländes aus einer bestimmten Lichtquelle simuliert und hauptsächlich die Hangneigung und -exposition visualisiert. Es gibt daher
+    <strong>keinen direkten Zusammenhang</strong> zwischen den Abbildungen 'TPI' und 'Schummerung'. Die Abbildung der Schummerung dient einzig der Orientierung und
+    der besseren topografischen Wahrnehmung des Reliefs.</p>
+    <img src="./images/edersee-schummerung-500x400.png" alt="Schummerung für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Schummerung für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+    <img src="./images/edersee-tpi-senken-kuppen-500x400.png" alt="Topographic Position Index (TPI) (Senken und Kuppen) für eine Datenkachel am Edersee (Hessen).">
+    <p><small>Topographic Position Index (TPI) (Senken und Kuppen) für eine Datenkachel am Edersee (Hessen).</small>
+    </p>
+
+    <hr>
+
+    <h3>Dienst Kolorierung</h3>
+
+    <p>Über den Dienst <strong>Kolorierung</strong> können Farbsteuerdateien definiert, eingelesen, editiert und gespeichert werden.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

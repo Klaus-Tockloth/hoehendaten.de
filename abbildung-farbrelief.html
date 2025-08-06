@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abbildung - Farbrelief</title>
+  <meta name="description" content=
+  "Entdecken Sie das Farbrelief zur direkten Visualisierung von Höhendaten und seine Anwendungen in der Kartografie und Geoinformation.">
+  <meta name="keywords" content="Farbrelief, Höhenkolorierung, DGM, Höhenvisualisierung, Reliefdarstellung, Geländehöhe, Kartographie">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tpi.html">TPI (Position)</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="grundlagen.html">Grundlagen</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="dienst-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="dienst-tpi.html">TPI (Position)</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
+
+          <li>
+            <a href="api-trirequest.html">TRIRequest</a>
+          </li>
+
+          <li>
+            <a href="api-tpirequest.html">TPIRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h3>Farbrelief</h3>
+
+    <p>Das Farbrelief, auch Höhenkolorierung oder hypsometrische Darstellung genannt, ist eine geographische Darstellungsform, die Höheninformationen direkt in
+    Farben übersetzt. Jedem Höhenwert wird dabei eine spezifische Farbe zugewiesen, um so die Geländetopographie visuell erfassbar zu machen. Im Gegensatz zu
+    anderen Reliefdarstellungen wie der Schummerung, die primär die Form und Neigung des Geländes betonen, liegt der Fokus des Farbreliefs auf der direkten
+    Abbildung der absoluten Höhenlagen. In Verbindung mit dem hochauflösenden Digitalen Geländemodell DGM1, bietet das Farbrelief detaillierte Einblicke in die
+    Höhenstruktur einer Landschaft. Zu den wichtigsten Anwendungsbereichen gehören:</p>
+
+    <ul>
+      <li><strong>Kartographie und Geovisualisierung:</strong> Das Farbrelief ist eine grundlegende Methode zur Erstellung anschaulicher topographischer Karten. Es
+      ermöglicht eine schnelle Orientierung über Höhenlagen und Höhenunterschiede.</li>
+
+      <li><strong>Raumplanung und Umweltanalyse:</strong> Die Visualisierung von Höhen ist entscheidend für die Standortbewertung, die Planung von Bauvorhaben oder
+      die Analyse von Fließgewässersystemen und Einzugsgebieten.</li>
+
+      <li><strong>Bildung und Forschung:</strong> In Geographie, Geologie und Umweltwissenschaften dient das Farbrelief als intuitives Werkzeug zum Verständnis
+      komplexer Geländestrukturen und deren Einfluss auf geologische Prozesse oder ökologische Verteilungen.</li>
+
+      <li><strong>Infrastrukturplanung:</strong> Bei der Trassierung von Straßen, Bahnlinien oder Leitungen können Höhenprofile durch das Farbrelief schnell
+      überblickt und optimiert werden.</li>
+
+      <li><strong>Katastrophenmanagement:</strong> Für die Analyse von Überschwemmungsgefahren oder Hangrutschungen ist die direkte Visualisierung von Höhenlagen
+      und potenziellen Überflutungsbereichen von großer Bedeutung.</li>
+    </ul>
+
+    <hr>
+
+    <h3>Berechnungsgrundlage</h3>
+
+    <p>Das Farbrelief wird durch eine direkte Zuordnung von Höhenwerten zu Farbwerten erzeugt. Für jeden Bildpunkt (Pixel) im DGM1, der einen spezifischen
+    Höhenwert enthält, wird anhand einer vordefinierten Farbsteuerdatei eine entsprechende Farbe ermittelt und zugewiesen. Es handelt sich hierbei um eine reine
+    visuelle Darstellung der absoluten Höhen. Das Prinzip ist denkbar einfach: Einem bestimmten Höhenbereich wird eine bestimmte Farbe oder ein Farbverlauf
+    zugeordnet. Ein typisches Farbschema reicht von dunklem Grün für niedrigere Höhen über Gelb-/Brauntöne bis hin zu Grau- und Weißtönen für die höchsten
+    Lagen.</p>
+
+    <hr>
+
+    <h3>Typische Landschaften und deren Höhenbereiche</h3>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left">Höhenbereich (m)</th>
+            <th style="text-align:left">Beschreibung</th>
+            <th style="text-align:left">Charakteristika und Beispiele</th>
+            <th style="text-align:left">Lage in Deutschland</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>&lt; 50</strong>
+            </td>
+            <td style="text-align:left"><strong>Tiefebene / Meeresspiegelnähe</strong>
+            </td>
+            <td style="text-align:left">
+              Sehr flache Gebiete, oft Flussauen, Küstenbereiche oder große Seen.
+              <p>Beispiele: Flussmarschen, Strände, Wattenmeer, große Stauseen.</p>
+            </td>
+            <td style="text-align:left">Nordseeküste (z.B. Ostfriesland), Elbtal (z.B. Niedersachsen, Brandenburg), Rheinebene (z.B. NRW, Rheinland-Pfalz),
+            Bodensee-Uferbereiche (Baden-Württemberg).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>50 - 200</strong>
+            </td>
+            <td style="text-align:left"><strong>Flachwelliges Hügelland / Becken</strong>
+            </td>
+            <td style="text-align:left">
+              Sanfte Hügel, weite Ebenen mit geringen Erhebungen, weitreichende Agrarlandschaften.
+              <p>Beispiele: Ackerflächen mit sanften Wellen, weite Grünlandbereiche, weiche Moränenlandschaften.</p>
+            </td>
+            <td style="text-align:left">Münsterländer Bucht (NRW), Leipziger Tieflandsbucht (Sachsen), Teile des Kraichgaus (Baden-Württemberg), Niederrheinische
+            Bucht (Nordrhein-Westfalen).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>200 - 500</strong>
+            </td>
+            <td style="text-align:left"><strong>Hügelland / Mittelgebirgsvorland</strong>
+            </td>
+            <td style="text-align:left">
+              Ausgeprägteres Hügelland, beginnende Mittelgebirgsregionen, oft mit Wäldern und Tälern durchzogen.
+              <p>Beispiele: Weinberge, ausgedehnte Forste auf hügeligem Terrain, voralpine Landschaften.</p>
+            </td>
+            <td style="text-align:left">Harzvorland (Niedersachsen, Sachsen-Anhalt), Odenwald (Hessen, Baden-Württemberg), Bayerischer Wald (Teile), Eifel (Teile
+            von Rheinland-Pfalz).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>500 - 1000</strong>
+            </td>
+            <td style="text-align:left"><strong>Mittelgebirgslagen</strong>
+            </td>
+            <td style="text-align:left">
+              Typische Mittelgebirgslandschaften mit deutlichen Steigungen, tiefen Tälern und ausgedehnten Wäldern.
+              <p>Beispiele: Mittelgebirgskämme, tief eingeschnittene Flusstäler, Hochflächen mit moorigen Abschnitten.</p>
+            </td>
+            <td style="text-align:left">Schwarzwald (Baden-Württemberg), Harz (Sachsen-Anhalt, Niedersachsen), Erzgebirge (Sachsen), Rhön (Bayern, Hessen).</td>
+          </tr>
+
+          <tr>
+            <td style="text-align:left; white-space: nowrap;"><strong>&gt; 1000</strong>
+            </td>
+            <td style="text-align:left"><strong>Hochgebirge / Alpine Regionen</strong>
+            </td>
+            <td style="text-align:left">
+              Steile Berghänge, markante Gipfel, Hochalmen, Kare, felsiges Gelände, oft mit Schneefeldern.
+              <p>Beispiele: Gletscherregionen, schroffe Felswände, alpine Hochtäler.</p>
+            </td>
+            <td style="text-align:left">Bayerische Alpen (z.B. Wettersteingebirge, Berchtesgadener Alpen).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <h3>Wertebereich zu Farbe</h3>
+
+    <p>Der Benutzer muss eine geeignete <strong>Farbsteuerdatei</strong> für Höhenbereiche und Farben definieren. Welche Farben und Höhenbereiche sinnvoll sind,
+    ist vom jeweiligen Anwendungsfall und von den charakteristischen Höhenlagen des Untersuchungsgebiets abhängig. Es empfiehlt sich, zunächst die Verteilung der
+    Höhenwerte (z. B. über ein Histogramm) zu analysieren, um eine passende Klassifizierung zu finden. Soll ein Wertebereich nicht dargestellt werden, wählt man
+    eine volltransparente Farbe.</p>
+
+    <hr>
+
+    <h3>Beispiel für eine Farbsteuerdatei</h3>
+
+    <p>Die untenstehende Tabelle zeigt ein beispielhaftes Farbschema für ein Farbrelief, bei dem Höhenstufen unterschiedlichen Farben zugeordnet werden. Die
+    RGBA-Werte stehen für Rot, Grün, Blau und Alpha (Transparenz). Das nachfolgende Farbschema ist als Beispiel zu verstehen. Es wurde speziell für ein hochalpines
+    Areal definiert.</p>
+
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Höhe (m)</th>
+            <th>RGBA</th>
+            <th>Farbe</th>
+            <th>Farbname</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>1480</td>
+            <td>0 100 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 100, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkelgrün</td>
+          </tr>
+
+          <tr>
+            <td>1540</td>
+            <td>0 128 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 128, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Grün</td>
+          </tr>
+
+          <tr>
+            <td>1600</td>
+            <td>50 205 50 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(50, 205, 50, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Hellgrün</td>
+          </tr>
+
+          <tr>
+            <td>1660</td>
+            <td>173 255 47 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(173, 255, 47, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Gelbgrün</td>
+          </tr>
+
+          <tr>
+            <td>1720</td>
+            <td>255 255 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 255, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Gelb</td>
+          </tr>
+
+          <tr>
+            <td>1780</td>
+            <td>255 165 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 165, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Orange</td>
+          </tr>
+
+          <tr>
+            <td>1840</td>
+            <td>255 127 80 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 127, 80, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Lachsrot</td>
+          </tr>
+
+          <tr>
+            <td>1900</td>
+            <td>255 0 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(255, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Rot</td>
+          </tr>
+
+          <tr>
+            <td>1960</td>
+            <td>178 34 34 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(178, 34, 34, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Feuerwehrrot</td>
+          </tr>
+
+          <tr>
+            <td>2020</td>
+            <td>128 0 0 255</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(128, 0, 0, 255); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Dunkelrot</td>
+          </tr>
+
+          <tr>
+            <td>nv</td>
+            <td>0 0 0 0</td>
+            <td>
+              <div style="width: 80px; height: 20px; background-color: rgba(0, 0, 0, 0); border: 1px solid #ccc;">
+              </div>
+            </td>
+            <td>Transparent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <h3>Farbrelief versus Schummerung</h3>
+    <img src="./images/farbrelief-hochalpen-500x400.png" alt="Farbrelief für eine Datenkachel in den Hochalpen (Großer Seekopf, 2085 Meter).">
+    <p><small>Farbrelief für eine Datenkachel in den Hochalpen (Großer Seekopf, 2085 Meter).</small>
+    </p>
+
+    <p>Das Farbrelief visualisiert die absoluten Höhenwerte des Geländes direkt durch Farben. Es gibt Aufschluss über die tatsächliche Höhe eines Punktes. Die
+    Schummerung hingegen dient dazu, die Form, Neigung und Ausrichtung des Geländes durch Schattierung darzustellen, als ob es von einer Lichtquelle beleuchtet
+    würde. Sie betont also die 'Rauheit' oder die 'Glätte' sowie die topographischen Formen. Beide Darstellungsformen ergänzen sich hervorragend: Ein über eine
+    Schummerung gelegtes transparentes Farbrelief kann eine sehr informative und ästhetisch ansprechende Karte des Geländes erzeugen, die sowohl Höhen als auch
+    Formen klar abbildet.</p>
+    <img src="./images/schummerung-hochalpen-500x400.png" alt="Schummerung für eine Datenkachel in den Hochalpen (Großer Seekopf, 2085 Meter).">
+    <p><small>Schummerung für eine Datenkachel in den Hochalpen (Großer Seekopf, 2085 Meter).</small>
+    </p>
+    <img src="./images/schummerung-farbrelief-hochalpen-500x400.png" alt=
+    "Schummerung und Farbrelief (40% transparent) für eine Datenkachel in den Hochalpen (Großer Seekopf, 2085 Meter).">
+    <p><small>Schummerung und Farbrelief (40% transparent) für eine Datenkachel in den Hochalpen (Großer Seekopf, 2085 Meter).</small>
+    </p>
+
+    <hr>
+
+    <h3>Dienst Kolorierung</h3>
+
+    <p>Über den Dienst <strong>Kolorierung</strong> können Farbsteuerdateien definiert, eingelesen, editiert und gespeichert werden.</p>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

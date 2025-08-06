@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dienst - Topographic Ruggedness Index</title>
+  <title>TPI (Dienst, Topographic Position Index)</title>
   <meta name="description" content=
-  "Generieren Sie Abbildungen des Topographic Ruggedness Index (TRI) für einen Kartenausschnitt in Deutschland basierend auf Koordinaten und einem Farbtextschema.">
-  <meta name="keywords" content="Höhendaten, Topographic Ruggedness Index, TRI, DGM, UTM, Lon/Lat, Abbildung, Visualisierung, Geodaten, Deutschland, Farbschema">
+  "Generieren Sie Abbildungen des Topographic Position Index (TPI) für einen Kartenausschnitt in Deutschland basierend auf Koordinaten und einem Farbtextschema.">
+  <meta name="keywords" content="Höhendaten, Topographic Position Index, TPI, DGM, UTM, Lon/Lat, Abbildung, Visualisierung, Geodaten, Deutschland, Farbschema">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
   <style>
@@ -107,6 +107,10 @@
           </li>
 
           <li>
+            <a href="abbildung-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="abbildung-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -119,13 +123,17 @@
           </li>
 
           <li>
-            <a href="abbildung-tri.html">TRI</a>
+            <a href="abbildung-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
 
       <li>
-        <a href="dud.html">DuD</a>
+        <a href="grundlagen.html">Grundlagen</a>
       </li>
 
       <li class="dropdown">
@@ -164,6 +172,10 @@
           </li>
 
           <li>
+            <a href="dienst-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
             <a href="dienst-hangneigung.html">Hangneigung</a>
           </li>
 
@@ -176,7 +188,11 @@
           </li>
 
           <li>
-            <a href="dienst-tri.html">TRI</a>
+            <a href="dienst-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="dienst-tpi.html">TPI (Position)</a>
           </li>
         </ul>
       </li>
@@ -217,6 +233,10 @@
           </li>
 
           <li>
+            <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
+          </li>
+
+          <li>
             <a href="api-sloperequest.html">SlopeRequest</a>
           </li>
 
@@ -231,6 +251,10 @@
           <li>
             <a href="api-trirequest.html">TRIRequest</a>
           </li>
+
+          <li>
+            <a href="api-tpirequest.html">TPIRequest</a>
+          </li>
         </ul>
       </li>
 
@@ -241,10 +265,10 @@
   </nav>
 
   <div class="container">
-    <h3>Topographic Ruggedness Index für einen Kartenausschnitt von 1x1 km</h3>
+    <h3>Topographic Position Index für einen Kartenausschnitt von 1x1 km</h3>
 
-    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Der Topographic Ruggedness Index (TRI) wird für die Kachel generiert,
-    in der sich der Referenzpunkt befindet. Die Ausgabe erfolgt im GeoTIFF-Format (wenn UTM-Koordinaten eingegeben wurden) oder im PNG-Format (wenn
+    <p>Der Referenzpunkt kann in den Koordinatensystemen Lon/Lat oder UTM angegeben werden. Der Topographic Position Index (TPI) wird für die Kachel generiert, in
+    der sich der Referenzpunkt befindet. Die Ausgabe erfolgt im GeoTIFF-Format (wenn UTM-Koordinaten eingegeben wurden) oder im PNG-Format (wenn
     Lon/Lat-Koordinaten eingegeben wurden). Zusätzlich muss ein Farbtextschema für die Kolorierung angegeben werden.</p>
     <!-- Bereich für die Eingabefelder -->
 
@@ -282,13 +306,15 @@
       <div class="input-group color-scheme-input-group">
         <label for="colorTextFileContent">Farbschema</label> <input type="file" id="colorFileInput" accept=".txt"> 
 
-        <textarea id="colorTextFileContent" rows="10"># Farbdefinition für TRI - Topographic Ruggedness Index
+        <textarea id="colorTextFileContent" rows="10"># Farbdefinition für TPI
 # Format: Wert Rot Grün Blau Alpha
-0 154 205 50 255
-0.5 50 150 50 255
-2 255 165 0 255
-5 255 0 0 255
-10 139 0 0 255
+# Senken: kleiner -0.05
+# Ebenen: -0.05 ... 0.05
+# Kuppen: größer 0.05
+-0.050001 0 0 0 255
+-0.05 255 255 255 255
+0.05 255 255 255 255
+0.050001 0 0 0 255
 nv 0 0 0 0</textarea>
       </div>
       <!-- Neuer Bereich für Farbzuweisung -->
@@ -303,7 +329,7 @@ nv 0 0 0 0</textarea>
     <!-- Bereich für den Button -->
 
     <div class="button-section section-box">
-      <button id="queryButton">Abfrage des Topographic Ruggedness Index</button>
+      <button id="queryButton">Abfrage des Topographic Position Index</button>
     </div>
     <!-- Bereich für die Ausgabe -->
 
@@ -328,7 +354,7 @@ nv 0 0 0 0</textarea>
              const queryButton = document.getElementById('queryButton');
              const resultsDiv = document.getElementById('results');
 
-             const apiUrl = 'https://api.hoehendaten.de:14444/v1/tri';
+             const apiUrl = 'https://api.hoehendaten.de:14444/v1/tpi'; // Changed from /v1/tri
 
              function displayResult(className, htmlContent) {
                  resultsDiv.className = className;
@@ -392,8 +418,8 @@ nv 0 0 0 0</textarea>
                  displayResult('loading', '<p class="status-message">Lade ... Sende Anfrage an den Dienst ...</p>');
 
                  const requestPayload = {
-                     Type: "TRIRequest",
-                     ID: "WebApp-TRI-" + Date.now() + "-" + Math.random().toString(36).substring(7),
+                     Type: "TPIRequest", // Changed from TRIRequest
+                     ID: "WebApp-TPI-" + Date.now() + "-" + Math.random().toString(36).substring(7), // Changed ID prefix
                      Attributes: {
                          Longitude: useLonLat ? longitude : 0.0,
                          Latitude: useLonLat ? latitude : 0.0,
@@ -498,7 +524,7 @@ nv 0 0 0 0</textarea>
                              return;
                          }
 
-                         let resultsHtml = '<p class="status-message">Topographic Ruggedness Index erfolgreich verarbeitet:</p>';
+                         let resultsHtml = '<p class="status-message">Topographic Position Index erfolgreich verarbeitet:</p>'; // Changed text
                          resultsHtml += '<table class="results-table">';
                          const attributes = data.Attributes;
                           // Display input parameters that were used
@@ -513,30 +539,30 @@ nv 0 0 0 0</textarea>
 
                          resultsHtml += '</table>';
 
-                         if (attributes.TRIs && Array.isArray(attributes.TRIs) && attributes.TRIs.length > 0) {
-                             resultsHtml += '<h4 style="margin-top: 1.5em;">Generierter Topographic Ruggedness Index (TRI):</h4>';
-                             attributes.TRIs.forEach((tri, index) => {
+                         if (attributes.TPIs && Array.isArray(attributes.TPIs) && attributes.TPIs.length > 0) { // Changed TRIs to TPIs
+                             resultsHtml += '<h4 style="margin-top: 1.5em;">Generierter Topographic Position Index (TPI):</h4>'; // Changed text
+                             attributes.TPIs.forEach((tpi, index) => { // Changed TRIs to TPIs, tri to tpi
                                  resultsHtml += `<h4 style="margin-top: 1.5em;">Abbildung ${index + 1}</h4>`;
                                  resultsHtml += '<table class="results-table">';
-                                 if (tri.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${tri.TileIndex}</td></tr>`;
-                                 if (tri.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${tri.Actuality}</td></tr>`;
-                                 if (tri.Origin !== undefined) resultsHtml += `<tr><td><strong>Ursprung</strong></td><td>${tri.Origin}</td></tr>`;
-                                 if (tri.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${tri.Attribution}</td></tr>`;
-                                 if (tri.DataFormat !== undefined) resultsHtml += `<tr><td><strong>Format</strong></td><td>${tri.DataFormat}</td></tr>`;
+                                 if (tpi.TileIndex !== undefined) resultsHtml += `<tr><td><strong>Tile Index</strong></td><td>${tpi.TileIndex}</td></tr>`; // Changed tri to tpi
+                                 if (tpi.Actuality !== undefined) resultsHtml += `<tr><td><strong>Aktualität</strong></td><td>${tpi.Actuality}</td></tr>`; // Changed tri to tpi
+                                 if (tpi.Origin !== undefined) resultsHtml += `<tr><td><strong>Ursprung</strong></td><td>${tpi.Origin}</td></tr>`; // Changed tri to tpi
+                                 if (tpi.Attribution !== undefined) resultsHtml += `<tr><td><strong>Attribution</strong></td><td>${tpi.Attribution}</td></tr>`; // Changed tri to tpi
+                                 if (tpi.DataFormat !== undefined) resultsHtml += `<tr><td><strong>Format</strong></td><td>${tpi.DataFormat}</td></tr>`; // Changed tri to tpi
 
                                  // Display Bounding Box if available (relevant for PNG)
-                                  if (tri.BoundingBox && (tri.BoundingBox.MinLon !== 0 || tri.BoundingBox.MinLat !== 0 || tri.BoundingBox.MaxLon !== 0 || tri.BoundingBox.MaxLat !== 0)) {
+                                  if (tpi.BoundingBox && (tpi.BoundingBox.MinLon !== 0 || tpi.BoundingBox.MinLat !== 0 || tpi.BoundingBox.MaxLon !== 0 || tpi.BoundingBox.MaxLat !== 0)) { // Changed tri to tpi
                                      resultsHtml += `<tr><td colspan="2"><strong>Bounding Box (WGS84):</strong></td></tr>`;
-                                     resultsHtml += `<tr><td>MinLon</td><td>${tri.BoundingBox.MinLon}</td></tr>`;
-                                     resultsHtml += `<tr><td>MaxLon</td><td>${tri.BoundingBox.MaxLon}</td></tr>`;
-                                     resultsHtml += `<tr><td>MinLat</td><td>${tri.BoundingBox.MinLat}</td></tr>`;
-                                     resultsHtml += `<tr><td>MaxLat</td><td>${tri.BoundingBox.MaxLat}</td></tr>`;
+                                     resultsHtml += `<tr><td>MinLon</td><td>${tpi.BoundingBox.MinLon}</td></tr>`; // Changed tri to tpi
+                                     resultsHtml += `<tr><td>MaxLon</td><td>${tpi.BoundingBox.MaxLon}</td></tr>`; // Changed tri to tpi
+                                     resultsHtml += `<tr><td>MinLat</td><td>${tpi.BoundingBox.MinLat}</td></tr>`; // Changed tri to tpi
+                                     resultsHtml += `<tr><td>MaxLat</td><td>${tpi.BoundingBox.MaxLat}</td></tr>`; // Changed tri to tpi
                                   }
 
                                  resultsHtml += '</table>';
 
-                                 if (tri.Data && tri.TileIndex && tri.DataFormat) {
-                                     const decodedBinaryString = base64ToBinaryString(tri.Data);
+                                 if (tpi.Data && tpi.TileIndex && tpi.DataFormat) { // Changed tri to tpi
+                                     const decodedBinaryString = base64ToBinaryString(tpi.Data); // Changed tri to tpi
                                      if (decodedBinaryString) {
                                          const byteNumbers = new Array(decodedBinaryString.length);
                                          for (let i = 0; i < decodedBinaryString.length; i++) {
@@ -547,7 +573,7 @@ nv 0 0 0 0</textarea>
                                          let mimeType = 'application/octet-stream'; // Default
                                          let fileExtension = 'bin';
 
-                                         switch(tri.DataFormat.toLowerCase()) {
+                                         switch(tpi.DataFormat.toLowerCase()) { // Changed tri to tpi
                                              case 'geotiff':
                                                  mimeType = 'image/tiff';
                                                  fileExtension = 'tif';
@@ -564,19 +590,19 @@ nv 0 0 0 0</textarea>
                                          const downloadUrl = URL.createObjectURL(blob);
 
                                          // Filename: TileIndex + optional Origin + Format extension
-                                         const originPart = tri.Origin ? `.${tri.Origin.toLowerCase()}` : '' ;
-                                         const outputFileName = `${tri.TileIndex}${originPart}.tri.${fileExtension}`;
+                                         const originPart = tpi.Origin ? `.${tpi.Origin.toLowerCase()}` : '' ; // Changed tri to tpi
+                                         const outputFileName = `${tpi.TileIndex}${originPart}.tpi.${fileExtension}`; // Changed .tri. to .tpi.
 
                                          resultsHtml += `<p class="download-link-area"><a href="${downloadUrl}" download="${outputFileName}">Download '${outputFileName}'</a></p>`;
                                      } else {
-                                         resultsHtml += `<p class="status-message error-message">Fehler: TRI-Daten (Base64) für Tile ${tri.TileIndex} konnten nicht dekodiert werden.</p>`;
+                                         resultsHtml += `<p class="status-message error-message">Fehler: TPI-Daten (Base64) für Tile ${tpi.TileIndex} konnten nicht dekodiert werden.</p>`; // Changed TRI to TPI, tri to tpi
                                      }
                                  } else {
-                                     resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${tri.TileIndex || 'Unbekannt'}.</p>`;
+                                     resultsHtml += `<p class="status-message error-message">Keine Daten zum Herunterladen für Tile ${tpi.TileIndex || 'Unbekannt'}.</p>`; // Changed TRI to TPI, tri to tpi
                                  }
                              });
                          } else {
-                             resultsHtml += '<p>Keine TRI-Daten in der Antwort enthalten.</p>';
+                             resultsHtml += '<p>Keine TPI-Daten in der Antwort enthalten.</p>'; // Changed TRI to TPI
                          }
                          displayResult('success', resultsHtml);
 
