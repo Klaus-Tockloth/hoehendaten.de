@@ -127,6 +127,10 @@
           </li>
 
           <li>
+            <a href="dienst-histogramm.html">Histogramm</a>
+          </li>
+
+          <li>
             <a href="dienst-farbrelief.html">Farbrelief</a>
           </li>
 
@@ -177,6 +181,10 @@
 
           <li>
             <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-histogramrequest.html">HistogramRequest</a>
           </li>
 
           <li>
@@ -296,6 +304,27 @@ nv 0 0 0 0
 
       <li>'nv' ist eine Sonderbehandlung für "No Data / No Value" Werte.</li>
     </ul>
+
+    <hr>
+    <h3>Histogramm im Kontext der Farbsteuerdatei</h3>
+
+    <p>Ein Histogramm ist ein mächtiges Werkzeug, um die Verteilung von Werten innerhalb eines Datensatzes zu visualisieren. Im Kontext der Kolorierung von topographischen Abbildungen (wie Höhendaten, Hangneigung, Hangexposition, Geländerauheit, TRI oder TPI) sind Histogramme unerlässlich, um effektive und aussagekräftige Farbsteuerdateien zu erstellen.</p>
+
+    <p>Durch die Analyse eines Histogramms für Ihre spezifischen Daten können Sie:</p>
+    <ul>
+      <li>Die tatsächliche Spannweite der Werte (Minimal- und Maximalwert) erkennen.</li>
+      <li>Häufig vorkommende Wertebereiche identifizieren (Peaks).</li>
+      <li>Selten vorkommende Ausreißer oder Extremwerte aufspüren.</li>
+    </ul>
+
+    <p>Diese Erkenntnisse sind entscheidend, um die Farbzuweisung in Ihrer Farbsteuerdatei optimal auf die Datenverteilung abzustimmen:</p>
+    <ul>
+      <li><strong>Festlegung der Schwellenwerte:</strong> Anstatt Farben willkürlich zuzuweisen, können Sie die Schwellenwerte (die ersten Spaltenwerte in der Farbsteuerdatei) basierend auf den im Histogramm sichtbaren Datenclustern oder wichtigen Perzentilen definieren.</li>
+      <li><strong>Anpassung an die Datenverteilung:</strong> Bei Daten, die sich in bestimmten Bereichen häufen, können Sie dort mehr Farbabstufungen vorsehen (granularere Definition in der Farbsteuerdatei), um feine Unterschiede sichtbar zu machen. In Bereichen mit wenigen Datenpunkten können Sie größere Intervalle verwenden.</li>
+      <li><strong>Quantil-Histogramme:</strong> Insbesondere Quantil-Histogramme sind hilfreich, da sie die Daten in gleich große Intervalle (z.B. 20 Klassen, die jeweils 5% der Daten enthalten) unterteilen. Dies ermöglicht es, eine Farbpalette zu erstellen, bei der jede Farbe einen annähernd gleichen Anteil an Pixeln auf der Karte repräsentiert, was zu einer visuell ausgewogeneren Darstellung führen kann.</li>
+    </ul>
+
+    <p>Nutzen Sie den Dienst <strong>Histogramm</strong>, um die Wertverteilung für die verschiedenen Abbildungstypen (Höhendaten, Hangneigung, Hangexposition, Geländerauheit, TRI, TPI) zu analysieren. Mit den erhaltenen Histogramm-Einträgen, insbesondere den Unter- und Obergrenzen sowie den Häufigkeiten der Klassen, können Sie präzisere und informativere Farbsteuerdateien entwickeln.</p>
 
     <hr>
 

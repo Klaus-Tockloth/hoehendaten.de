@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API - HistogramRequest</title>
+  <meta name="description" content=
+  "API-Dokumentation für den 'HistogramRequest'. Erzeugt Histogramm-Daten für einen Kartenausschnitt im PNG- oder GeoTIFF-Format basierend auf Lon/Lat oder UTM für verschiedene Visualisierungstypen.">
+  <meta name="keywords" content=
+  "Höhendaten, API, HistogramRequest, Histogramm, Höhenrelief, Hangneigung, Hangexposition, Rauheit, TRI, TPI, Lon/Lat, UTM, Programmierschnittstelle">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="index.html">Start</a>
+      </li>
+
+      <li>
+        <a href="karte.html">Karte</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Abbildungen&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="abbildung-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="abbildung-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="abbildung-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="abbildung-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="abbildung-tpi.html">TPI (Position)</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="grundlagen.html">Grundlagen</a>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">Dienste&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="dienst-punkt.html">Punkt Lon / Lat</a>
+          </li>
+
+          <li>
+            <a href="dienst-punkt_utm.html">Punkt UTM</a>
+          </li>
+
+          <li>
+            <a href="dienst-quelldaten.html">Quelldaten GeoTIFF</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx.html">GPX-Datei</a>
+          </li>
+
+          <li>
+            <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenschichtlinien.html">Höhenschichtlinien</a>
+          </li>
+
+          <li>
+            <a href="dienst-schummerung.html">Schummerung</a>
+          </li>
+
+          <li>
+            <a href="dienst-kolorierung.html">Kolorierung</a>
+          </li>
+
+          <li>
+            <a href="dienst-histogramm.html">Histogramm</a>
+          </li>
+
+          <li>
+            <a href="dienst-farbrelief.html">Farbrelief</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangneigung.html">Hangneigung</a>
+          </li>
+
+          <li>
+            <a href="dienst-hangexposition.html">Hangexposition</a>
+          </li>
+
+          <li>
+            <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
+          </li>
+
+          <li>
+            <a href="dienst-tri.html">TRI (Ruggedness)</a>
+          </li>
+
+          <li>
+            <a href="dienst-tpi.html">TPI (Position)</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="javascript:void(0);" class="dropbtn">API&nbsp;›</a>
+        <ul class="dropdown-content">
+          <li>
+            <a href="api-allgemein.html">Allgemein</a>
+          </li>
+
+          <li>
+            <a href="api-pointrequest.html">PointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-utmpointrequest.html">UTMPointRequest</a>
+          </li>
+
+          <li>
+            <a href="api-rawtifrequest.html">RawTIFRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxrequest.html">GPXRequest</a>
+          </li>
+
+          <li>
+            <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-histogramrequest.html">HistogramRequest</a>
+          </li>
+
+          <li>
+            <a href="api-contoursrequest.html">ContoursRequest</a>
+          </li>
+
+          <li>
+            <a href="api-hillshaderequest.html">HillshadeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
+          </li>
+
+          <li>
+            <a href="api-sloperequest.html">SlopeRequest</a>
+          </li>
+
+          <li>
+            <a href="api-aspectrequest.html">AspectRequest</a>
+          </li>
+
+          <li>
+            <a href="api-roughnessrequest.html">RoughnessRequest</a>
+          </li>
+
+          <li>
+            <a href="api-trirequest.html">TRIRequest</a>
+          </li>
+
+          <li>
+            <a href="api-tpirequest.html">TPIRequest</a>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="impressum.html">Impressum</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Application Programming Interface (API)</h2>
+
+    <hr>
+
+    <h3 class="request">API-Attribute 'HistogramRequest'</h3>
+
+    <p>Der API-Aufruf 'HistogramRequest' generiert Histogramm-Daten für einen Kartenausschnitt von 1x1 km. Der Kartenausschnitt wird durch einen beliebigen
+    Referenzpunkt bestimmt. Der Referenzpunkt kann in den Koordinatensystemen Longitude/Latitude oder UTM angegeben werden. Das Histogramm kann für verschiedene
+    Visualisierungstypen (Höhendaten, Hangneigung, Hangexposition, Geländerauheit, TRI, TPI) erstellt werden. Die Antwort enthält die Histogramm-Daten sowie
+    Metadaten zur Quelle und Attributierung.</p>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Anfrage (HistogramRequest)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Eindeutige ID der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Anfrage</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>int</td>
+          <td>UTM Zone Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>float</td>
+          <td>Easting, X, Ostwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert Referenzpunkt</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>float</td>
+          <td>Längengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>float</td>
+          <td>Breitengrad Referenzpunkt (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>TypeOfVisualization</td>
+          <td>string</td>
+          <td>Typ der Visualisierung, für die das Histogramm erstellt wird (rawtif, slope, aspect, roughness, tri, tpi)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GradientAlgorithm</td>
+          <td>string</td>
+          <td>Algorithmus für die Steigungsberechnung ('Horn' oder 'ZevenbergenThorne') - nur relevant für Hangneigung und Hangexposition</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>TypeOfHistogram</td>
+          <td>string</td>
+          <td>Typ des zu erzeugenden Histogramms ('standard' oder 'quantile')</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>NumberOfBins</td>
+          <td>int</td>
+          <td>Anzahl der Bins (Klassen, Intervalle) für das Histogramm</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>MinValue</td>
+          <td>string</td>
+          <td>Minimaler Wert für das Histogramm (optional, leerer String für automatische Bestimmung)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>MaxValue</td>
+          <td>string</td>
+          <td>Maximaler Wert für das Histogramm (optional, leerer String für automatische Bestimmung)</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+
+    <h3 class="response">API-Attribute 'HistogramResponse'</h3>
+
+    <div class="table-responsive">
+      <table>
+        <tr>
+          <th>Attribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Subattribut</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
+        </tr>
+
+        <tr>
+          <td>Type</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Antwort (HistogramResponse)</td>
+        </tr>
+
+        <tr>
+          <td>ID</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>ID der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>Attributes</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Attribute der Antwort</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>UTM Zone des angefragten Referenzpunkts</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Easting, X, Ostwert des angefragten Referenzpunkts</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert des angefragten Referenzpunkts</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Längengrad des angefragten Referenzpunkts (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Breitengrad des angefragten Referenzpunkts (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>TypeOfVisualization</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ der Visualisierung, für die das Histogramm erstellt wurde</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>GradientAlgorithm</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Algorithmus für die Steigungsberechnung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>TypeOfHistogram</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Typ des Histogramms</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>NumberOfBins</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Anzahl der Bins (Intervalle) für das Histogramm</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>MinValue</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Minimaler Wert für das Histogramm</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>MaxValue</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Maximaler Wert für das Histogramm</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>Histograms</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>[]struct</td>
+          <td>Array von Histogramm-Datenobjekten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Statistic</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Statistiken zu den Histogramm-Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>NoValueCount</td>
+          <td>int</td>
+          <td>Anzahl der Pixel ohne Wert</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>NoValuePercent</td>
+          <td>float</td>
+          <td>Prozentsatz der Pixel ohne Wert</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>BelowHistogramMinCount</td>
+          <td>int</td>
+          <td>Anzahl der Pixel unterhalb des Histogramm-Minimums</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>BelowHistogramMinPercent</td>
+          <td>float</td>
+          <td>Prozentsatz der Pixel unterhalb des Histogramm-Minimums</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>AboveHistogramMaxCount</td>
+          <td>int</td>
+          <td>Anzahl der Pixel oberhalb des Histogramm-Maximums</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>AboveHistogramMaxPercent</td>
+          <td>float</td>
+          <td>Prozentsatz der Pixel oberhalb des Histogramm-Maximums</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>ValuesTotal</td>
+          <td>int</td>
+          <td>Gesamtzahl der Pixel mit Werten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MinValueAbsolute</td>
+          <td>float</td>
+          <td>Absoluter Minimalwert in den Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MaxValueAbsolute</td>
+          <td>float</td>
+          <td>Absoluter Maximalwert in den Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MinValueHistogram</td>
+          <td>float</td>
+          <td>Minimalwert, der für die Histogramm-Bins verwendet wurde</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>MaxValueHistogram</td>
+          <td>float</td>
+          <td>Maximalwert, der für die Histogramm-Bins verwendet wurde</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Entries</td>
+          <td>
+          </td>
+          <td>[]struct</td>
+          <td>Array von Histogramm-Bins</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>LowerBound</td>
+          <td>float</td>
+          <td>Untere Grenze des Bins</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>UpperBound</td>
+          <td>float</td>
+          <td>Obere Grenze des Bins</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>BinCount</td>
+          <td>int</td>
+          <td>Anzahl der Werte in diesem Bin</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>BinPercent</td>
+          <td>float</td>
+          <td>Prozentsatz der Werte in diesem Bin</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Actuality</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Aktualität der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Origin</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Herkunft der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Attribution</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Attribution der Daten</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>TileIndex</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Index der Quelldatenkachel</td>
+        </tr>
+
+        <tr>
+          <td>IsError</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>bool</td>
+          <td>Fehler (ja/nein)</td>
+        </tr>
+
+        <tr>
+          <td>Error</td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Fehlerdetails</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Code</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlernummer</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Title</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlerbeschreibung</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Detail</td>
+          <td>
+          </td>
+          <td>string</td>
+          <td>Fehlerdetaillierung</td>
+        </tr>
+      </table>
+    </div>
+
+    <p>Eingabe:</p>
+
+    <ul>
+      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Histogramm-Daten erstellt werden.</li>
+
+      <li>Mögliche Koordinatensysteme:</li>
+
+      <ul>
+        <li>Lon/Lat-Koordinaten (WGS84, EPSG:4326).</li>
+
+        <li>UTM-Koordinaten (EPSG:25832 / EPSG:25833).</li>
+      </ul>
+
+      <li>Der gewünschte Visualisierungstyp und Histogramm-Typ müssen angegeben werden.</li>
+
+      <li>Optional können ein Minimum- und Maximumwert für die Histogramm-Intervalle festgelegt werden.</li>
+    </ul>
+
+    <p>Ausgabe:</p>
+
+    <ul>
+      <li>Histogramm-Daten und zugehörige Statistiken für die angefragte Kachel.</li>
+    </ul>
+
+    <p>Anmerkungen:</p>
+
+    <ul>
+      <li>Ein Kartenausschnitt wird in der Regel durch genau eine Kachel repräsentiert.</li>
+
+      <li>Verläuft eine Landesgrenze durch eine Kachel, wird sie von allen betroffenen Bundesländer (2 oder 3) zur Verfügung gestellt.</li>
+
+      <li>Entsprechend enthält das Feld 'Attributes.Histograms' die Daten für eine, zwei oder maximal drei Kacheln.</li>
+
+      <li>Der Body der Antwort ist komprimiert (gzip).</li>
+    </ul>
+
+    <hr>
+
+    <h4 class="request">HistogramRequest (Beispiel)</h4>
+
+    <pre class="request"><code>
+#!/bin/bash
+#
+# Abfrage Histogramm für eine Kachel mit 1000x1000 Meter.
+
+postdata=$(cat &lt;&lt;EOF
+{
+  "Type": "HistogramRequest",
+  "ID": "Hegekopf, Edersee, Hessen",
+  "Attributes": {
+    "Zone": 0,
+    "Easting": 0.0,
+    "Northing": 0.0,
+    "Longitude": 8.964229,
+    "Latitude": 51.185913,
+    "TypeOfVisualization": "slope",
+    "GradientAlgorithm": "Horn",
+    "TypeOfHistogram": "standard",
+    "NumberOfBins": 20,
+    "MinValue": "",
+    "MaxValue": ""
+  }
+}
+EOF
+)
+
+echo "postdata = $postdata"
+
+curl \
+--silent \
+--include \
+--compressed \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--header "Accept-Encoding: gzip" \
+--data "$postdata" \
+https://api.hoehendaten.de:14444/v1/histogram
+
+</code></pre>
+
+    <hr>
+
+    <h4 class="response">HistogramResponse:</h4>
+
+    <pre class="response"><code>
+HTTP/2 200
+access-control-allow-headers: Content-Type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+content-encoding: gzip
+content-type: application/json; charset=utf-8
+content-length: 1041
+date: Sat, 09 Aug 2025 11:53:18 GMT
+
+{
+  "Type": "HistogramResponse",
+  "ID": "Hegekopf, Edersee, Hessen",
+  "Attributes": {
+    "Zone": 0,
+    "Easting": 0,
+    "Northing": 0,
+    "Longitude": 8.964229,
+    "Latitude": 51.185913,
+    "TypeOfVisualization": "slope",
+    "GradientAlgorithm": "Horn",
+    "TypeOfHistogram": "standard",
+    "NumberOfBins": 20,
+    "MinValue": "",
+    "MaxValue": "",
+    "Histograms": [
+      {
+        "Statistic": {
+          "NoValueCount": 0,
+          "NoValuePercent": 0,
+          "BelowHistogramMinCount": 0,
+          "BelowHistogramMinPercent": 0,
+          "AboveHistogramMaxCount": 0,
+          "AboveHistogramMaxPercent": 0,
+          "ValuesTotal": 1000000,
+          "MinValueAbsolute": 0,
+          "MaxValueAbsolute": 68.45832,
+          "MinValueHistogram": 0,
+          "MaxValueHistogram": 68.45832
+        },
+        "Entries": [
+          {
+            "LowerBound": 0,
+            "UpperBound": 3.422916,
+            "BinCount": 325666,
+            "BinPercent": 32.5666
+          },
+          {
+            "LowerBound": 3.422916,
+            "UpperBound": 6.845832,
+            "BinCount": 139928,
+            "BinPercent": 13.992799999999999
+          },
+          {
+            "LowerBound": 6.845832,
+            "UpperBound": 10.268747999999999,
+            "BinCount": 63580,
+            "BinPercent": 6.358
+          },
+          {
+            "LowerBound": 10.268747999999999,
+            "UpperBound": 13.691664,
+            "BinCount": 38038,
+            "BinPercent": 3.8038000000000003
+          },
+          {
+            "LowerBound": 13.691664,
+            "UpperBound": 17.11458,
+            "BinCount": 40758,
+            "BinPercent": 4.0758
+          },
+          {
+            "LowerBound": 17.11458,
+            "UpperBound": 20.537495999999997,
+            "BinCount": 54426,
+            "BinPercent": 5.4426000000000005
+          },
+          {
+            "LowerBound": 20.537495999999997,
+            "UpperBound": 23.960411999999998,
+            "BinCount": 65215,
+            "BinPercent": 6.5215
+          },
+          {
+            "LowerBound": 23.960411999999998,
+            "UpperBound": 27.383328,
+            "BinCount": 77736,
+            "BinPercent": 7.7736
+          },
+          {
+            "LowerBound": 27.383328,
+            "UpperBound": 30.806244,
+            "BinCount": 78175,
+            "BinPercent": 7.817499999999999
+          },
+          {
+            "LowerBound": 30.806244,
+            "UpperBound": 34.22916,
+            "BinCount": 56286,
+            "BinPercent": 5.6286000000000005
+          },
+          {
+            "LowerBound": 34.22916,
+            "UpperBound": 37.652076,
+            "BinCount": 33161,
+            "BinPercent": 3.3161000000000005
+          },
+          {
+            "LowerBound": 37.652076,
+            "UpperBound": 41.074991999999995,
+            "BinCount": 14443,
+            "BinPercent": 1.4443
+          },
+          {
+            "LowerBound": 41.074991999999995,
+            "UpperBound": 44.497907999999995,
+            "BinCount": 6696,
+            "BinPercent": 0.6696
+          },
+          {
+            "LowerBound": 44.497907999999995,
+            "UpperBound": 47.920823999999996,
+            "BinCount": 2993,
+            "BinPercent": 0.2993
+          },
+          {
+            "LowerBound": 47.920823999999996,
+            "UpperBound": 51.34374,
+            "BinCount": 1371,
+            "BinPercent": 0.1371
+          },
+          {
+            "LowerBound": 51.34374,
+            "UpperBound": 54.766656,
+            "BinCount": 735,
+            "BinPercent": 0.0735
+          },
+          {
+            "LowerBound": 54.766656,
+            "UpperBound": 58.189572,
+            "BinCount": 441,
+            "BinPercent": 0.0441
+          },
+          {
+            "LowerBound": 58.189572,
+            "UpperBound": 61.612488,
+            "BinCount": 233,
+            "BinPercent": 0.0233
+          },
+          {
+            "LowerBound": 61.612488,
+            "UpperBound": 65.035404,
+            "BinCount": 91,
+            "BinPercent": 0.0091
+          },
+          {
+            "LowerBound": 65.035404,
+            "UpperBound": 68.45832,
+            "BinCount": 28,
+            "BinPercent": 0.0028
+          }
+        ],
+        "Actuality": "2021-04-26",
+        "Origin": "DE-HE",
+        "Attribution": "Geobasisdaten © Hessische Verwaltung für Bodenmanagement und Geoinformation, dl-de/by-2-0",
+        "TileIndex": "32_497_5670"
+      }
+    ],
+    "IsError": false,
+    "Error": {
+      "Code": "",
+      "Title": "",
+      "Detail": ""
+    }
+  }
+}
+</code></pre>
+  </div>
+
+  <div class="container">
+    <hr>
+
+    <p class="copyright">© 2025 - Höhendaten für Deutschland</p>
+  </div>
+</body>
+</html>

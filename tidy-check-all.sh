@@ -11,6 +11,7 @@
 # - v1.3.0 - 2025/07/31 websites added
 # - v1.4.0 - 2025/08/04 websites added
 # - v1.5.0 - 2025/08/06 websites added
+# - v1.6.0 - 2025/08/10 websites added
 #
 # Prerequisites:
 # - tidy-html5 installed
@@ -38,6 +39,7 @@ tidy -errors -quiet api-contoursrequest.html
 tidy -errors -quiet api-gpxrequest.html
 tidy -errors -quiet api-gpxanalyzerequest.html
 tidy -errors -quiet api-hillshaderequest.html
+tidy -errors -quiet api-histogramrequest.html
 tidy -errors -quiet api-pointrequest.html
 tidy -errors -quiet api-rawtifrequest.html
 tidy -errors -quiet api-roughnessrequest.html
@@ -51,6 +53,7 @@ tidy -errors -quiet dienst-gpx.html
 tidy -errors -quiet dienst-gpx-analyse.html
 tidy -errors -quiet dienst-hangexposition.html
 tidy -errors -quiet dienst-hangneigung.html
+tidy -errors -quiet dienst-histogramm.html
 tidy -errors -quiet dienst-hoehenschichtlinien.html
 tidy -errors -quiet dienst-kolorierung.html
 tidy -errors -quiet dienst-punkt_utm.html
