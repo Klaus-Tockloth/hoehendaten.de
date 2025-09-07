@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GPX-Analyse (Dienst)</title>
   <meta name="description" content="Analysieren Sie Höhendaten und andere Metriken für alle Punkte in Ihrer GPX-Datei.">
-  <meta name="keywords" content="Höhendaten, GPX-Datei, Analyse, Strecke, Segment, Höhenprofil, Dauer, Distanz, Aufstieg, Abstieg">
+  <meta name="keywords" content="Höhendaten, GPX-Datei, Analyse, Strecke, Segment, Höhenprofil, Dauer, Distanz, Aufstieg, Abstieg, Minimale Höhe, Maximale Höhe">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
   <style>
@@ -106,6 +106,10 @@
           </li>
 
           <li>
+            <a href="abbildung-ueberlagerung.html">Überlagerung</a>
+          </li>
+
+          <li>
             <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
           </li>
 
@@ -168,6 +172,10 @@
 
           <li>
             <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenprofil.html">Höhenprofil A-B</a>
           </li>
 
           <li>
@@ -237,6 +245,10 @@
 
           <li>
             <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-elevationprofile.html">ElevationProfileRequest</a>
           </li>
 
           <li>
@@ -523,6 +535,24 @@
 
                                           if (Array.isArray(track.Segments) && track.Segments.length > 0) {
                                               track.Segments.forEach((segment, segmentIndex) => {
+                                                  // *** NEU: Berechnung der minimalen und maximalen Höhe ***
+                                                  let minElevation = Infinity;
+                                                  let maxElevation = -Infinity;
+                                                  if (Array.isArray(segment.PointDetails) && segment.PointDetails.length > 0) {
+                                                      segment.PointDetails.forEach(point => {
+                                                          if (point.Elevation !== undefined) {
+                                                              if (point.Elevation < minElevation) {
+                                                                  minElevation = point.Elevation;
+                                                              }
+                                                              if (point.Elevation > maxElevation) {
+                                                                  maxElevation = point.Elevation;
+                                                              }
+                                                          }
+                                                      });
+                                                  }
+                                                  // *** ENDE NEU ***
+
+
                                                   resultsHtml += `<h4>Segment ${segmentIndex + 1}:</h4>`;
                                                   resultsHtml += '<table class="results-table">';
                                                   if (segment.StartTime !== undefined) resultsHtml += `<tr><td><strong>Startzeit</strong></td><td>${new Date(segment.StartTime).toLocaleString()}</td></tr>`;
@@ -536,12 +566,16 @@
                                                   if (segment.StoppedTime !== undefined) resultsHtml += `<tr><td><strong>Zeit ohne Bewegung (hh:mm:ss)</strong></td><td>${formatSecondsToHMS(segment.StoppedTime)}</td></tr>`;
                                                   if (segment.MovingDistance !== undefined) resultsHtml += `<tr><td><strong>Distanz mit Bewegung</strong></td><td>${segment.MovingDistance.toFixed(2)} m (${(segment.MovingDistance / 1000).toFixed(2)} km)</td></tr>`;
                                                   if (segment.StoppedDistance !== undefined) resultsHtml += `<tr><td><strong>Distanz ohne Bewegung</strong></td><td>${segment.StoppedDistance.toFixed(2)} m (${(segment.StoppedDistance / 1000).toFixed(2)} km)</td></tr>`;
-                                                  /*
-                                                  if (segment.MaxLatitude !== undefined) resultsHtml += `<tr><td><strong>Max. Breite</strong></td><td>${segment.MaxLatitude}</td></tr>`;
-                                                  if (segment.MaxLongitude !== undefined) resultsHtml += `<tr><td><strong>Max. Länge</strong></td><td>${segment.MaxLongitude}</td></tr>`;
-                                                  if (segment.MinLatitude !== undefined) resultsHtml += `<tr><td><strong>Min. Breite</strong></td><td>${segment.MinLatitude}</td></tr>`;
-                                                  if (segment.MinLongitude !== undefined) resultsHtml += `<tr><td><strong>Min. Länge</strong></td><td>${segment.MinLongitude}</td></tr>`;
-                                                  */
+
+                                                  // *** NEU: Anzeige der minimalen und maximalen Höhe ***
+                                                  if (minElevation !== Infinity) {
+                                                      resultsHtml += `<tr><td><strong>Minimale Höhe</strong></td><td>${minElevation.toFixed(2)} m</td></tr>`;
+                                                  }
+                                                  if (maxElevation !== -Infinity) {
+                                                      resultsHtml += `<tr><td><strong>Maximale Höhe</strong></td><td>${maxElevation.toFixed(2)} m</td></tr>`;
+                                                  }
+                                                  // *** ENDE NEU ***
+
                                                   if (segment.UphillUnfiltered !== undefined) resultsHtml += `<tr><td><strong>Anstieg (Rohdaten)</strong></td><td>${segment.UphillUnfiltered.toFixed(2)} m</td></tr>`;
                                                   if (segment.DownhillUnfiltered !== undefined) resultsHtml += `<tr><td><strong>Abstieg (Rohdaten)</strong></td><td>${segment.DownhillUnfiltered.toFixed(2)} m</td></tr>`;
                                                   if (segment.UphillWMA !== undefined) resultsHtml += `<tr><td><strong>Anstieg (Gewichtung)</strong></td><td>${segment.UphillWMA.toFixed(2)} m (Weighted Moving Average: 30,40,30)</td></tr>`;

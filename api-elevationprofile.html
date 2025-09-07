@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AspectRequest (API)</title>
+  <title>API - ElevationProfileRequest</title>
   <meta name="description" content=
-  "API-Dokumentation für den 'AspectRequest'. Erzeugt Hangexpositionsdaten für einen Kartenausschnitt im PNG- oder GeoTIFF-Format basierend auf Lon/Lat oder UTM.">
-  <meta name="keywords" content=
-  "Höhendaten, API, AspectRequest, Hangexposition, PNG, GeoTIFF, Lon/Lat, UTM, Programmierschnittstelle, GradientAlgorithm, Horn, ZevenbergenThorne">
+  "API-Dokumentation für den 'ElevationProfileRequest'. Erzeugt ein Höhenprofil zwischen zwei Punkten im JSON-Format basierend auf Lon/Lat oder UTM.">
+  <meta name="keywords" content="Höhenprofil, API, ElevationProfileRequest, JSON, Lon/Lat, UTM, Programmierschnittstelle">
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -224,20 +223,17 @@
 
     <hr>
 
-    <h3 class="request">API-Attribute 'AspectRequest'</h3>
+    <h3 class="request">API-Attribute 'ElevationProfileRequest'</h3>
 
-    <p>Der API-Aufruf 'AspectRequest' generiert eine kolorierte Hangexpositionsabbildung (aspect) für einen Kartenausschnitt von 1x1 km. Der Kartenausschnitt wird
-    durch einen beliebigen Referenzpunkt bestimmt. Der angegebene Referenzpunkt (Lon/Lat oder UTM) dient zur Identifizierung der relevanten 1x1 km Kachel, für die
-    die Abbildung generiert wird. Die Antwort enthält die kolorierten Hangexpositionsabbildung im GeoTIFF- oder PNG-Format (Base64-kodiert), sowie Metadaten zur
-    Quelle und Attributierung.</p>
-
-    <p>Die Hangexposition kann mit verschiedenen Algorithmen berechnet werden. Es ist eine Farbtextdatei für die Kolorierung zu übergeben. Die Antwort kann Daten
-    für eine, zwei oder drei Kacheln enthalten, falls eine Landesgrenze den Bereich schneidet.</p>
+    <p>Der API-Aufruf 'ElevationProfileRequest' generiert ein Höhenprofil zwischen einem Startpunkt (PointA) und einem Endpunkt (PointB). Die Punkte können in den
+    Koordinatensystemen Longitude/Latitude oder UTM angegeben werden. Die Antwort enthält das berechnete Höhenprofil als eine Liste von Punkten mit Distanz, Höhe
+    und Koordinaten, sowie Metadaten zur Attributierung.</p>
 
     <div class="table-responsive">
       <table>
         <tr>
           <th>Attribut</th>
+          <th>Subattribut</th>
           <th>Subattribut</th>
           <th>Datentyp</th>
           <th>Beschreibung</th>
@@ -247,12 +243,16 @@
           <td>Type</td>
           <td>
           </td>
+          <td>
+          </td>
           <td>string</td>
-          <td>Typ der Anfrage (AspectRequest)</td>
+          <td>Typ der Anfrage (ElevationProfileRequest)</td>
         </tr>
 
         <tr>
           <td>ID</td>
+          <td>
+          </td>
           <td>
           </td>
           <td>string</td>
@@ -263,6 +263,8 @@
           <td>Attributes</td>
           <td>
           </td>
+          <td>
+          </td>
           <td>struct</td>
           <td>Attribute der Anfrage</td>
         </tr>
@@ -270,72 +272,148 @@
         <tr>
           <td>
           </td>
-          <td>Zone</td>
-          <td>int</td>
-          <td>UTM Zone Referenzpunkt</td>
+          <td>PointA</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Startpunkt des Profils</td>
         </tr>
 
         <tr>
           <td>
           </td>
-          <td>Easting</td>
-          <td>float</td>
-          <td>Easting, X, Ostwert Referenzpunkt</td>
-        </tr>
-
-        <tr>
-          <td>
-          </td>
-          <td>Northing</td>
-          <td>float</td>
-          <td>Northing, Y, Nordwert Referenzpunkt</td>
-        </tr>
-
-        <tr>
           <td>
           </td>
           <td>Longitude</td>
           <td>float</td>
-          <td>Längengrad Referenzpunkt (Dezimalgrad)</td>
+          <td>Längengrad (Dezimalgrad)</td>
         </tr>
 
         <tr>
+          <td>
+          </td>
           <td>
           </td>
           <td>Latitude</td>
           <td>float</td>
-          <td>Breitengrad Referenzpunkt (Dezimalgrad)</td>
+          <td>Breitengrad (Dezimalgrad)</td>
         </tr>
 
         <tr>
           <td>
           </td>
-          <td>GradientAlgorithm</td>
-          <td>string</td>
-          <td>Algorithmus zur Berechnung der Hangexposition ('Horn' oder 'ZevenbergenThorne')</td>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>int</td>
+          <td>UTM Zone</td>
         </tr>
 
         <tr>
           <td>
           </td>
-          <td>ColorTextFileContent</td>
-          <td>[]string</td>
-          <td>Inhalt der Farbtextdatei für die Kolorierung der Hangexposition</td>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>float</td>
+          <td>Easting, X, Ostwert</td>
         </tr>
 
         <tr>
           <td>
           </td>
-          <td>ColoringAlgorithm</td>
-          <td>string</td>
-          <td>Algorithmus für Zuweisung 'Wert zu Farbe' ('interpolation' oder 'rounding')</td>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>PointB</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Endpunkt des Profils</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Longitude</td>
+          <td>float</td>
+          <td>Längengrad (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Latitude</td>
+          <td>float</td>
+          <td>Breitengrad (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Zone</td>
+          <td>int</td>
+          <td>UTM Zone</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>float</td>
+          <td>Easting, X, Ostwert</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>float</td>
+          <td>Northing, Y, Nordwert</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>MaxTotalProfilePoints</td>
+          <td>
+          </td>
+          <td>int</td>
+          <td>Maximale Anzahl der Punkte im Ergebnisprofil</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>MinStepSize</td>
+          <td>
+          </td>
+          <td>float</td>
+          <td>Minimale Schrittweite zwischen den Punkten in Metern</td>
         </tr>
       </table>
     </div>
 
     <hr>
 
-    <h3 class="response">API-Attribute 'AspectResponse'</h3>
+    <h3 class="response">API-Attribute 'ElevationProfileResponse'</h3>
 
     <div class="table-responsive">
       <table>
@@ -354,7 +432,7 @@
           <td>
           </td>
           <td>string</td>
-          <td>Typ der Antwort (AspectResponse)</td>
+          <td>Typ der Antwort (ElevationProfileResponse)</td>
         </tr>
 
         <tr>
@@ -380,91 +458,51 @@
         <tr>
           <td>
           </td>
-          <td>Zone</td>
+          <td>PointA</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Startpunkt des Profils (wie in der Anfrage)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>PointB</td>
+          <td>
+          </td>
+          <td>struct</td>
+          <td>Endpunkt des Profils (wie in der Anfrage)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>MaxTotalProfilePoints</td>
           <td>
           </td>
           <td>int</td>
-          <td>UTM Zone des angefragten Referenzpunkts</td>
+          <td>Maximale Anzahl der Punkte (wie in der Anfrage)</td>
         </tr>
 
         <tr>
           <td>
           </td>
-          <td>Easting</td>
+          <td>MinStepSize</td>
           <td>
           </td>
           <td>float</td>
-          <td>Easting, X, Ostwert des angefragten Referenzpunkts</td>
+          <td>Minimale Schrittweite (wie in der Anfrage)</td>
         </tr>
 
         <tr>
           <td>
           </td>
-          <td>Northing</td>
-          <td>
-          </td>
-          <td>float</td>
-          <td>Northing, Y, Nordwert des angefragten Referenzpunkts</td>
-        </tr>
-
-        <tr>
-          <td>
-          </td>
-          <td>Longitude</td>
-          <td>
-          </td>
-          <td>float</td>
-          <td>Längengrad des angefragten Referenzpunkts (Dezimalgrad)</td>
-        </tr>
-
-        <tr>
-          <td>
-          </td>
-          <td>Latitude</td>
-          <td>
-          </td>
-          <td>float</td>
-          <td>Breitengrad des angefragten Referenzpunkts (Dezimalgrad)</td>
-        </tr>
-
-        <tr>
-          <td>
-          </td>
-          <td>GradientAlgorithm</td>
-          <td>
-          </td>
-          <td>string</td>
-          <td>Algorithmus zur Berechnung der Hangexposition</td>
-        </tr>
-
-        <tr>
-          <td>
-          </td>
-          <td>ColorTextFileContent</td>
-          <td>
-          </td>
-          <td>[]string</td>
-          <td>Inhalt der Farbtextdatei für die Kolorierung der Hangexposition</td>
-        </tr>
-
-        <tr>
-          <td>
-          </td>
-          <td>ColoringAlgorithm</td>
-          <td>
-          </td>
-          <td>string</td>
-          <td>Algorithmus für Zuweisung 'Wert zu Farbe'</td>
-        </tr>
-
-        <tr>
-          <td>
-          </td>
-          <td>Aspects</td>
+          <td>Profile</td>
           <td>
           </td>
           <td>[]struct</td>
-          <td>Array von kolorierten Hangexpositionsabbildungen</td>
+          <td>Array der berechneten Profilpunkte</td>
         </tr>
 
         <tr>
@@ -472,9 +510,9 @@
           </td>
           <td>
           </td>
-          <td>Data</td>
-          <td>string (Base64)</td>
-          <td>Kolorierte Hangexpositionsabbildung für die Kachel</td>
+          <td>Distance</td>
+          <td>float</td>
+          <td>Distanz vom Startpunkt in Metern</td>
         </tr>
 
         <tr>
@@ -482,9 +520,9 @@
           </td>
           <td>
           </td>
-          <td>DataFormat</td>
-          <td>string</td>
-          <td>Format der Daten (GeoTIFF oder PNG)</td>
+          <td>Elevation</td>
+          <td>float</td>
+          <td>Höhe an diesem Punkt in Metern</td>
         </tr>
 
         <tr>
@@ -492,9 +530,9 @@
           </td>
           <td>
           </td>
-          <td>Actuality</td>
-          <td>string</td>
-          <td>Aktualität der Daten</td>
+          <td>Longitude</td>
+          <td>float</td>
+          <td>Längengrad des Punkts (Dezimalgrad)</td>
         </tr>
 
         <tr>
@@ -502,9 +540,29 @@
           </td>
           <td>
           </td>
-          <td>Origin</td>
-          <td>string</td>
-          <td>Herkunft der Daten</td>
+          <td>Latitude</td>
+          <td>float</td>
+          <td>Breitengrad des Punkts (Dezimalgrad)</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Easting</td>
+          <td>float</td>
+          <td>Easting des Punkts</td>
+        </tr>
+
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>Northing</td>
+          <td>float</td>
+          <td>Northing des Punkts</td>
         </tr>
 
         <tr>
@@ -514,33 +572,23 @@
           </td>
           <td>Attribution</td>
           <td>string</td>
-          <td>Attribution der Daten</td>
+          <td>Attribution der Datenquelle für diesen Punkt</td>
         </tr>
 
         <tr>
           <td>
           </td>
+          <td>Attributions</td>
           <td>
           </td>
-          <td>TileIndex</td>
-          <td>string</td>
-          <td>Index der Quelldatenkachel</td>
+          <td>[]string</td>
+          <td>Liste aller für das Profil verwendeten Datenquellen</td>
         </tr>
 
         <tr>
-          <td>
-          </td>
-          <td>
-          </td>
-          <td>BoundingBox</td>
-          <td>struct</td>
-          <td>WGS84 Georeferenz (relevant bei PNG)</td>
-        </tr>
-
-        <tr>
-          <td>
-          </td>
           <td>IsError</td>
+          <td>
+          </td>
           <td>
           </td>
           <td>bool</td>
@@ -548,9 +596,9 @@
         </tr>
 
         <tr>
+          <td>Error</td>
           <td>
           </td>
-          <td>Error</td>
           <td>
           </td>
           <td>struct</td>
@@ -592,7 +640,7 @@
     <p>Eingabe:</p>
 
     <ul>
-      <li>Aus den Koordinaten eines Referenzpunkts wird die Kachel (1x1 km) abgeleitet, für die die Hangexpositionsabbildungen erstellt werden.</li>
+      <li>Die Koordinaten für Start- (PointA) und Endpunkt (PointB) des Profils.</li>
 
       <li>Mögliche Koordinatensysteme:</li>
 
@@ -601,69 +649,53 @@
 
         <li>UTM-Koordinaten (EPSG:25832 / EPSG:25833).</li>
       </ul>
+
+      <li>Optionale Parameter zur Steuerung der Detailgenauigkeit des Profils: 'MaxTotalProfilePoints' und 'MinStepSize'.</li>
     </ul>
 
     <p>Ausgabe:</p>
 
     <ul>
-      <li>Abhängig vom Eingabeformat werden unterschiedliche Ausgabeformate erzeugt:</li>
+      <li>Ein JSON-Objekt, das die Eingabeparameter und das berechnete Höhenprofil enthält.</li>
 
-      <ul>
-        <li>PNG in der Projektion EPSG:3857 (Webmercator) mit expliziter Georeferenzierung durch Lon/Lat-Koordinaten (WGS84, EPSG:4326).</li>
-
-        <li>GeoTIFF in der Projektion der DGM1-Ausgangsdaten (EPSG:25832 / EPSG:25833) mit impliziter Georeferenzierung in den Metadaten.</li>
-      </ul>
+      <li>Das Profil ist ein Array von Punkten, wobei jeder Punkt Informationen über Distanz, Höhe, Koordinaten und Datenquelle enthält.</li>
     </ul>
 
     <p>Anmerkungen:</p>
 
     <ul>
-      <li>Ein Kartenausschnitt wird in der Regel durch genau eine Kachel repräsentiert.</li>
+      <li>Wenn für PointA und PointB unterschiedliche Koordinatensysteme (z.B. Lon/Lat für A und UTM für B) gemischt werden, wird ein Fehler zurückgegeben.</li>
 
-      <li>Verläuft eine Landesgrenze durch eine Kachel, wird sie von allen betroffenen Bundesländer (2 oder 3) zur Verfügung gestellt.</li>
-
-      <li>Entsprechend enthält das Feld 'Attributes.Aspects' die Daten für eine, zwei oder maximal drei Kacheln.</li>
+      <li>Das Attribut 'Attributions' in der Antwort fasst alle einzigartigen Quellenvermerke der Daten zusammen, die zur Erstellung des Profils verwendet
+      wurden.</li>
 
       <li>Der Body der Antwort ist komprimiert (gzip).</li>
     </ul>
 
     <hr>
 
-    <h4 class="request">AspectRequest (Beispiel)</h4>
+    <h4 class="request">ElevationProfileRequest (Beispiel)</h4>
 
     <pre class="request"><code>
 #!/bin/bash
 #
-# Abfrage der Hangexposition für eine Kachel mit 1000x1000 Meter. 
+# Abfrage ElevationProfile zwischen zwei Punkten via Lon/Lat. 
 
 postdata=$(cat &lt;&lt;EOF
 {
-  "Type": "AspectRequest",
-  "ID": "Hegekopf, Edersee, Hessen",
+  "Type": "ElevationProfileRequest",
+  "ID": "Test Maifisch LonLat",
   "Attributes": {
-    "Zone": 0,
-    "Easting": 0.0,
-    "Northing": 0.0,
-    "Longitude": 8.964229,
-    "Latitude": 51.185913,
-    "GradientAlgorithm": "ZevenbergenThorne",
-    "ColorTextFileContent": [
-      "# Winkel- und Farbschema für die Abbildung von Hangexpositionen.",
-      "# Musterdefinition als Basis für eigene Anpassungen.",
-      "# Format: Wert Rot Grün Blau Alpha",
-      "0 190 190 220 255",
-      "22.5 180 220 200 255",
-      "67.5 255 255 180 255",
-      "112.5 255 220 160 255",
-      "157.5 255 180 120 255",
-      "202.5 245 190 130 255",
-      "247.5 200 210 230 255",
-      "292.5 190 190 220 255",
-      "337.5 190 190 220 255",
-      "360.0 190 190 220 255",
-      "nv 0 0 0 0"
-    ],
-    "ColoringAlgorithm": "interpolation"
+    "PointA": {
+      "Longitude": 7.234057,
+      "Latitude": 51.722921
+    },
+    "PointB": {
+      "Longitude": 7.234519,
+      "Latitude": 51.721705
+    },
+    "MaxTotalProfilePoints": 50,
+    "MinStepSize": 1.0
   }
 }
 EOF
@@ -679,65 +711,83 @@ curl \
 --header "Accept: application/json" \
 --header "Accept-Encoding: gzip" \
 --data "$postdata" \
-https://api.hoehendaten.de:14444/v1/aspect
+https://api.hoehendaten.de:14444/v1/elevationprofile
 
 </code></pre>
 
     <hr>
 
-    <h4 class="response">AspectResponse:</h4>
+    <h4 class="response">ElevationProfileResponse:</h4>
 
     <pre class="response"><code>
 HTTP/2 200
 access-control-allow-headers: Content-Type
 access-control-allow-methods: POST
 access-control-allow-origin: *
-content-encoding: gzip
 content-type: application/json; charset=utf-8
-date: Thu, 10 Jul 2025 09:18:12 GMT
+date: Thu, 04 Sep 2025 08:07:54 GMT
 
 {
-  "Type": "AspectResponse",
-  "ID": "Hegekopf, Edersee, Hessen",
+  "Type": "ElevationProfileResponse",
+  "ID": "Test-Profil Maifisch LonLat",
   "Attributes": {
-    "Zone": 0,
-    "Easting": 0,
-    "Northing": 0,
-    "Longitude": 8.964229,
-    "Latitude": 51.185913,
-    "GradientAlgorithm": "ZevenbergenThorne",
-    "ColorTextFileContent": [
-      "# Winkel- und Farbschema für die Abbildung von Hangexpositionen.",
-      "# Musterdefinition als Basis für eigene Anpassungen.",
-      "# Format: Wert Rot Grün Blau Alpha",
-      "0 190 190 220 255",
-      "22.5 180 220 200 255",
-      "67.5 255 255 180 255",
-      "112.5 255 220 160 255",
-      "157.5 255 180 120 255",
-      "202.5 245 190 130 255",
-      "247.5 200 210 230 255",
-      "292.5 190 190 220 255",
-      "337.5 190 190 220 255",
-      "360.0 190 190 220 255",
-      "nv 0 0 0 0"
-    ],
-    "ColoringAlgorithm": "interpolation",
-    "Aspects": [
+    "PointA": {
+      "Longitude": 7.234057,
+      "Latitude": 51.722921,
+      "Zone": 0,
+      "Easting": 0,
+      "Northing": 0
+    },
+    "PointB": {
+      "Longitude": 7.234519,
+      "Latitude": 51.721705,
+      "Zone": 0,
+      "Easting": 0,
+      "Northing": 0
+    },
+    "MaxTotalProfilePoints": 50,
+    "MinStepSize": 1,
+    "Profile": [
       {
-        "Data": "iVBORw0KGgoAAAANSUhEUgAAA+cAAAPqCA ... BPfB8AAAAASUVORK5CYII=",
-        "DataFormat": "png",
-        "Actuality": "2021-04-26",
-        "Origin": "DE-HE",
-        "Attribution": "Geobasisdaten © Hessische Verwaltung für Bodenmanagement und Geoinformation, dl-de/by-2-0",
-        "TileIndex": "32_497_5670",
-        "BoundingBox": {
-          "MinLon": 8.95707049585795,
-          "MaxLon": 8.971385896601037,
-          "MinLat": 51.18141399484732,
-          "MaxLat": 51.190410580109756
-        }
+        "Distance": 0,
+        "Elevation": 39.77000045776367,
+        "Longitude": 7.234057000025448,
+        "Latitude": 51.722920998887616,
+        "Easting": 0,
+        "Northing": 0,
+        "Attribution": "DE-NW, 2020-02"
+      },
+      {
+        "Distance": 2.836328507741234,
+        "Elevation": 39.790000915527344,
+        "Longitude": 7.2340664288522225,
+        "Latitude": 51.722896182583966,
+        "Easting": 0,
+        "Northing": 0,
+        "Attribution": "DE-NW, 2020-02"
+      },
+...
+      {
+        "Distance": 136.14376837157923,
+        "Elevation": 37.31999969482422,
+        "Longitude": 7.2345095717093475,
+        "Latitude": 51.72172981523702,
+        "Easting": 0,
+        "Northing": 0,
+        "Attribution": "DE-NW, 2020-02"
+      },
+      {
+        "Distance": 138.98009687932046,
+        "Elevation": 37.4900016784668,
+        "Longitude": 7.23451900002544,
+        "Latitude": 51.7217049988876,
+        "Easting": 0,
+        "Northing": 0,
+        "Attribution": "DE-NW, 2020-02"
       }
+    ],
+    "Attributions": [
+      "DE-NW: © GeoBasis-DE / NRW (2025), dl-de/by-2-0"
     ],
     "IsError": false,
     "Error": {

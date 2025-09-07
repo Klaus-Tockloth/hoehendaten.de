@@ -12,6 +12,8 @@
 # - v1.4.0 - 2025/08/04 websites added
 # - v1.5.0 - 2025/08/06 websites added
 # - v1.6.0 - 2025/08/10 websites added
+# - v1.7.0 - 2025/08/17 website added
+# - v1.8.0 - 2025/09/04 website added
 #
 # Prerequisites:
 # - tidy-html5 installed
@@ -32,10 +34,12 @@ tidy -errors -quiet abbildung-kolorierung.html
 tidy -errors -quiet abbildung-schummerung.html
 tidy -errors -quiet abbildung-tpi.html
 tidy -errors -quiet abbildung-tri.html
+tidy -errors -quiet abbildung-ueberlagerung.html
 tidy -errors -quiet api-allgemein.html
 tidy -errors -quiet api-aspectrequest.html
 tidy -errors -quiet api-colorreliefrequest.html
 tidy -errors -quiet api-contoursrequest.html
+tidy -errors -quiet api-elevationprofile.html
 tidy -errors -quiet api-gpxrequest.html
 tidy -errors -quiet api-gpxanalyzerequest.html
 tidy -errors -quiet api-hillshaderequest.html
@@ -54,6 +58,7 @@ tidy -errors -quiet dienst-gpx-analyse.html
 tidy -errors -quiet dienst-hangexposition.html
 tidy -errors -quiet dienst-hangneigung.html
 tidy -errors -quiet dienst-histogramm.html
+tidy -errors -quiet dienst-hoehenprofil.html
 tidy -errors -quiet dienst-hoehenschichtlinien.html
 tidy -errors -quiet dienst-kolorierung.html
 tidy -errors -quiet dienst-punkt_utm.html

@@ -12,6 +12,8 @@
 # - v1.4.0 - 2025/08/04 websites added
 # - v1.5.0 - 2025/08/06 websites added
 # - v1.6.0 - 2025/08/10 websites added
+# - v1.7.0 - 2025/08/17 website added
+# - v1.8.0 - 2025/09/04 website added
 #
 # Prerequisites:
 # - tidy-html5 installed
@@ -32,10 +34,12 @@ tidy -config tidy-config.txt -quiet -modify abbildung-kolorierung.html
 tidy -config tidy-config.txt -quiet -modify abbildung-schummerung.html
 tidy -config tidy-config.txt -quiet -modify abbildung-tpi.html
 tidy -config tidy-config.txt -quiet -modify abbildung-tri.html
+tidy -config tidy-config.txt -quiet -modify abbildung-ueberlagerung.html
 tidy -config tidy-config.txt -quiet -modify api-allgemein.html
 tidy -config tidy-config.txt -quiet -modify api-aspectrequest.html
 tidy -config tidy-config.txt -quiet -modify api-colorreliefrequest.html
 tidy -config tidy-config.txt -quiet -modify api-contoursrequest.html
+tidy -config tidy-config.txt -quiet -modify api-elevationprofile.html
 tidy -config tidy-config.txt -quiet -modify api-gpxrequest.html
 tidy -config tidy-config.txt -quiet -modify api-gpxanalyzerequest.html
 tidy -config tidy-config.txt -quiet -modify api-hillshaderequest.html
@@ -54,6 +58,7 @@ tidy -config tidy-config.txt -quiet -modify dienst-gpx-analyse.html
 tidy -config tidy-config.txt -quiet -modify dienst-hangexposition.html
 tidy -config tidy-config.txt -quiet -modify dienst-hangneigung.html
 tidy -config tidy-config.txt -quiet -modify dienst-histogramm.html
+tidy -config tidy-config.txt -quiet -modify dienst-hoehenprofil.html
 tidy -config tidy-config.txt -quiet -modify dienst-hoehenschichtlinien.html
 tidy -config tidy-config.txt -quiet -modify dienst-kolorierung.html
 tidy -config tidy-config.txt -quiet -modify dienst-punkt_utm.html

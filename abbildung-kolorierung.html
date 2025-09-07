@@ -50,6 +50,10 @@
           </li>
 
           <li>
+            <a href="abbildung-ueberlagerung.html">Überlagerung</a>
+          </li>
+
+          <li>
             <a href="abbildung-hoehenschichtlinien.html">Höhenschichtlinien</a>
           </li>
 
@@ -112,6 +116,10 @@
 
           <li>
             <a href="dienst-gpx-analyse.html">GPX-Analyse</a>
+          </li>
+
+          <li>
+            <a href="dienst-hoehenprofil.html">Höhenprofil A-B</a>
           </li>
 
           <li>
@@ -181,6 +189,10 @@
 
           <li>
             <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
+          </li>
+
+          <li>
+            <a href="api-elevationprofile.html">ElevationProfileRequest</a>
           </li>
 
           <li>
@@ -273,6 +285,8 @@
       white, black, red, green, blue, yellow, magenta, cyan, aqua, grey/gray, orange, brown, purple/violet und indigo.</li>
     </ul>
 
+    <p>Nutzen Sie den Dienst <strong>Kolorierung</strong> um Farbsteuerdateien zu definieren und zu editieren.</p>
+
     <hr>
 
     <h3>Beispiel</h3>
@@ -303,28 +317,46 @@ nv 0 0 0 0
       <li>Für den letzten definierten Wert (hier 90) gilt die Farbe für alle Werte von diesem Wert an aufwärts.</li>
 
       <li>'nv' ist eine Sonderbehandlung für "No Data / No Value" Werte.</li>
+
+      <li>Werte, die unter dem ersten definierten Schwellenwert (0) liegen, werden der Farbe des ersten Eintrags (0) zugeordnet.</li>
     </ul>
 
     <hr>
+
     <h3>Histogramm im Kontext der Farbsteuerdatei</h3>
 
-    <p>Ein Histogramm ist ein mächtiges Werkzeug, um die Verteilung von Werten innerhalb eines Datensatzes zu visualisieren. Im Kontext der Kolorierung von topographischen Abbildungen (wie Höhendaten, Hangneigung, Hangexposition, Geländerauheit, TRI oder TPI) sind Histogramme unerlässlich, um effektive und aussagekräftige Farbsteuerdateien zu erstellen.</p>
+    <p>Ein Histogramm ist ein mächtiges Werkzeug, um die Verteilung von Werten innerhalb eines Datensatzes zu visualisieren. Im Kontext der Kolorierung von
+    topographischen Abbildungen (wie Höhendaten, Hangneigung, Hangexposition, Geländerauheit, TRI oder TPI) sind Histogramme unerlässlich, um effektive und
+    aussagekräftige Farbsteuerdateien zu erstellen.</p>
 
     <p>Durch die Analyse eines Histogramms für Ihre spezifischen Daten können Sie:</p>
+
     <ul>
       <li>Die tatsächliche Spannweite der Werte (Minimal- und Maximalwert) erkennen.</li>
+
       <li>Häufig vorkommende Wertebereiche identifizieren (Peaks).</li>
+
       <li>Selten vorkommende Ausreißer oder Extremwerte aufspüren.</li>
     </ul>
 
     <p>Diese Erkenntnisse sind entscheidend, um die Farbzuweisung in Ihrer Farbsteuerdatei optimal auf die Datenverteilung abzustimmen:</p>
+
     <ul>
-      <li><strong>Festlegung der Schwellenwerte:</strong> Anstatt Farben willkürlich zuzuweisen, können Sie die Schwellenwerte (die ersten Spaltenwerte in der Farbsteuerdatei) basierend auf den im Histogramm sichtbaren Datenclustern oder wichtigen Perzentilen definieren.</li>
-      <li><strong>Anpassung an die Datenverteilung:</strong> Bei Daten, die sich in bestimmten Bereichen häufen, können Sie dort mehr Farbabstufungen vorsehen (granularere Definition in der Farbsteuerdatei), um feine Unterschiede sichtbar zu machen. In Bereichen mit wenigen Datenpunkten können Sie größere Intervalle verwenden.</li>
-      <li><strong>Quantil-Histogramme:</strong> Insbesondere Quantil-Histogramme sind hilfreich, da sie die Daten in gleich große Intervalle (z.B. 20 Klassen, die jeweils 5% der Daten enthalten) unterteilen. Dies ermöglicht es, eine Farbpalette zu erstellen, bei der jede Farbe einen annähernd gleichen Anteil an Pixeln auf der Karte repräsentiert, was zu einer visuell ausgewogeneren Darstellung führen kann.</li>
+      <li><strong>Festlegung der Schwellenwerte:</strong> Anstatt Farben willkürlich zuzuweisen, können Sie die Schwellenwerte (die ersten Spaltenwerte in der
+      Farbsteuerdatei) basierend auf den im Histogramm sichtbaren Datenclustern oder wichtigen Perzentilen definieren.</li>
+
+      <li><strong>Anpassung an die Datenverteilung:</strong> Bei Daten, die sich in bestimmten Bereichen häufen, können Sie dort mehr Farbabstufungen vorsehen
+      (granularere Definition in der Farbsteuerdatei), um feine Unterschiede sichtbar zu machen. In Bereichen mit wenigen Datenpunkten können Sie größere
+      Intervalle verwenden.</li>
+
+      <li><strong>Quantil-Histogramme:</strong> Insbesondere Quantil-Histogramme sind hilfreich, da sie die Daten in gleich große Intervalle (z.B. 20 Klassen, die
+      jeweils 5% der Daten enthalten) unterteilen. Dies ermöglicht es, eine Farbpalette zu erstellen, bei der jede Farbe einen annähernd gleichen Anteil an Pixeln
+      auf der Karte repräsentiert, was zu einer visuell ausgewogeneren Darstellung führen kann.</li>
     </ul>
 
-    <p>Nutzen Sie den Dienst <strong>Histogramm</strong>, um die Wertverteilung für die verschiedenen Abbildungstypen (Höhendaten, Hangneigung, Hangexposition, Geländerauheit, TRI, TPI) zu analysieren. Mit den erhaltenen Histogramm-Einträgen, insbesondere den Unter- und Obergrenzen sowie den Häufigkeiten der Klassen, können Sie präzisere und informativere Farbsteuerdateien entwickeln.</p>
+    <p>Nutzen Sie den Dienst <strong>Histogramm</strong>, um die Wertverteilung für die verschiedenen Abbildungstypen (Höhendaten, Hangneigung, Hangexposition,
+    Geländerauheit, TRI, TPI) zu analysieren. Mit den erhaltenen Histogramm-Einträgen, insbesondere den Unter- und Obergrenzen sowie den Häufigkeiten der Klassen,
+    können Sie präzisere und informativere Farbsteuerdateien entwickeln.</p>
 
     <hr>
 
@@ -338,9 +370,9 @@ nv 0 0 0 0
     </p>
 
     <pre><code>
-0   white   # Höhe 0m ist weiß
-100 red     # Höhe 100m ist rot
-200 blue    # Höhe 200m ist blau
+0 255 255 255 255
+100 255 0 0 255
+200 0 0 255 255
 
 </code></pre>
     <div class="table-responsive">
@@ -377,10 +409,154 @@ nv 0 0 0 0
       </table>
     </div>
 
+    <hr>
+
     <p><strong>Beispiel für eine kolorierte Hangneigungskachel</strong>
     </p>
     <img src="./images/32_497_5670_hangneigung.linear_interpolation-500x500.png" alt="Kolorierung der Hangneigung mittels linearer Interpolation.">
     <p><small>Kolorierung der Hangneigung mittels linearer Interpolation.</small>
+    </p>
+
+    <hr>
+
+    <h3>Lineare Interpolation und Alphakanal</h3>
+
+    <p>Die lineare Interpolation wirkt sich nicht nur auf die Farbkanäle (RGB), sondern auch auf den Alphakanal (A) aus.</p>
+
+    <p><strong>Beispiel zur Verdeutlichung des Sachverhalts</strong>
+    </p>
+
+    <pre><code>
+0 255 255 255 255
+100 255 0 0 255
+200 0 0 255 0
+
+</code></pre>
+    <p>Beachte:</p>
+
+    <ul>
+      <li>der Alphakanal für den Wert 100 beträgt 255 (voll opak)</li>
+
+      <li>der Alphakanal für den Wert 200 beträgt 0 (voll transparent)</li>
+    </ul>
+
+    <p>Anhand dieser Datei werden die Farben für verschiedene Beispielwerte wie folgt berechnet:</p>
+
+    <p><strong>-10</strong>: Da der Wert -10 unterhalb des niedrigsten definierten Stützpunktes (0) liegt, wird die Farbe des Stützpunktes 0 verwendet.</p>
+
+    <ul>
+      <li><strong>Farbe:</strong> Weiß</li>
+
+      <li><strong>RGB-Werte:</strong> Rot 255, Grün 255, Blau 255</li>
+
+      <li><strong>Alphakanal:</strong> 255 (vollständig undurchsichtig)</li>
+    </ul>
+
+    <p><strong>30</strong>: Der Wert 30 liegt zwischen den Stützpunkten 0 und 100. Der Fortschritt von 0 nach 100 beträgt (30 - 0) / (100 - 0) = 0,3 (oder 30%).
+    Die Interpolation erfolgt für jeden Kanal:</p>
+
+    <ul>
+      <li>Rot: 255 + (255 - 255) * 0,3 = 255</li>
+
+      <li>Grün: 255 + (0 - 255) * 0,3 = 255 - 76,5 = 178,5 ≈ 179</li>
+
+      <li>Blau: 255 + (0 - 255) * 0,3 = 255 - 76,5 = 178,5 ≈ 179</li>
+
+      <li>Alpha: 255 + (255 - 255) * 0,3 = 255</li>
+
+      <li><strong>Farbe:</strong> Mischung aus Weiß und Rot</li>
+
+      <li><strong>RGB-Werte:</strong> Rot 255, Grün 179, Blau 179</li>
+
+      <li><strong>Alphakanal:</strong> 255 (vollständig undurchsichtig)</li>
+    </ul>
+
+    <p><strong>160</strong>: Der Wert 160 liegt zwischen den Stützpunkten 100 und 200. Der Fortschritt von 100 nach 200 beträgt (160 - 100) / (200 - 100) = 0,6
+    (oder 60%).</p>
+
+    <ul>
+      <li>Rot: 255 + (0 - 255) * 0,6 = 255 - 153 = 102</li>
+
+      <li>Grün: 0 + (0 - 0) * 0,6 = 0</li>
+
+      <li>Blau: 0 + (255 - 0) * 0,6 = 0 + 153 = 153</li>
+
+      <li>Alpha: 255 + (0 - 255) * 0,6 = 255 - 153 = 102</li>
+
+      <li><strong>Farbe:</strong> Mischung aus Rot und Blau</li>
+
+      <li><strong>RGB-Werte:</strong> Rot 102, Grün 0, Blau 153</li>
+
+      <li><strong>Alphakanal:</strong> 102 (teilweise transparent)</li>
+    </ul>
+
+    <p><strong>310</strong>: Da der Wert 310 oberhalb des höchsten definierten Stützpunktes (200) liegt, wird die Farbe des Stützpunktes 200 verwendet.</p>
+
+    <ul>
+      <li><strong>Farbe:</strong> Blau</li>
+
+      <li><strong>RGB-Werte:</strong> Rot 0, Grün 0, Blau 255</li>
+
+      <li><strong>Alphakanal:</strong> 0 (vollständig transparent)</li>
+    </ul>
+
+    <hr>
+
+    <h3>Lineare Interpolation und Ausblenden von Bereichen</h3>
+
+    <p>Um einen Bereich auszublenden, das heißt volltransparent darzustellen, ist dieser Bereich explizit zu definieren. Dies ist erforderlich, da ja auch
+    Alphakanal interpoliert wird.</p>
+
+    <p><strong>Beispiel zur Verdeutlichung des Sachverhalts</strong>
+    </p>
+
+    <p>Der Bereich von 0° bis 20° soll ausgeblendet werden. Zusätzlich soll der Bereich von 40° bis 45° ausgeblendet werden. Hierzu ist die Farbsteuerdatei wie
+    folgt anzupassen:</p>
+
+    <pre><code>
+# Winkel- und Farbschema für die Abbildung von Hangneigungen
+# Musterdefinition als Basis für eigene Anpassungen
+# Format: Wert Rot Grün Blau Alpha
+
+# Werte von 0 bis 20 werden transparent dargestellt (Alpha = 0)
+0 0 100 0 0
+5 0 200 0 0
+10 100 255 0 0
+20 200 200 0 0
+
+# Unmittelbar nach 20 beginnt der farbige Bereich abrupt.
+# Ein Eintrag mit minimal höherem Wert und vollem Alpha (255) verhindert die Interpolation.
+# Die Farbe entspricht dem ursprünglichen Wert bei 20.
+20.000001 200 200 0 255
+
+# Nächster definierter Farbpunkt
+30 255 150 0 255
+
+# Kurz vor 40 wird der letzte farbige Punkt definiert, um den Übergang zur Transparenz vorzubereiten.
+# Die Farbe entspricht dem ursprünglichen Wert bei 40.
+39.999999 255 100 0 255
+
+# Werte von 40 bis 45 werden transparent dargestellt (Alpha = 0).
+40 255 100 0 0
+45 255 0 0 0
+
+# Unmittelbar nach 45 beginnt der farbige Bereich wieder abrupt.
+# Die Farbe entspricht dem ursprünglichen Wert bei 45.
+45.000001 255 0 0 255
+
+# Restliche Farbdefinitionen
+60 150 0 0 255
+90 0 0 0 255
+
+# Kein-Daten-Wert wird ebenfalls transparent dargestellt
+nv 0 0 0 0
+
+</code></pre>
+    <p><strong>Beispiel für ausgeblendete Bereiche (vergleiche oben)</strong>
+    </p>
+    <img src="./images/32_497_5670_hangneigung.bereiche-ausgeblendet.linear_interpolation-500x500.png" alt=
+    "Kolorierte Hangneigung mit ausgeblendeten (transparenten) Bereichen.">
+    <p><small>Kolorierte Hangneigung mit ausgeblendeten (transparenten) Bereichen.</small>
     </p>
 
     <hr>
@@ -395,9 +571,9 @@ nv 0 0 0 0
     </p>
 
     <pre><code>
-0   white   # Höhe 0m ist weiß
-100 red     # Höhe 100m ist rot
-200 blue    # Höhe 200m ist blau
+0 255 255 255 255
+100 255 0 0 255
+200 0 0 255 255
 
 </code></pre>
     <div class="table-responsive">
@@ -448,6 +624,8 @@ nv 0 0 0 0
       </table>
     </div>
 
+    <hr>
+
     <p><strong>Beispiel für eine kolorierte Hangneigungskachel</strong>
     </p>
     <img src="./images/32_497_5670_hangneigung.nearest_color_entry-500x500.png" alt="Kolorierung der Hangneigung mittels nächstgelegener Farbzuweisung.">
@@ -461,12 +639,6 @@ nv 0 0 0 0
     <p>Bei bekannten Datenwerten ermöglicht eine geeignete Kombination aus granularer Farbsteuerdatei und geeignetem Farbzuweisungsalgorithmus oft sehr
     detaillierte und informative Abbildungen. Um dorthin zu gelangen bedarf es meist einiger empirischer Versuche. Diese lassen sich aber mit den Möglichkeiten auf
     dieser Webseite recht schnell und einfach durchführen.</p>
-
-    <hr>
-
-    <h3>Dienst Kolorierung</h3>
-
-    <p>Über den Dienst <strong>Kolorierung</strong> können Farbsteuerdateien definiert, eingelesen, editiert und gespeichert werden.</p>
   </div>
 
   <div class="container">
