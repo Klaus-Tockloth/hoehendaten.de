@@ -1,9 +1,11 @@
+// map.js
+
 /*
 Purpose:
 - Definition und Initialisierung der Leaflet-Basiskarte.
 
 Releases:
-- v1.0.0 - 2025-05-22: initial release
+- v1.0.0 - 2025-05-16: initial release
 
 Copyright:
 - © 2025 | Klaus Tockloth
@@ -15,21 +17,18 @@ Description:
 - NN
 */
 
-// Initialisiere die Karte auf die 'Mitte Deutschlands'.
+// Initialisiere die Karte (auf die 'Mitte Deutschlands').
 var map = L.map('map').setView([51.220906, 9.357579], 8);
 
-// Exportiere die Karte für andere Skripte.
+// Export map for other scripts
 window.map = map;
 
 // Füge die OpenStreetMap Basemap hinzu.
 var osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 21, // erlaube dem Layer, Kacheln bis Zoom 21 darzustellen (Level 20 & 21 werden hochskaliert)
-    maxNativeZoom: 19, // OSM liefert native Kacheln bis Zoom 19
+    maxZoom: 23,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap Contributors</a>'
-}).addTo(map);
-
-// Erlaube der Karte als Ganzes, Zoom bis Level 21.
-map.options.maxZoom = 21;
+});
+// osmLayer.addTo(map); // <--- REMOVED: Initial layer adding will be handled by map_1.js
 
 // Massstab für Leaflet initialisieren.
 L.control.scale({ imperial: false, maxWidth: 200 }).addTo(map);
@@ -46,47 +45,66 @@ var googleSatellite = L.gridLayer.googleMutant({
     type: 'satellite'
 });
 
+/* TODO: Wie kann die Terrain-Ansicht genutzt werden?
 var googleTerrain = L.gridLayer.googleMutant({
     type: 'terrain'
 });
+*/
 
 var googleHybrid = L.gridLayer.googleMutant({
     type: 'hybrid'
 });
 
-// Definiere Basis-Layer für den Layer-Control.
-var baseLayers = {
-    "OpenStreetMap": osmLayer,
-    "Google Roadmap": googleRoadmap,
-    "Google Satellite": googleSatellite,
-    "Google Terrain": googleTerrain,
-    "Google Hybrid": googleHybrid
+// Definiere Basis-Layer für den Layer-Control und mache sie global zugänglich.
+// Die IDs müssen einzigartig sein und für das Speichern/Laden verwendet werden.
+window.baseLayersConfig = {
+    "OpenStreetMap": {
+        layer: osmLayer,
+        id: "openstreetmap", // Unique ID for storage
+        label: "OpenStreetMap"
+    },
+    "Google Roadmap": {
+        layer: googleRoadmap,
+        id: "googleRoadmap",
+        label: "Google Roadmap"
+    },
+    "Google Satellite": {
+        layer: googleSatellite,
+        id: "googleSatellite",
+        label: "Google Satellite"
+    },
+    "Google Hybrid": {
+        layer: googleHybrid,
+        id: "googleHybrid",
+        label: "Google Hybrid"
+    }
 };
 
-// Füge den Layer-Control zur Karte hinzu.
-var layercontrol = L.control.layers(baseLayers).addTo(map);
+// KEINEN L.control.layers hier hinzufügen. Die Steuerung erfolgt über map_1.js.
+// L.control.layers(baseLayers).addTo(map); // <--- REMOVED
 
 // Leaflet.Locate control initialisieren.
 L.control.locate({
     position: 'topleft',
     keepCurrentZoomLevel: true,
     drawCircle: true,
-    showCompass: false,
     strings: {
         title: "Zeige meinen aktuellen Standort an.",
-        popup: "Sie befinden sich im Umkreis von {distance} Metern um den markierten Mittelpunkt."
+        popup: "Ihr Standort befindet sich innerhalb von {distance} Metern von diesem Punkt."
     }
 }).addTo(map);
 
 /*
  * Initialize Leaflet.FileLayer control for loading GPX/KML/GeoJSON.
  */
+/*
 let fileLayerColors = [
     "#f44336", "#9c27b0", "#2196f3", "#4caf50", "#ff9800", "#795548", "#607d8b",
 ];
 
+// L.Control.fileLayerLoad comes from the Leaflet FileLayer plugin — it’s not part of core Leaflet.
 // Set the label for the file layer button
-L.Control.FileLayerLoad.LABEL = '📂';
+L.Control.FileLayerLoad.LABEL = "🥾"; // This was the last one in original code, so it's kept.
 
 let fileLayerControl = L.Control.fileLayerLoad({
     layerOptions: {
@@ -121,8 +139,27 @@ let fileLayerControl = L.Control.fileLayerLoad({
 }).addTo(map);
 
 fileLayerControl.loader.on('data:loaded', function (e) {
-    layercontrol.addOverlay(e.layer, '<span style="color: ' + fileLayerColors[0] + '">' + e.filename + '</span>');
+    // Create a custom pane for uploaded files
+    const paneName = 'uploaded-files';
+    if (!map.getPane(paneName)) {
+        map.createPane(paneName);
+        map.getPane(paneName).style.zIndex = 650; // higher than default vector layers
+    }
 
-    // rotate to next color
+    // Assign the pane to the uploaded layer
+    e.layer.eachLayer(function (l) {
+        if (l.options && !l.options.pane) {
+            l.options.pane = paneName;
+        }
+    });
+
+    // We do NOT add overlays to the standard L.control.layers here, as it's removed.
+    // layercontrol.addOverlay(...) <--- REMOVED
+
+    // Add layer to map
+    e.layer.addTo(map);
+
+    // Rotate to next color
     fileLayerColors.push(fileLayerColors.shift());
 });
+*/

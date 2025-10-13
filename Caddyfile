@@ -1,6 +1,6 @@
 http://localhost:8080 {
     # Setzen Sie das Root-Verzeichnis auf den Ordner mit den gebuildeten Angular-Dateien
-    root * /Users/klaustockloth/entw-hoehendaten.de
+    root * /Users/klaustockloth/hoehendaten.de
 
     # Behandelt das Client-seitige Routing von Angular
     # Versucht zuerst, die angeforderte Datei/den Pfad zu bedienen.

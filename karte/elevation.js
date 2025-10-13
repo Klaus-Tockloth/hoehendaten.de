@@ -42,6 +42,10 @@ Versionen:
 - v1.0.0 - 2025-05-25: initiale Veröffentlichung
 - v1.1.0 - 2025-06-06: Linie: Richtungspfeil, Aktion: Voreinstellung und Speicherung
            2025-06-11: alert bei Fetch error und Delta, Prozent, Winkel, ..., Prozent und Winkel mit 1 NK
+- v1.1.1 - 2025-07-23: Fehlermeldung: Daten konnten nicht geladen werden\n\n...
+                       pairPane für zIndex 900 bei marker und line
+           2025-09-25: Verzeichnis assets eingebunden, Verzeichnis elevation gelöscht 
+                       setInterval auskommentiert, dafür Aufruf von saveMarkersAndLines() wo erforderlich 
 
 Autor:
 - Franz Kolberg
@@ -124,6 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.info('Hi, here is elevation.js!');
 
+        map.createPane("pairPane");
+        map.getPane("pairPane").style.zIndex = 900;
+
         addCustomControls();
 
         initClickHandling();
@@ -132,9 +139,9 @@ document.addEventListener("DOMContentLoaded", () => {
         loadMarkersAndLines();
 
         // save data to localStorage
-        setInterval(saveMarkersAndLines, localStorageTimer * 1000);
+        // setInterval(saveMarkersAndLines, localStorageTimer * 1000);
 
-        console.info('ready');
+        // console.info('ready');
     } else {
         alert("window.map is missing !");
     }
@@ -155,32 +162,50 @@ function addCustomControls() {
 
   const MainControl = L.Control.extend({
     onAdd: () => {
-      const container = L.DomUtil.create("div", "leaflet-control leaflet-bar elevation-bar");
+      const container = L.DomUtil.create(
+        "div",
+        "leaflet-control leaflet-bar elevation-bar"
+      );
       const btns = [];
       let pointBtn = null;
       let lineBtn = null;
 
-      function makeBtn(html, title, toggle, onClick, onUnpress = null, cl = "") {
-        const a = L.DomUtil.create("a", "elevation-btn " + cl, container);
+      function makeBtn(
+        html,
+        title,
+        isToggle,
+        onEnable,
+        onDisable = null,
+        claz = ""
+      ) {
+        const a = L.DomUtil.create("a", "elevation-btn " + claz, container);
         a.innerHTML = html;
         a.title = title;
         L.DomEvent.disableClickPropagation(a);
 
-        const btnEntry = { element: a, onUnpress };
+        const btnEntry = { element: a, onUnpress: onDisable };
 
         a.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
 
+          resetMode();
+
           const wasPressed = a.classList.contains("pressed");
 
-          if (toggle) {
+          //console.log("isToggle:", isToggle);
+          //console.log("wasPressed:", wasPressed);
+
+          if (isToggle) {
             if (wasPressed) {
               a.classList.remove("pressed");
-              if (onUnpress) onUnpress(a);
+              if (onDisable) onDisable(a);
             } else {
               btns.forEach((btn) => {
-                if (btn.element !== a && btn.element.classList.contains("pressed")) {
+                if (
+                  btn.element !== a &&
+                  btn.element.classList.contains("pressed")
+                ) {
                   btn.element.classList.remove("pressed");
                   if (btn.onUnpress) btn.onUnpress(btn.element);
                 }
@@ -196,10 +221,10 @@ function addCustomControls() {
               });
 
               a.classList.add("pressed");
-              onClick(a);
+              onEnable(a);
             }
           } else {
-            onClick(a);
+            onEnable(a);
           }
         });
 
@@ -209,13 +234,20 @@ function addCustomControls() {
       }
 
       // Clear Button
-      makeBtn("🗑️", txt_ClearEverything, false, () => {
-        clearAll();
-        mode = MODE_NONE;
-        map.getContainer().style.cursor = "";
-        btns.forEach((b) => b.element.classList.remove("pressed"));
-        localStorage.setItem("mode", MODE_NONE);
-      }, null, 'elevation-btn-clear');
+      makeBtn(
+        "🗑️",
+        txt_ClearEverything,
+        false,
+        () => {
+          removeAllPointsAndLines();
+          mode = MODE_NONE;
+          map.getContainer().style.cursor = "";
+          btns.forEach((b) => b.element.classList.remove("pressed"));
+          localStorage.setItem("mode", MODE_NONE);
+        },
+        null,
+        "elevation-btn-clear"
+      );
 
       // Erase Button
       makeBtn(
@@ -230,7 +262,7 @@ function addCustomControls() {
           mode = MODE_NONE;
           localStorage.setItem("mode", MODE_NONE);
         },
-        'elevation-btn-erase'
+        "elevation-btn-erase"
       );
 
       // Point Button
@@ -242,13 +274,15 @@ function addCustomControls() {
           mode = MODE_POINT;
           map.getContainer().style.cursor = "crosshair";
           localStorage.setItem("mode", MODE_POINT);
+          setStatusInfo("Punkt");
         },
         () => {
           mode = MODE_NONE;
           map.getContainer().style.cursor = "";
           localStorage.setItem("mode", MODE_NONE);
+          setStatusInfo("");
         },
-        'elevation-btn-1point'
+        "elevation-btn-1point"
       );
 
       // Line Button
@@ -260,27 +294,40 @@ function addCustomControls() {
           mode = MODE_LINE;
           map.getContainer().style.cursor = "crosshair";
           localStorage.setItem("mode", MODE_LINE);
+          setStatusInfo("Linie");
         },
         () => {
           mode = MODE_NONE;
           map.getContainer().style.cursor = "";
           localStorage.setItem("mode", MODE_NONE);
+          setStatusInfo("");
         },
-        'elevation-btn-2points'
+        "elevation-btn-2points"
       );
 
-      // Set initial button state from localStorage
-      if (mode === MODE_POINT && pointBtn) {
-        pointBtn.classList.add("pressed");
-        map.getContainer().style.cursor = "crosshair";
-      } else if (mode === MODE_LINE && lineBtn) {
-        lineBtn.classList.add("pressed");
-        map.getContainer().style.cursor = "crosshair";
-      }
+      if (true) {
+         // Set initial button state from localStorage
+        if (mode === MODE_POINT && pointBtn) {
+          pointBtn.classList.add("pressed");
+          map.getContainer().style.cursor = "crosshair";
+          setTimeout(() => setStatusInfo("Punkt"), 1000);
+
+        } else if (mode === MODE_LINE && lineBtn) {
+          lineBtn.classList.add("pressed");
+          map.getContainer().style.cursor = "crosshair";
+          setTimeout(() => setStatusInfo("Linie"), 1000);
+        }
+      }     
 
       return container;
     },
   });
+
+  function resetMode() {
+    if (window.modeManager && typeof window.modeManager.resetMode === "function") {
+      window.modeManager.resetMode();
+    }
+  }
 
   new MainControl({ position: "topleft" }).addTo(map);
 }
@@ -297,9 +344,7 @@ function initClickHandling() {
         if (suppressNextMapClick) return; // Skip this click if suppressed
 
         if (mode === MODE_NONE)
-            return;
-
-        console.log("elevation.js initClickHandling click");        
+            return;  
 
         // Prevent click during elevation fetch
         if (isFetchingElevation) return;
@@ -439,6 +484,8 @@ Er speichert diesen Marker und seine abgerufenen Daten und ordnet ihn entweder a
 potenziellen Paares zu. Das Aussehen des Markers kann farblich angepasst werden.
 */
 function addMarker(latlng, position, color = "red") {
+    console.log("addMarker");
+
     let m = null;
     m = createMarker(latlng, true, color).addTo(map);
 
@@ -461,6 +508,10 @@ function addMarker(latlng, position, color = "red") {
                 m2: null,
             });
 
+            if (mode === MODE_POINT) {
+              saveMarkersAndLines();
+            }
+
             const pair = arrayOfMarkerPairs[arrayOfMarkerPairs.length - 1];
             addTooltipAndPopupToMarker(pair.marker1, pair.m1);
             addEventhandlingToMarker(m, pair);
@@ -477,6 +528,10 @@ function addMarker(latlng, position, color = "red") {
                 actuality,
                 attribution,
             };
+
+            if (mode === MODE_LINE) {
+              saveMarkersAndLines();
+            }
 
             addTooltipAndPopupToMarker(lastPair.marker2, lastPair.m2);
             addEventhandlingToMarker(m, lastPair);
@@ -521,15 +576,16 @@ function createMarker(latlng, draggable, color, markerStyle = 'icon') {
 
     if (color === 'red') {
         icon = new ElevationIcon({
-            iconUrl: './elevation/Point-Red-64x64.png'
+            iconUrl: './assets/Point-Red-64x64.png'
         });
     } else {
         icon = new ElevationIcon({
-            iconUrl: './elevation/Point-Blue-64x64.png'
+            iconUrl: './assets/Point-Blue-64x64.png'
         });
     }
 
     marker = L.marker(latlng, {
+        pane: "pairPane",
         draggable: draggable,
         icon: icon
     });
@@ -680,6 +736,8 @@ function addEventhandlingToLineTooltip(pair) {
             if (index !== -1) {
                 removePair(pair);
                 arrayOfMarkerPairs.splice(index, 1);
+
+                saveMarkersAndLines();
             } else {
                 console.error("Tooltip not found in pair list");
             }
@@ -751,6 +809,8 @@ function addEventhandlingToMarker(marker, pair) {
         // works only for instance of L.marker !
         marker.on("dragend", () => {
             updatePair(marker, pair);
+
+            saveMarkersAndLines();
         });
         const throttledUpdatePair = throttle(updatePair, 100); // 100ms = 10x per second
         marker.on("drag", () => throttledUpdatePair(marker, pair));
@@ -791,6 +851,7 @@ function addLineAndTooltip(pair) {
     along that line will point from latlng1 to latlng2, regardless of elevation!
   */
   const newLine = L.polyline([latlng1, latlng2], {
+    pane: "pairPane",
     color: "red",
     weight: 2,
   }).addTo(map);
@@ -867,6 +928,7 @@ function createLineWithArrowDecorator(pair) {
             pixelSize: 10,
             polygon: false,
             pathOptions: {
+              pane: "pairPane",
               stroke: true,
               color: "rgb(82, 144, 199)",
               weight: 1.5,
@@ -971,7 +1033,10 @@ function fetchElevation(latlng, onSuccess) {
         .catch((error) => {
             isFetchingElevation = false;
             console.error("Fetch error:", error);
-            alert("Fetch error: " + error.message);
+            //alert("Fetch error: " + error.message);
+            alert(
+                "Daten konnten nicht geladen werden\n\nEs ist ein Problem bei der Verbindung zum Server aufgetreten.\nBitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+            );
 
             const msg = "❌ Fetch failed";
             const a = "Code: FETCH_ERROR";
@@ -1064,6 +1129,7 @@ function createLineTooltip(pair) {
 
     // 1. Dummy‑Marker direkt unter den Tooltip setzen
     const ghost = L.marker([midLat, midLng], {
+        pane: "pairPane",
         icon: L.divIcon({
             className: 'ghost-icon'
         }),
@@ -1096,7 +1162,7 @@ clearAll entfernt alle vom Benutzer hinzugefügten Höhenelemente von der Karte 
 Dies umfasst alle Marker, Linien, Tooltips und leert das `arrayOfMarkerPairs` sowie temporäre Puffer. Es stellt effektiv
 einen sauberen Zustand für die Höhenfunktionalität her.
 */
-function clearAll() {
+function removeAllPointsAndLines() {
     arrayOfMarkerPairs.forEach((pair) => {
         if (pair.marker1) map.removeLayer(pair.marker1);
         if (pair.marker2) map.removeLayer(pair.marker2);
@@ -1108,6 +1174,8 @@ function clearAll() {
     });
     // Clear the array properly
     arrayOfMarkerPairs.length = 0;
+
+    saveMarkersAndLines();
 
     // Clear any 2-point buffers
     tmp_buffer = [];
@@ -1129,6 +1197,8 @@ function erase(clickedMarker) {
     removePair(pair); // Use the helper function
 
     arrayOfMarkerPairs.splice(index, 1); // Remove from array
+
+    saveMarkersAndLines();
   }
 }
 
@@ -1324,7 +1394,7 @@ function loadMarkersAndLines() {
     if (mapStateData) {
         const mapState = JSON.parse(mapStateData);
         if (mapState.center && typeof mapState.zoom === "number") {
-            map.setView(mapState.center, mapState.zoom);
+            // TODO ??? map.setView(mapState.center, mapState.zoom);
         }
     }
 
@@ -1369,4 +1439,11 @@ function loadMarkersAndLines() {
             addLineAndTooltip(arrayOfMarkerPairs[arrayOfMarkerPairs.length - 1])
         }
     });
+}
+
+function setStatusInfo(status) { 
+  const statusInfo = document.getElementById("status-info");
+  if (statusInfo) {
+      statusInfo.textContent = status;
+  }  
 }

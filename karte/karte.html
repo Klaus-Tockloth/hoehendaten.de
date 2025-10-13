@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <title>Karte (Höhendaten)</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Erkunden Sie Höhendaten für Deutschland interaktiv auf einer Karte.">
+  <meta name="keywords" content="Höhendaten, Karte, Deutschland, DGM, interaktiv, GPX, KML, Geodaten, Höhe">
+  <meta name="robots" content="index, follow">
+
+   <!-- leaflet -->
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+   <!-- google maps via 'google mutant' -->
+   <script
+      src="https://cdn.jsdelivr.net/npm/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
+   <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxvlt3A4v0niarIP7hvoaViuMDYfg8fL4&loading=async"></script>
+
+   <!-- leaflet.fileLayer (with dependencies) -->
+   <script src="https://cdn.jsdelivr.net/npm/@mapbox/togeojson/togeojson.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/gh/shramov/leaflet-plugins@master/layer/vector/KML.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/leaflet-filelayer@1.2.0/src/leaflet.filelayer.min.js"></script>
+   
+   <!-- locate control (serach) -->
+   <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.84.2/dist/L.Control.Locate.mapbox.min.css" />
+   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.84.2/dist/L.Control.Locate.min.js"
+      charset="utf-8"></script>
+
+   <!-- Geocoding (for contour) -->   
+   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+   <!-- Leaflet.Editable (for contour) -->
+   <script src="https://unpkg.com/leaflet-editable@1.2.0/src/Leaflet.Editable.js"></script>
+
+   <!-- turf.js (for calculateRectangleAreaInSqKm) -->
+   <script src='https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js'></script>
+
+   <!-- D3.js (for contour) -->
+   <script src="https://d3js.org/d3.v7.min.js"></script>
+
+   <!-- PolylineDecorator for arrow on line -->
+   <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.min.js"></script>
+
+   <!-- Leaflet.Path.Drag plugin Leaflet.Path.Drag.min.js -->
+   <script src="https://cdn.jsdelivr.net/npm/leaflet-path-drag"></script>
+  
+   <!-- Leaflet.TextPath Plugin -->
+   <script src="libs/leaflet.textpath.js"></script>
+
+   <!-- Proj4.js to convert between lat/lng and projected coordinates. -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
+
+   <!-- colorpicker als IIFE -->
+   <link rel="stylesheet" href="libs/colorpicker.css">
+   <link rel="stylesheet" href="libs/mycolorpicker.css">
+   <script src="libs/mycolorpicker.js"></script>
+
+   <!-- project specific styles -->
+   <link rel="stylesheet" href="style_1.css">
+
+   <!-- elevation plugin -->
+   <link rel="stylesheet" href="elevation.css">
+   <script src="elevation.js"></script>   
+
+   <!-- Suche Ort Plugin -->
+   <link rel="stylesheet" href="geocoder.css">
+   <script src="geocoder.js"></script>
+
+   <script src="map-tile-manager.js"></script>
+
+   <script src="ui-utils.js"></script>
+
+   <script src="geo-utils.js"></script>
+
+   <script src="map-style-manager.js"></script>
+
+   <script src="modeManager.js"></script>     
+
+   <script src="sidepanel.js"></script>
+      
+   <script src="persistence.js"></script>    
+
+   <!-- Basiskarte -->
+   <script src="map_1.js"></script>  
+  
+   <!-- Höhenschichtlinien -->
+   <script src="contour_1.js"></script>   
+
+   <!-- TPI (Position)-->
+   <script src="tpi_1.js"></script>   
+
+   <!-- TRI (Ruggedness)-->
+   <script src="tri_1.js"></script>   
+
+   <!-- Geländerauheit -->
+   <script src="roughness_1.js"></script>
+
+   <!-- Hangexposition -->
+   <script src="aspect_1.js"></script>  
+
+   <!-- Hangneigung -->
+   <script src="slope_1.js"></script> 
+
+   <!-- Farbrelief -->
+   <script src="colorRelief_1.js"></script>     
+
+   <!-- Schummerung -->
+   <script src="hillshade_1.js"></script>      
+
+   <!-- Eigene Dateien -->
+   <script src="customdata_1.js"></script>    
+
+</head>
+
+<body>  
+   <div id="main-content-area"></div>
+      <!-- leaflet -->
+      <div id="map-container" class="map-container">
+         <div id="map"></div>
+      </div>
+   </div>
+   
+   <script src="map.js"></script>
+</body>
+
+</html>

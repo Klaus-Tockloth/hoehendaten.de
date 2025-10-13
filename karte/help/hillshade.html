@@ -1,0 +1,22 @@
+<h4><strong>Schummerung: Gelände dreidimensional visualisieren</strong></h4>
+<p>Die Schummerung stellt das Gelände dar, als würde es von einer Lichtquelle beleuchtet, wodurch ein plastischer, dreidimensionaler Eindruck entsteht. Sie liefert keine exakten Höhenwerte, eignet sich aber hervorragend als visuelle Basiskarte, um räumlichen Kontext zu bieten oder Bodenstrukturen sichtbar zu machen.</p>
+<p>Sie können verschiedene Parameter anpassen, um die Darstellung zu steuern:</p>
+<ul>
+<li><strong>Algorithmus:</strong> Bestimmt die Berechnung von Steigung und Ausrichtung. Zur Auswahl stehen „Horn“ (gut für raues Gelände) und „ZevenbergenThorne“ (besser für glattere Landschaften).</li>
+<li><strong>Schattierungsvariante:</strong>
+<ul>
+<li><strong>regular:</strong> Klassische Beleuchtung mit einer Lichtquelle, ideal für einen schnellen Überblick.</li>
+<li><strong>multidirectional:</strong> Kombiniert mehrere Lichtquellen für eine verbesserte Detailerkennung.</li>
+<li><strong>combined:</strong> Kombiniert Neigung und Beleuchtung für spezifische visuelle Effekte.</li>
+<li><strong>igor:</strong> Erzeugt eine weichere, subtilere Schummerung, ideal als dezenter Hintergrund.</li>
+</ul>
+</li>
+<li><strong>Lichtquelle:</strong>
+<ul>
+<li><strong>Azimut:</strong> Die horizontale Richtung des Lichts (0° = Nord, 90° = Ost). Standard ist 315° (Nordwesten). Wird bei „multidirectional“ ignoriert.</li>
+<li><strong>Höhe:</strong> Der vertikale Winkel des Lichts (0° = Horizont, 90° = senkrecht). Niedrigere Winkel erzeugen längere Schatten. Standard ist 45°. Wird bei „igor“ ignoriert.</li>
+</ul>
+</li>
+<li><strong>Vertikale Überhöhung:</strong> Multipliziert die Höhe des Geländes, um das Relief künstlich zu überhöhen und Schatten in flacheren Gebieten zu verstärken.</li>
+<li><strong>Interaktion mit dem Kartenbild:</strong> Die Ebene kann durch die Auswahl eines Mischmodus und/oder durch Filter mit darunterliegenden Kartenebenen interagieren. Dadurch lassen sich visuelle Effekte erzielen, die die ästhetische Integration der Schummerung verbessern.</li>
+</ul>

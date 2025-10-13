@@ -1,0 +1,31 @@
+.color-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 8px;
+}
+
+.color-header {
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  background-color: #f4f4f4;
+}
+
+/* Adjust flex ratios */
+.color-cell:nth-child(1) {
+  flex: 0 0 40px;  /* Wert column - fixed or minimal width */
+}
+
+.color-cell:nth-child(2) {
+  flex: 1;         /* Farbe column - flexible */
+}
+
+.color-cell:nth-child(3) {
+  flex: 0 0 80px;  /* Anzeige column - fixed */
+}
+
+.color-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* or whatever spacing you prefer */
+}

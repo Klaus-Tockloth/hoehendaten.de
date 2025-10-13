@@ -1,0 +1,16 @@
+/* trackme.css */
+
+.leaflet-tooltip.tracking-tooltip {
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    padding: 4px;
+    border-radius: 4px;
+  }
+
+.elevation-bar-hidden {
+  display: none !important;
+}
+  
+  
