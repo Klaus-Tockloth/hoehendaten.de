@@ -934,7 +934,7 @@
     const btnContent = document.createElement("span");
     btnContent.textContent = global.TEXT_CUSTOMDATA_LABEL; 
     const arrow = document.createElement("span");
-    arrow.textContent = " ▼";
+    arrow.textContent = " +";
     arrow.style.float = "right";
     arrow.style.marginLeft = "10px";
     hamburgerMainBtn.appendChild(btnContent);
@@ -953,7 +953,7 @@
         });
       const visible = submenu.style.display === "none";
       submenu.style.display = visible ? "flex" : "none";
-      arrow.textContent = visible ? " ▲" : " ▼";
+      arrow.textContent = visible ? " -" : " +";
     });
 
     container.appendChild(hamburgerMainBtn);
@@ -997,7 +997,8 @@
           global.deactivateElevationButtons();
         }
       },
-      "⬆️"
+      // "⬆️"
+      ""
     );
 
     // Sichtbarkeit
@@ -1035,7 +1036,8 @@
           global.sidepanel.showCustomDataConfiguration("customdata");
         }
       },
-      "🔳"
+      // "🔳"
+      ""
     );
 
     // Übersicht (Data Panel)
@@ -1050,7 +1052,8 @@
           global.sidepanel.showCustomData("customdata");
         }
       },
-      "🔳"
+      // "🔳"
+      ""
     );
 
     // Alle eigenen Dateien löschen

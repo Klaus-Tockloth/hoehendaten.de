@@ -72,5 +72,5 @@ tidy -config tidy-config.txt -quiet -modify impressum.html
 tidy -config tidy-config.txt -quiet -modify index.html
 
 # unerwünschte Änderungen im Bereich <head> ... </head>
-# tidy -config tidy-config.txt -quiet -modify karte.html
+# tidy -config tidy-config.txt -quiet -modify karte/karte.html
 

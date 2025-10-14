@@ -70,5 +70,5 @@ tidy -errors -quiet dienst-tri.html
 tidy -errors -quiet grundlagen.html
 tidy -errors -quiet impressum.html
 tidy -errors -quiet index.html
-tidy -errors -quiet karte.html
+tidy -errors -quiet karte/karte.html
 

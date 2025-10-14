@@ -928,7 +928,8 @@ const isLocalhost =
     const btnContent = document.createElement("span");
     btnContent.textContent = html;
 
-    const arrow = document.createElement("span");    arrow.textContent = " ▼"; 
+    const arrow = document.createElement("span");
+    arrow.textContent = " +"; 
     arrow.style.float = "right";
     arrow.style.marginLeft = "10px";
 
@@ -956,7 +957,7 @@ const isLocalhost =
       const currentArrow = arrow; 
       const isAboutToBeVisible = currentSubmenu.style.display === "none";
 
-      // 1. Collapse all other submenus and reset their arrows to '▼'
+      // 1. Collapse all other submenus and reset their arrows
       document
         .querySelectorAll(".hamburger-menu-main-button")
         .forEach((otherMainBtn) => {
@@ -968,7 +969,7 @@ const isLocalhost =
             if (otherSubmenu && otherArrow) {
               if (otherSubmenu.style.display !== "none") {
                 otherSubmenu.style.display = "none";
-                otherArrow.textContent = " ▼"; 
+                otherArrow.textContent = " +"; 
               }
             }
           }
@@ -976,7 +977,7 @@ const isLocalhost =
 
       // 2. Toggle the clicked button's submenu and update its arrow
       currentSubmenu.style.display = isAboutToBeVisible ? "flex" : "none";
-      currentArrow.textContent = isAboutToBeVisible ? " ▲" : " ▼";
+      currentArrow.textContent = isAboutToBeVisible ? " -" : " +";
 
       if (toggle) {        
         if (hamburgerMainBtn.classList.contains("active")) {
@@ -1087,22 +1088,24 @@ const isLocalhost =
         const visible = togglePaneVisibility(map, type);
 
         eyeButton.innerHTML = visible
-          ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit.'
-          : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit.';
+          ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
+          : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit';
       });
       // Set the initial innerHTML of the eyeButton to show the full eye icon.
       eyeButton.innerHTML =
-        '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit.';
+        '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit';
     }
 
     if (config.hasSettings) {
-      addSubBtn("⚙️ Konfiguration", type, () => {
+      // addSubBtn("⚙️ Konfiguration", type, () => {
+      addSubBtn("Konfiguration", type, () => {
         sidepanel?.showOptions?.(type);
       });
     }
 
     if (config.hasTiles) {
-      addSubBtn("🔳 Daten", type, () => {
+      // addSubBtn("🔳 Daten", type, () => {
+      addSubBtn("Daten", type, () => {
         sidepanel?.showData?.(type);
       });
     }
@@ -1116,7 +1119,8 @@ const isLocalhost =
       } else {
         label = `Kacheln ${html} `;
       }
-      addSubBtn(`🗑️ Alle ${label} löschen`, type, () => {
+      // addSubBtn(`🗑️ Alle ${label} löschen`, type, () => {
+      addSubBtn(`Alle ${label} löschen`, type, () => {
         deleteAllLayers(config, type);
       });
     }
