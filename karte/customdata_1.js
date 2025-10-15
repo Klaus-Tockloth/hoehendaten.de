@@ -2,7 +2,7 @@
 
 (function (global) {
 
-  global.TEXT_CUSTOMDATA_LABEL = "Eigene Dateien";
+  global.TEXT_CUSTOMDATA_LABEL = "Eigene Objekte";
 
   let _myCustomdataMap = new Map();
 
@@ -140,7 +140,7 @@
   async function clearAllCustomDataLayers() {
     if (
       !confirm(
-        "Wirklich alle geladenen CUSTOMDATA-Dateien von der Karte entfernen und den lokalen Speicher leeren?"
+        "Wirklich alle geladenen CUSTOMDATA-Objekte von der Karte entfernen und den lokalen Speicher leeren?"
       )
     ) {
       return;
@@ -168,7 +168,7 @@
     applyGlobalCustomDataStyleToPane(); 
 
     console.log(
-      "Alle CUSTOMDATA-Dateien von der Karte entfernt und lokaler Speicher geleert."
+      "Alle CUSTOMDATA-Objekte von der Karte entfernt und lokaler Speicher geleert."
     );
    
     if (
@@ -752,9 +752,9 @@
     };
 
     // --- Submenu Entries ---
-    // Upload
+    // Importieren
     addSubmenuButton(
-      "Import",
+      "Importieren",
       () => {
         fileInput.click();
       },
@@ -778,7 +778,7 @@
       },
       "", 
       "customdata-visibility-btn"
-    );   
+    );
     visibilityBtn.innerHTML = getOverallCustomDataVisibility()
       ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
       : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
@@ -811,11 +811,11 @@
       ""
     );
 
-    // Alle eigenen Dateien löschen
+    // Alle eigenen Objekte löschen
     addSubmenuButton(
-      "Alle eigenen Dateien löschen",
+      "Alle eigenen Objekte löschen",
       async () => {
-        console.log("Desktop Submenu: Alle eigenen Dateien löschen clicked.");
+        console.log("Desktop Submenu: Alle eigenen Objekte löschen clicked.");
         await clearAllCustomDataLayers();
         visibilityBtn.innerHTML = getOverallCustomDataVisibility()
           ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
@@ -927,7 +927,7 @@
       nav.appendChild(infoBtn);
     }
 
-    // Main "Eigene Dateien" button in the hamburger panel
+    // Main "Eigene Objekte" button in the hamburger panel
     const hamburgerMainBtn = document.createElement("button");
     hamburgerMainBtn.classList.add("hamburger-menu-main-button");
     hamburgerMainBtn.classList.add("customdata"); 
@@ -975,11 +975,11 @@
     };
 
     // --- Submenu Entries ---
-    // Upload
+    // Importieren
     addSubBtn(
-      "Upload",
+      "Importieren",
       () => {
-        console.log("Hamburger Submenu: Upload clicked.");
+        console.log("Hamburger Submenu: Importieren clicked.");
         fileInput.click();
         document.getElementById("status-info").textContent =
           global.TEXT_CUSTOMDATA_LABEL; 
@@ -1056,11 +1056,11 @@
       ""
     );
 
-    // Alle eigenen Dateien löschen
+    // Alle eigenen Objekte löschen
     addSubBtn(
-      "Alle eigenen Dateien löschen",
+      "Alle eigenen Objekte löschen",
       async () => {
-        console.log("Hamburger Submenu: Alle eigenen Dateien löschen clicked.");
+        console.log("Hamburger Submenu: Alle eigenen Objekte löschen clicked.");
         await clearAllCustomDataLayers();
         visibilityBtn.innerHTML = getOverallCustomDataVisibility()
           ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
@@ -1104,10 +1104,10 @@
         <div>
           <b> Hinweis: </b>
           <br>
-          Diese Konfiguration wirkt auf neu importierte Dateien,
-          nicht auf bereits importierte Dateien!         
+          Diese Konfiguration wirkt auf neu importierte Objekte,
+          nicht auf bereits importierte Objekte!         
           <br>
-          Individuelle Konfigurationen zu bereits importierten Dateien 
+          Individuelle Konfigurationen zu bereits importierten Objekten 
           können unter "Übersicht" vorgenommen werden.
         </div>
 
@@ -1287,7 +1287,7 @@
   `;
 
     if (!_myCustomdataMap || _myCustomdataMap.size === 0) {
-      html += `<p>Noch keine Dateien hochgeladen. Nutzen Sie "Import" im Menü, um Ihre ersten Daten hinzuzufügen!</p>`;
+      html += `<p>Noch keine Objekte importiert. Nutzen Sie "Importieren" im Menü, um Ihr erstes Objekt hinzuzufügen!</p>`;
     } else {
       _myCustomdataMap.forEach((item) => {
         const isVisible = typeof item.visible === "boolean" ? item.visible : true;
@@ -1399,7 +1399,7 @@
     html += `
       </div>
       <!--
-      <p><small>Die Dateien werden lokal in Ihrem Browser gespeichert (Origin Private File System).</small></p>
+      <p><small>Die Objekte werden lokal in Ihrem Browser gespeichert (Origin Private File System).</small></p>
       -->
     </div>
   `;

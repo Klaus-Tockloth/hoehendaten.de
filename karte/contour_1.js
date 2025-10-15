@@ -11,10 +11,10 @@
     interval: 10.0,
     lineWeight: 0.5,
     smoothFactor: 0,
-    color: "rgba(51,136,255,1.0)",
+    color: "rgba(180,180,180,1.0)",
     majorInterval: 5,
-    majorColor: "rgba(255,0,0,1.0)",
-    majorLineWeight: 1,
+    majorColor: "rgba(150,150,150,1.0)",
+    majorLineWeight: 0.5,
     majorLabeling: false,
     labelSmoothFactor: 10,
     styleOptions: {
@@ -192,7 +192,7 @@
       <div class="client">
         <h4>Höhenlinien</h4>
 
-        <label>Farbe</label>
+        <label>Farbe:</label>
         <div class="color-row">
           <div class="color-cell">
             <input type="text"
@@ -238,7 +238,7 @@
         ${global.makeSlider(
           "majorInterval",
           idSuffix,
-          "Intervall (jede x-te Linie)",
+          "Intervall",
           options.majorInterval,
           2,
           25,

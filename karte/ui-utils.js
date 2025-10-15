@@ -1115,7 +1115,7 @@ const isLocalhost =
       if (type === "map") {
         label = "Kacheln";
       } else if (type === "customdata") {
-        label = "eigenen Dateien";
+        label = "eigenen Objekte";
       } else {
         label = `Kacheln ${html} `;
       }
@@ -1285,7 +1285,8 @@ function bindSlider(
   isFetchRequired,
   displayPrecision = 1,
   toNumber = parseFloat,
-  optionsArray = contour_options_last,
+  //optionsArray = contour_options_last,
+  optionsArray,
   saveSettingsFn,
   redrawFn = null
 ) {
@@ -1311,10 +1312,13 @@ function bindSlider(
           : value;
       }
 
+      // console.log("bindSlider updateValue num: ", num, optionKey); 
+
       optionsArray[optionKey] = num;
       saveSettingsFn?.();
 
       if (triggerRedraw && redrawFn) {
+        console.log("bindSlider updateValue calling redrawFn()", num, optionKey);
         redrawFn();
       }
     }

@@ -1,12 +1,8 @@
 // trackme_1.js
 
 const GEOLOCATION_OPTIONS = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 };
+const TRACKING_DISTANCE_THRESHOLD = 25; // Minimum distance in meters to record a new point
 
-const TRACKINGDISTANCE = 20;
-const TRACKINGSECONDS = 10;
-const TRACKINGSECONDS2 = 2; // This variable seems unused in the provided code, kept for consistency.
-
-const txt_log_TRACKING = `Tracking started with TRACKINGDISTANCE: ${TRACKINGDISTANCE} m and TRACKINGSECONDS: ${TRACKINGSECONDS}`;
 const txt_GoToCurrentLocation = "Go to current location";
 const txt_GeolocationFailed = "Geolocation failed: ";
 const txt_GeolocationIsNotSupportedByYourBrowser = "Geolocation is not supported by your browser.";
@@ -20,20 +16,162 @@ let up = 0;
 let down = 0;
 let trackMarkers = [];
 let trackLines = [];
-let lastTrackTime = null;
 let lastTooltipMarker = null;
-let tooltipContent = ""; // Seems unused, but keeping for consistency.
 
 const SMOOTH_WINDOW = 3;
 let lastLocations = [];
 
-let currentTrackingNotification = null; // To manage the persistent notification
+// Array to store console log history
+let consoleLogHistory = [];
 
+// --- IndexedDB ---
+let db;
+const DB_NAME = "trackmeDB";
+const STORE_NAME = "points";
+
+function initDB(callback) {
+    const request = indexedDB.open(DB_NAME, 1);
+
+    request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { autoIncrement: true });
+        }
+    };
+
+    request.onsuccess = (event) => {
+        db = event.target.result;
+        console.log("Database opened successfully.");
+        if (callback) callback();
+    };
+
+    request.onerror = (event) => {
+        console.error("Database error: " + event.target.errorCode);
+    };
+}
+
+function addPointToDB(point) {
+    if (!db) return;
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    store.add(point);
+}
+
+function getAllPointsFromDB(callback) {
+    if (!db) return;
+    const transaction = db.transaction([STORE_NAME], "readonly");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.getAll();
+
+    request.onsuccess = () => {
+        if (callback) callback(request.result);
+    };
+
+    request.onerror = (event) => {
+        console.error("Error fetching points from DB: " + event.target.errorCode);
+    };
+}
+
+function clearDB() {
+    if (!db) return;
+    const transaction = db.transaction([STORE_NAME], "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    store.clear();
+}
+
+
+// Function to capture console logs
+function captureConsoleLogs() {
+    const originalConsole = {
+        log: console.log.bind(console),
+        warn: console.warn.bind(console),
+        error: console.error.bind(console),
+        info: console.info.bind(console)
+    };
+
+    function formatMessage(args) {
+        return args.map(arg => {
+            if (typeof arg === 'object' && arg !== null) {
+                try {
+                    return JSON.stringify(arg, null, 2);
+                } catch (e) {
+                    return 'Unserializable Object';
+                }
+            }
+            return String(arg);
+        }).join(' ');
+    }
+
+    Object.keys(originalConsole).forEach(level => {
+        console[level] = function(...args) {
+            const message = formatMessage(args);
+            const timestamp = new Date().toISOString();
+            consoleLogHistory.push(`[${timestamp}] [${level.toUpperCase()}] ${message}`);
+            originalConsole[level](...args);
+        };
+    });
+}
+
+// Initialize console capture immediately
+captureConsoleLogs();
+
+
+// --- Wake Lock Functions ---
+let wakeLock = null;
+
+const requestWakeLock = async () => {
+    if (document.visibilityState === 'visible') {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            wakeLock.addEventListener('release', () => {
+                console.log('Wake Lock was released');
+                wakeLock = null;
+            });
+            console.log('Wake Lock is active');
+        } catch (err) {
+            console.error(`${err.name}, ${err.message}`);
+        }
+    }
+};
+
+// Re-acquire the wake lock when the page becomes visible again.
+document.addEventListener('visibilitychange', async () => {
+    if (wakeLock === null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+    }
+});
+
+const releaseWakeLock = async () => {
+  if (wakeLock !== null) {
+    try {
+      await wakeLock.release();
+      wakeLock = null;
+      console.log('Screen Wake Lock released.');
+    } catch (err) {
+      console.error(`${err.name}, ${err.message}`);
+    }
+  }
+}
+
+/*
+You could remove both requestNotificationPermission and sendNotification functions, 
+and the associated calls to them, 
+and the application would still successfully track and save the user's route.
+
+However, by doing so, 
+you would lose the benefit of proactively informing the user about important events, 
+particularly tracking errors. 
+Therefore, while not essential for the primary function, 
+these notification features are a highly recommended enhancement 
+for creating a more robust and user-friendly tracking application.
+*/
 // --- Notification Functions ---
 function requestNotificationPermission() {
+    if (_isSafariOnIOS)
+        return;
+
     if (!("Notification" in window)) {
         console.warn("This browser does not support desktop notification");
-        alert("trackme_1.js: This browser does not support desktop notification");
         return;
     }
 
@@ -48,101 +186,55 @@ function requestNotificationPermission() {
     }
 }
 
-// For one-off notifications (e.g., tracking stopped)
 function sendNotification(title, body) {
-    console.log("sendNotification Notification.permission: ", Notification.permission);
+    if (_isSafariOnIOS)
+        return;
+
     if (Notification.permission === "granted") {
         new Notification(title, {
             body: body,
-            icon: '/icon.png', // <--- IMPORTANT: Update this path to your app's icon
-            tag: 'trackme-status', // Use a consistent tag for general status messages
-            renotify: true // Re-alert if notification with same tag is sent
+            icon: '/icon.png',
+            tag: 'trackme-status',
+            renotify: true
         });
     } else {
         console.log(`[Notification Skipped] Title: ${title}, Body: ${body}`);
     }
 }
 
-// For a persistent notification that updates its content
-function sendPersistentNotification(title, body) {
-    console.log("sendPersistentNotification Notification.permission: ", Notification.permission);
-    if (Notification.permission === "granted") {
-        if (currentTrackingNotification) {
-            console.log("sendPersistentNotification currentTrackingNotification.close ...");
-            currentTrackingNotification.close(); // Close previous one if it's still open
-        }
-        console.log("sendPersistentNotification new Notification ...");
-        currentTrackingNotification = new Notification(title, {
-            body: body,
-            icon: '/icon.png', // <--- IMPORTANT: Update this path to your app's icon
-            tag: 'trackme-active-tracking', // Consistent tag for active tracking to update/replace
-            renotify: false, // Don't re-alert for every update if body changes
-            silent: true // Optional: don't make a sound for routine updates
-        });
-    } else {
-        console.log(`[Persistent Notification Skipped] Title: ${title}, Body: ${body}`);
-    }
-    console.log("sendPersistentNotification done");
+let _isSafariOnIOS = false;
+function isSafariOnIOS() {
+  const ua = window.navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  const isAppleVendor = /Apple Computer, Inc./.test(navigator.vendor);
+
+  _isSafariOnIOS = isIOS && isSafari && isAppleVendor;
+
+  return _isSafariOnIOS;
 }
 
-
-// --- Init on DOM
+// --- Init on DOM ---
 document.addEventListener("DOMContentLoaded", () => {
-    // Wait until map is available
+
+    if (isSafariOnIOS()) {
+        console.log("This is running on Safari on an iOS device.");
+        // You could apply specific logic or CSS classes here if needed
+        document.body.classList.add('safari-ios');
+    }
+
     if (window.map) {
-
         console.info('Hi, here is trackme.js!');
-
+        initDB(() => {
+            restoreTrackIfNeeded();
+        });
         getLocation();
-
-        // Add other layers, controls, etc., here
-
-        initMapForTrackme();
-
         addCustomControlsForTrackingPlugin();
-
-        if (true) {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for (let registration of registrations) {
-                        registration.unregister();
-                    }
-                });
-            }
-
-            if ('caches' in window) {
-                caches.keys().then(function(keyList) {
-                    return Promise.all(keyList.map(function(key) {
-                        return caches.delete(key);
-                    }));
-                });
-            }
-        }
-
-        // Register Service Worker for PWA capabilities
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                // Ensure trackme_sw.js is at the root of your *web server*
-                console.log("navigator.serviceWorker.register('trackme_sw.js') ...");
-                navigator.serviceWorker.register('trackme_sw.js')
-                    .then(registration => {
-                        console.log('Service Worker registered with scope:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.error('Service Worker registration failed:', error);
-                    });
-            });
-        }
-
     }
     else {
         alert("window.map is missing !");
     }
 });
-
-// --- Initialize map & base layers ---
-function initMapForTrackme() {
-}
 
 // --- Toolbar Controls ---
 function addCustomControlsForTrackingPlugin() {
@@ -157,15 +249,11 @@ function addCustomControlsForTrackingPlugin() {
                 a.innerHTML = html;
                 a.title = title;
                 L.DomEvent.disableClickPropagation(a);
-
                 const btnEntry = { element: a, onUnpress };
-
                 a.addEventListener("click", (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-
                     const wasPressed = a.classList.contains("pressed");
-
                     if (toggle) {
                         if (wasPressed) {
                             a.classList.remove("pressed");
@@ -177,7 +265,6 @@ function addCustomControlsForTrackingPlugin() {
                                     if (btn.onUnpress) btn.onUnpress(btn.element);
                                 }
                             });
-
                             a.classList.add("pressed");
                             onClick(a);
                         }
@@ -185,38 +272,28 @@ function addCustomControlsForTrackingPlugin() {
                         onClick(a);
                     }
                 });
-
                 btns.push(btnEntry);
                 return a;
             }
 
-            // Hidden File Input
             const fileInput = L.DomUtil.create("input", "", container);
             fileInput.type = "file";
             fileInput.accept = ".gpx,.kml,.geojson";
             fileInput.style.display = "none";
 
-            // Upload Button
             makeBtn("📂", "Upload track", false, () => fileInput.click(), null, "elevation-btn-upload");
             fileInput.addEventListener("change", onFileSelected);
 
-            // Locate Me Button
             makeBtn("📍", txt_GoToCurrentLocation, false, () => {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
-                            const lat = position.coords.latitude;
-                            const lng = position.coords.longitude;
-                            const latlng = [lat, lng];
-                            const llatlng = L.latLng(lat, lng);
-
-                            showPosition(position);
+                            const latlng = [position.coords.latitude, position.coords.longitude];
+                            logPosition(position);
                             map.setView(latlng, 16);
-                            aaddMarker(llatlng); // Assuming aaddMarker exists and works
+                            aaddMarker(L.latLng(latlng));
                         },
-                        (err) => {
-                            alert(txt_GeolocationFailed + err.message);
-                        },
+                        (err) => alert(txt_GeolocationFailed + err.message),
                         GEOLOCATION_OPTIONS
                     );
                 } else {
@@ -224,11 +301,11 @@ function addCustomControlsForTrackingPlugin() {
                 }
             }, null, "elevation-btn-locate");
 
-            // Track Me Button
             makeBtn("👣", "Track me", true,
-                () => {
-                    isRecording = 1;
-                    // Reset all tracking variables for a new session
+                () => { // On Press
+                    isRecording = true;
+                    localStorage.setItem("isRecording", "true");
+                    // Reset all tracking variables
                     recordedPoints = [];
                     totalDistance = 0;
                     up = 0;
@@ -237,32 +314,23 @@ function addCustomControlsForTrackingPlugin() {
                     trackMarkers = [];
                     trackLines.forEach(l => map.removeLayer(l));
                     trackLines = [];
-                    lastTrackTime = null;
                     lastTooltipMarker = null;
-                    lastLocations = []; // Reset smoothing buffer
-
-                    //console.log("requestNotificationPermission ...");   
-                    //requestNotificationPermission(); // Request permission proactively when user intends to track
-    
-                    window.modeManager.resetMode(true);
-                    setStatusInfo("Track");
-
-                    console.log("startTracking ...");  
+                    lastLocations = [];
+                    consoleLogHistory = []; 
+                    clearDB();
+                    
+                    requestNotificationPermission();
+                    requestWakeLock();
                     startTracking();
-
-                    console.log(txt_log_TRACKING);
-
-                    alert(txt_log_TRACKING); // Still keep for immediate user feedback
+                    alert("Tracking started...");
+                    console.log(`Tracking started, ${TRACKING_DISTANCE_THRESHOLD} m`);
                 },
-                () => {
-                    isRecording = 0;
+                () => { // On Unpress
+                    isRecording = false;
+                    localStorage.removeItem("isRecording");
+                    releaseWakeLock();
                     stopTracking();
-
-                    window.modeManager.resetMode(true);
-                    setStatusInfo("");
-
-                    console.log("Tracking stopped, points: ", recordedPoints.length);
-                    alert("Tracking stopped, points: " + recordedPoints.length); // Still keep for immediate user feedback
+                    alert("Tracking stopped. Points recorded: " + recordedPoints.length);
                     saveGPXFile();
                 },
                 "elevation-btn-trackme"
@@ -275,161 +343,132 @@ function addCustomControlsForTrackingPlugin() {
     new Control({ position: "topleft" }).addTo(map);
 }
 
-
 // --- File import GPX/KML/GeoJSON ---
-// Removed the old 'ooonFileSelected' function for clarity.
-
 function onFileSelected(evt) {
     const file = evt.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
-
     reader.onload = function (e) {
         const gpxText = e.target.result;
-
-        // Parse GPX string into an XML DOM
         const parser = new DOMParser();
         const gpxDoc = parser.parseFromString(gpxText, "application/xml");
 
-        // Convert GPX XML to GeoJSON
-        // <--- IMPORTANT: 'toGeoJSON' library is required for this to work.
-        // Make sure you've included it (e.g., <script src="https://unpkg.com/@mapbox/togeojson@0.16.0/togeojson.js"></script>)
+        // Requires the togeojson.js library
         const geojson = toGeoJSON.gpx(gpxDoc);
-
-        // Optional: Log or inspect it
         console.log("GeoJSON from GPX:", geojson);
 
-        // Pane erstellen (nur einmal nötig)
         if (!map.getPane('gpxPane')) {
             map.createPane('gpxPane');
-            map.getPane('gpxPane').style.zIndex = 650; // kleiner als 500 (z. B. Labels), größer als Standard-Overlays
+            map.getPane('gpxPane').style.zIndex = 650;
         }
 
-        // Add GeoJSON layer to the map
         const gpxLayer = L.geoJSON(geojson, {
-            pane: 'gpxPane',  // Hier ist der entscheidende Teil
-            style: {
-                color: "#f00",
-                weight: 4,
-                opacity: 0.7
-            },
+            pane: 'gpxPane',
+            style: { color: "#f00", weight: 4, opacity: 0.7 },
             onEachFeature: function (feature, layer) {
-                if (feature.geometry.type === "LineString") {
-                    layer.bindPopup("Track");
-                } else if (feature.geometry.type === "Point") {
-                    const ele = feature.properties.ele ? `Elevation: ${feature.properties.ele}m` : "No elevation";
-                    layer.bindPopup(ele);
+                if (feature.properties.name) {
+                    layer.bindPopup(feature.properties.name);
                 }
             }
         }).addTo(map);
 
         map.fitBounds(gpxLayer.getBounds());
     };
-
     reader.readAsText(file);
 }
 
+// --- Geolocation Functions ---
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            showPosition,
-            showError,
-            GEOLOCATION_OPTIONS
-        );
+        navigator.geolocation.getCurrentPosition(logPosition, showError, GEOLOCATION_OPTIONS);
     } else {
         console.warn("Geolocation is not supported.");
     }
 }
 
-function showPosition(position) {
-    const lat = position.coords.latitude;
-    const lng = position.coords.longitude;
-    const accuracy = position.coords.accuracy;
-
-    //console.log(`trackme.js Latitude: ${lat}\nLongitude: ${lng}\nAccuracy: ${accuracy} meters`);
+function logPosition(position) {
+    console.log(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
 }
 
 function showError(error) {
-    console.error(`Error: ${error.message}`);
+    console.error(`Geolocation Error: ${error.message}`);
 }
 
+// --- Distance Calculation ---
 function getDistanceMeters(p1, p2) {
-    if (
-        !p1 || !p2 ||
-        !isFinite(p1.lat) || !isFinite(p1.lng) ||
-        !isFinite(p2.lat) || !isFinite(p2.lng)
-    ) {
-        console.warn("Invalid coordinates in getDistanceMeters", p1, p2);
-        return NaN;
+    if (!p1 || !p2 || !isFinite(p1.lat) || !isFinite(p1.lng) || !isFinite(p2.lat) || !isFinite(p2.lng)) {
+        console.warn("Invalid coordinates for distance calculation.", p1, p2);
+        return 0;
     }
-
     const R = 6371000; // Earth radius in meters
     const toRad = (deg) => (deg * Math.PI) / 180;
-
     const dLat = toRad(p2.lat - p1.lat);
     const dLng = toRad(p2.lng - p1.lng);
-    const lat1 = toRad(p1.lat);
-    const lat2 = toRad(p2.lat);
-
-    const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
-
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(p1.lat)) * Math.cos(toRad(p2.lat)) * Math.sin(dLng / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
     return R * c;
 }
 
-
+// --- GPX Export ---
 function exportToGPX(points) {
     const header = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="MyTracker" xmlns="http://www.topografix.com/GPX/1/1">
-<trk>
-  <name>My Track</name>
-  <trkseg>
-`;
+<gpx version="1.1" creator="TrackMe" xmlns="http://www.topografix.com/GPX/1/1">
+<trk><name>My Track</name><trkseg>`;
 
-    const footer = `  </trkseg>
-</trk>
-</gpx>`;
+    const footer = `</trkseg></trk></gpx>`;
 
-    const segments = points
-        .map((p) => {
-            const eleLine =
-                typeof p.elevation === "number"
-                    ? `\n      <ele>${p.elevation.toFixed(1)}</ele>`
-                    : "";
-            return `    <trkpt lat="${p.lat}" lon="${p.lng}">${eleLine}
-      <time>${p.time}</time>
-    </trkpt>`;
-        })
-        .join("\n");
+    const segments = points.map(p => {
+        const eleLine = typeof p.elevation === "number" ? `<ele>${p.elevation.toFixed(1)}</ele>` : "";
+        return `<trkpt lat="${p.lat}" lon="${p.lng}">${eleLine}<time>${p.time}</time></trkpt>`;
+    }).join("\n");
 
-    const gpx = header + segments + "\n" + footer;
-
-    return gpx;
+    return header + "\n" + segments + "\n" + footer;
 }
 
 function saveGPXFile() {
+    if (recordedPoints.length === 0) {
+        console.log("No points recorded, skipping file save.");
+        return;
+    }
+
+    // --- Save GPX File ---
     const gpxData = exportToGPX(recordedPoints);
-    const blob = new Blob([gpxData], { type: 'application/gpx+xml' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "track.gpx";
-    link.click();
-    URL.revokeObjectURL(url);
+    const gpxBlob = new Blob([gpxData], { type: 'application/gpx+xml' });
+    const gpxUrl = URL.createObjectURL(gpxBlob);
+    const gpxLink = document.createElement("a");
+    gpxLink.href = gpxUrl;
+    gpxLink.download = "track.gpx";
+    document.body.appendChild(gpxLink);
+    gpxLink.click();
+    document.body.removeChild(gpxLink);
+    URL.revokeObjectURL(gpxUrl);
+
+    // --- Save Console Log File ---
+    if (false) {
+      setTimeout(() => {
+        const logData = consoleLogHistory.join("\n");
+        const logBlob = new Blob([logData], { type: "text/plain" });
+        const logUrl = URL.createObjectURL(logBlob);
+        const logLink = document.createElement("a");
+        logLink.href = logUrl;
+        logLink.download = "console_log.txt";
+        document.body.appendChild(logLink);
+        logLink.click();
+        document.body.removeChild(logLink);
+        URL.revokeObjectURL(logUrl);
+      }, 5000);
+    }
+    
 }
 
-
+// --- Location Smoothing ---
 function smoothLocation(lat, lng) {
-
     lat = Number(lat);
     lng = Number(lng);
 
     if (isNaN(lat) || isNaN(lng)) {
-        console.error("Invalid lat/lng:", lat, lng);
+        console.error("Invalid lat/lng for smoothing:", lat, lng);
         return null;
     }
 
@@ -442,371 +481,132 @@ function smoothLocation(lat, lng) {
     return { lat: avgLat, lng: avgLng };
 }
 
-
-function ssstartTracking() {
-    console.log("startTracking isRecording: ", isRecording);
-
-    if (isRecording !== 1) return;
-
-    // Send initial persistent notification
-    console.log("sendPersistentNotification ...");
-    //sendPersistentNotification("Tracking Started", "Your location is now being recorded.");
+// --- Tracking Logic ---
+function startTracking() {
+    if (!isRecording) return;
+    
+    console.log("Starting geolocation watch...");
 
     watchId = navigator.geolocation.watchPosition(
-        (pos) => {
-
-            let lat = pos.coords.latitude;
-            let lng = pos.coords.longitude;
-
-            const smoothed = smoothLocation(lat, lng);
-            if (!smoothed) {
-                console.warn("Skipping point due to invalid smoothed location.");
-                return;
-            }
-            lat = smoothed.lat;
-            lng = smoothed.lng;
-
-            const now = Date.now();
-            const newPoint = {
-                lat,
-                lng,
-                time: new Date().toISOString(),
-            };
-
-            const lastPoint = recordedPoints.at(-1);
-            const distance = lastPoint
-                ? getDistanceMeters(lastPoint, newPoint)
-                : Infinity;
-
-            // Simplified speed check for robustness
-            if (false) { // Disabled for now, uncomment if needed
-                const timeDiff = lastPoint
-                    ? (now - new Date(lastPoint.time).getTime()) / 1000
-                    : Infinity;
-                const speed = distance / timeDiff;
-                const SPEED_THRESHOLD = 10; // 10 m/s (~36 km/h)
-                if (speed > SPEED_THRESHOLD && timeDiff > 1) { // Only check if enough time has passed
-                    console.log(
-                        `Ignored point due to unrealistic speed: ${speed.toFixed(1)} m/s over ${timeDiff.toFixed(1)}s`
-                    );
-                    return;
-                }
+        // Make the callback async
+        async (pos) => {
+            // Ensure wake lock is active
+            if (!wakeLock || wakeLock.released) {
+                await requestWakeLock();
             }
 
-            if (distance < 5 && recordedPoints.length > 0) { // Only ignore if not the very first point
-                //console.log(`Ignored small move: ${distance.toFixed(1)} m`);
-                return;
-            }
-
-            if (distance >= TRACKINGDISTANCE || recordedPoints.length === 0) { // Always record the first point
-                // Elevation (if getElevation function is available)
-                if (false && typeof getElevation === "function") { // Disabled, requires an external elevation service
-                    getElevation({ lat, lng }, (elevation, _, __) => {
-                        newPoint.elevation = elevation;
-
-                        if (lastPoint?.elevation !== undefined) {
-                            const delta = elevation - lastPoint.elevation;
-                            if (delta > 0) up += delta;
-                            else down += Math.abs(delta);
-                        }
-
-                        updateMapAndData(newPoint, lastPoint, distance);
-                    });
-                } else {
-                    updateMapAndData(newPoint, lastPoint, distance);
-                }
-            } else {
-                //console.log(`Skipped: ${distance.toFixed(1)} m from last (less than TRACKINGDISTANCE)`);
-            }
-        },
-        (err) => {
-            console.warn("Geolocation error:", err.message);
-            // Notify user if there's a serious geolocation error
-            sendNotification("Tracking Error", `Geolocation failed: ${err.message}. Tracking may have stopped.`);
-            stopTracking(); // Attempt to stop tracking gracefully
-        },
-        GEOLOCATION_OPTIONS
-    );
-    console.log("startTracking done");
-}
-
-
-function ssstopTracking() {
-    if (watchId !== null) {
-        navigator.geolocation.clearWatch(watchId);
-        watchId = null;
-    }
-    // Close the persistent notification
-    if (currentTrackingNotification) {
-        currentTrackingNotification.close();
-        currentTrackingNotification = null;
-    }
-    // Send a final notification with summary
-    // sendNotification("Tracking Stopped", `Tracked ${recordedPoints.length} points over ${totalDistance.toFixed(1)} meters. Up: ${up.toFixed(1)}m, Down: ${down.toFixed(1)}m.`);
-    console.log("Tracking Stopped", `Tracked ${recordedPoints.length} points over ${totalDistance.toFixed(1)} meters. Up: ${up.toFixed(1)}m, Down: ${down.toFixed(1)}m.`);
-}
-
-// In trackme_1.js
-
-function xstartTracking() {
-    console.log("startTracking isRecording: ", isRecording);
-
-    if (isRecording !== 1) return;
-
-    if (true) {
-        // Listen for messages from the service worker
-        // This listener is set up to catch messages sent from the service worker.
-        navigator.serviceWorker.addEventListener('message', event => {
-            // First, check if it's a RESPONSE message we care about.
-            if (event.data && event.data.type === 'RESPONSE') {
-                
-                console.log('Message received from service worker:', event.data);
-
-                // Now, check if this response contains tracking data to update the map.
-                if (event.data.data) {
-                    const { newPoint, lastPoint, distance } = event.data.data;
-                    updateMapAndData(newPoint, lastPoint, distance);
-                } 
-                // Optional: If you want to specifically see the text from other messages.
-                else if (event.data.text) {
-                    console.log('Received status text from SW:', event.data.text); // This will show "bla" and "blub"
-                } else {
-                    console.log('Received something else from SW:'); 
-                }
-            }
-        });
-    }
-
-    // Inform the service worker that tracking has started
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
-            type: 'START_TRACKING'
-        });
-    }
-
-    watchId = navigator.geolocation.watchPosition(
-        (pos) => {
-            // ... (smoothing logic remains the same)
             const smoothed = smoothLocation(pos.coords.latitude, pos.coords.longitude);
             if (!smoothed) {
                 console.warn("Skipping point due to invalid smoothed location.");
                 return;
             }
 
-            lat = smoothed.lat;
-            lng = smoothed.lng;
-
-            const now = Date.now();
             const newPoint = {
-                lat,
-                lng,
+                lat: smoothed.lat,
+                lng: smoothed.lng,
                 time: new Date().toISOString(),
+                // elevation: pos.coords.altitude // Optional: include if available
             };
 
-            const lastPoint = recordedPoints.at(-1);
-            const distance = lastPoint
-                ? getDistanceMeters(lastPoint, newPoint)
-                : Infinity;
+            if (recordedPoints.length === 0) {
+                console.log("Recording first point.");
+                updateMapAndData(newPoint, null, 0);
+            } else {
+                const lastPoint = recordedPoints[recordedPoints.length - 1];
+                const distance = getDistanceMeters(lastPoint, newPoint);
 
-            // Simplified speed check for robustness
-            if (false) { // Disabled for now, uncomment if needed
-                const timeDiff = lastPoint
-                    ? (now - new Date(lastPoint.time).getTime()) / 1000
-                    : Infinity;
-                const speed = distance / timeDiff;
-                const SPEED_THRESHOLD = 10; // 10 m/s (~36 km/h)
-                if (speed > SPEED_THRESHOLD && timeDiff > 1) { // Only check if enough time has passed
-                    console.log(
-                        `Ignored point due to unrealistic speed: ${speed.toFixed(1)} m/s over ${timeDiff.toFixed(1)}s`
-                    );
-                    return;
+                if (distance >= TRACKING_DISTANCE_THRESHOLD) {
+                    // console.log(`Distance ${distance.toFixed(1) }m. Recording point.`);
+                    updateMapAndData(newPoint, lastPoint, distance);
+                } else {
+                    // Optional: log points that are too close
+                    // console.log(`Point too close (${distance.toFixed(1)} m). Skipping.`);
                 }
             }
-
-            /*
-            if (distance < 5 && recordedPoints.length > 0) { // Only ignore if not the very first point
-                //console.log(`Ignored small move: ${distance.toFixed(1)} m`);
-                return;
-            }
-            */
-
-            if (true /* distance >= 0 || recordedPoints.length === 0 */) { // Always record the first point
-                // console.log("NEW_POINT payload: ", newPoint);
-                // Send the new point to the service worker
-                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                    //console.log("posting to sw...: NEW_POINT payload: ", newPoint);
-                    navigator.serviceWorker.controller.postMessage({
-                        type: 'NEW_POINT',
-                        payload: newPoint
-                    });
-                }
-            }
-            
-            /*
-            // Send the new point to the service worker
-            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                navigator.serviceWorker.controller.postMessage({
-                    type: 'NEW_POINT',
-                    payload: newPoint
-                });
-            }
-            */
-            
-            // You can still update the map if the page is active
-            // Or, have the service worker send the updated stats back to the page
-            // updateMapAndData(newPoint); das gibt zu viele Punkte !!!
-
         },
         (err) => {
-            console.warn("Geolocation error:", err.message);
+            console.error("Geolocation watch error:", err.message);
             sendNotification("Tracking Error", `Geolocation failed: ${err.message}.`);
             stopTracking();
         },
         GEOLOCATION_OPTIONS
     );
 }
-function startTracking() {
-    console.log("startTracking isRecording: ", isRecording);
-
-    if (isRecording !== 1) return;
-
-    // Wait for the service worker to be ready
-    navigator.serviceWorker.ready.then((registration) => {
-        console.log("Service Worker is ready.");
-
-        // Listen for messages from the service worker
-        navigator.serviceWorker.addEventListener('message', event => {
-            if (event.data && event.data.type === 'RESPONSE') {
-                console.log('Message received from service worker:', event.data);
-                if (event.data.data) {
-                    const { newPoint, lastPoint, distance } = event.data.data;
-                    updateMapAndData(newPoint, lastPoint, distance);
-                }
-            }
-        });
-
-        // Inform the service worker that tracking has started
-        registration.active.postMessage({
-            type: 'START_TRACKING'
-        });
-
-        watchId = navigator.geolocation.watchPosition(
-            (pos) => {
-                const smoothed = smoothLocation(pos.coords.latitude, pos.coords.longitude);
-                if (!smoothed) {
-                    console.warn("Skipping point due to invalid smoothed location.");
-                    return;
-                }
-
-                const newPoint = {
-                    lat: smoothed.lat,
-                    lng: smoothed.lng,
-                    time: new Date().toISOString(),
-                };
-
-                // Send the new point to the active service worker
-                if (navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.controller.postMessage({
-                        type: 'NEW_POINT',
-                        payload: newPoint
-                    });
-                }
-            },
-            (err) => {
-                console.warn("Geolocation error:", err.message);
-                sendNotification("Tracking Error", `Geolocation failed: ${err.message}.`);
-                stopTracking();
-            },
-            GEOLOCATION_OPTIONS
-        );
-    });
-}
-
 
 function stopTracking() {
     if (watchId !== null) {
+        console.log("Stopping geolocation watch.");
         navigator.geolocation.clearWatch(watchId);
         watchId = null;
     }
-    
-    // Inform the service worker to stop and finalize the track
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
-            type: 'STOP_TRACKING'
-        });
-    }
-
-    // The service worker will be responsible for creating the GPX file
-    // and notifying the main thread when it's ready for download.
+    isRecording = false; // Ensure state is consistent
 }
 
-
-// Separated out for clarity
+// --- Map Update Logic ---
 function updateMapAndData(newPoint, lastPoint, distance) {
     recordedPoints.push(newPoint);
-    lastTrackTime = Date.now();
+    addPointToDB(newPoint);
 
-    const lat = newPoint.lat;
-    const lng = newPoint.lng;
-
-    // Marker
-    const marker = L.circleMarker([lat, lng], {
-        radius: 3,
-        color: "blue",
-        fillColor: "#30f",
-        fillOpacity: 0.8,
-        weight: 1,
+    // Update Map Marker
+    const marker = L.circleMarker([newPoint.lat, newPoint.lng], {
+        radius: 3, color: "blue", fillColor: "#30f", fillOpacity: 0.8, weight: 1
     }).addTo(map);
-    map.setView([lat, lng], map.getZoom());
+    map.setView([newPoint.lat, newPoint.lng]);
     trackMarkers.push(marker);
 
-    // Line
+    // Update Map Line
     if (lastPoint) {
-        const line = L.polyline(
-            [
-                [lastPoint.lat, lastPoint.lng],
-                [lat, lng],
-            ],
+        const line = L.polyline([[lastPoint.lat, lastPoint.lng], [newPoint.lat, newPoint.lng]], 
             { color: "blue", weight: 2, opacity: 0.8 }
         ).addTo(map);
         trackLines.push(line);
         totalDistance += distance;
     }
 
-    if (lastTooltipMarker) lastTooltipMarker.unbindTooltip();
-
-    const currentTooltipContent =
-        typeof newPoint.elevation !== "undefined"
-            ? `🔼 ${up.toFixed(1)} m / 🔽 ${down.toFixed(1)} m<br>📏 ${totalDistance.toFixed(1)} m`
-            : `📏 ${totalDistance.toFixed(1)} m`;
-
-    console.log("updateMapAndData currentTooltipContent: ", currentTooltipContent);
-
-    marker
-        .bindTooltip(currentTooltipContent, {
-            permanent: true,
-            direction: "top",
-            offset: [0, -8],
-            className: "tracking-tooltip",
-        })
-        .openTooltip();
-
+    // Update Tooltip
+    if (lastTooltipMarker) {
+        lastTooltipMarker.unbindTooltip();
+    }
+    const tooltipContent = `📏 ${totalDistance.toFixed(1)} m`;
+    marker.bindTooltip(tooltipContent, {
+        permanent: true, direction: "top", offset: [0, -8], className: "tracking-tooltip"
+    }).openTooltip();
     lastTooltipMarker = marker;
 
-    // Update persistent notification with current progress
-    const notificationBody =
-        typeof newPoint.elevation !== "undefined"
-            ? `Active: 🔼 ${up.toFixed(1)} m / 🔽 ${down.toFixed(1)} m, 📏 ${totalDistance.toFixed(1)} m`
-            : `Active: 📏 ${totalDistance.toFixed(1)} m`;
-    //sendPersistentNotification("Tracking in Progress", notificationBody);
+    // Optionally send a status notification
+    // sendNotification("Tracking Update", `Distance: ${totalDistance.toFixed(1)} m`);
 }
 
-// Add a dummy aaddMarker function if it's not defined elsewhere, for the Locate Me button
-// This is not directly related to background tracking but ensures the example works.
+// --- Restore track from DB ---
+function restoreTrackIfNeeded() {
+    if (localStorage.getItem("isRecording") === "true") {
+        getAllPointsFromDB(points => {
+            if (points && points.length > 0) {
+                console.log(`Restoring ${points.length} points from a previous session.`);
+                recordedPoints = points;
+                let lastPoint = null;
+                points.forEach(point => {
+                    const distance = lastPoint ? getDistanceMeters(lastPoint, point) : 0;
+                    updateMapAndData(point, lastPoint, distance);
+                    lastPoint = point;
+                });
+
+                // Continue tracking
+                isRecording = true;
+                const trackMeButton = document.querySelector('.elevation-btn-trackme');
+                if (trackMeButton) {
+                    trackMeButton.classList.add('pressed');
+                }
+                startTracking();
+            }
+        });
+    }
+}
+
+
+// Dummy function to prevent errors if not defined elsewhere
 function aaddMarker(latlng) {
-    if (false) {
-        L.marker(latlng).addTo(map)
-        .bindPopup("Your current location")
-        .openPopup();
-    }    
+    L.marker(latlng).addTo(map)
+      .bindPopup("Your location")
+      .openPopup();
 }

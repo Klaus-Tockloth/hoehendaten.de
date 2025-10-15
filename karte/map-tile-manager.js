@@ -295,7 +295,8 @@ function createTileManager(config) {
             </details>
 
             <!-- Color table -->
-            <details open style="margin-top: 12px;">
+            <!-- <details open style="margin-top: 12px;"> -->
+            <details style="margin-top: 12px;">
               <summary class="summary" style="cursor: pointer; font-size: 1.1em; font-weight: bold;">Farbtabelle</summary>
               <div id="${type}ColorTable${idSuffix}" class="color-table" style="margin-top: 8px;"></div>
             </details>
@@ -352,7 +353,8 @@ function createTileManager(config) {
       resetOptionsToDefaults: () => resetOptionsToDefaults(idSuffix),
       hasGradientAlgorithm,
       hasColorMap,
-      reloadLayersFromStorage: () => managerPublicApi.loadLayers(), 
+      //reloadLayersFromStorage: () => managerPublicApi.loadLayers(), 
+      reloadLayersFromStorage: () => {/* console.log("getPanelHelper reloadLayersFromStorage calling managerPublicApi.loadLayers()"); */managerPublicApi.removeLayersFromMap(); managerPublicApi.loadLayers()}, 
     };
 
    
@@ -1304,6 +1306,23 @@ function createTileManager(config) {
           () => myLayers.length, 
           "my-custom-class" 
         );
+      }
+    },
+
+    removeLayersFromMap:  async function () {
+      console.log("new function: removeLayersFromMap()");
+
+      for (const tilesArray of myTilesMap.values()) {
+        for (const tile of tilesArray) {
+          console.log("tile: ", tile);
+          console.log("tile.leaflet_id: ", tile.leaflet_id);
+        }
+      }
+
+      for (const tilesArray of myTilesMap.values()) {
+        for (const tile of tilesArray) {
+          removeLayerById(tile.leaflet_id);
+        }
       }
     },
 

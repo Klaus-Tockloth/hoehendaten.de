@@ -14,7 +14,8 @@
     exaggeration: 1.0,
     azimuth: 315,
     altitude: 45,
-    shadingVariant: "multidirectional",
+    // shadingVariant: "multidirectional",
+    shadingVariant: "igor",
     gradientAlgorithmVariant: "ZevenbergenThorne",
     opacity: 100, 
 
@@ -23,8 +24,9 @@
       brightness: 100,
       contrast: 100,
       saturation: 100,
-      opacity: 100, 
-      blendMode: "normal"
+      opacity: 90, 
+      // blendMode: "normal"
+      blendMode: "multiply"
     }
   };
   
