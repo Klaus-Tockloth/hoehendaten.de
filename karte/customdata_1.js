@@ -671,7 +671,8 @@
   };
   
   function makeCustomDataMenu() {
-    if (window.innerWidth >= 1280) {
+    // if (window.innerWidth >= 1280) {
+    if (window.innerWidth > 1024) {
       createDesktopMenuEntry();
     } else {
       createHamburgerMenuEntry();
@@ -797,9 +798,9 @@
       ""
     );
 
-    // Übersicht (Data Panel)
+    // Objektübersicht (Data Panel)
     addSubmenuButton(
-      "Übersicht",
+      "Objektübersicht",
       () => {
         if (
           typeof global.sidepanel !== "undefined" &&
@@ -1040,11 +1041,11 @@
       ""
     );
 
-    // Übersicht (Data Panel)
+    // Objektübersicht (Data Panel)
     addSubBtn(
-      "Übersicht",
+      "Objektübersicht",
       () => {
-        console.log("Hamburger Submenu: Übersicht clicked.");
+        console.log("Hamburger Submenu: Objektübersicht clicked.");
         if (
           typeof global.sidepanel !== "undefined" &&
           global.sidepanel.showCustomData
@@ -1108,7 +1109,7 @@
           nicht auf bereits importierte Objekte!         
           <br>
           Individuelle Konfigurationen zu bereits importierten Objekten 
-          können unter "Übersicht" vorgenommen werden.
+          können unter "Objektübersicht" vorgenommen werden.
         </div>
 
         <hr>
@@ -1287,7 +1288,8 @@
   `;
 
     if (!_myCustomdataMap || _myCustomdataMap.size === 0) {
-      html += `<p>Noch keine Objekte importiert. Nutzen Sie "Importieren" im Menü, um Ihr erstes Objekt hinzuzufügen!</p>`;
+      /* html += `<p>Noch keine Objekte importiert. Nutzen Sie "Importieren" im Menü, um Ihr erstes Objekt hinzuzufügen!</p>`; */
+      html += `<div class="entry-list"><p style="color: #777; font-style: italic; padding: 10px;">Noch kein Objekt importiert.</p></div>`;
     } else {
       _myCustomdataMap.forEach((item) => {
         const isVisible = typeof item.visible === "boolean" ? item.visible : true;

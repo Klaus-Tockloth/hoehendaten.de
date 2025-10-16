@@ -162,7 +162,8 @@ const isLocalhost =
       }
     }
     //if (isMobile()) {
-    if (window.innerWidth < 1280) {
+    // if (window.innerWidth < 1280) {
+    if (window.innerWidth <= 1024) {
       //makeMatrixMenuEntry(
       makeHamburgerMenuEntry(
         type,
@@ -1248,7 +1249,8 @@ function makeSlider(
     decimals === 0 ? Math.round(value) : Number(value).toFixed(decimals);
 
   // if (window.isMobile()) {
-  if (window.innerWidth < 1280) {
+  // if (window.innerWidth < 1280) {
+  if (window.innerWidth <= 1024) {
     return `
       <label style="display: flex; align-items: center; gap: 8px;">
         <span>${label}:</span>
@@ -1389,7 +1391,8 @@ function updateInputAndLabel(id, idSuffix, value) {
   if (input) input.value = value;
   else {
     // if (isMobile()) {
-    if (window.innerWidth < 1280) {
+    // if (window.innerWidth < 1280) {
+    if (window.innerWidth <= 1024) {
       console.warn(
         "Input-Element nicht gefunden, fullIdOfInput:",
         fullIdOfInput
@@ -1419,25 +1422,10 @@ function suppressEventPropagation(selector) {
 
 function buildTileInfo(entry, type) {
   return `
-    <br>
-    <div><strong>${type}-Kachel:</strong> ${entry.tile?.TileIndex}</div>
-    <div>
-      <strong>Aktualität:</strong>
-      <span title="${entry.tile?.Actuality ?? "N/A"}" style="
-        display: inline-block;
-        max-width: 140px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        vertical-align: bottom;
-      ">
-        ${entry.tile?.Actuality ?? "N/A"}
-      </span>
-    </div>
-    <div><strong>Herkunft:</strong> ${entry.tile?.Origin ?? "N/A"}</div>
-    <div><strong>Urheberrecht:</strong> ${
-      entry.tile?.Attribution ?? "N/A"
-    }</div>    
+    <!-- <div>Kachel: ${entry.tile?.TileIndex}</div> -->
+    <div>Aktualität: ${entry.tile?.Actuality ?? "N/A"}</div>
+    <!-- <div>Herkunft: ${entry.tile?.Origin ?? "N/A"}</div> -->
+    <div>Attribution: ${entry.tile?.Attribution ?? "N/A"}</div>    
   `;
 }
 

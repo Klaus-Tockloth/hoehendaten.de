@@ -321,7 +321,7 @@ class SidepanelManager {
   getListHtml(tilesMap, type, highlightTileIndex = null) {   
     if (!tilesMap || tilesMap.size === 0) {
       const label = this.configs[type]?.label || type || "Elemente";
-      return `<div class="entry-list"><p style="color: #777; font-style: italic; padding: 10px;">Noch keine Kachel für ${label} angelegt</p></div>`;
+      return `<div class="entry-list"><p style="color: #777; font-style: italic; padding: 10px;">Noch keine Kachel für ${label} angelegt.</p></div>`;
     }
    
     let colorIndex = 0;

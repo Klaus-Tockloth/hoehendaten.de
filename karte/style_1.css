@@ -625,12 +625,26 @@ nav.mobile-nav {
 
 /* --- Eintragsliste (Details/Summary) --- */
 
+/*
 .entry-list details {
-	border-radius: 6px;
-	padding: 6px 10px;
-	margin-bottom: 10px;
+	padding: 2px 2px;
+	margin-top: 2px;
+	margin-bottom: 2px;
 	transition: all 0.3s ease;
 }
+*/
+
+.entry-list details {
+    padding-inline-start: 0;
+	padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 2px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	transition: all 0.3s ease;
+	font-size: 0.8em;
+}
+
 
 .entry-list details[open] {
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -643,9 +657,9 @@ nav.mobile-nav {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	font-weight: 500;
-	padding: 4px 0;
-	color: #333;
+	padding: 0px;
+	font-size: 0.9rem;
+
 }
 
 .entry-list summary:hover {
@@ -659,16 +673,11 @@ nav.mobile-nav {
 }
 
 .entry-list summary::before {
-	content: "▸";
-	font-size: 12px;
-	margin-right: 8px;
-	transform: rotate(0deg);
-	transition: transform 0.2s ease;
-	color: #666;
+	content: "+";
 }
 
 .entry-list details[open] summary::before {
-	transform: rotate(90deg);
+	content: "-";
 }
 
 .entry-list button:not(.customdata-apply-config-btn) {
@@ -693,23 +702,16 @@ nav.mobile-nav {
 }
 
 .color-even {
-	background-color: #998a8a;
+	background-color: rgb(240, 240, 240);
 }
 
 .color-odd {
-	background-color: #e8e8e8;
-}
-
-@keyframes blink-animation {
-	50% {
-		opacity: 0.5;
-	}
+	background-color: rgb(240, 240, 240);
 }
 
 .highlighted-tile {
 	border: 2px solid #007bff;
 	box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-	animation: blink-animation 1.5s infinite;
 }
 
 .highlighted-tile.color-even {
