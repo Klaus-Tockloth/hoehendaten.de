@@ -2,8 +2,9 @@
 
 const tpi_url = "https://api.hoehendaten.de:14444/v1/tpi";
 
-//const txt_tpi = "TPI&nbsp;(Position)";
-const txt_tpi = "TPI\u00A0(Position)";
+// const txt_tpi = "TPI&nbsp;(Position)";
+// const txt_tpi = "TPI\u00A0(Position)";
+const txt_tpi = "TPI";
 
 const MODE_TPI = 22;
 

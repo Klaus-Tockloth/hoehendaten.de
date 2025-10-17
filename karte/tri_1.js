@@ -2,8 +2,9 @@
 
 const tri_url = "https://api.hoehendaten.de:14444/v1/tri";
 
-//const txt_tri = "TRI&nbsp;(Ruggedness)";
-const txt_tri = "TRI\u00A0(Ruggedness)";
+// const txt_tri = "TRI&nbsp;(Ruggedness)";
+// const txt_tri = "TRI\u00A0(Ruggedness)";
+const txt_tri = "TRI";
 
 const MODE_TRI = 23;
 

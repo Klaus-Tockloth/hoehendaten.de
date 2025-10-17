@@ -3,8 +3,9 @@
 
   const CONTOUR_API_URL = "https://api.hoehendaten.de:14444/v1/contours";
   
-  const TEXT_CONTOUR_LABEL = "Höhenschichtlinien";
- 
+  // const TEXT_CONTOUR_LABEL = "Höhenschichtlinien";
+  const TEXT_CONTOUR_LABEL = "Höhenlinien";
+
   const MODE_CONTOUR = 20;
 
   const CONTOUR_OPTIONS_DEFAULTS = {
