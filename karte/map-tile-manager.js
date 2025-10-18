@@ -253,7 +253,8 @@ function createTileManager(config) {
   function getPanelHtml(idSuffix = "") {    
     if (getCustomPanelHtml) {
       return (
-        "<h4>Darstellung:</h4>" + getCustomPanelHtml(idSuffix, optionsLast)
+        // "<h4>Darstellung:</h4>" + getCustomPanelHtml(idSuffix, optionsLast)
+        getCustomPanelHtml(idSuffix, optionsLast)
       );
     }
 
@@ -279,7 +280,8 @@ function createTileManager(config) {
       colorMapHtml = `
             <!-- Color file input -->
             <details style="margin-top: 12px;">
-              <summary class="summary" style="cursor: pointer; font-size: 1.1em; font-weight: bold;">Farbschemadatei</summary>
+              <!-- <summary class="summary" style="cursor: pointer; font-size: 1.1em; font-weight: bold;">Farbschemadatei</summary> -->
+              <summary class="summary" style="cursor: pointer; font-weight: bold;">Farbschemadatei</summary>
               <div style="margin-top: 12px;">
                 <div id="colorFileSection${idSuffix}" style="margin-top: 8px;">
                   <label for="colorFileInput${idSuffix}">Farbschema</label>
@@ -297,7 +299,8 @@ function createTileManager(config) {
             <!-- Color table -->
             <!-- <details open style="margin-top: 12px;"> -->
             <details style="margin-top: 12px;">
-              <summary class="summary" style="cursor: pointer; font-size: 1.1em; font-weight: bold;">Farbtabelle</summary>
+              <!-- <summary class="summary" style="cursor: pointer; font-size: 1.1em; font-weight: bold;">Farbtabelle</summary> -->
+              <summary class="summary" style="cursor: pointer; font-weight: bold;">Farbtabelle</summary>
               <div id="${type}ColorTable${idSuffix}" class="color-table" style="margin-top: 8px;"></div>
             </details>
 

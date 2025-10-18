@@ -930,12 +930,16 @@ const isLocalhost =
     btnContent.textContent = html;
 
     const arrow = document.createElement("span");
-    arrow.textContent = " +"; 
-    arrow.style.float = "right";
-    arrow.style.marginLeft = "10px";
+    // arrow.textContent = " +"; 
+    // arrow.style.float = "right";
+    // arrow.style.marginLeft = "10px";
+    // arrow.textContent = "▶"; 
+    arrow.textContent = "▷"; 
+    arrow.style.float = "left";
+    arrow.style.marginRight = "10px";
 
-    hamburgerMainBtn.appendChild(btnContent);
     hamburgerMainBtn.appendChild(arrow);    
+    hamburgerMainBtn.appendChild(btnContent);
 
     hamburgerMainBtn.classList.add(type);
    
@@ -965,12 +969,15 @@ const isLocalhost =
          
           if (otherMainBtn !== hamburgerMainBtn) {
             const otherSubmenu = otherMainBtn.nextElementSibling; 
-            const otherArrow = otherMainBtn.lastElementChild; 
+            // const otherArrow = otherMainBtn.lastElementChild; 
+            const otherArrow = otherMainBtn.firstElementChild; 
 
             if (otherSubmenu && otherArrow) {
               if (otherSubmenu.style.display !== "none") {
                 otherSubmenu.style.display = "none";
-                otherArrow.textContent = " +"; 
+                // otherArrow.textContent = " +";
+                // otherArrow.textContent = "▶"; 
+                otherArrow.textContent = "▷"; 
               }
             }
           }
@@ -978,7 +985,9 @@ const isLocalhost =
 
       // 2. Toggle the clicked button's submenu and update its arrow
       currentSubmenu.style.display = isAboutToBeVisible ? "flex" : "none";
-      currentArrow.textContent = isAboutToBeVisible ? " -" : " +";
+      // currentArrow.textContent = isAboutToBeVisible ? " -" : " +";
+      // currentArrow.textContent = isAboutToBeVisible ? "▼" : "▶"; 
+      currentArrow.textContent = isAboutToBeVisible ? "▽" : "▷"; 
 
       if (toggle) {        
         if (hamburgerMainBtn.classList.contains("active")) {
@@ -1023,7 +1032,8 @@ const isLocalhost =
 
     // Zeichnen
     if (type !== "map") {
-      let text = "Kacheln";
+      // let text = "Kacheln";
+      let text = "Kacheln (Anzeigen/Info/Löschen)";
 
       const drawButton = addSubBtn(text, type, (e) => {
         document.getElementById("status-info").textContent = html;
@@ -1032,7 +1042,8 @@ const isLocalhost =
 
         if (toggle) {
           if (drawButton.classList.contains("nav-green-btn")) {
-            drawButton.textContent = "Kacheln";
+            // drawButton.textContent = "Kacheln";
+            drawButton.textContent = "Kacheln (Anzeigen/Info/Löschen)";
             drawButton.classList.remove("nav-green-btn");
             onUnpress?.call(drawButton, e);
             modeManager.set(MODE_NONE, "");
@@ -1106,7 +1117,8 @@ const isLocalhost =
 
     if (config.hasTiles) {
       // addSubBtn("🔳 Daten", type, () => {
-      addSubBtn("Daten", type, () => {
+      // addSubBtn("Daten", type, () => {
+      addSubBtn("Kachelübersicht", type, () => {
         sidepanel?.showData?.(type);
       });
     }

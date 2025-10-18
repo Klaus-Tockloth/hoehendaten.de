@@ -191,7 +191,7 @@
       <hr>
    
       <div class="client">
-        <h4>Höhenlinien</h4>
+        <h4>Höhenlinien:</h4>
 
         <label>Farbe:</label>
         <div class="color-row">
@@ -235,7 +235,7 @@
           0
         )}
         
-        <h4>Haupthöhenlinien</h4>                
+        <h4>Haupthöhenlinien:</h4>                
         ${global.makeSlider(
           "majorInterval",
           idSuffix,

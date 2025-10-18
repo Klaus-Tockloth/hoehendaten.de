@@ -404,7 +404,7 @@ class SidepanelManager {
     const config = this.configs[type];
 
     if (this._sidepanelTitle) {
-      this._sidepanelTitle.innerHTML = "Konfiguration 'Eigene Objekte'";
+      this._sidepanelTitle.innerHTML = "Konfiguration Eigene Objekte";
     }
 
     this.contentEl.innerHTML = getCustomDataConfigurationPanelHtml();

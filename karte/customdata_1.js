@@ -935,11 +935,16 @@
     const btnContent = document.createElement("span");
     btnContent.textContent = global.TEXT_CUSTOMDATA_LABEL; 
     const arrow = document.createElement("span");
-    arrow.textContent = " +";
-    arrow.style.float = "right";
-    arrow.style.marginLeft = "10px";
-    hamburgerMainBtn.appendChild(btnContent);
+    // arrow.textContent = " +";
+    // arrow.style.float = "right";
+    // arrow.style.marginLeft = "10px";
+    // hamburgerMainBtn.appendChild(btnContent);
+    // hamburgerMainBtn.appendChild(arrow);
+    arrow.textContent = "▷";
+    arrow.style.float = "left";
+    arrow.style.marginRight = "10px";
     hamburgerMainBtn.appendChild(arrow);
+    hamburgerMainBtn.appendChild(btnContent);
 
     const submenu = document.createElement("div");
     submenu.classList.add("hamburgerSubmenu");
@@ -954,7 +959,8 @@
         });
       const visible = submenu.style.display === "none";
       submenu.style.display = visible ? "flex" : "none";
-      arrow.textContent = visible ? " -" : " +";
+      // arrow.textContent = visible ? " -" : " +";
+      arrow.textContent = visible ? "▽" : "▷";
     });
 
     container.appendChild(hamburgerMainBtn);
@@ -1093,7 +1099,7 @@
     return `
         <!-- Style Controls -->
         <div class="client" id="style-controls${idSuffix}">
-          <h4>Darstellung:</h4>
+          <!-- <h4>Darstellung:</h4> -->
           ${MapStyleManager.getHtml(
             _customDataOptionsLast.styleOptions,
             idSuffix

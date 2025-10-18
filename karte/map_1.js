@@ -218,7 +218,7 @@ function getMapPanelHtml(idSuffix = "") {
       return `
         <!-- Style Controls -->
         <div class="client" id="style-controls${idSuffix}">
-          <h4>Darstellung</h4>
+          <!-- <h4>Darstellung:</h4> -->
           ${MapStyleManager.getHtml(map_options_last.styleOptions, idSuffix)}
         </div>
         
