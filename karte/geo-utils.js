@@ -159,7 +159,7 @@ function getTiles(map, lon, lat) {
 
 function findAndDisplayTiles(map, lon, lat) {
     const resultsDiv = document.getElementById('results');    
-    let resultsHTML = `<h2>Informationen ..</h2>`;
+    let resultsHTML = `<h2>Informationen ...</h2>`;
     let allFoundTiles = [];
 
     if (lon <= 10.4) {
@@ -233,27 +233,27 @@ function findTiles(map, lon, lat) {
 }
 function displayTiles(allFoundTiles, lon, lat, typeName="") {    
   const resultsDiv = document.getElementById('results');    
-    let resultsHTML = `<h2>Informationen ...</h2>`;
-   
+    // let resultsHTML = `<h2>Informationen ...</h2>`;
+    let resultsHTML = `<h2>${typeName}</h2>`;
+  
     if (allFoundTiles.length === 0) {
         resultsHTML += "<p><strong>Keine Kacheln für diese Koordinaten gefunden.</strong></p>";
     } else { 
         console.log("displayTiles allFoundTiles: ", allFoundTiles);
 
-        resultsHTML += `<h3>${allFoundTiles.length} ${typeName}-Kachel(n) gefunden:</h3>`;
+        // resultsHTML += `<h3>${allFoundTiles.length} ${typeName}-Kachel(n) gefunden:</h3>`;
+        resultsHTML += `<h3>${allFoundTiles.length} Kachel(n) gefunden:</h3>`;
         allFoundTiles.forEach(tile => {            
             const tileData = tile.tile; 
             console.log("displayTiles tileData: ", tileData);
 
             resultsHTML += `
               <div class="tile-info">
-                  <!--
-                  <strong>Dateiname:</strong> ${tile.filename}<br>
-                  -->
+                  <!-- <strong>Dateiname:</strong> ${tile.filename}<br> -->
                   <strong>TileIndex:</strong> ${tileData.TileIndex}<br>
                   <strong>Herkunft:</strong> ${tileData.Origin}<br>
                   <strong>Aktualität:</strong> ${tileData.Actuality}<br>
-                  <strong>Attribution:</strong> ${tileData.Attribution}<br><br>
+                  <strong>Attribution:</strong> ${tileData.Attribution}<br>
               </div>
             `;
         });       

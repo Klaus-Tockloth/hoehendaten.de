@@ -4,7 +4,7 @@ const MODE_MAP = 10;
 
 let isOpfsAvailable = true;
 
-const defaultLayerOrder = ["contour", "tpi", "tri", "roughness", "aspect", "slope", "colorRelief", "hillshade", "customdata", "map"];
+const defaultLayerOrder = ["customdata", "tri", "tpi", "slope", "aspect", "roughness", "colorRelief", "contour", "hillshade", "map"];
 
 const map_options_defaults = {
   storeTiles: true,
