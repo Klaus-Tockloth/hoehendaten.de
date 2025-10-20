@@ -111,7 +111,7 @@
           "Vertikale Überhöhung",
           options.exaggeration,
           0.1,
-          10,
+          25,
           0.1,
           1
         )}

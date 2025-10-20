@@ -244,7 +244,8 @@ function createTileManager(config) {
       const effectiveLatLng = calculateLatLng(key);
 
       await handleGoButtonForMode(effectiveLatLng);
-      await delay(500); // 0.5 Sekunden Pause
+      // await delay(500); // 0.5 Sekunden Pause
+      await delay(200); // 0.2 Sekunden Pause
     }
 
     modeManager.set(originalMode); 

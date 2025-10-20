@@ -213,8 +213,10 @@ class SidepanelManager {
       let contentHtml = await response.text();
      
       if (type === "map") {
-        contentHtml += `<br><br>${window.innerWidth}`;
-        contentHtml += `<div class="Version">${version}</div>`;
+        // contentHtml += `<br><br>${window.innerWidth}`;
+        // contentHtml += `<div class="Version">${version}</div>`;
+        console.log("window.innerWidth:", window.innerWidth);
+        console.log("version:", version);
       }
 
       this.contentEl.innerHTML = contentHtml;
