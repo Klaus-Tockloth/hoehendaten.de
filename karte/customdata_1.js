@@ -7,10 +7,10 @@
   let _myCustomdataMap = new Map();
 
   const defaultLineStyle = {
-    color: "#0078FF",
+    color: "#613583",
     weight: 5,
     opacity: 0.75,
-    dashArray: "5, 15",
+    dashArray: "", // "5, 15",
     trackColor: "#0056b3", 
   };
   const defaultPointStyle = {
@@ -100,7 +100,7 @@
           global.sidepanel.isVisible() &&
           global.sidepanel.currentType === "customdata"
         ) {
-          global.sidepanel.showCustomData(); 
+          global.sidepanel.showCustomData("customdata"); 
         }
       } else {
         console.warn(`Item with ID ${id} not found for visibility toggle.`);
@@ -792,7 +792,7 @@
           typeof global.sidepanel !== "undefined" &&
           global.sidepanel.showCustomDataConfiguration
         ) {
-          global.sidepanel.showCustomDataConfiguration("customdata");
+          global.sidepanel.showCustomDataConfiguration("customdataConfiguration");
         }
       },
       ""
@@ -1089,6 +1089,9 @@
     return hamburgerMainBtn;
   }
 
+  /*
+    globale Konfiguration 
+  */
   global.getCustomDataConfigurationPanelHtml = function (idSuffix = "") {
     idSuffix = "-default"; 
     
@@ -1124,11 +1127,14 @@
 
           <h4>default-Stil für Linien (Tracks/Routen)</h4>
 
-          <label>Farbe: <input type="color" class="config-line-color" value="${
-            lineStyle.color || "#0078FF"
-          }"></label>
-
-          <br>  <br>
+          <label>Farbe:</label>
+          <div class="color-row">
+            <div class="color-cell">
+              <input type="color" class="config-line-color" value="${
+                lineStyle.color || "#613583"
+              }">
+            </div>
+          </div>
           
           ${global.makeSlider(
             "line-weight",
@@ -1141,17 +1147,26 @@
             0
           )}
 
-          <br>  <br>
+         
 
-          <label>Muster (z.B. "5, 5" für gestrichelt, leer für durchgezogen): <input type="text" class="config-line-dasharray" value="${
-            lineStyle.dashArray || ""
-          }"></label>
-
-          <br>  <br>
+          <label>Muster (z.B. "5, 15" für gestrichelt, leer für durchgezogen): </label>
+          <br> 
+          <div>
+            <input type="text" class="config-line-dasharray" value="${
+              lineStyle.dashArray || ""
+            }">
+          </div>
           
-          <label>Track Farbe (GPX/KML, durchgezogen): <input type="color" class="config-line-trackcolor" value="${
-            lineStyle.trackColor || "#0056b3"
-          }"></label>
+          <br> 
+
+          <label>Track Farbe (GPX/KML, durchgezogen): </label>
+          <div class="color-row">
+            <div class="color-cell">
+              <input type="color" class="config-line-trackcolor" value="${
+                lineStyle.trackColor || "#0056b3"
+              }">
+            </div>
+          </div>
 
           <br>  <br>
 
@@ -1168,19 +1183,23 @@
             0
           )}
 
-          <br>  <br>
+          <label>Füllfarbe: </label>
+          <div class="color-row">
+            <div class="color-cell">
+              <input type="color" class="config-point-fillcolor" value="${
+                pointStyle.fillColor || "#ff0000"
+              }">
+            </div>
+          </div>
 
-          <label>Füllfarbe: <input type="color" class="config-point-fillcolor" value="${
-            pointStyle.fillColor || "#ff0000"
-          }"></label>
-
-          <br>  <br>
-
-          <label>Randfarbe: <input type="color" class="config-point-color" value="${
-            pointStyle.color || "#000"
-          }"></label>
-          
-          <br>  <br>
+          <label>Randfarbe: </label>
+          <div class="color-row">
+            <div class="color-cell">
+              <input type="color" class="config-point-color" value="${
+                pointStyle.color || "#000"
+              }">
+            </div>
+          </div>
 
           ${global.makeSlider(
             "point-weight",
@@ -1285,6 +1304,9 @@
     }
   };
 
+  /*
+    Konfiguration für selektiertes item
+  */
   global.getCustomDataPanelHtml = function (idSuffix = "") {
     console.log("getCustomDataPanelHtml called with suffix:", idSuffix);
 
@@ -1327,14 +1349,16 @@
         <span class="customdata-item-name">${itemName}</span>
         -->
         <h4>Stil für Linien (Tracks/Routen)</h4>
-        <label>Farbe: <input type="color" class="config-line-color" value="${
-          lineStyle.color || "#0078FF"
-        }"></label>
-        
-        <br>  <br>
+        <label>Farbe: </label>
+        <div class="color-row">
+          <div class="color-cell">
+            <input type="color" class="config-line-color-for-item-${itemId}" value="${
+              lineStyle.color || "#613583"}">
+          </div>
+        </div>
 
         ${global.makeSlider(
-          `line-weight`,
+          `line-weight-input-`,
           itemId,
           "Stärke",
           lineStyle.weight || 5,
@@ -1344,22 +1368,24 @@
           0
         )}
 
-        <br>  <br>
-
-        <label>Muster (z.B. "5, 5" für gestrichelt, leer für durchgezogen): <input type="text" class="config-line-dasharray" value="${
+        <label>Muster (z.B. "5, 15" für gestrichelt, leer für durchgezogen): <input type="text" class="config-line-dasharray-for-item-${itemId}" value="${
           lineStyle.dashArray || ""
         }"></label>
 
         <br>  <br>
 
-        <label>Track Farbe (GPX/KML, durchgezogen): <input type="color" class="config-line-trackcolor" value="${
-          lineStyle.trackColor || "#0056b3"
-        }"></label>
+        <label>Track Farbe (GPX/KML, durchgezogen): </label>
+        <div class="color-row">
+          <div class="color-cell">
+            <input type="color" class="config-line-trackcolor-for-item-${itemId}" value="${
+             lineStyle.trackColor || "#0056b3"}">
+            </div>
+        </div>
 
         <h4>Stil für Punkte (Wegpunkte)</h4>
         
         ${global.makeSlider(
-          `point-radius`,
+          `point-radius-input-`,
           itemId,
           "Radius",
           pointStyle.radius || 8,
@@ -1368,23 +1394,25 @@
           1,
           0
         )}
-
-        <br>  <br>
         
-        <label>Füllfarbe: <input type="color" class="config-point-fillcolor" value="${
-          pointStyle.fillColor || "#ff0000"
-        }"></label>
+        <label>Füllfarbe: </label>
+        <div class="color-row">
+          <div class="color-cell">
+            <input type="color" class="config-point-fillcolor-for-item-${itemId}" value="${
+              pointStyle.fillColor || "#ff0000"}">
+          </div>
+        </div>
 
-        <br>  <br>
-
-        <label>Randfarbe: <input type="color" class="config-point-color" value="${
-          pointStyle.color || "#000"
-        }"></label>
-
-        <br>  <br>
+        <label>Randfarbe: </label>
+        <div class="color-row">
+          <div class="color-cell">
+            <input type="color" class="config-point-color-for-item-${itemId}" value="${
+              pointStyle.color || "#000"}">
+          </div>
+        </div>
         
         ${global.makeSlider(
-          `point-weight`,
+          `point-weight-input-`,
           itemId,
           "Randstärke",
           pointStyle.weight || 1,
@@ -1394,9 +1422,11 @@
           0
         )}
 
+        <!--
         <div class="panel-buttons">
-            <button type="button" class="customdata-apply-config-btn" data-id="${itemId}">Stil anwenden</button>
+            <button type="button" class="customdata-apply-config-btn" data-id="${itemId}">Stil anwenden ...</button>
         </div>
+        -->
       </div>
       <!-- -->
     </details>
@@ -1414,7 +1444,22 @@
     return html;
   };
 
-  global.initCustomDataPanelHelper = function (idSuffix) {
+  /*
+    Anwenden auf selektiertes item
+  */
+// customdata_1.js
+
+// ... (previous code remains the same)
+
+  /*
+    Anwenden auf selektiertes item
+  */
+/**
+ * Initializes a custom data panel and its associated event listeners.
+ *
+ * @param {string} panelId The full ID of the panel element to initialize.
+ */
+global.initCustomDataPanelHelper = function (idSuffix) {
     idSuffix = ""; // TODO Hack !!!
 
     const panelElement = document.getElementById(`customdata-panel-${idSuffix}`);
@@ -1423,25 +1468,34 @@
       return;
     }
 
+    /**
+     * Redraws a given map item by reloading its data and applying its current style.
+     * @param {object} item The metadata item for the custom data layer.
+     */
     const redrawAndSaveItem = async (item) => {
         if (!item) return;
+
+        // Remove the existing layer from the map if it exists
         if (item.layer && global.map && global.map.hasLayer(item.layer)) {
             global.map.removeLayer(item.layer);
-            item.layer = null; 
+            item.layer = null;
         }
 
         const fileNameInOpfs = item.opfsPath.split("/").pop();
         const fileContent = await loadCustomDataFile(fileNameInOpfs);
+
         if (fileContent) {
             const geojson = parseFileContentToGeoJson(fileContent, item.fileType, item.name);
-            if (geojson) {              
+            if (geojson) {
+                // Display the new GeoJSON with the item's current style properties
                 displayCustomDataGeoJson(geojson, item.name, item.id, item.opfsPath, item.fileType, item.visible, item.style);
             }
         }
-        await saveMetadata(); 
+        await saveMetadata(); // Persist metadata changes
         console.log(`Style for "${item.name}" updated and redrawn.`);
-    };    
-   
+    };
+
+    // Iterate over each custom data item within the panel
     panelElement.querySelectorAll(".customdata-item-details").forEach(detailsElement => {
         const itemId = detailsElement.dataset.id;
         const item = _myCustomdataMap.get(itemId);
@@ -1450,78 +1504,123 @@
         const configArea = detailsElement.querySelector('.customdata-config-area');
         if (!configArea) return;
 
-        const redrawCallback = () => redrawAndSaveItem(item);
+        /**
+         * Reads all style values from the UI controls and updates the item's style object.
+         */
+        const updateItemStyleFromUI = () => {
+            // Read values from text and color inputs
+            item.style.line.color = configArea.querySelector(`.config-line-color-for-item-${itemId}`).value;
+            console.log("updateItemStyleFromUI item.style.line.color: ", item.style.line.color);
+            item.style.line.dashArray = configArea.querySelector(`.config-line-dasharray-for-item-${itemId}`).value.trim() || null;
+            item.style.line.trackColor = configArea.querySelector(`.config-line-trackcolor-for-item-${itemId}`).value;
+            item.style.point.fillColor = configArea.querySelector(`.config-point-fillcolor-for-item-${itemId}`).value;
+            item.style.point.color = configArea.querySelector(`.config-point-color-for-item-${itemId}`).value;
 
-        global.bindSlider(`line-weight`, itemId, "weight", item.style.line, false, 0, parseInt, item.style.line, saveMetadata, redrawCallback);
-        global.bindSlider(`point-radius`, itemId, "radius", item.style.point, false, 0, parseInt, item.style.point, saveMetadata, redrawCallback);
-        global.bindSlider(`point-weight`, itemId, "weight", item.style.point, false, 0, parseInt, item.style.point, saveMetadata, redrawCallback);
+            // Read values from sliders
+            const lineWeightInput = configArea.querySelector(`#line-weight-input-${itemId}`);
+            console.log("updateItemStyleFromUI lineWeightInput: ", lineWeightInput);
+            if (lineWeightInput) item.style.line.weight = parseInt(lineWeightInput.value, 10);
+            console.log("updateItemStyleFromUI item.style.line.weight: ", item.style.line.weight);
 
-        const applyButton = configArea.querySelector(".customdata-apply-config-btn");
-        applyButton.addEventListener('click', async (e) => {
-            e.stopPropagation();            
-            
-            item.style.line.color = configArea.querySelector(".config-line-color").value;
-            item.style.line.dashArray = configArea.querySelector(".config-line-dasharray").value.trim() || null;
-            item.style.line.trackColor = configArea.querySelector(".config-line-trackcolor").value;
-            item.style.point.fillColor = configArea.querySelector(".config-point-fillcolor").value;
-            item.style.point.color = configArea.querySelector(".config-point-color").value;
+            const pointRadiusInput = configArea.querySelector(`#point-radius-input-${itemId}`);
+            if (pointRadiusInput) item.style.point.radius = parseInt(pointRadiusInput.value, 10);
 
-            await redrawAndSaveItem(item); 
-            
-            alert(`Stil für "${item.name}" angewendet.`);
-            detailsElement.open = false; 
+            const pointWeightInput = configArea.querySelector(`#point-weight-input-${itemId}`);
+            if (pointWeightInput) item.style.point.weight = parseInt(pointWeightInput.value, 10);
+        };
+
+        // This callback is passed to the sliders for real-time updates.
+        const redrawCallback = () => {
+            updateItemStyleFromUI();
+            redrawAndSaveItem(item);
+        };
+
+        // Add event listeners for real-time updates on text and color inputs.
+        // The 'input' event provides immediate feedback as the user interacts with the element.
+        const inputsToBind = [
+            `.config-line-color-for-item-${itemId}`,
+            `.config-line-dasharray-for-item-${itemId}`,
+            `.config-line-trackcolor-for-item-${itemId}`,
+            `.config-point-fillcolor-for-item-${itemId}`,
+            `.config-point-color-for-item-${itemId}`,
+        ];
+
+        inputsToBind.forEach(selector => {
+            const inputElement = configArea.querySelector(selector);
+            if (inputElement) {
+                inputElement.addEventListener('input', redrawCallback);
+            }
         });
+
+        // Correctly bind sliders by passing the function reference 'redrawCallback'
+        global.bindSlider(`line-weight-input-`, itemId, "weight", item.style.line, false, 0, parseInt, item.style.line, saveMetadata, redrawCallback);
+        global.bindSlider(`point-radius-input-`, itemId, "radius", item.style.point, false, 0, parseInt, item.style.point, saveMetadata, redrawCallback);
+        global.bindSlider(`point-weight-input-`, itemId, "weight", item.style.point, false, 0, parseInt, item.style.point, saveMetadata, redrawCallback);
+
+        /*
+        // Setup the "Apply" button
+        const applyButton = configArea.querySelector(".customdata-apply-config-btn");
+        applyButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // The callback now handles all UI updates and redrawing consistently.
+            redrawCallback();
+            alert(`Stil für "${item.name}" angewendet.`);
+            detailsElement.open = false; // Collapse the details section
+        });
+        */
     });
 
-    panelElement.querySelectorAll(".customdata-toggle-visibility-btn").forEach(button => {
-        button.addEventListener("click", function(e) {
+    // Use event delegation for common button actions (more efficient).
+    panelElement.addEventListener("click", async (e) => {
+        const button = e.target.closest("button");
+        if (!button) return;
+
+        const itemId = button.dataset.id;
+        if (!itemId) return;
+
+        const item = _myCustomdataMap.get(itemId);
+
+        // Visibility Toggle
+        if (button.classList.contains("customdata-toggle-visibility-btn")) {
             e.stopPropagation();
-            const itemId = this.dataset.id;
-            const item = _myCustomdataMap.get(itemId);
             if (item) {
                 global.toggleCustomDataLayerVisibility(itemId, !item.visible);
             }
-        });
-    });
+        }
 
-    panelElement.querySelectorAll(".customdata-remove-btn").forEach(button => {
-        button.addEventListener("click", async function(e) {
+        // Remove Button
+        if (button.classList.contains("customdata-remove-btn")) {
             e.stopPropagation();
-            const itemId = this.dataset.id;
-            const itemName = (_myCustomdataMap.get(itemId) || {}).name || itemId;
+            const itemName = (item || {}).name || itemId;
             if (confirm(`Möchten Sie die Datei "${itemName}" wirklich entfernen?`)) {
                 await global.removeCustomDataLayer(itemId);
             }
-        });
-    });
+        }
 
-    panelElement.querySelectorAll(".customdata-position-btn").forEach(button => {
-        button.addEventListener("click", async function(e) {
+        // Position/Zoom Button
+        if (button.classList.contains("customdata-position-btn")) {
             e.stopPropagation();
-            const itemIdToFind = this.dataset.id;
-            const foundLayerMetadata = _myCustomdataMap.get(itemIdToFind);
+            if (item && item.layer && global.map) {
+                const layer = item.layer;
+                const wasVisible = global.map.hasLayer(layer);
 
-            if (foundLayerMetadata && foundLayerMetadata.layer && global.map) {
-                const actualLeafletLayer = foundLayerMetadata.layer;
-                let wasVisible = global.map.hasLayer(actualLeafletLayer);
+                if (!wasVisible) layer.addTo(global.map);
 
-                if (!wasVisible) {
-                    actualLeafletLayer.addTo(global.map);
+                if (layer.getBounds && layer.getBounds().isValid()) {
+                    global.map.fitBounds(layer.getBounds(), { padding: [20, 20] });
                 }
 
-                if (actualLeafletLayer.getBounds && actualLeafletLayer.getBounds().isValid()) {
-                    global.map.fitBounds(actualLeafletLayer.getBounds(), { padding: [20, 20] });
-                }
-
-                if (!wasVisible && !foundLayerMetadata.visible) {
-                    global.map.removeLayer(actualLeafletLayer);
+                if (!wasVisible && !item.visible) {
+                    global.map.removeLayer(layer);
                 }
             } else {
-                console.warn(`Layer with ID ${itemIdToFind} not found or has no valid bounds.`);
+                console.warn(`Layer with ID ${itemId} not found or has no valid bounds.`);
             }
-        });
+        }
     });
 };
+
+
 
   async function _saveSettings() {
     localStorage.setItem(

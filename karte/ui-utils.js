@@ -1059,7 +1059,8 @@ const isLocalhost =
               });
             }
 
-            drawButton.textContent = "Kacheln";
+            // drawButton.textContent = "Kacheln";
+            drawButton.textContent = "Kacheln (Anzeigen/Info/Löschen)";
             allToggleEntries.forEach((entry) => entry.toggleFn(false));
             drawButton.classList.add("nav-green-btn");
             modeManager.set(_mode, type);
@@ -1314,11 +1315,34 @@ function bindSlider(
     return;
   }
 
+  // NEU: Lese min/max aus dem verfügbaren Input-Element
+  const inputElement = slider || numberInput;
+  if (!inputElement) {
+      console.warn(`No input element found for ID '${fullId}'`);
+      return;
+  }
+  const minVal = parseFloat(inputElement.min);
+  const maxVal = parseFloat(inputElement.max);
+
+  // console.log("bindSlider minVal/maxVal: ", minVal, maxVal);
+  // ENDE NEU
+
   const updateValue = (value, triggerRedraw = false, formatNumber = true) => {
-    const num = toNumber(value);
+    let num = toNumber(value);
     if (!isNaN(num)) {
+
+      // NEU: Begrenze den Wert (Clamping)
+      if (!isNaN(minVal) && num < minVal) {
+          num = minVal;
+      }
+      if (!isNaN(maxVal) && num > maxVal) {
+          num = maxVal;
+      }
+      // ENDE NEU
+
       valueSpan.textContent = num.toFixed(displayPrecision);
-      if (slider) slider.value = num;
+      if (slider) 
+        slider.value = num;
 
       if (numberInput) {
         numberInput.value = formatNumber

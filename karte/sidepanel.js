@@ -392,12 +392,15 @@ class SidepanelManager {
     return `<div class="entry-list">${listItems}</div>`;
   }
 
-  showCustomDataConfiguration() {    
+  showCustomDataConfiguration(type) {    
+
+    console.log("showCustomDataConfiguration type: ", type);
+
     if (this.contentEl) {
       this.contentEl.classList.add("sidepanel-options-padding");
     }
 
-    const type = "customdataConfiguration";   
+    // const type = "customdataConfiguration";   
     this._container.classList.add("open");
     this._container.classList.add("data");
 
@@ -419,12 +422,15 @@ class SidepanelManager {
     }
   }
 
-  showCustomData() {
+  showCustomData(type) {
+
+    console.log("showCustomData type: ", type);
+
     if (this.contentEl) {
       this.contentEl.classList.remove("sidepanel-options-padding");
     }
 
-    const type = "customdata";
+    // const type = "customdata";
    
     this._container.classList.add("open"); 
     this._container.classList.add("data");
