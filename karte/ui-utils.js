@@ -74,7 +74,7 @@ const isLocalhost =
       }
 
       console.log("calling location.reload()");
-      location.reload();
+      // location.reload();
       // TODO
       // von map entfernen
       /*
@@ -87,11 +87,37 @@ const isLocalhost =
     }
 
     const deleteLayersFromConfig = (cfg) => {
-      if (!cfg || !Array.isArray(cfg.array)) {
-        console.warn("Konfiguration fehlt oder 'array' ist kein Array:", cfg);
+      // console.log("deleteLayersFromConfig cfg: ", cfg);
+
+      // Check if the configuration and tilesMap exist and if tilesMap is a Map
+      if (!cfg || !(cfg.tilesMap instanceof Map)) {
+        console.warn("Konfiguration fehlt oder 'tilesMap' ist keine Map:", cfg);
         return;
       }
+
+      // Iterate over the values (which are ARRAYS of layer objects) in the tilesMap
+      cfg.tilesMap.forEach((layerArray) => {
+        // Check if layerArray is actually an array
+        if (Array.isArray(layerArray)) {
+          // Now, iterate over each layer object inside the array
+          layerArray.forEach((layerObject) => {
+            // console.log("Processing layer object: ", layerObject);
+            // Check if the layer object and its leafletId exist before removing
+            if (layerObject && layerObject.leaflet_id) {
+              // <-- NOTE: your log shows 'leaflet_id', not 'leafletId'
+              removeLayerById(layerObject.leaflet_id);
+              // console.log("Layer entfernt:", layerObject.leaflet_id);
+            } else {
+              console.warn("Layer-Objekt oder leaflet_id fehlt:", layerObject);
+            }
+          });
+        }
+      });
+
+      // Optionally, clear the tilesMap after removing the layers from the map
+      cfg.tilesMap.clear();
     };
+
 
     if (type === "map" && typeof sidepanel?.configs === "object") {     
       Object.values(sidepanel.configs).forEach(deleteLayersFromConfig);
@@ -2364,7 +2390,7 @@ function removeLayerById(id) {
   map.eachLayer(function (layer) {
     if (layer._leaflet_id === id) {
       map.removeLayer(layer);
-      console.log("removeLayerById removed layer with _leaflet_id: ", id);
+      // console.log("removeLayerById removed layer with _leaflet_id: ", id);
       return;
     }
   });

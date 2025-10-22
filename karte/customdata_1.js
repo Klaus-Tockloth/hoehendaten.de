@@ -9,9 +9,9 @@
   const defaultLineStyle = {
     color: "#613583",
     weight: 5,
-    opacity: 0.75,
+    opacity: 1, //0.75,
     dashArray: "", // "5, 15",
-    trackColor: "#0056b3", 
+    // trackColor: "#0056b3", 
   };
   const defaultPointStyle = {
     radius: 8,
@@ -249,7 +249,7 @@
     const effectiveLineStyle = layerMetadata.style.line;
     const effectivePointStyle = layerMetadata.style.point;
 
-    const customdataLayer = L.geoJSON(geojson, {
+    const cccustomdataLayer = L.geoJSON(geojson, {
       pane: pane, 
       style: function (feature) {
         if (
@@ -361,6 +361,149 @@
         }
       },
     });
+    const customdataLayer = L.geoJSON(geojson, {
+      pane: pane,
+      /**
+       * Styles features based on their geometry type and properties.
+       * @param {object} feature - The GeoJSON feature.
+       * @returns {object} The style object for the feature.
+       */
+      style: function (feature) {
+        if (
+          feature.geometry.type === "LineString" ||
+          feature.geometry.type === "MultiLineString"
+        ) {
+          let styleToApply = {
+            color: effectiveLineStyle.color,
+            weight: effectiveLineStyle.weight,
+            opacity: effectiveLineStyle.opacity,
+            dashArray: effectiveLineStyle.dashArray || null,
+          };
+
+          // Apply a specific style for track-like features
+          if (
+            feature.properties &&
+            (feature.properties.type === "track" ||
+              feature.properties.hasOwnProperty("trackseg") ||
+              feature.properties.hasOwnProperty("gx_track"))
+          ) {
+            styleToApply.dashArray = null; // Tracks are typically solid lines
+            styleToApply.color = effectiveLineStyle.trackColor;
+          }
+          return styleToApply;
+        }
+        // For non-LineString geometries, return an empty object to use default styles.
+        return {};
+      },
+
+      /**
+       * Creates a layer for a GeoJSON point feature.
+       * @param {object} feature - The GeoJSON feature.
+       * @param {L.LatLng} latlng - The latitude and longitude of the point.
+       * @returns {L.Layer} The layer to be added to the map.
+       */
+      pointToLayer: function (feature, latlng) {
+        if (feature.geometry.type === "Point") {
+          // If an icon property is specified, create a marker with that icon.
+          if (feature.properties && feature.properties.icon) {
+            return L.marker(latlng, {
+              pane: pane,
+              icon: L.icon({
+                pane: pane,
+                iconUrl: feature.properties.icon,
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32],
+              }),
+            });
+          }
+
+          // Otherwise, create a default circle marker.
+          return L.circleMarker(latlng, {
+            radius: effectivePointStyle.radius,
+            fillColor: effectivePointStyle.fillColor,
+            color: effectivePointStyle.color,
+            weight: effectivePointStyle.weight,
+            opacity: effectivePointStyle.opacity,
+            fillOpacity: effectivePointStyle.fillOpacity,
+            pane: pane,
+          });
+        }
+        return null;
+      },
+
+      /**
+       * Attaches a popup to each feature.
+       * @param {object} feature - The GeoJSON feature.
+       * @param {L.Layer} layer - The layer created for the feature.
+       */
+      onEachFeature: function (feature, layer) {
+        let popupContent = "";
+        if (feature.properties) {
+          if (feature.properties.name) {
+            popupContent += `<b>${feature.properties.name}</b><br>`;
+          }
+
+          const description =
+            feature.properties.description || feature.properties.desc;
+          if (description) {
+            popupContent += `${description}<br>`;
+          }
+
+          if (feature.properties.sym) {
+            popupContent += `Symbol: ${feature.properties.sym}<br>`;
+          }
+          if (feature.properties.cmt) {
+            popupContent += `Kommentar: ${feature.properties.cmt}<br>`;
+          }
+          if (feature.properties.ele !== undefined) {
+            popupContent += `Höhe: ${feature.properties.ele} m<br>`;
+          }
+          if (feature.properties.time) {
+            try {
+              popupContent += `Zeit: ${new Date(
+                feature.properties.time
+              ).toLocaleString()}<br>`;
+            } catch (e) {
+              console.error(
+                "Could not parse time property:",
+                feature.properties.time
+              );
+            }
+          }
+
+          // Fallback to show a few generic properties if no specific content was found.
+          if (!popupContent && Object.keys(feature.properties).length > 0) {
+            const genericProps = Object.keys(feature.properties).filter(
+              (key) =>
+                ![
+                  "name",
+                  "description",
+                  "desc",
+                  "sym",
+                  "cmt",
+                  "ele",
+                  "time",
+                  "icon",
+                ].includes(key)
+            );
+
+            if (genericProps.length > 0) {
+              popupContent += "Weitere Eigenschaften:<br>";
+              // Show a maximum of 3 other properties
+              genericProps.slice(0, 3).forEach((key) => {
+                popupContent += `&nbsp;&nbsp;<b>${key}</b>: ${feature.properties[key]}<br>`;
+              });
+            }
+          }
+        }
+
+        if (popupContent) {
+          layer.bindPopup(popupContent);
+        }
+      },
+    });
+
 
     layerMetadata.layer = customdataLayer;
 
@@ -379,18 +522,7 @@
       }
     }
   
-    _myCustomdataMap.set(id, layerMetadata);
-   
-    if (
-      typeof global.sidepanel !== "undefined" &&
-      global.sidepanel.isVisible() &&
-      global.sidepanel.currentType === "customdata"
-    ) {
-      // TODO !!! Achtung, nur wenn Übersicht abgezeigt wird, dann diese aktualisiert anzeigen
-
-      // auskommentiert, damit die komplette Ansicht sichtbar bleibt !!!
-      //global.sidepanel.showCustomData("customdata"); // Re-display the list of CUSTOMDATA files
-    }
+    _myCustomdataMap.set(id, layerMetadata);   
 
     return customdataLayer;
   }
@@ -560,6 +692,22 @@
         
         persist(CUSTOMDATA_DIR_NAME, fileNameInOpfs, fileContent);
 
+        console.log(`file ${fileName} imported`);
+
+        if (document.querySelector(".side-panel.open.data"))
+          global.sidepanel.showCustomData("customdata");
+
+        // macht das gleiche
+        /*
+        if (
+          typeof global.sidepanel !== "undefined" &&
+          global.sidepanel.isVisible() &&
+          global.sidepanel.currentType === "customdata"
+        ) {
+           global.sidepanel.showCustomData("customdata");
+        }
+        */
+
         await saveMetadata();
       }
 
@@ -667,6 +815,7 @@
   };
 
   const getOverallCustomDataVisibility = () => {
+    // checks if at least one item within map has a visible property set to true.
     return Array.from(_myCustomdataMap.values()).some((item) => item.visible);
   };
   
@@ -763,26 +912,49 @@
     );
 
     // Sichtbarkeit
-    const visibilityBtn = addSubmenuButton(
-      "Sichtbarkeit",
-      async () => {        
-        const targetVisibility = !getOverallCustomDataVisibility();
-        for (const item of _myCustomdataMap.values()) {
-          await global.toggleCustomDataLayerVisibility(
-            item.id,
-            targetVisibility
-          );
-        }        
-        visibilityBtn.innerHTML = targetVisibility
-          ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-          : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
-      },
-      "", 
-      "customdata-visibility-btn"
-    );
-    visibilityBtn.innerHTML = getOverallCustomDataVisibility()
-      ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-      : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
+    if (false) {
+      const visibilityBtn = addSubmenuButton(
+        "Sichtbarkeit",
+        async () => {        
+          const targetVisibility = !getOverallCustomDataVisibility();
+          for (const item of _myCustomdataMap.values()) {
+            await global.toggleCustomDataLayerVisibility(
+              item.id,
+              targetVisibility
+            );
+          }        
+          visibilityBtn.innerHTML = targetVisibility
+            ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
+            : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
+        },
+        "", 
+        "customdata-visibility-btn"
+      );
+      visibilityBtn.innerHTML = getOverallCustomDataVisibility()
+        ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
+        : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
+    }
+    // Sichtbarkeit 
+    let _visible = true;
+    if (true) {
+      const updateButtonState = (button, isVisible) => {
+        const icon = isVisible
+          ? "assets/eye-solid-full.svg"
+          : "assets/eye-slash-solid-full.svg";
+        const altText = isVisible ? "Sichtbar" : "Unsichtbar";
+        const label = isVisible ? "Sichtbarkeit" : "Sichtbarkeit: unsichtbar";
+
+        button.innerHTML = `<img src="${icon}" alt="${altText}" style="width: 1em; height: 1em; vertical-align: middle;"> ${label}`;
+      };
+
+      const eyeButton = addSubmenuButton(`Sichtbarkeit...`, () => {
+        const currentVisibilityState = togglePaneVisibility(map, 'customdata');
+        updateButtonState(eyeButton, currentVisibilityState);
+      });
+
+      // Set the initial state of the button when it's first created.
+      updateButtonState(eyeButton, true);
+    }
 
     // Konfiguration
     addSubmenuButton(
@@ -818,10 +990,13 @@
       async () => {
         console.log("Desktop Submenu: Alle eigenen Objekte löschen clicked.");
         await clearAllCustomDataLayers();
+        // TODO ???
+        /* 
         visibilityBtn.innerHTML = getOverallCustomDataVisibility()
           ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
           : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
-      },
+        */
+          },
       "", // "🗑️"
     );
 
@@ -1009,27 +1184,45 @@
     );
 
     // Sichtbarkeit
-    const visibilityBtn = addSubBtn(
-      "Sichtbarkeit",
-      async () => {
-        console.log("Hamburger Submenu: Sichtbarkeit clicked.");
-        const targetVisibility = !getOverallCustomDataVisibility();
-        for (const item of _myCustomdataMap.values()) {
-          await global.toggleCustomDataLayerVisibility(
-            item.id,
-            targetVisibility
-          );
-        }
-        visibilityBtn.innerHTML = targetVisibility
+    if (false) {
+      const visibilityBtn = addSubBtn(
+        "Sichtbarkeit",
+        async () => {
+          console.log("Hamburger Submenu: Sichtbarkeit clicked.");
+          const targetVisibility = !getOverallCustomDataVisibility();
+          for (const item of _myCustomdataMap.values()) {
+            await global.toggleCustomDataLayerVisibility(
+              item.id,
+              targetVisibility
+            );
+          }
+          visibilityBtn.innerHTML = targetVisibility
+            ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
+            : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
+        },
+        "",
+        "customdata-visibility-btn"
+      );
+      visibilityBtn.innerHTML = getOverallCustomDataVisibility()
+        ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
+        : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
+    }
+    // Sichtbarkeit 
+    let _visible = true;
+    if (true) {
+      const type = "customdata";
+      const eyeButton = addSubBtn("Sichtbarkeit", () => {
+        // 1. Toggle the visual pane element.
+        const visible = togglePaneVisibility(map, type);
+
+        eyeButton.innerHTML = visible
           ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-          : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
-      },
-      "",
-      "customdata-visibility-btn"
-    );
-    visibilityBtn.innerHTML = getOverallCustomDataVisibility()
-      ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-      : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
+          : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit';
+      });
+      // Set the initial innerHTML of the eyeButton to show the full eye icon.
+      eyeButton.innerHTML =
+        '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit';
+    }
 
     // Konfiguration
     addSubBtn(
@@ -1135,11 +1328,34 @@
               }">
             </div>
           </div>
+
+          <!-- 
+          <label>Farbeeeeee:</label>
+          <div class="color-row">
+            <div class="color-cell">
+              <input type="text"
+                  id="contour-color-input${idSuffix}"
+                  value="${lineStyle.color}"
+                  tabindex="-1"
+                  readonly
+                  class="cp_input color-input"
+                  data-color="${lineStyle.color}"
+                  style="background-color: ${lineStyle.color};
+                  color: ${global.getTextColor(
+                    global.rgbToHex(
+                      global.parseColorStringToRgbaObject(lineStyle.color).r,
+                      global.parseColorStringToRgbaObject(lineStyle.color).g,
+                      global.parseColorStringToRgbaObject(lineStyle.color).b
+                    )
+                  )};">
+            </div>          
+          </div>
+          -->
           
           ${global.makeSlider(
             "line-weight",
             idSuffix,
-            "Stärke",
+            "Linienstärke",
             lineStyle.weight || 5,
             1,
             10,
@@ -1147,10 +1363,10 @@
             0
           )}
 
-         
+          <br> 
 
           <label>Muster (z.B. "5, 15" für gestrichelt, leer für durchgezogen): </label>
-          <br> 
+          <br> <br> 
           <div>
             <input type="text" class="config-line-dasharray" value="${
               lineStyle.dashArray || ""
@@ -1159,6 +1375,7 @@
           
           <br> 
 
+          <!--
           <label>Track Farbe (GPX/KML, durchgezogen): </label>
           <div class="color-row">
             <div class="color-cell">
@@ -1169,19 +1386,9 @@
           </div>
 
           <br>  <br>
+          -->
 
-          <h4>default-Stil für Punkte (Wegpunkte)</h4>
-
-          ${global.makeSlider(
-            "point-radius",
-            idSuffix,
-            "Radius",
-            pointStyle.radius || 8,
-            1,
-            20,
-            1,
-            0
-          )}
+          <h4>default-Stil für Punkte (Wegpunkte)</h4>          
 
           <label>Füllfarbe: </label>
           <div class="color-row">
@@ -1200,6 +1407,17 @@
               }">
             </div>
           </div>
+
+          ${global.makeSlider(
+            "point-radius",
+            idSuffix,
+            "Radius",
+            pointStyle.radius || 8,
+            1,
+            20,
+            1,
+            0
+          )}
 
           ${global.makeSlider(
             "point-weight",
@@ -1295,7 +1513,7 @@
 
           _customDataOptionsLast.lineStyle.color = panelElement.querySelector(".config-line-color").value;
           _customDataOptionsLast.lineStyle.dashArray = panelElement.querySelector(".config-line-dasharray").value;
-          _customDataOptionsLast.lineStyle.trackColor = panelElement.querySelector(".config-line-trackcolor").value;
+          // _customDataOptionsLast.lineStyle.trackColor = panelElement.querySelector(".config-line-trackcolor").value;
           _customDataOptionsLast.pointStyle.fillColor = panelElement.querySelector(".config-point-fillcolor").value;
           _customDataOptionsLast.pointStyle.color = panelElement.querySelector(".config-point-color").value;
 
@@ -1308,7 +1526,7 @@
     Konfiguration für selektiertes item
   */
   global.getCustomDataPanelHtml = function (idSuffix = "") {
-    console.log("getCustomDataPanelHtml called with suffix:", idSuffix);
+    // console.log("getCustomDataPanelHtml called with suffix:", idSuffix);
 
     let html = `
     <div id="customdata-panel-${idSuffix}" class="customdata-panel">
@@ -1360,7 +1578,7 @@
         ${global.makeSlider(
           `line-weight-input-`,
           itemId,
-          "Stärke",
+          "Linienstärke",
           lineStyle.weight || 5,
           1,
           10,
@@ -1368,12 +1586,17 @@
           0
         )}
 
-        <label>Muster (z.B. "5, 15" für gestrichelt, leer für durchgezogen): <input type="text" class="config-line-dasharray-for-item-${itemId}" value="${
+        <br>
+
+        <label>Muster (z.B. "5, 15" für gestrichelt, leer für durchgezogen): </label>
+        <br> <br>
+        <input type="text" class="config-line-dasharray-for-item-${itemId}" value="${
           lineStyle.dashArray || ""
-        }"></label>
+        }">
 
         <br>  <br>
 
+        <!--
         <label>Track Farbe (GPX/KML, durchgezogen): </label>
         <div class="color-row">
           <div class="color-cell">
@@ -1381,19 +1604,9 @@
              lineStyle.trackColor || "#0056b3"}">
             </div>
         </div>
+        -->
 
-        <h4>Stil für Punkte (Wegpunkte)</h4>
-        
-        ${global.makeSlider(
-          `point-radius-input-`,
-          itemId,
-          "Radius",
-          pointStyle.radius || 8,
-          1,
-          20,
-          1,
-          0
-        )}
+        <h4>Stil für Punkte (Wegpunkte)</h4>        
         
         <label>Füllfarbe: </label>
         <div class="color-row">
@@ -1411,6 +1624,17 @@
           </div>
         </div>
         
+        ${global.makeSlider(
+          `point-radius-input-`,
+          itemId,
+          "Radius",
+          pointStyle.radius || 8,
+          1,
+          20,
+          1,
+          0
+        )}
+
         ${global.makeSlider(
           `point-weight-input-`,
           itemId,
@@ -1512,7 +1736,7 @@ global.initCustomDataPanelHelper = function (idSuffix) {
             item.style.line.color = configArea.querySelector(`.config-line-color-for-item-${itemId}`).value;
             console.log("updateItemStyleFromUI item.style.line.color: ", item.style.line.color);
             item.style.line.dashArray = configArea.querySelector(`.config-line-dasharray-for-item-${itemId}`).value.trim() || null;
-            item.style.line.trackColor = configArea.querySelector(`.config-line-trackcolor-for-item-${itemId}`).value;
+            // item.style.line.trackColor = configArea.querySelector(`.config-line-trackcolor-for-item-${itemId}`).value;
             item.style.point.fillColor = configArea.querySelector(`.config-point-fillcolor-for-item-${itemId}`).value;
             item.style.point.color = configArea.querySelector(`.config-point-color-for-item-${itemId}`).value;
 
@@ -1540,7 +1764,7 @@ global.initCustomDataPanelHelper = function (idSuffix) {
         const inputsToBind = [
             `.config-line-color-for-item-${itemId}`,
             `.config-line-dasharray-for-item-${itemId}`,
-            `.config-line-trackcolor-for-item-${itemId}`,
+            // `.config-line-trackcolor-for-item-${itemId}`,
             `.config-point-fillcolor-for-item-${itemId}`,
             `.config-point-color-for-item-${itemId}`,
         ];

@@ -633,7 +633,7 @@ nav.mobile-nav {
 	margin-top: 2px;
 	margin-bottom: 2px;
 	transition: all 0.3s ease;
-	font-size: 0.8em;
+	/* font-size: 0.8em; */
 }
 
 .entry-list details[open] {
@@ -710,4 +710,19 @@ nav.mobile-nav {
 
 .highlighted-tile.color-odd {
 	background-color: #cceeff;
+}
+
+/* --- Anpassung für den Farbwahl-Button in der Farbtabelle --- */
+
+.color-row .color-cell:nth-child(2),
+.color-row .color-cell:first-child:last-child {
+    flex-grow: 1; 
+}
+
+.color-row .cp_wide {
+    width: 100%;
+}
+
+.color-row .cp_input {
+    width: 100%;
 }

@@ -394,7 +394,7 @@ class SidepanelManager {
 
   showCustomDataConfiguration(type) {    
 
-    console.log("showCustomDataConfiguration type: ", type);
+    // console.log("showCustomDataConfiguration type: ", type);
 
     if (this.contentEl) {
       this.contentEl.classList.add("sidepanel-options-padding");
@@ -424,7 +424,7 @@ class SidepanelManager {
 
   showCustomData(type) {
 
-    console.log("showCustomData type: ", type);
+    // console.log("showCustomData type: ", type);
 
     if (this.contentEl) {
       this.contentEl.classList.remove("sidepanel-options-padding");

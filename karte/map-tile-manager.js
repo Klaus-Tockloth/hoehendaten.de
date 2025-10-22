@@ -636,6 +636,8 @@ function createTileManager(config) {
         });
         
         saveTileMapInOPFS(myTilesMap, type);
+
+        updateDataInSidepanel();
       }
     } catch (error) {      
       console.log("User canceled the action.");
