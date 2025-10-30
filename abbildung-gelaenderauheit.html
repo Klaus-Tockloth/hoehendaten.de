@@ -117,7 +117,7 @@
             <a href="dienst-histogramm.html">Histogramm</a>
           </li>
 
-         <li>
+          <li>
             <a href="dienst-farbrelief.html">Farbrelief</a>
           </li>
 
@@ -129,15 +129,15 @@
             <a href="dienst-hangexposition.html">Hangexposition</a>
           </li>
 
-         <li>
+          <li>
             <a href="dienst-gelaenderauheit.html">Geländerauheit</a>
           </li>
- 
-         <li>
+
+          <li>
             <a href="dienst-tri.html">TRI (Ruggedness)</a>
           </li>
 
-         <li>
+          <li>
             <a href="dienst-tpi.html">TPI (Position)</a>
           </li>
         </ul>
@@ -158,7 +158,7 @@
             <a href="api-utmpointrequest.html">UTMPointRequest</a>
           </li>
 
-         <li>
+          <li>
             <a href="api-rawtifrequest.html">RawTIFRequest</a>
           </li>
 
@@ -170,7 +170,7 @@
             <a href="api-gpxanalyzerequest.html">GPXAnalyseRequest</a>
           </li>
 
-         <li>
+          <li>
             <a href="api-elevationprofile.html">ElevationProfileRequest</a>
           </li>
 
@@ -186,7 +186,7 @@
             <a href="api-hillshaderequest.html">HillshadeRequest</a>
           </li>
 
-         <li>
+          <li>
             <a href="api-colorreliefrequest.html">ColorReliefRequest</a>
           </li>
 
@@ -197,7 +197,7 @@
           <li>
             <a href="api-aspectrequest.html">AspectRequest</a>
           </li>
-          
+
           <li>
             <a href="api-roughnessrequest.html">RoughnessRequest</a>
           </li>
@@ -206,7 +206,7 @@
             <a href="api-trirequest.html">TRIRequest</a>
           </li>
 
-         <li>
+          <li>
             <a href="api-tpirequest.html">TPIRequest</a>
           </li>
         </ul>
@@ -216,39 +216,39 @@
         <a href="impressum.html">Impressum</a>
       </li>
     </ul>
-</nav>
+  </nav>
 
   <div class="container">
-    <h3>Geländerauheit</h3>
+    <h3>Geländerauheit (Erkennung von Hindernissen/Zerklüftung im Nahbereich)</h3>
 
-    <p>Die Geländerauheit ist ein geomorphometrisches Maß, das die maximale lokale Unebenheit des Geländes quantifiziert. Zur Berechnung der Geländerauheit wird
-    für jeden Punkt die größte Höhendifferenz zwischen dem höchsten und dem niedrigsten Höhenwert innerhalb eines 3x3-Messpunkte-Fensters (entspricht bei DGM1
-    einem 3x3-Meter-Ausschnitt) ermittelt.</p>
+    <p>Die Geländerauheit ist ein Maß dafür, wie "zerklüftet" oder "uneben" das Gelände im Nahbereich ist. Sie quantifiziert die maximale lokale Unebenheit, indem
+    sie für jeden Punkt die größte Höhendifferenz zwischen dem höchsten und dem niedrigsten Höhenwert innerhalb eines 3x3-Meter-Fensters (DGM1) ermittelt.</p>
 
-    <p>Eine hohe Geländerauheit weist auf eine sehr abrupte und ausgeprägte lokale Höhenänderung hin, wie sie an Kanten, Felsvorsprüngen oder sehr steilen,
-    stufigen Hängen vorkommt. Bei hochauflösenden DGM1-Höhendaten ermöglicht die Geländerauheit detaillierte Einblicke in extrem feine, scharfe und abrupte
-    Geländeformen. Zu den wichtigsten Anwendungsbereichen gehören:</p>
+    <p>Eine hohe Geländerauheit visualisiert sehr abrupte und ausgeprägte lokale Höhenänderungen, wie sie typischerweise an Felskanten, Steinstufen, Blockfeldern
+    oder tiefen Erosionsrinnen vorkommen. Für den interessierten Laien ist dies ein wertvoller Indikator für die Begehbarkeit des Geländes und die Präsenz von
+    scharfen, potenziell gefährlichen oder hinderlichen Strukturen. Bei hochauflösenden DGM1-Höhendaten ermöglicht die Geländerauheit detaillierte Einblicke in
+    extrem feine, scharfe und abrupte Geländeformen. Zu den wichtigsten Anwendungsbereichen gehören:</p>
 
     <ul>
-      <li><strong>Detaillierte Geomorphologische Analyse von Steil- und Felsstrukturen:</strong> Abbildungen zur Geländerauheit heben sehr scharfe Höhenänderungen
+      <li><strong>Erkennung von Fels- und Steilstrukturen:</strong> Abbildungen zur Geländerauheit heben sehr scharfe Höhenänderungen
       hervor, die auf Felswände, Überhänge oder ausgeprägte Absätze im Gelände hindeuten.</li>
 
       <li><strong>Risikobewertung und Naturgefahren:</strong> Bereiche mit sehr hoher Geländerauheit sind prädestiniert für Felsabgänge. Die 1m-Auflösung
       ermöglicht die Identifikation einzelner Felsblöcke oder instabiler Kanten. Auch die Analyse von Erdrutschgebieten und die Bewertung der Lawinengefahr
       profitieren von detaillierten Rauigkeitsdaten.</li>
 
-      <li><strong>Ingenieurwesen, Bauwesen und Infrastrukturplanung:</strong> Die Geländerauheit hilft, Bereiche mit extremen Höhenunterschieden auf kleinster
+      <li><strong>Bau- und Infrastrukturplanung:</strong> Die Geländerauheit hilft, Bereiche mit extremen Höhenunterschieden auf kleinster
       Skala zu identifizieren, die zusätzliche Maßnahmen bei Fundamentierung oder Aushub erfordern (z.B. große Felsblöcke, die entfernt werden müssen). Auch die
       Planung von Trassen für Pipelines oder Straßen in schwierigem Gelände kann optimiert werden.</li>
 
       <li><strong>Land- und Forstwirtschaft:</strong> Die Zugänglichkeit für schwere Geräte und die Planung von Rückewegen können durch die Erkennung sehr rauer
       Kleinstrukturen verbessert werden.</li>
 
-      <li><strong>Outdoor-Sport und militärische Anwendungen:</strong> Die Geländerauheit ermöglicht eine präzise Routenplanung für Kletterer, Bergsteiger und
+      <li><strong>Outdoor-Aktivitäten und Routenplanung:</strong> Die Geländerauheit ermöglicht eine präzise Routenplanung für Kletterer, Bergsteiger und
       Wanderer durch Kennzeichnung von Klippen oder Blockfeldern. Für militärische Zwecke kann er die Mobilität im Gelände bewerten und Engpässe
       identifizieren.</li>
 
-      <li><strong>Hydrodynamische Modellierung auf Mikroebene:</strong> Geländerauheit in und um kleine Bachbetten oder Entwässerungsrinnen können wichtige
+      <li><strong>Analyse des Wasserabflusses (Mikro-Hydrologie)::</strong> Geländerauheit in und um kleine Bachbetten oder Entwässerungsrinnen können wichtige
       Informationen über die Sohlrauigkeit und damit den Strömungswiderstand liefern, was für die detaillierte Modellierung von Strömungsgeschwindigkeiten relevant
       ist.</li>
     </ul>
@@ -293,9 +293,9 @@
     3x3-Meter-Fenster könnten kleine Felsen, steilere Hanganschnitte, Bachufer oder umgestürzte Bäume zu Höhendifferenzen von mehreren Metern (z.B. 2-5 Meter)
     führen.</p>
 
-    <p><strong>Extrem zerklüftetes Gelände (z.B. Steilhänge, Felsformationen):</strong> Obwohl Deutschland keine Hochgebirge hat, können in sehr steilen Felswänden
-    oder stark erodierten Schluchten (z.B. in manchen Teilen des Elbsandsteingebirges oder alpinen Vorgebirgen) auf einer 3x3-Meter-Fläche auch 5 Meter und mehr an
-    Höhendifferenz auftreten, wenn ein Pixel direkt auf einem Felsvorsprung und ein anderes in einer Spalte liegt. Dies ist jedoch die Ausnahme.</p>
+    <p><strong>Extrem zerklüftetes Gelände (z.B. Steilhänge, Felsformationen):</strong> In den deutschen Alpen, dem einzigen Hochgebirge des Landes, aber auch in
+    sehr steilen Felswänden oder stark erodierten Schluchten (z.B. in manchen Teilen des Elbsandsteingebirges) können auf einer 3x3-Meter-Fläche auch 5 Meter und
+    mehr an Höhendifferenz auftreten, wenn ein Pixel direkt auf einem Felsvorsprung und ein anderes in einer Spalte liegt. Dies ist jedoch die Ausnahme.</p>
 
     <hr>
 

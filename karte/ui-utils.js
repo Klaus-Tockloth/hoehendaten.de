@@ -981,6 +981,8 @@ const isLocalhost =
       allToggleEntries.push({ type, toggleFn, a: hamburgerMainBtn });
     }
    
+    let dddrawButton;
+
     hamburgerMainBtn.addEventListener("click", (e) => {
       e.preventDefault();   
 
@@ -1015,13 +1017,16 @@ const isLocalhost =
       // currentArrow.textContent = isAboutToBeVisible ? "▼" : "▶"; 
       currentArrow.textContent = isAboutToBeVisible ? "▽" : "▷"; 
 
-      if (toggle) {        
+      console.log("toggle: ", toggle);
+      if (toggle) {            
         if (hamburgerMainBtn.classList.contains("active")) {
+          console.log("contains active");
           // mainBtn.classList.remove("active");
           // onUnpress?.call(mainBtn, e);
           // modeManager.set(MODE_NONE, "");
           // document.getElementById("info-button").style.display = "none";
         } else {
+          console.log("contains not active");
           // allToggleEntries.forEach((entry) => entry.toggleFn(false));
           // mainBtn.classList.add("active");
           // modeManager.set(_mode, type);
@@ -1030,8 +1035,40 @@ const isLocalhost =
           // document.getElementById("info-button").style.display = "inline-block";
         }
       } else {
+        console.log("calling hamburgerMainBtn: ", hamburgerMainBtn, e);
         onClick?.call(hamburgerMainBtn, e);
       }
+
+      // neu xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      if (true) {
+        if (true) {
+          if (sidepanel.isVisibleWithData()) {
+            console.log("sidepanel.isVisibleWithData");
+            sidepanel?.showData?.(type);
+          }
+          if (sidepanel.isVisibleWithOptions()) {
+            console.log("sidepanel.isVisibleWithOptions");
+            sidepanel?.showOptions?.(type);
+          }
+        }
+        if (false) {
+          if (hamburgerMainBtn.classList.contains("nav-green-btn")) {
+            hamburgerMainBtn.classList.remove("nav-green-btn");
+          } else {
+            document
+              .querySelectorAll(".nav-green-btn")
+              .forEach((otherMainBtn) => {
+                otherMainBtn.classList.remove("nav-green-btn");
+              });
+            hamburgerMainBtn.classList.add("nav-green-btn");
+
+            if (dddrawButton) {
+              dddrawButton.click(); // Dispatch click to the "draw" button
+            }
+          }
+        }
+      }
+
     });
   
     container.appendChild(hamburgerMainBtn);
@@ -1116,6 +1153,7 @@ const isLocalhost =
           onClick?.call(hamburgerMainBtn, e);
         }
       });
+      dddrawButton = drawButton;
     }
 
     // Visibility toggle

@@ -1080,7 +1080,7 @@ function createTileManager(config) {
 
 
       <button id="fetch-data-rect" style="margin-right: 5px; padding: 5px 10px;">Kacheln für diesen Bereich laden</button>
-      <button id="delete-layers-rect" style="margin-right: 5px; padding: 5px 10px;">TODO: Kacheln in diesem Bereich löschen</button>
+      <button id="delete-layers-rect" style="margin-right: 5px; padding: 5px 10px;">Kacheln in diesem Bereich löschen</button>
       <button id="cancel-rect-action" style="padding: 5px 10px;">Abbruch</button>
     `;
 

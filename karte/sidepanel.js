@@ -233,6 +233,7 @@ class SidepanelManager {
 
     this._container.classList.add("open"); 
     this._container.classList.add("options");
+    this._container.classList.remove("data");
 
     if (this._sidepanelTitle) {
       this._sidepanelTitle.innerHTML =
@@ -283,6 +284,12 @@ class SidepanelManager {
 
     this._container.classList.add("open"); 
     this._container.classList.add("data");
+    this._container.classList.remove("options");
+
+    if (type === "map") {
+      this._container.classList.remove("open"); 
+      return;
+    }
 
     this._closeButton.style.display = "block"; 
 
@@ -402,7 +409,8 @@ class SidepanelManager {
 
     // const type = "customdataConfiguration";   
     this._container.classList.add("open");
-    this._container.classList.add("data");
+    this._container.classList.add("options");
+    this._container.classList.remove("data");
 
     this._closeButton.style.display = "block"; 
 
@@ -434,6 +442,7 @@ class SidepanelManager {
    
     this._container.classList.add("open"); 
     this._container.classList.add("data");
+    this._container.classList.remove("options");
 
     this._closeButton.style.display = "block"; 
 

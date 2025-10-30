@@ -7,19 +7,18 @@
   let _myCustomdataMap = new Map();
 
   const defaultLineStyle = {
-    color: "#613583",
-    weight: 5,
-    opacity: 1, //0.75,
-    dashArray: "", // "5, 15",
-    // trackColor: "#0056b3", 
+    color: "rgba(0, 0, 255, 1)",
+    weight: 4,
+    opacity: 1,
+    dashArray: "", // "5,10",
   };
   const defaultPointStyle = {
-    radius: 8,
-    fillColor: "#ff0000",
-    color: "#000", 
+    radius: 4,
+    fillColor: "rgba(255, 0, 0, 1)",
+    color: "rgba(0, 0, 0, 1)",
     weight: 1, 
     opacity: 1,
-    fillOpacity: 0.8,
+    fillOpacity: 1,
   };
 
   const CUSTOMDATA_OPTIONS_DEFAULTS = {
@@ -40,6 +39,77 @@
 
   const CUSTOMDATA_DIR_NAME = "customdata_files";
   const CUSTOMDATA_MASTER_NAME = "customdata_master.json";
+
+  // Hilfsfunktion zum Einrichten eines Farbwählers.
+  const sssetupColorPicker = (inputId, initialColor, onPickCallback) => {
+
+    const colorInput = document.getElementById(inputId);
+
+    if (!colorInput || typeof global.ColorPicker === "undefined") {
+      console.warn(
+        `Farbwähler-Einrichtung übersprungen für #${inputId}: Input oder ColorPicker-Klasse nicht gefunden.`
+      );
+      return;
+    } else {
+      console.log(`Farbwähler-Einrichtung erfolgreich für #${inputId}: Input und ColorPicker-Klasse gefunden.`);
+    }
+
+    const initialColorRgbaObj = global.parseColorStringToRgbaObject(initialColor);
+    const initialColorRgbaStr = global.rgbaObjectToString(initialColorRgbaObj);
+
+    const pickerInstance = new global.ColorPicker(colorInput, {
+      toggleStyle: "input",
+      headless: false,
+      enableAlpha: true,
+      color: initialColorRgbaStr,
+      enableEyedropper: false,
+      formats: ["hex", "rgba", "hsv", "hsl"],
+      defaultFormat: "rgba",
+      swatches: [
+        "rgba(139,0,0,1)", "rgba(255,0,0,1)", "rgba(255,69,0,1)", "rgba(255,165,0,1)",
+        "rgba(255,215,0,1)", "rgba(255,255,0,1)", "rgba(173,255,47,1)", "rgba(0,255,0,1)",
+        "rgba(144,238,144,1)", "rgba(64,224,208,1)", "rgba(0,255,255,1)", "rgba(135,206,235,1)",
+        "rgba(0,0,255,1)", "rgba(75,0,130,1)", "rgba(138,43,226,1)", "rgba(128,0,128,1)",
+        "rgba(55,30,70,1)", "rgba(255,0,255,1)",
+      ],
+      submitMode: "confirm",
+      showClearButton: false,
+      dismissOnOutsideClick: true,
+      dialogPlacement: "top",
+      dialogOffset: 8,
+    });
+
+    colorInput._colorpicker = pickerInstance;
+
+    pickerInstance.on("pick", (pickedColor) => {
+      const rgbaStr = pickedColor.string("rgba");
+      const rgbaObj = global.parseColorStringToRgbaObject(rgbaStr);
+
+      colorInput.value = rgbaStr;
+      colorInput.style.backgroundColor = rgbaStr;
+      colorInput.style.color = global.getTextColor(
+        global.rgbToHex(rgbaObj.r, rgbaObj.g, rgbaObj.b)
+      );
+      colorInput.dataset.color = rgbaStr;
+
+      if (typeof onPickCallback === "function") {
+        onPickCallback(rgbaStr);
+      }
+    });
+  };
+
+  // Hilfsfunktion, um Stilattribute für die HTML-Vorlage zu erhalten.
+  const gggetColorStylesForTemplate = (colorString, defaultColor) => {
+    const color = colorString || defaultColor;
+    const rgbaObj = global.parseColorStringToRgbaObject(color);
+    const textColor = global.getTextColor(
+      global.rgbToHex(rgbaObj.r, rgbaObj.g, rgbaObj.b)
+    );
+    return {
+      bgColor: color,
+      textColor: textColor,
+    };
+  };
   
   global.initcustomdata = async function () {
     
@@ -66,8 +136,8 @@
         label: global.TEXT_CUSTOMDATA_LABEL, 
         loadFn: loadCustomDataLayers, 
         saveFn: saveCustomDataLayers, 
-        panelHtmlFn: (idSuffix) => global.getCustomDataPanelHtml(idSuffix), 
-        panelHelperFn: (idSuffix) => global.initCustomDataPanelHelper(idSuffix), 
+        panelHtmlFn: (idSuffix) => global.getCustomDataItemPanelHtml(idSuffix), 
+        panelHelperFn: (idSuffix) => global.initCustomDataItemPanelHelper(idSuffix), 
         mode: global.MODE_NONE, 
         array: _myCustomdataMap, 
         onAction: ({ type: actionType, name }) => {
@@ -514,7 +584,9 @@
         customdataLayer.getBounds().isValid() &&
               !global.map.getBounds().contains(customdataLayer.getBounds())
       ) {
-        global.map.fitBounds(customdataLayer.getBounds());
+        // KTO
+        // global.map.fitBounds(customdataLayer.getBounds());
+        global.map.fitBounds(customdataLayer.getBounds(), { maxZoom: 16 }); 
       } else if (!customdataLayer.getBounds().isValid()) {
         console.warn(
           `Die hochgeladene Datei "${fileName}" enthält keine gültigen Geometrien zum Anpassen der Kartenansicht.`
@@ -1011,6 +1083,7 @@
     });
    
     a.addEventListener("click", function (e) {
+      //console.log("click");
       e.preventDefault();
       if (typeof global.deactivateElevationButtons === "function") {
         global.deactivateElevationButtons();
@@ -1026,6 +1099,17 @@
         submenu.style.display =
           submenu.style.display === "flex" ? "none" : "flex";
       }    
+
+      if (true) {
+        const type = "customdata";
+        if (sidepanel.isVisibleWithData()) {
+            console.log("toggle sidepanel.isVisibleWithData");
+            sidepanel.showCustomData(type);
+          } else if (sidepanel.isVisibleWithOptions()) {
+            console.log("toggle sidepanel.isVisibleWithOptions");
+            sidepanel.showCustomDataConfiguration(type);
+          }
+      }
     });
 
     li.appendChild(a);
@@ -1126,6 +1210,7 @@
     submenu.style.display = "none";
 
     hamburgerMainBtn.addEventListener("click", (e) => {
+      //console.log("click");
       e.preventDefault();
       document
         .querySelectorAll("#hamburger-content > div.hamburgerSubmenu")
@@ -1136,6 +1221,17 @@
       submenu.style.display = visible ? "flex" : "none";
       // arrow.textContent = visible ? " -" : " +";
       arrow.textContent = visible ? "▽" : "▷";
+
+      if (true) {
+        const type = "customdata";
+        if (sidepanel.isVisibleWithData()) {
+            console.log("toggle sidepanel.isVisibleWithData");
+            sidepanel.showCustomData(type);
+          } else if (sidepanel.isVisibleWithOptions()) {
+            console.log("toggle sidepanel.isVisibleWithOptions");
+            sidepanel.showCustomDataConfiguration(type);
+          }
+      }
     });
 
     container.appendChild(hamburgerMainBtn);
@@ -1282,8 +1378,79 @@
     return hamburgerMainBtn;
   }
 
-  /*
-    globale Konfiguration 
+// Hilfsfunktion zum Einrichten eines Farbwählers.
+  const setupColorPicker = (inputId, initialColor, onPickCallback) => {
+
+    const colorInput = document.getElementById(inputId);
+
+    if (!colorInput || typeof global.ColorPicker === "undefined") {
+      console.warn(
+        `Farbwähler-Einrichtung übersprungen für #${inputId}: Input oder ColorPicker-Klasse nicht gefunden.`
+      );
+      return;
+    } else {
+      console.log(`Farbwähler-Einrichtung erfolgreich für #${inputId}: Input und ColorPicker-Klasse gefunden.`);
+    }
+
+    const initialColorRgbaObj = global.parseColorStringToRgbaObject(initialColor);
+    const initialColorRgbaStr = global.rgbaObjectToString(initialColorRgbaObj);
+
+    const pickerInstance = new global.ColorPicker(colorInput, {
+      toggleStyle: "input",
+      headless: false,
+      enableAlpha: true,
+      color: initialColorRgbaStr,
+      enableEyedropper: false,
+      formats: ["hex", "rgba", "hsv", "hsl"],
+      defaultFormat: "rgba",
+      swatches: [
+        "rgba(139,0,0,1)", "rgba(255,0,0,1)", "rgba(255,69,0,1)", "rgba(255,165,0,1)",
+        "rgba(255,215,0,1)", "rgba(255,255,0,1)", "rgba(173,255,47,1)", "rgba(0,255,0,1)",
+        "rgba(144,238,144,1)", "rgba(64,224,208,1)", "rgba(0,255,255,1)", "rgba(135,206,235,1)",
+        "rgba(0,0,255,1)", "rgba(75,0,130,1)", "rgba(138,43,226,1)", "rgba(128,0,128,1)",
+        "rgba(55,30,70,1)", "rgba(255,0,255,1)",
+      ],
+      submitMode: "confirm",
+      showClearButton: false,
+      dismissOnOutsideClick: true,
+      dialogPlacement: "top",
+      dialogOffset: 8,
+    });
+
+    colorInput._colorpicker = pickerInstance;
+
+    pickerInstance.on("pick", (pickedColor) => {
+      const rgbaStr = pickedColor.string("rgba");
+      const rgbaObj = global.parseColorStringToRgbaObject(rgbaStr);
+
+      colorInput.value = rgbaStr;
+      colorInput.style.backgroundColor = rgbaStr;
+      colorInput.style.color = global.getTextColor(
+        global.rgbToHex(rgbaObj.r, rgbaObj.g, rgbaObj.b)
+      );
+      colorInput.dataset.color = rgbaStr;
+
+      if (typeof onPickCallback === "function") {
+        onPickCallback(rgbaStr);
+      }
+    });
+  };
+
+  // Hilfsfunktion, um Stilattribute für die HTML-Vorlage zu erhalten.
+  const getColorStylesForTemplate = (colorString, defaultColor) => {
+    const color = colorString || defaultColor;
+    const rgbaObj = global.parseColorStringToRgbaObject(color);
+    const textColor = global.getTextColor(
+      global.rgbToHex(rgbaObj.r, rgbaObj.g, rgbaObj.b)
+    );
+    return {
+      bgColor: color,
+      textColor: textColor,
+    };
+  };
+
+ /*
+    html für default Konfiguration 
   */
   global.getCustomDataConfigurationPanelHtml = function (idSuffix = "") {
     idSuffix = "-default"; 
@@ -1291,6 +1458,9 @@
     const lineStyle = _customDataOptionsLast.lineStyle || {};
     const pointStyle = _customDataOptionsLast.pointStyle || {};
 
+    const lineStyleTpl = getColorStylesForTemplate(lineStyle.color, "#613583");
+    const pointFillStyleTpl = getColorStylesForTemplate(pointStyle.fillColor, "#ff0000");
+    const pointBorderStyleTpl = getColorStylesForTemplate(pointStyle.color, "#000");
     
     return `
         <!-- Style Controls -->
@@ -1305,58 +1475,33 @@
         <hr>
 
         <div>
-          <b> Hinweis: </b>
-          <br>
-          Diese Konfiguration wirkt auf neu importierte Objekte,
-          nicht auf bereits importierte Objekte!         
-          <br>
-          Individuelle Konfigurationen zu bereits importierten Objekten 
-          können unter "Objektübersicht" vorgenommen werden.
+          <b>Hinweis:</b> Die nachfolgende Konfiguration der Standardstile wirkt auf neu importierte Objekte.         
+          Die Darstellung bereits importierten Objekte kann unter "Objektübersicht" geändert werden.
         </div>
 
         <hr>
 
         <div id="customdata-config-area" class="customdata-config-area">
 
-          <h4>default-Stil für Linien (Tracks/Routen)</h4>
+          <h4>Standardstil für Linien:</h4>
 
           <label>Farbe:</label>
           <div class="color-row">
             <div class="color-cell">
-              <input type="color" class="config-line-color" value="${
-                lineStyle.color || "#613583"
-              }">
-            </div>
-          </div>
-
-          <!-- 
-          <label>Farbeeeeee:</label>
-          <div class="color-row">
-            <div class="color-cell">
               <input type="text"
-                  id="contour-color-input${idSuffix}"
-                  value="${lineStyle.color}"
-                  tabindex="-1"
-                  readonly
-                  class="cp_input color-input"
-                  data-color="${lineStyle.color}"
-                  style="background-color: ${lineStyle.color};
-                  color: ${global.getTextColor(
-                    global.rgbToHex(
-                      global.parseColorStringToRgbaObject(lineStyle.color).r,
-                      global.parseColorStringToRgbaObject(lineStyle.color).g,
-                      global.parseColorStringToRgbaObject(lineStyle.color).b
-                    )
-                  )};">
-            </div>          
-          </div>
-          -->
+                  id="config-line-color${idSuffix}"
+                  value="${lineStyleTpl.bgColor}"
+                  tabindex="-1" readonly class="cp_input color-input"
+                  data-color="${lineStyleTpl.bgColor}"
+                  style="background-color: ${lineStyleTpl.bgColor}; color: ${lineStyleTpl.textColor};">
+            </div>
+          </div>          
           
           ${global.makeSlider(
             "line-weight",
             idSuffix,
             "Linienstärke",
-            lineStyle.weight || 5,
+            lineStyle.weight || 4,
             1,
             10,
             1,
@@ -1365,8 +1510,8 @@
 
           <br> 
 
-          <label>Muster (z.B. "5, 15" für gestrichelt, leer für durchgezogen): </label>
-          <br> <br> 
+          <label>Muster (z.B. "5,10" für gestrichelt, leer für durchgezogen):</label>
+          <br><br> 
           <div>
             <input type="text" class="config-line-dasharray" value="${
               lineStyle.dashArray || ""
@@ -1375,36 +1520,29 @@
           
           <br> 
 
-          <!--
-          <label>Track Farbe (GPX/KML, durchgezogen): </label>
-          <div class="color-row">
-            <div class="color-cell">
-              <input type="color" class="config-line-trackcolor" value="${
-                lineStyle.trackColor || "#0056b3"
-              }">
-            </div>
-          </div>
-
-          <br>  <br>
-          -->
-
-          <h4>default-Stil für Punkte (Wegpunkte)</h4>          
+          <h4>Standardstil für Punkte:</h4>          
 
           <label>Füllfarbe: </label>
           <div class="color-row">
             <div class="color-cell">
-              <input type="color" class="config-point-fillcolor" value="${
-                pointStyle.fillColor || "#ff0000"
-              }">
+              <input type="text"
+                  id="config-point-fillcolor${idSuffix}"
+                  value="${pointFillStyleTpl.bgColor}"
+                  tabindex="-1" readonly class="cp_input color-input"
+                  data-color="${pointFillStyleTpl.bgColor}"
+                  style="background-color: ${pointFillStyleTpl.bgColor}; color: ${pointFillStyleTpl.textColor};">
             </div>
           </div>
 
           <label>Randfarbe: </label>
           <div class="color-row">
             <div class="color-cell">
-              <input type="color" class="config-point-color" value="${
-                pointStyle.color || "#000"
-              }">
+              <input type="text"
+                  id="config-point-color${idSuffix}"
+                  value="${pointBorderStyleTpl.bgColor}"
+                  tabindex="-1" readonly class="cp_input color-input"
+                  data-color="${pointBorderStyleTpl.bgColor}"
+                  style="background-color: ${pointBorderStyleTpl.bgColor}; color: ${pointBorderStyleTpl.textColor};">
             </div>
           </div>
 
@@ -1412,7 +1550,7 @@
             "point-radius",
             idSuffix,
             "Radius",
-            pointStyle.radius || 8,
+            pointStyle.radius || 4,
             1,
             20,
             1,
@@ -1432,12 +1570,15 @@
 
 
           <div class="panel-buttons">
-              <button type="button" class="customdata-apply-config-btn" data-id="0">default-Stile speichern</button>
+              <button type="button" class="customdata-apply-config-btn" data-id="0">Standardstile speichern</button>
           </div>
         </div>       
         `;
   };
 
+  /*
+    helper für default Konfiguration 
+  */
   global.initCustomDataConfigurationPanelHelper = function (idSuffix) {
     idSuffix = "-default"; 
 
@@ -1464,6 +1605,22 @@
       _saveSettings();
       global.redrawCustomData();
     };
+
+    const lineStyle = _customDataOptionsLast.lineStyle;
+    const pointStyle = _customDataOptionsLast.pointStyle;
+
+    setupColorPicker(`config-line-color${idSuffix}`, lineStyle.color, (newColor) => {
+      lineStyle.color = newColor;
+      updateAndRedraw();
+    });
+    setupColorPicker(`config-point-fillcolor${idSuffix}`, pointStyle.fillColor, (newColor) => {
+      pointStyle.fillColor = newColor;
+      updateAndRedraw();
+    });
+    setupColorPicker(`config-point-color${idSuffix}`, pointStyle.color, (newColor) => {
+      pointStyle.color = newColor;
+      updateAndRedraw();
+    });
 
     global.bindSlider(
       "line-weight",
@@ -1511,11 +1668,11 @@
           console.log("customdata-apply-config-btn click");
           e.stopPropagation();
 
-          _customDataOptionsLast.lineStyle.color = panelElement.querySelector(".config-line-color").value;
+          _customDataOptionsLast.lineStyle.color = panelElement.querySelector(`#config-line-color${idSuffix}`).value;
           _customDataOptionsLast.lineStyle.dashArray = panelElement.querySelector(".config-line-dasharray").value;
           // _customDataOptionsLast.lineStyle.trackColor = panelElement.querySelector(".config-line-trackcolor").value;
-          _customDataOptionsLast.pointStyle.fillColor = panelElement.querySelector(".config-point-fillcolor").value;
-          _customDataOptionsLast.pointStyle.color = panelElement.querySelector(".config-point-color").value;
+          _customDataOptionsLast.pointStyle.fillColor = panelElement.querySelector(`#config-point-fillcolor${idSuffix}`).value;
+          _customDataOptionsLast.pointStyle.color = panelElement.querySelector(`#config-point-color${idSuffix}`).value;
 
           updateAndRedraw(); 
         });
@@ -1523,9 +1680,9 @@
   };
 
   /*
-    Konfiguration für selektiertes item
+    html für Konfiguration eines selektierten items  
   */
-  global.getCustomDataPanelHtml = function (idSuffix = "") {
+  global.getCustomDataItemPanelHtml = function (idSuffix = "") {
     // console.log("getCustomDataPanelHtml called with suffix:", idSuffix);
 
     let html = `
@@ -1547,6 +1704,10 @@
         const lineStyle = itemStyle.line || {};
         const pointStyle = itemStyle.point || {};
 
+        const lineStyleTpl = getColorStylesForTemplate(lineStyle.color, "#613583");
+        const pointFillStyleTpl = getColorStylesForTemplate(pointStyle.fillColor, "#ff0000");
+        const pointBorderStyleTpl = getColorStylesForTemplate(pointStyle.color, "#000");
+
         const visibilityButtonContent = isVisible
           ? `<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> `
           : `<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> `;
@@ -1566,12 +1727,16 @@
         <!--
         <span class="customdata-item-name">${itemName}</span>
         -->
-        <h4>Stil für Linien (Tracks/Routen)</h4>
+        <h4>Stil für Linien:</h4>
         <label>Farbe: </label>
         <div class="color-row">
           <div class="color-cell">
-            <input type="color" class="config-line-color-for-item-${itemId}" value="${
-              lineStyle.color || "#613583"}">
+            <input type="text"
+                id="config-line-color-for-item-${itemId}"
+                value="${lineStyleTpl.bgColor}"
+                tabindex="-1" readonly class="cp_input color-input"
+                data-color="${lineStyleTpl.bgColor}"
+                style="background-color: ${lineStyleTpl.bgColor}; color: ${lineStyleTpl.textColor};">
           </div>
         </div>
 
@@ -1588,7 +1753,7 @@
 
         <br>
 
-        <label>Muster (z.B. "5, 15" für gestrichelt, leer für durchgezogen): </label>
+        <label>Muster (z.B. "5,10" für gestrichelt, leer für durchgezogen):</label>
         <br> <br>
         <input type="text" class="config-line-dasharray-for-item-${itemId}" value="${
           lineStyle.dashArray || ""
@@ -1596,31 +1761,29 @@
 
         <br>  <br>
 
-        <!--
-        <label>Track Farbe (GPX/KML, durchgezogen): </label>
-        <div class="color-row">
-          <div class="color-cell">
-            <input type="color" class="config-line-trackcolor-for-item-${itemId}" value="${
-             lineStyle.trackColor || "#0056b3"}">
-            </div>
-        </div>
-        -->
-
-        <h4>Stil für Punkte (Wegpunkte)</h4>        
+        <h4>Stil für Punkte:</h4>        
         
         <label>Füllfarbe: </label>
         <div class="color-row">
           <div class="color-cell">
-            <input type="color" class="config-point-fillcolor-for-item-${itemId}" value="${
-              pointStyle.fillColor || "#ff0000"}">
+            <input type="text"
+                id="config-point-fillcolor-for-item-${itemId}"
+                value="${pointFillStyleTpl.bgColor}"
+                tabindex="-1" readonly class="cp_input color-input"
+                data-color="${pointFillStyleTpl.bgColor}"
+                style="background-color: ${pointFillStyleTpl.bgColor}; color: ${pointFillStyleTpl.textColor};">
           </div>
         </div>
 
         <label>Randfarbe: </label>
         <div class="color-row">
           <div class="color-cell">
-            <input type="color" class="config-point-color-for-item-${itemId}" value="${
-              pointStyle.color || "#000"}">
+            <input type="text"
+                id="config-point-color-for-item-${itemId}"
+                value="${pointBorderStyleTpl.bgColor}"
+                tabindex="-1" readonly class="cp_input color-input"
+                data-color="${pointBorderStyleTpl.bgColor}"
+                style="background-color: ${pointBorderStyleTpl.bgColor}; color: ${pointBorderStyleTpl.textColor};">
           </div>
         </div>
         
@@ -1669,21 +1832,9 @@
   };
 
   /*
-    Anwenden auf selektiertes item
+    helper für Konfiguration eines selektierten items  
   */
-// customdata_1.js
-
-// ... (previous code remains the same)
-
-  /*
-    Anwenden auf selektiertes item
-  */
-/**
- * Initializes a custom data panel and its associated event listeners.
- *
- * @param {string} panelId The full ID of the panel element to initialize.
- */
-global.initCustomDataPanelHelper = function (idSuffix) {
+  global.initCustomDataItemPanelHelper = function (idSuffix) {
     idSuffix = ""; // TODO Hack !!!
 
     const panelElement = document.getElementById(`customdata-panel-${idSuffix}`);
@@ -1732,13 +1883,16 @@ global.initCustomDataPanelHelper = function (idSuffix) {
          * Reads all style values from the UI controls and updates the item's style object.
          */
         const updateItemStyleFromUI = () => {
+
+            console.log("updateItemStyleFromUI itemId: ", itemId);
+
             // Read values from text and color inputs
-            item.style.line.color = configArea.querySelector(`.config-line-color-for-item-${itemId}`).value;
+            item.style.line.color = configArea.querySelector(`#config-line-color-for-item-${itemId}`).value;
             console.log("updateItemStyleFromUI item.style.line.color: ", item.style.line.color);
             item.style.line.dashArray = configArea.querySelector(`.config-line-dasharray-for-item-${itemId}`).value.trim() || null;
             // item.style.line.trackColor = configArea.querySelector(`.config-line-trackcolor-for-item-${itemId}`).value;
-            item.style.point.fillColor = configArea.querySelector(`.config-point-fillcolor-for-item-${itemId}`).value;
-            item.style.point.color = configArea.querySelector(`.config-point-color-for-item-${itemId}`).value;
+            item.style.point.fillColor = configArea.querySelector(`#config-point-fillcolor-for-item-${itemId}`).value;
+            item.style.point.color = configArea.querySelector(`#config-point-color-for-item-${itemId}`).value;
 
             // Read values from sliders
             const lineWeightInput = configArea.querySelector(`#line-weight-input-${itemId}`);
@@ -1759,14 +1913,24 @@ global.initCustomDataPanelHelper = function (idSuffix) {
             redrawAndSaveItem(item);
         };
 
+        setupColorPicker(`config-line-color-for-item-${itemId}`, item.style.line.color, (newColor) => {
+            item.style.line.color = newColor;
+            redrawAndSaveItem(item);
+        });
+        setupColorPicker(`config-point-fillcolor-for-item-${itemId}`, item.style.point.fillColor, (newColor) => {
+            item.style.point.fillColor = newColor;
+            redrawAndSaveItem(item);
+        });
+        setupColorPicker(`config-point-color-for-item-${itemId}`, item.style.point.color, (newColor) => {
+            item.style.point.color = newColor;
+            redrawAndSaveItem(item);
+        });
+
         // Add event listeners for real-time updates on text and color inputs.
         // The 'input' event provides immediate feedback as the user interacts with the element.
         const inputsToBind = [
-            `.config-line-color-for-item-${itemId}`,
             `.config-line-dasharray-for-item-${itemId}`,
             // `.config-line-trackcolor-for-item-${itemId}`,
-            `.config-point-fillcolor-for-item-${itemId}`,
-            `.config-point-color-for-item-${itemId}`,
         ];
 
         inputsToBind.forEach(selector => {
@@ -1831,8 +1995,10 @@ global.initCustomDataPanelHelper = function (idSuffix) {
                 if (!wasVisible) layer.addTo(global.map);
 
                 if (layer.getBounds && layer.getBounds().isValid()) {
-                    global.map.fitBounds(layer.getBounds(), { padding: [20, 20] });
-                }
+                    // KTO
+                    // global.map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+                    global.map.fitBounds(layer.getBounds(), { padding: [20, 20], maxZoom: 16 }); 
+               }
 
                 if (!wasVisible && !item.visible) {
                     global.map.removeLayer(layer);
@@ -1843,6 +2009,7 @@ global.initCustomDataPanelHelper = function (idSuffix) {
         }
     });
 };
+
 
 
 
@@ -1900,6 +2067,7 @@ global.initCustomDataPanelHelper = function (idSuffix) {
             item.name
           );
           if (geojson) {
+            item.visible = true;
             displayCustomDataGeoJson(
               geojson,
               item.name,
