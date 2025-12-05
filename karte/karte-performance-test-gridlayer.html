@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>Leaflet Performance Test (Optimiert mit L.GridLayer und Effekten)</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Custom CSS for the map -->
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+        
+        /* Stil für die Steuerungs-Box */
+        #controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 1000; /* Stellt sicher, dass die Box über der Karte liegt */
+            font-family: sans-serif;
+            min-width: 220px;
+        }
+        #controls h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .control-group {
+            margin-bottom: 10px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+        }
+        .control-group fieldset {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .control-group legend {
+            padding: 0 5px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Steuerungs-Elemente für die Effekte -->
+    <div id="controls">
+        <h3>Bildeffekte</h3>
+        
+        <div class="control-group">
+            <label for="opacity-slider">Deckkraft</label>
+            <input type="range" id="opacity-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+
+        <div class="control-group">
+            <label for="brightness-slider">Helligkeit</label>
+            <input type="range" id="brightness-slider" min="0" max="2" step="0.05" value="1">
+        </div>
+
+        <div class="control-group">
+            <label for="contrast-slider">Kontrast</label>
+            <input type="range" id="contrast-slider" min="0" max="2" step="0.05" value="1">
+        </div>
+
+        <div class="control-group">
+            <label for="saturation-slider">Sättigung</label>
+            <input type="range" id="saturation-slider" min="0" max="3" step="0.1" value="1">
+        </div>
+
+        <div class="control-group">
+            <fieldset>
+                <legend>Mischmodus</legend>
+                <label><input type="radio" name="blend-mode" value="normal"> Normal</label>
+                <label><input type="radio" name="blend-mode" value="multiply" checked> Multiply</label>
+            </fieldset>
+        </div>
+    </div>
+
+    <script>
+        // --- Konfiguration ---
+        const MAP_CENTER = [51.9600, 7.6300]; // Münster, NRW
+        const START_LAT = 51.8000;
+        const START_LNG = 7.5000;
+        const TILE_SIZE_KM = 1;
+        const GRID_SIZE = 50; // 50x50 Raster = 2500 Kacheln
+        const CUSTOM_PANE_NAME = 'customGridPane'; // Name für die benutzerdefinierte Ebene
+
+        // --- Map Initialisierung ---
+        const map = L.map('map').setView(MAP_CENTER, 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Erstelle einen dedizierten "Pane" für den GridLayer, um Effekte global anzuwenden
+        if (!map.getPane(CUSTOM_PANE_NAME)) {
+            map.createPane(CUSTOM_PANE_NAME);
+            // zIndex sorgt dafür, dass der Pane über der Basiskarte, aber unter Popups etc. liegt
+            map.getPane(CUSTOM_PANE_NAME).style.zIndex = 450;
+        }
+
+        // --- Effekt-Steuerung ---
+        const opacitySlider = document.getElementById('opacity-slider');
+        const brightnessSlider = document.getElementById('brightness-slider');
+        const contrastSlider = document.getElementById('contrast-slider');
+        const saturationSlider = document.getElementById('saturation-slider');
+        const blendModeRadios = document.querySelectorAll('input[name="blend-mode"]');
+
+        function updateOverlayStyles() {
+            const opacity = opacitySlider.value;
+            const brightness = brightnessSlider.value;
+            const contrast = contrastSlider.value;
+            const saturation = saturationSlider.value;
+            const blendMode = document.querySelector('input[name="blend-mode"]:checked').value;
+
+            const filterString = `brightness(${brightness}) contrast(${contrast}) saturate(${saturation})`;
+
+            // Hole den Custom Pane, der den GridLayer enthält
+            const customPane = map.getPane(CUSTOM_PANE_NAME);
+
+            // Wende alle Effekte direkt auf den gesamten Pane an
+            if (customPane) {
+                customPane.style.opacity = opacity;
+                customPane.style.mixBlendMode = blendMode;
+                customPane.style.filter = filterString;
+            }
+        }
+
+        // Füge Event Listeners zu allen Steuerelementen hinzu
+        opacitySlider.addEventListener('input', updateOverlayStyles);
+        brightnessSlider.addEventListener('input', updateOverlayStyles);
+        contrastSlider.addEventListener('input', updateOverlayStyles);
+        saturationSlider.addEventListener('input', updateOverlayStyles);
+        blendModeRadios.forEach(radio => radio.addEventListener('input', updateOverlayStyles));
+
+
+        // --- Hilfsfunktionen und Farb-Array ---
+        const colors = [
+            '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#33FFF6', '#FFC300', '#C70039', '#900C3F',
+            '#581845', '#FF8C00', '#00CED1', '#8A2BE2', '#7FFF00', '#DC143C', '#00008B', '#B8860B'
+        ];
+
+        function calculateBounds(startLat, startLng, row, col, tileSizeKm) {
+            const latPerKm = 1 / 111.32;
+            const avgLatRad = (startLat + (row + 0.5) * tileSizeKm * latPerKm) * Math.PI / 180;
+            const lngPerKm = 1 / (111.32 * Math.cos(avgLatRad));
+
+            const swLat = startLat + row * tileSizeKm * latPerKm;
+            const swLng = startLng + col * tileSizeKm * lngPerKm;
+            const neLat = swLat + tileSizeKm * latPerKm;
+            const neLng = swLng + tileSizeKm * lngPerKm;
+
+            return L.latLngBounds([swLat, swLng], [neLat, neLng]);
+        }
+
+        // --- Architektonische Optimierung: L.GridLayer ---
+        const CustomGridLayer = L.GridLayer.extend({
+            createTile: function (coords) {
+                const tile = L.DomUtil.create('canvas', 'leaflet-tile');
+                const size = this.getTileSize();
+                tile.width = size.x;
+                tile.height = size.y;
+                const ctx = tile.getContext('2d');
+
+                const tileBounds = this._tileCoordsToBounds(coords);
+
+                for (let i = 0; i < GRID_SIZE; i++) {
+                    for (let j = 0; j < GRID_SIZE; j++) {
+                        const cellBounds = calculateBounds(START_LAT, START_LNG, i, j, TILE_SIZE_KM);
+
+                        if (tileBounds.intersects(cellBounds)) {
+                            const sw = map.project(cellBounds.getSouthWest(), coords.z);
+                            const ne = map.project(cellBounds.getNorthEast(), coords.z);
+                            
+                            const tilePixelOrigin = coords.scaleBy(this.getTileSize());
+                            
+                            const x = sw.x - tilePixelOrigin.x;
+                            const y = ne.y - tilePixelOrigin.y;
+                            const width = ne.x - sw.x;
+                            const height = sw.y - ne.y;
+                                                        
+                            const colorIndex = (i * GRID_SIZE + j) % colors.length;
+                            ctx.fillStyle = colors[colorIndex];
+                            ctx.fillRect(x, y, width, height);
+                        }
+                    }
+                }
+                return tile;
+            }
+        });
+
+        // --- Layer zur Karte hinzufügen ---
+        function initializeCustomLayer() {
+            // Erstelle eine Instanz des GridLayers und weise sie dem Custom Pane zu
+            const customGrid = new CustomGridLayer({
+                pane: CUSTOM_PANE_NAME
+            });
+            map.addLayer(customGrid);
+            
+            console.log(`✅ Optimierte Kachelebene (L.GridLayer) im Pane '${CUSTOM_PANE_NAME}' hinzugefügt.`);
+
+            const southWest = calculateBounds(START_LAT, START_LNG, 0, 0, TILE_SIZE_KM).getSouthWest();
+            const northEast = calculateBounds(START_LAT, START_LNG, GRID_SIZE - 1, GRID_SIZE - 1, TILE_SIZE_KM).getNorthEast();
+            const totalBounds = L.latLngBounds(southWest, northEast);
+            
+            map.fitBounds(totalBounds, {
+                padding: [20, 20]
+            });
+        }
+
+        // Starte die Initialisierung und wende die initialen Stile an
+        map.whenReady(() => {
+            initializeCustomLayer();
+            updateOverlayStyles(); // Setze die Standardwerte der Regler
+        });
+    </script>
+
+</body>
+</html>

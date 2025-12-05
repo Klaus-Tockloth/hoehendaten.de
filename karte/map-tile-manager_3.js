@@ -29,6 +29,88 @@ function createTileManager(config) {
   let currentRectangle = null;
   let drawnRectangleBounds = null; 
 
+  // Add a variable to hold your grid layer instance
+  let myGridLayer = null;
+
+  // --- ExampleCustomGridLayer Definition ---
+  const ExampleCustomGridLayer = L.GridLayer.extend({
+      initialize: function (options) {
+        console.log("in ExampleCustomGridLayer initialize");
+          L.GridLayer.prototype.initialize.call(this, options);
+      },
+
+      createTile: function (coords) {
+        console.log("in ExampleCustomGridLayer createTile");
+          const tile = L.DomUtil.create('div', 'leaflet-tile');
+
+          // This is a placeholder for your logic to get the correct tile data
+          // based on the x, y, z coordinates of the tile.
+          // You will need to map these coordinates to your `TileIndex`.
+          // For this example, we'll just show the coordinates.
+          tile.innerHTML = [coords.x, coords.y, coords.z].join(', ');
+          tile.style.outline = '1px solid red';
+
+
+          // Here you would look up your tile data from `myTilesMap`
+          // and render it. Since the data fetching is asynchronous in your
+          // current code, you would store the fetched data in `myTilesMap`
+          // and then call `myGridLayer.redraw()` to have this `createTile`
+          // function execute again for the visible tiles.
+
+          return tile;
+      }
+  });
+
+  /*
+    First, you'll want to create a new class that extends L.GridLayer. 
+    This class will contain the logic for creating individual tiles. 
+    The most important method to implement here is createTile(). 
+    This method is called by Leaflet for each tile that needs to be displayed on the map.
+  */
+  const CustomGridLayer = L.GridLayer.extend({
+    initialize: function (options, tileManager) {
+      console.log("in CustomGridLayer initialize");
+      L.GridLayer.prototype.initialize.call(this, options);
+      this.tileManager = tileManager;
+    },
+
+        // Inside CustomGridLayer
+    createTile: function (coords, done) {
+        const tile = L.DomUtil.create('div', 'leaflet-tile');
+        const tileIndex = this.tileManager.getTileIndexFromCoords(coords);
+
+        // Set a loading state
+        tile.innerHTML = 'Loading...';
+        tile.style.outline = '1px solid grey';
+
+        this.tileManager.getTileData(tileIndex, (error, tileData) => {
+            if (error) {
+                console.error(error);
+                tile.innerHTML = 'Error';
+                done(error, tile);
+                return;
+            }
+
+            if (tileData) {
+                const imageUrl = `data:${tileData.mimeType};base64,${tileData.base64Data}`;
+                const img = L.DomUtil.create('img');
+                img.src = imageUrl;
+                img.style.width = '256px';
+                img.style.height = '256px';
+                tile.innerHTML = ''; // Clear loading text
+                tile.appendChild(img);
+            } else {
+                // If no data is available, you can leave it blank or show a specific message
+                tile.innerHTML = 'No data';
+            }
+            done(null, tile);
+        });
+
+        return tile;
+    },
+
+  });
+
   function saveSettings() {  
     localStorage.setItem(`${type}_configuration`, JSON.stringify(optionsLast));
   }
@@ -196,7 +278,7 @@ function createTileManager(config) {
     redrawTiles();
   }
  
-  function redrawTiles() {
+  function rrredrawTiles() {
     console.log("redrawLayers fetchForRedraw:", fetchForRedraw, type);
 
     if (!fetchForRedraw) {
@@ -210,7 +292,7 @@ function createTileManager(config) {
     fetchForRedraw = false; 
   }
   
-  function regenerateTiles() {
+  function rrregenerateTiles() {
     for (const tilesArray of myTilesMap.values()) {
       for (const tile of tilesArray) {
         console.log("tile: ", tile);
@@ -229,6 +311,30 @@ function createTileManager(config) {
 
     revisitTileIndices(copiedTilesMap);
   }
+
+  function redrawTiles() {
+        console.log("redrawLayers fetchForRedraw:", fetchForRedraw, type);
+
+        if (myGridLayer) {
+            myGridLayer.redraw();
+        }
+
+        if (!fetchForRedraw) {
+            MapStyleManager.applyFilterAndBlendMode(
+                type,
+                optionsLast.styleOptions
+            );
+        } else {
+            // The redraw() on the grid layer will handle regeneration
+        }
+        fetchForRedraw = false;
+    }
+
+    function regenerateTiles() {
+        if (myGridLayer) {
+            myGridLayer.redraw();
+        }
+    }
 
   async function revisitTileIndices(copiedTilesMap = []) {
     console.log("revisitTileIndices optionsLast: ", optionsLast);
@@ -788,6 +894,7 @@ function createTileManager(config) {
         throw new Error(`No ${type} data found in response.`);
       }
 
+      if (false)
       for (const tileData of tilesData) {
         let layer;
         if (typeof createLayerFromTileData === "function") {
@@ -834,6 +941,81 @@ function createTileManager(config) {
           console.log(" ", myTilesMap);
         }
       }
+      if (true)
+        for (const tileData of tilesData) {
+    let layer;
+
+    // This block correctly handles the creation of the layer from Base64 data.
+    // It was missing in the second snippet.
+    if (typeof createLayerFromTileData === "function") {
+        // Use a custom function if it exists
+        layer = createLayerFromTileData(tileData, optionsLast, latlng);
+    } else {
+        // --- Start of Missing Logic ---
+        const base64Data = tileData.Data;
+        const format = tileData.DataFormat?.toLowerCase() || "png";
+
+        // Determine the correct MIME type for the data URL
+        let mimeType = "image/png";
+        if (format === "geotiff") mimeType = "image/tiff";
+        else if (format === "jpeg" || format === "jpg") mimeType = "image/jpeg";
+
+        // Create a data URL from the Base64 string
+        const imageUrl = `data:${mimeType};base64,${base64Data}`;
+
+        // Define the geographical bounds for the image
+        const bounds = [
+            [tileData.BoundingBox.MinLat, tileData.BoundingBox.MinLon],
+            [tileData.BoundingBox.MaxLat, tileData.BoundingBox.MaxLon],
+        ];
+
+        // Ensure the layer is added to the correct map pane
+        const pane = getOrCreatePane(map, type);
+
+        // Create the Leaflet image overlay layer
+        layer = L.imageOverlay(imageUrl, bounds, { pane });
+        layer.options.latLng = latlng;
+        // --- End of Missing Logic ---
+    }
+
+    // Create the metadata object for the new layer
+    const metadata = {
+        Actuality: tileData.Actuality || null,
+        Origin: tileData.Origin || null,
+        Attribution: tileData.Attribution || null,
+        TileIndex: tileData.TileIndex || null,
+        latLng: latlng,
+        optionsAtCreation: structuredClone(optionsLast),
+        // You can optionally keep the original tile data for other uses
+        tileContent: tileData,
+    };
+
+    // Draw the layer on the map and get its unique ID
+    const leaflet_id = drawTile(layer, metadata, latlng);
+
+    // Persist the layer and its state
+    saveLayers();
+
+    if (true) {
+        await saveSingleLayerInOPFS({ layer, ...metadata }, type);
+        // Add the tile to your internal map tracking with its Leaflet ID
+        addTileToMap(myTilesMap, metadata, type, leaflet_id);
+        saveTileMapInOPFS(myTilesMap, type);
+        updateDataInSidepanel();
+        console.log("Tile processed and added to map:", myTilesMap);
+    }
+}
+
+
+      // Now that new data is available, redraw the grid layer
+      if (myGridLayer) {
+        console.log(" myGridLayer.redraw() ...");
+        myGridLayer.redraw();
+      }
+
+      saveTileMapInOPFS(myTilesMap, type);
+      updateDataInSidepanel();
+
       window.activeMarker = null;
     } catch (err) {
       console.error(`${label} error:`, err);
@@ -1072,23 +1254,7 @@ function createTileManager(config) {
     const skm = calculateRectangleAreaInSqKm(bounds);
     console.log("calculateRectangleAreaInSqKm skm: ", skm);
 
-    // http://127.0.0.1:5500/src/hoehendaten_0.0.9/karte_ohne_GridLayer.html?skmValue=1000
-
-    // HACK
-    
-    // Get the URL query string
-    const queryString = window.location.search;
-    // Create a new URLSearchParams object
-    const urlParams = new URLSearchParams(queryString);
-    console.log("urlParams: ", urlParams);
-
-    // Get the value of the 'skmValue' parameter
-    // If the parameter is not found, default to 64
-    const skmValue = parseInt(urlParams.get('skmValue')) || MAXIMUM_NUMBER_OF_TILES;
-
-    // Your original if statement, now using the dynamic value
-    if (skm > skmValue) {
-    //if (skm > MAXIMUM_NUMBER_OF_TILES) {
+    if (skm > MAXIMUM_NUMBER_OF_TILES) {
       alert(`Der markierte Bereich ist größer als ${MAXIMUM_NUMBER_OF_TILES} Kacheln!`);
       return;
     }
@@ -1271,28 +1437,30 @@ function createTileManager(config) {
  
   const managerPublicApi = {
     init: () => {
-      loadSettings(); 
-      MapStyleManager.applyFilterAndBlendMode(
-        type,
-        optionsLast.styleOptions
-      );
-      handleMapClick(); 
+      loadSettings();
+
+      // Create and add the GridLayer to the map, passing the tileManager instance
+      myGridLayer = new CustomGridLayer({}, managerPublicApi); // Pass managerPublicApi as the tileManager
+      map.addLayer(myGridLayer);
+
+      MapStyleManager.applyFilterAndBlendMode(type, optionsLast.styleOptions);
+      handleMapClick();
       setupRectangleDrawingHandlers();
 
-      const idSuffix = getUniqueIdSuffix(); 
+      const idSuffix = getUniqueIdSuffix();
 
-      if (typeof createSidepanel === "function") {        
+      if (typeof createSidepanel === "function") {
         window.sidepanel = createSidepanel({
           type: type,
           label: label,
-          loadFn: managerPublicApi.loadLayers.bind(managerPublicApi), 
-          saveFn: saveLayers, 
+          loadFn: managerPublicApi.loadLayers.bind(managerPublicApi),
+          saveFn: saveLayers,
           panelHtmlFn: () => getPanelHtml(idSuffix),
           panelHelperFn: () => getPanelHelper(idSuffix),
           mode: modeId,
           array: null, // myLayers,
           tilesMap: myTilesMap,
-          geojsonLayers: null, 
+          geojsonLayers: null,
           onAction: ({ type: actionType, id, name, layers }) => {
             if (actionType === "update") {
               const latlng = extractLatLngFromNameHTML(name);
@@ -1307,20 +1475,79 @@ function createTileManager(config) {
       if (typeof createLayerControl === "function") {
         // Assign to window scope if 'layerControl' is a global singleton
         // window.layerControl = createLayerControl({ ...
-        // das war einmal 
-      }          
+        // das war einmal
+      }
+    },
+
+    getTileIndexFromCoords: function(coords) {
+        // Implement the logic to convert tile coordinates (coords.x, coords.y, coords.z) 
+        // to your custom tile index. This will depend on your tiling scheme.
+        // For example:
+        return `z${coords.z}-x${coords.x}-y${coords.y}`; 
+    },
+
+    /// This helper fetches data for the grid layer.
+    getTileData: function(tileIndex, callback) {
+        // Find the tile data in your main map.
+        // It's possible a tile index could have multiple entries if fetched multiple times.
+        // We'll just use the first one for simplicity.
+        const tileEntries = myTilesMap.get(tileIndex);
+
+        if (tileEntries && tileEntries.length > 0 && tileEntries[0].tileContent) {
+            // Data is loaded and available, return it immediately.
+            callback(null, tileEntries[0].tileContent);
+        } else {
+            // Data is not in the map or hasn't been loaded from OPFS yet.
+            // You can either trigger a fetch here or just show a blank tile.
+            callback(null, null); // Indicates no data is available for this tile.
+        }
+    },
+
+
+        // Inside managerPublicApi, make sure you have access to the map object.
+    // You can pass the map instance during the tile manager's initialization.
+    getTileBounds: function(coords) {
+        const map = this.map; // Assuming 'this.map' is set during initialization
+        const tileSize = this._getTileSize();
+        const nwPoint = coords.scaleBy(tileSize);
+        const sePoint = nwPoint.add(tileSize);
+        const nw = map.unproject(nwPoint, coords.z);
+        const se = map.unproject(sePoint, coords.z);
+        return new L.LatLngBounds(se, nw);
+    },
+
+
+    removeLayersFromMap: async function () {
+      if (myGridLayer && map.hasLayer(myGridLayer)) {
+        map.removeLayer(myGridLayer);
+      }
+      myTilesMap.clear();
+    },
+
+    loadLayers: async function () {
+      // Your existing load logic to populate myTilesMap
+      if (isOpfsAvailable) {
+        await managerPublicApi.loadLayersFromOPFS();
+      } else {
+        // managerPublicApi.loadLayersFromLocalStorage();
+      }
+
+      // After loading data, redraw the grid layer
+      if (myGridLayer) {
+        myGridLayer.redraw();
+      }
     },
 
     addCustomControls() {
       if (typeof makeMenuEntry !== "undefined") {
         makeMenuEntry(
-          type, 
-          modeId, 
+          type,
+          modeId,
           null, // myLayers, // Array der von diesem Typ verwalteten Layer // TODO map
-          true, 
-          label, 
+          true,
+          label,
           "#",
-          true, 
+          true,
           () => {
             // --- OnActivate ---
             if (typeof layerControl !== "undefined") {
@@ -1328,7 +1555,7 @@ function createTileManager(config) {
             }
 
             if (window.mode !== undefined) {
-              window.mode = window.MODE_NONE; 
+              window.mode = window.MODE_NONE;
             }
             if (typeof modeManager !== "undefined") {
               modeManager.set(modeId);
@@ -1346,13 +1573,13 @@ function createTileManager(config) {
               window.activeMarker = null;
             }
           },
-          () => myLayers.length, 
-          "my-custom-class" 
+          () => myLayers.length,
+          "my-custom-class"
         );
       }
     },
 
-    removeLayersFromMap:  async function () {
+    removeLayersFromMap: async function () {
       console.log("new function: removeLayersFromMap()");
 
       for (const tilesArray of myTilesMap.values()) {
@@ -1370,7 +1597,6 @@ function createTileManager(config) {
     },
 
     loadLayers: async function () {
-
       if (isOpfsAvailable) managerPublicApi.loadLayersFromOPFS();
       else {
         managerPublicApi.loadLayersFromLocalStorage();
@@ -1378,28 +1604,27 @@ function createTileManager(config) {
     },
 
     loadLayersFromOPFS: async function () {
-      try {    
-        if (map_options_last && !map_options_last.storeTiles) 
-          return []; 
+      try {
+        if (map_options_last && !map_options_last.storeTiles) return [];
 
         myTilesMap.clear();
 
         const content = await retrieve("", TYPE_MASTER_NAME);
-        
+
         if (content === "") {
           return [];
         }
 
-        const parsedData = JSON.parse(content);       
+        const parsedData = JSON.parse(content);
 
-        if (!Array.isArray(parsedData) || parsedData.length === 0) {         
+        if (!Array.isArray(parsedData) || parsedData.length === 0) {
           return [];
         }
 
         const ccontent = await retrieve("", TYPE_MASTER_NAME);
-        
-        const newTilesData = JSON.parse(ccontent);        
-        
+
+        const newTilesData = JSON.parse(ccontent);
+
         myTilesMap.clear();
 
         for (const [key, value] of newTilesData) {
@@ -1412,7 +1637,7 @@ function createTileManager(config) {
               const content = await retrieve(TYPE_DIR_NAME, entry.filename);
 
               if (content && content.trim().length > 0) {
-                const tile = JSON.parse(content); 
+                const tile = JSON.parse(content);
 
                 try {
                   latLng = calculateLatLng(entry.tile.TileIndex);
@@ -1448,20 +1673,19 @@ function createTileManager(config) {
                     TileIndex: entry.TileIndex || tile.TileIndex || null,
                     latLng: latLng,
                     optionsAtCreation:
-                      entry.optionsAtCreation || structuredClone(optionsLast), 
+                      entry.optionsAtCreation || structuredClone(optionsLast),
                   };
 
                   const leaflet_id = drawTile(layer, metadata, latLng);
-                  
+
                   entry.leaflet_id = leaflet_id;
-            
                 } else if (
                   tile.type === "geojson" &&
                   typeof createLayerFromTileData === "function"
                 ) {
                   const tileDataForCreate = {
                     geojson: tile.data,
-                    ...entry, 
+                    ...entry,
                   };
                   layer = createLayerFromTileData(
                     tileDataForCreate,
@@ -1476,11 +1700,11 @@ function createTileManager(config) {
                     TileIndex: entry.TileIndex || tile.TileIndex || null,
                     latLng: latLng,
                     optionsAtCreation:
-                      entry.optionsAtCreation || structuredClone(optionsLast), 
+                      entry.optionsAtCreation || structuredClone(optionsLast),
                   };
 
                   const leaflet_id = drawTile(layer, metadata, latLng);
-                
+
                   entry.leaflet_id = leaflet_id;
                 }
               } else {
@@ -1499,22 +1723,19 @@ function createTileManager(config) {
           }
         }
 
-        MapStyleManager.applyFilterAndBlendMode(
-          type,
-          optionsLast.styleOptions
-        );
+        MapStyleManager.applyFilterAndBlendMode(type, optionsLast.styleOptions);
       } catch (err) {
-        console.error(`❌ Fehler beim Laden der ${type} Layer aus OPFS:`, err);        
+        console.error(`❌ Fehler beim Laden der ${type} Layer aus OPFS:`, err);
         managerPublicApi.loadLayersFromLocalStorage();
       }
     },
- 
+
     getOptions: () => optionsLast,
-    
+
     triggerRedraw: () => {
       redrawTiles();
     },
-   
+
     forceRedraw: () => {
       fetchForRedraw = true;
       console.log("forceRedraw calling redrawLayers");
@@ -1524,10 +1745,10 @@ function createTileManager(config) {
     triggerSavelayers: () => {
       saveLayers();
     },
-    
+
     _saveTileMapInternal: saveTileMapInOPFS,
 
-    _removeSingleLayerInOPFS: (type, tileId, origin) => {      
+    _removeSingleLayerInOPFS: (type, tileId, origin) => {
       try {
         const directoryName = `${type}_files`;
         const fileName = `${type}_${tileId}_${origin}.json`;

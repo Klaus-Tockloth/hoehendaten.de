@@ -1169,8 +1169,15 @@ function removeAllPointsAndLines() {
         if (pair.line) map.removeLayer(pair.line);
         if (pair.lineTooltip) map.removeLayer(pair.lineTooltip);
 
-        if (pair.arrowDecorator) map.removeLayer(pair.arrowDecorator);
+        if (pair.arrowDecorator) {
+            map.removeLayer(pair.arrowDecorator);
+        }
 
+        // KORREKTUR: Den zugehörigen Zoom-Listener entfernen.
+        // Dies verhindert, dass die Pfeile nach dem Löschen beim Zoomen wieder erscheinen.
+        if (pair.zoomHandler) {
+            map.off("zoomend", pair.zoomHandler);
+        }
     });
     // Clear the array properly
     arrayOfMarkerPairs.length = 0;
@@ -1180,6 +1187,7 @@ function removeAllPointsAndLines() {
     // Clear any 2-point buffers
     tmp_buffer = [];
 }
+
 
 /*
 erase entfernt einen angeklickten Marker und seine zugehörigen Elemente von der Karte und aus dem Datenspeicher.
@@ -1213,19 +1221,25 @@ function removePair(pair) {
         marker2,
         line,
         lineTooltip,
-        arrowDecorator
+        arrowDecorator,
+        zoomHandler // Referenz auf den Handler holen
     } = pair;
 
     map.removeLayer(marker1);
     if (marker2 != null) {
         map.removeLayer(marker2);
-
         map.removeLayer(line);
         map.removeLayer(lineTooltip);
-
         map.removeLayer(arrowDecorator);
     }
+
+    // KORREKTUR: Den 'zoomend'-Listener entfernen, um "Zombie"-Pfeile zu verhindern.
+    // Der Handler existiert nur, wenn das Paar eine Linie hatte.
+    if (zoomHandler) {
+        map.off("zoomend", zoomHandler);
+    }
 }
+
 
 /*
 makeOverlayDraggable ermöglicht es, ein HTML-Element, typischerweise ein Overlay-Panel, durch Ziehen zu verschieben.

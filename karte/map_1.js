@@ -2,6 +2,8 @@
 
 const MODE_MAP = 10; 
 
+const MAXIMUM_NUMBER_OF_TILES = 1000;
+
 let isOpfsAvailable = true;
 
 const defaultLayerOrder = ["customdata", "tri", "tpi", "slope", "aspect", "roughness", "colorRelief", "contour", "hillshade", "map"];
@@ -226,12 +228,14 @@ function getMapPanelHtml(idSuffix = "") {
 
     <div>
       <!-- Base Layer Selection -->
+      <!--
       <div style="margin-bottom: 15px;">
           <h4>Karte/Luftbild auswählen:</h4>
           ${baseLayerOptionsHtml}
-      </div>
+      </div>      
 
       <hr>
+      -->
 
       <!--
       <div>
@@ -578,13 +582,6 @@ function redrawAllTypes() {
   
   for (const layerType of reversedOrder) {
       switch (layerType) {
-          case "cccontour":
-              if (typeof contourManagerInstance !== 'undefined' && contourManagerInstance) {
-                  contourManagerInstance.redrawLayers();
-              } else {
-                console.log("problem: contourManagerInstance.redrawLayers()");
-              }
-              break;
           case "contour":
               if (typeof contourModeManager !== 'undefined' && contourModeManager) {
                   contourModeManager.triggerRedraw();

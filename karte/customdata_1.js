@@ -1,4 +1,4 @@
-// customdata_1.js
+// customdata.js
 
 (function (global) {
 
@@ -11,6 +11,7 @@
     weight: 4,
     opacity: 1,
     dashArray: "", // "5,10",
+    lineCap: "round", // butt, round, square
   };
   const defaultPointStyle = {
     radius: 4,
@@ -39,83 +40,12 @@
 
   const CUSTOMDATA_DIR_NAME = "customdata_files";
   const CUSTOMDATA_MASTER_NAME = "customdata_master.json";
-
-  // Hilfsfunktion zum Einrichten eines Farbwählers.
-  const sssetupColorPicker = (inputId, initialColor, onPickCallback) => {
-
-    const colorInput = document.getElementById(inputId);
-
-    if (!colorInput || typeof global.ColorPicker === "undefined") {
-      console.warn(
-        `Farbwähler-Einrichtung übersprungen für #${inputId}: Input oder ColorPicker-Klasse nicht gefunden.`
-      );
-      return;
-    } else {
-      console.log(`Farbwähler-Einrichtung erfolgreich für #${inputId}: Input und ColorPicker-Klasse gefunden.`);
-    }
-
-    const initialColorRgbaObj = global.parseColorStringToRgbaObject(initialColor);
-    const initialColorRgbaStr = global.rgbaObjectToString(initialColorRgbaObj);
-
-    const pickerInstance = new global.ColorPicker(colorInput, {
-      toggleStyle: "input",
-      headless: false,
-      enableAlpha: true,
-      color: initialColorRgbaStr,
-      enableEyedropper: false,
-      formats: ["hex", "rgba", "hsv", "hsl"],
-      defaultFormat: "rgba",
-      swatches: [
-        "rgba(139,0,0,1)", "rgba(255,0,0,1)", "rgba(255,69,0,1)", "rgba(255,165,0,1)",
-        "rgba(255,215,0,1)", "rgba(255,255,0,1)", "rgba(173,255,47,1)", "rgba(0,255,0,1)",
-        "rgba(144,238,144,1)", "rgba(64,224,208,1)", "rgba(0,255,255,1)", "rgba(135,206,235,1)",
-        "rgba(0,0,255,1)", "rgba(75,0,130,1)", "rgba(138,43,226,1)", "rgba(128,0,128,1)",
-        "rgba(55,30,70,1)", "rgba(255,0,255,1)",
-      ],
-      submitMode: "confirm",
-      showClearButton: false,
-      dismissOnOutsideClick: true,
-      dialogPlacement: "top",
-      dialogOffset: 8,
-    });
-
-    colorInput._colorpicker = pickerInstance;
-
-    pickerInstance.on("pick", (pickedColor) => {
-      const rgbaStr = pickedColor.string("rgba");
-      const rgbaObj = global.parseColorStringToRgbaObject(rgbaStr);
-
-      colorInput.value = rgbaStr;
-      colorInput.style.backgroundColor = rgbaStr;
-      colorInput.style.color = global.getTextColor(
-        global.rgbToHex(rgbaObj.r, rgbaObj.g, rgbaObj.b)
-      );
-      colorInput.dataset.color = rgbaStr;
-
-      if (typeof onPickCallback === "function") {
-        onPickCallback(rgbaStr);
-      }
-    });
-  };
-
-  // Hilfsfunktion, um Stilattribute für die HTML-Vorlage zu erhalten.
-  const gggetColorStylesForTemplate = (colorString, defaultColor) => {
-    const color = colorString || defaultColor;
-    const rgbaObj = global.parseColorStringToRgbaObject(color);
-    const textColor = global.getTextColor(
-      global.rgbToHex(rgbaObj.r, rgbaObj.g, rgbaObj.b)
-    );
-    return {
-      bgColor: color,
-      textColor: textColor,
-    };
-  };
   
   global.initcustomdata = async function () {
     
     await _loadSettings();
 
-    await loadCustomData();
+    /*await*/ loadCustomData();
     
     applyGlobalCustomDataStyleToPane();
 
@@ -319,7 +249,10 @@
     const effectiveLineStyle = layerMetadata.style.line;
     const effectivePointStyle = layerMetadata.style.point;
 
-    const cccustomdataLayer = L.geoJSON(geojson, {
+    // console.log("displayCustomDataGeoJson effectiveLineStyle: ", effectiveLineStyle);
+    // console.log("displayCustomDataGeoJson effectivePointStyle: ", effectivePointStyle);
+
+    const customdataLayer = L.geoJSON(geojson, {
       pane: pane, 
       style: function (feature) {
         if (
@@ -330,7 +263,8 @@
             color: effectiveLineStyle.color,
             weight: effectiveLineStyle.weight,
             opacity: effectiveLineStyle.opacity,
-            dashArray: effectiveLineStyle.dashArray || null, 
+            dashArray: effectiveLineStyle.dashArray || null,
+            lineCap: effectiveLineStyle.lineCap || "round",
           };
 
           if (
@@ -431,149 +365,6 @@
         }
       },
     });
-    const customdataLayer = L.geoJSON(geojson, {
-      pane: pane,
-      /**
-       * Styles features based on their geometry type and properties.
-       * @param {object} feature - The GeoJSON feature.
-       * @returns {object} The style object for the feature.
-       */
-      style: function (feature) {
-        if (
-          feature.geometry.type === "LineString" ||
-          feature.geometry.type === "MultiLineString"
-        ) {
-          let styleToApply = {
-            color: effectiveLineStyle.color,
-            weight: effectiveLineStyle.weight,
-            opacity: effectiveLineStyle.opacity,
-            dashArray: effectiveLineStyle.dashArray || null,
-          };
-
-          // Apply a specific style for track-like features
-          if (
-            feature.properties &&
-            (feature.properties.type === "track" ||
-              feature.properties.hasOwnProperty("trackseg") ||
-              feature.properties.hasOwnProperty("gx_track"))
-          ) {
-            styleToApply.dashArray = null; // Tracks are typically solid lines
-            styleToApply.color = effectiveLineStyle.trackColor;
-          }
-          return styleToApply;
-        }
-        // For non-LineString geometries, return an empty object to use default styles.
-        return {};
-      },
-
-      /**
-       * Creates a layer for a GeoJSON point feature.
-       * @param {object} feature - The GeoJSON feature.
-       * @param {L.LatLng} latlng - The latitude and longitude of the point.
-       * @returns {L.Layer} The layer to be added to the map.
-       */
-      pointToLayer: function (feature, latlng) {
-        if (feature.geometry.type === "Point") {
-          // If an icon property is specified, create a marker with that icon.
-          if (feature.properties && feature.properties.icon) {
-            return L.marker(latlng, {
-              pane: pane,
-              icon: L.icon({
-                pane: pane,
-                iconUrl: feature.properties.icon,
-                iconSize: [32, 32],
-                iconAnchor: [16, 32],
-                popupAnchor: [0, -32],
-              }),
-            });
-          }
-
-          // Otherwise, create a default circle marker.
-          return L.circleMarker(latlng, {
-            radius: effectivePointStyle.radius,
-            fillColor: effectivePointStyle.fillColor,
-            color: effectivePointStyle.color,
-            weight: effectivePointStyle.weight,
-            opacity: effectivePointStyle.opacity,
-            fillOpacity: effectivePointStyle.fillOpacity,
-            pane: pane,
-          });
-        }
-        return null;
-      },
-
-      /**
-       * Attaches a popup to each feature.
-       * @param {object} feature - The GeoJSON feature.
-       * @param {L.Layer} layer - The layer created for the feature.
-       */
-      onEachFeature: function (feature, layer) {
-        let popupContent = "";
-        if (feature.properties) {
-          if (feature.properties.name) {
-            popupContent += `<b>${feature.properties.name}</b><br>`;
-          }
-
-          const description =
-            feature.properties.description || feature.properties.desc;
-          if (description) {
-            popupContent += `${description}<br>`;
-          }
-
-          if (feature.properties.sym) {
-            popupContent += `Symbol: ${feature.properties.sym}<br>`;
-          }
-          if (feature.properties.cmt) {
-            popupContent += `Kommentar: ${feature.properties.cmt}<br>`;
-          }
-          if (feature.properties.ele !== undefined) {
-            popupContent += `Höhe: ${feature.properties.ele} m<br>`;
-          }
-          if (feature.properties.time) {
-            try {
-              popupContent += `Zeit: ${new Date(
-                feature.properties.time
-              ).toLocaleString()}<br>`;
-            } catch (e) {
-              console.error(
-                "Could not parse time property:",
-                feature.properties.time
-              );
-            }
-          }
-
-          // Fallback to show a few generic properties if no specific content was found.
-          if (!popupContent && Object.keys(feature.properties).length > 0) {
-            const genericProps = Object.keys(feature.properties).filter(
-              (key) =>
-                ![
-                  "name",
-                  "description",
-                  "desc",
-                  "sym",
-                  "cmt",
-                  "ele",
-                  "time",
-                  "icon",
-                ].includes(key)
-            );
-
-            if (genericProps.length > 0) {
-              popupContent += "Weitere Eigenschaften:<br>";
-              // Show a maximum of 3 other properties
-              genericProps.slice(0, 3).forEach((key) => {
-                popupContent += `&nbsp;&nbsp;<b>${key}</b>: ${feature.properties[key]}<br>`;
-              });
-            }
-          }
-        }
-
-        if (popupContent) {
-          layer.bindPopup(popupContent);
-        }
-      },
-    });
-
 
     layerMetadata.layer = customdataLayer;
 
@@ -834,7 +625,7 @@
   }
   
   global.redrawCustomData = async function () {
-    console.log("Redrawing all custom data layers...");
+    // console.log("Redrawing all custom data layers...");
 
     const currentLayers = Array.from(_myCustomdataMap.values()); 
     _myCustomdataMap.clear(); 
@@ -883,7 +674,7 @@
 
     await saveMetadata();
 
-    console.log("Finished redrawing all custom data layers.");
+    // console.log("Finished redrawing all custom data layers.");
   };
 
   const getOverallCustomDataVisibility = () => {
@@ -983,29 +774,6 @@
       ""
     );
 
-    // Sichtbarkeit
-    if (false) {
-      const visibilityBtn = addSubmenuButton(
-        "Sichtbarkeit",
-        async () => {        
-          const targetVisibility = !getOverallCustomDataVisibility();
-          for (const item of _myCustomdataMap.values()) {
-            await global.toggleCustomDataLayerVisibility(
-              item.id,
-              targetVisibility
-            );
-          }        
-          visibilityBtn.innerHTML = targetVisibility
-            ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-            : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
-        },
-        "", 
-        "customdata-visibility-btn"
-      );
-      visibilityBtn.innerHTML = getOverallCustomDataVisibility()
-        ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-        : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
-    }
     // Sichtbarkeit 
     let _visible = true;
     if (true) {
@@ -1061,13 +829,7 @@
       "Alle eigenen Objekte löschen",
       async () => {
         console.log("Desktop Submenu: Alle eigenen Objekte löschen clicked.");
-        await clearAllCustomDataLayers();
-        // TODO ???
-        /* 
-        visibilityBtn.innerHTML = getOverallCustomDataVisibility()
-          ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-          : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
-        */
+        await clearAllCustomDataLayers();        
           },
       "", // "🗑️"
     );
@@ -1167,26 +929,6 @@
       nav.appendChild(statusInfo);
     }
 
-    // Ensure info-button exists for mobile
-    if (!document.getElementById("info-button")) {
-      const infoBtn = document.createElement("button");
-      infoBtn.id = "info-button";
-      infoBtn.textContent = "Info";
-      infoBtn.classList.add("nav-green-btn");
-      infoBtn.style.display = "none"; 
-      infoBtn.addEventListener("click", () => {
-        document
-          .querySelectorAll(".nav-green-btn")
-          .forEach((btn) => btn.classList.remove("nav-green-btn"));
-        if (typeof global.modeManager !== "undefined") {
-          global.modeManager.set(global.MODE_NONE, "");
-        }
-        infoBtn.style.display = "none";
-        if (global.map) global.map.getContainer().style.cursor = "pointer";
-      });
-      nav.appendChild(infoBtn);
-    }
-
     // Main "Eigene Objekte" button in the hamburger panel
     const hamburgerMainBtn = document.createElement("button");
     hamburgerMainBtn.classList.add("hamburger-menu-main-button");
@@ -1262,6 +1004,7 @@
         document.getElementById("status-info").textContent =
           global.TEXT_CUSTOMDATA_LABEL; 
         const infoBtn = document.getElementById("info-button");
+        if (false)
         if (infoBtn) {
           infoBtn.textContent = global.TEXT_CUSTOMDATA_LABEL;
           infoBtn.classList.add("customdata", "nav-green-btn");
@@ -1279,30 +1022,6 @@
       ""
     );
 
-    // Sichtbarkeit
-    if (false) {
-      const visibilityBtn = addSubBtn(
-        "Sichtbarkeit",
-        async () => {
-          console.log("Hamburger Submenu: Sichtbarkeit clicked.");
-          const targetVisibility = !getOverallCustomDataVisibility();
-          for (const item of _myCustomdataMap.values()) {
-            await global.toggleCustomDataLayerVisibility(
-              item.id,
-              targetVisibility
-            );
-          }
-          visibilityBtn.innerHTML = targetVisibility
-            ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-            : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
-        },
-        "",
-        "customdata-visibility-btn"
-      );
-      visibilityBtn.innerHTML = getOverallCustomDataVisibility()
-        ? '<img src="assets/eye-solid-full.svg" alt="Sichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit'
-        : '<img src="assets/eye-slash-solid-full.svg" alt="Unsichtbar" style="width: 1em; height: 1em; vertical-align: middle;"> Sichtbarkeit: unsichtbar';
-    }
     // Sichtbarkeit 
     let _visible = true;
     if (true) {
@@ -1378,6 +1097,18 @@
     return hamburgerMainBtn;
   }
 
+  // Hilfsfunktion zur Aktualisierung der Linienvorschau-SVG.
+  const updateLinePreview = (svgElement, style) => {
+      if (!svgElement) return;
+      const line = svgElement.querySelector('line');
+      if (!line) return;
+
+      line.style.stroke = style.color || 'blue';
+      line.style.strokeWidth = style.weight || 4;
+      line.style.strokeDasharray = style.dashArray || 'none';
+      line.style.strokeLinecap = style.lineCap || 'round';
+  };
+
 // Hilfsfunktion zum Einrichten eines Farbwählers.
   const setupColorPicker = (inputId, initialColor, onPickCallback) => {
 
@@ -1389,7 +1120,7 @@
       );
       return;
     } else {
-      console.log(`Farbwähler-Einrichtung erfolgreich für #${inputId}: Input und ColorPicker-Klasse gefunden.`);
+      // console.log(`Farbwähler-Einrichtung erfolgreich für #${inputId}: Input und ColorPicker-Klasse gefunden.`);
     }
 
     const initialColorRgbaObj = global.parseColorStringToRgbaObject(initialColor);
@@ -1483,7 +1214,7 @@
 
         <div id="customdata-config-area" class="customdata-config-area">
 
-          <h4>Standardstil für Linien:</h4>
+          <h4>Standardstil für Linien:</h4>    
 
           <label>Farbe:</label>
           <div class="color-row">
@@ -1508,17 +1239,42 @@
             0
           )}
 
-          <br> 
+          <br>
 
-          <label>Muster (z.B. "5,10" für gestrichelt, leer für durchgezogen):</label>
-          <br><br> 
-          <div>
-            <input type="text" class="config-line-dasharray" value="${
-              lineStyle.dashArray || ""
-            }">
+          <label>Linientyp:</label>
+          <div class="radio-group" style="margin-top: 5px; margin-bottom: 15px;">
+            <input type="radio" id="line-type-solid${idSuffix}" name="line-type${idSuffix}" value="solid" ${!lineStyle.dashArray ? 'checked' : ''}>
+            <label for="line-type-solid${idSuffix}" style="margin-right: 15px;">durchgezogene Linie</label>
+            <input type="radio" id="line-type-dashed${idSuffix}" name="line-type${idSuffix}" value="dashed" ${lineStyle.dashArray ? 'checked' : ''}>
+            <label for="line-type-dashed${idSuffix}">gestrichelte Linie</label>
+          </div>
+
+          <div class="dash-pattern-container" style="display: ${lineStyle.dashArray ? 'block' : 'none'};">
+            <label for="config-line-dasharray${idSuffix}">Muster (z.B. "5,10" für gestrichelt):</label>
+            <br><br>
+            <div>
+              <input type="text" id="config-line-dasharray${idSuffix}" class="config-line-dasharray" value="${lineStyle.dashArray || "5,10"}">
+            </div>
           </div>
           
-          <br> 
+          <br>
+
+          <label>Linienenden:</label>
+          <div class="radio-group" style="margin-top: 5px; margin-bottom: 15px;">
+            <input type="radio" id="line-cap-butt${idSuffix}" name="line-cap${idSuffix}" value="butt" ${lineStyle.lineCap === 'butt' ? 'checked' : ''}>
+            <label for="line-cap-butt${idSuffix}" style="margin-right: 15px;">Butt</label>
+            <input type="radio" id="line-cap-round${idSuffix}" name="line-cap${idSuffix}" value="round" ${lineStyle.lineCap === 'round' ? 'checked' : ''}>
+            <label for="line-cap-round${idSuffix}" style="margin-right: 15px;">Round</label>
+            <input type="radio" id="line-cap-square${idSuffix}" name="line-cap${idSuffix}" value="square" ${lineStyle.lineCap === 'square' ? 'checked' : ''}>
+            <label for="line-cap-square${idSuffix}">Square</label>
+          </div>
+
+          <label>Vorschau:</label>
+          <div class="line-preview-container">
+            <svg id="line-style-preview${idSuffix}" width="100%" height="20">
+                <line x1="5" y1="10" x2="195" y2="10" />
+            </svg>
+          </div>
 
           <h4>Standardstil für Punkte:</h4>          
 
@@ -1600,10 +1356,13 @@
       console.error(`CustomData panel element "customdata-config-area" not found.`);
       return;
     }
+    
+    const previewSvg = document.getElementById(`line-style-preview${idSuffix}`);
 
     const updateAndRedraw = () => {
+      updateLinePreview(previewSvg, _customDataOptionsLast.lineStyle);
       _saveSettings();
-      global.redrawCustomData();
+      // global.redrawCustomData(); // das muss hier nicht sein !
     };
 
     const lineStyle = _customDataOptionsLast.lineStyle;
@@ -1622,6 +1381,49 @@
       updateAndRedraw();
     });
 
+    // --- Radio Button Logic for Line Type ---
+    const solidRadio = panelElement.querySelector(`#line-type-solid${idSuffix}`);
+    const dashedRadio = panelElement.querySelector(`#line-type-dashed${idSuffix}`);
+    const dashPatternContainer = panelElement.querySelector('.dash-pattern-container');
+    const dashInput = panelElement.querySelector('.config-line-dasharray');
+
+    if(solidRadio && dashedRadio && dashPatternContainer && dashInput) {
+      solidRadio.addEventListener('change', () => {
+        if (solidRadio.checked) {
+          dashPatternContainer.style.display = 'none';
+          lineStyle.dashArray = "";
+          updateAndRedraw();
+        }
+      });
+
+      dashedRadio.addEventListener('change', () => {
+        if (dashedRadio.checked) {
+          dashPatternContainer.style.display = 'block';
+          lineStyle.dashArray = dashInput.value.trim() || "5,10"; // Use current or default value
+          dashInput.value = lineStyle.dashArray;
+          updateAndRedraw();
+        }
+      });
+
+      dashInput.addEventListener('input', () => {
+        if (dashedRadio.checked) {
+          lineStyle.dashArray = dashInput.value.trim();
+          updateAndRedraw();
+        }
+      });
+    }
+
+    // --- Radio Button Logic for Line Cap ---
+    const lineCapRadios = panelElement.querySelectorAll(`input[name="line-cap${idSuffix}"]`);
+    lineCapRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.checked) {
+          lineStyle.lineCap = radio.value;
+          updateAndRedraw();
+        }
+      });
+    });
+
     global.bindSlider(
       "line-weight",
       idSuffix,
@@ -1632,7 +1434,11 @@
       parseInt,
       _customDataOptionsLast.lineStyle, 
       _saveSettings,
-      () => global.redrawCustomData() 
+      () => {
+          updateLinePreview(previewSvg, _customDataOptionsLast.lineStyle);
+          //global.redrawCustomData();
+          updateAndRedraw();
+      }
     );
 
     global.bindSlider(
@@ -1661,7 +1467,6 @@
       () => global.redrawCustomData()
     );
 
-
     const applyButton = panelElement.querySelector(".customdata-apply-config-btn");
     if (applyButton) {
         applyButton.addEventListener("click", async function (e) {
@@ -1669,14 +1474,22 @@
           e.stopPropagation();
 
           _customDataOptionsLast.lineStyle.color = panelElement.querySelector(`#config-line-color${idSuffix}`).value;
-          _customDataOptionsLast.lineStyle.dashArray = panelElement.querySelector(".config-line-dasharray").value;
-          // _customDataOptionsLast.lineStyle.trackColor = panelElement.querySelector(".config-line-trackcolor").value;
+          
+          if(dashedRadio && dashedRadio.checked) {
+             _customDataOptionsLast.lineStyle.dashArray = panelElement.querySelector(".config-line-dasharray").value.trim();
+          } else {
+             _customDataOptionsLast.lineStyle.dashArray = "";
+          }
+
           _customDataOptionsLast.pointStyle.fillColor = panelElement.querySelector(`#config-point-fillcolor${idSuffix}`).value;
           _customDataOptionsLast.pointStyle.color = panelElement.querySelector(`#config-point-color${idSuffix}`).value;
 
           updateAndRedraw(); 
         });
     }
+
+    // Initial preview render
+    updateLinePreview(previewSvg, lineStyle);
   };
 
   /*
@@ -1723,11 +1536,13 @@
         </span>
       </summary>
       <!-- -->
-      <div class="customdata-config-area" data-id="${itemId}">
+      <div class="customdata-config-area
+" data-id="${itemId}">
         <!--
         <span class="customdata-item-name">${itemName}</span>
         -->
         <h4>Stil für Linien:</h4>
+        
         <label>Farbe: </label>
         <div class="color-row">
           <div class="color-cell">
@@ -1753,13 +1568,40 @@
 
         <br>
 
-        <label>Muster (z.B. "5,10" für gestrichelt, leer für durchgezogen):</label>
-        <br> <br>
-        <input type="text" class="config-line-dasharray-for-item-${itemId}" value="${
-          lineStyle.dashArray || ""
-        }">
+        <label>Linientyp:</label>
+        <div class="radio-group" style="margin-top: 5px; margin-bottom: 15px;">
+          <input type="radio" id="line-type-solid-for-item-${itemId}" name="line-type-for-item-${itemId}" value="solid" ${!lineStyle.dashArray ? 'checked' :
+ ''}>
+          <label for="line-type-solid-for-item-${itemId}" style="margin-right: 15px;">durchgezogene Linie</label>
+          <input type="radio" id="line-type-dashed-for-item-${itemId}" name="line-type-for-item-${itemId}" value="dashed" ${lineStyle.dashArray ? 'checked' : ''}>
+          <label for="line-type-dashed-for-item-${itemId}">gestrichelte Linie</label>
+        </div>
 
-        <br>  <br>
+        <div class="dash-pattern-container-for-item" style="display: ${lineStyle.dashArray ? 'block' : 'none'};">
+            <label for="config-line-dasharray-for-item-${itemId}">Muster (z.B. "5,10" für gestrichelt):</label>
+            <br><br>
+            <input type="text" id="config-line-dasharray-for-item-${itemId}" class="config-line-dasharray-for-item" value="${lineStyle.dashArray || '5,10'}">
+        </div>
+        
+        <br>
+
+        <label>Linienenden:</label>
+        <div class="radio-group" style="margin-top: 5px; margin-bottom: 15px;">
+          <input type="radio" id="line-cap-butt-for-item-${itemId}" name="line-cap-for-item-${itemId}" value="butt" ${lineStyle.lineCap === 'butt' ? 'checked' : ''}>
+          <label for="line-cap-butt-for-item-${itemId}" style="margin-right: 15px;">Butt</label>
+          <input type="radio" id="line-cap-round-for-item-${itemId}" name="line-cap-for-item-${itemId}" value="round" ${lineStyle.lineCap === 'round' ? 'checked' : ''}>
+          <label for="line-cap-round-for-item-${itemId}" style="margin
+-right: 15px;">Round</label>
+          <input type="radio" id="line-cap-square-for-item-${itemId}" name="line-cap-for-item-${itemId}" value="square" ${lineStyle.lineCap === 'square' ? 'checked' : ''}>
+          <label for="line-cap-square-for-item-${itemId}">Square</label>
+        </div>
+
+        <label>Vorschau:</label>
+        <div class="line-preview-container">
+            <svg id="line-style-preview-for-item-${itemId}" width="100%" height="20">
+                <line x1="5" y1="10" x2="195" y2="10" />
+            </svg>
+        </div>
 
         <h4>Stil für Punkte:</h4>        
         
@@ -1848,7 +1690,13 @@
      * @param {object} item The metadata item for the custom data layer.
      */
     const redrawAndSaveItem = async (item) => {
+
+        console.log("redrawAndSaveItem item: ", item.style);
+
         if (!item) return;
+        
+        const previewSvg = document.getElementById(`line-style-preview-for-item-${item.id}`);
+        updateLinePreview(previewSvg, item.style.line);
 
         // Remove the existing layer from the map if it exists
         if (item.layer && global.map && global.map.hasLayer(item.layer)) {
@@ -1875,6 +1723,8 @@
         const itemId = detailsElement.dataset.id;
         const item = _myCustomdataMap.get(itemId);
         if (!item) return;
+        
+        const previewSvg = document.getElementById(`line-style-preview-for-item-${itemId}`);
 
         const configArea = detailsElement.querySelector('.customdata-config-area');
         if (!configArea) return;
@@ -1884,8 +1734,9 @@
          */
         const updateItemStyleFromUI = () => {
 
-            console.log("updateItemStyleFromUI itemId: ", itemId);
+            // console.log("updateItemStyleFromUI itemId: ", itemId);
 
+            /*
             // Read values from text and color inputs
             item.style.line.color = configArea.querySelector(`#config-line-color-for-item-${itemId}`).value;
             console.log("updateItemStyleFromUI item.style.line.color: ", item.style.line.color);
@@ -1893,12 +1744,13 @@
             // item.style.line.trackColor = configArea.querySelector(`.config-line-trackcolor-for-item-${itemId}`).value;
             item.style.point.fillColor = configArea.querySelector(`#config-point-fillcolor-for-item-${itemId}`).value;
             item.style.point.color = configArea.querySelector(`#config-point-color-for-item-${itemId}`).value;
+            */
 
             // Read values from sliders
             const lineWeightInput = configArea.querySelector(`#line-weight-input-${itemId}`);
             console.log("updateItemStyleFromUI lineWeightInput: ", lineWeightInput);
             if (lineWeightInput) item.style.line.weight = parseInt(lineWeightInput.value, 10);
-            console.log("updateItemStyleFromUI item.style.line.weight: ", item.style.line.weight);
+            // console.log("updateItemStyleFromUI item.style.line.weight: ", item.style.line.weight);
 
             const pointRadiusInput = configArea.querySelector(`#point-radius-input-${itemId}`);
             if (pointRadiusInput) item.style.point.radius = parseInt(pointRadiusInput.value, 10);
@@ -1909,6 +1761,7 @@
 
         // This callback is passed to the sliders for real-time updates.
         const redrawCallback = () => {
+            // console.log("redrawCallback");
             updateItemStyleFromUI();
             redrawAndSaveItem(item);
         };
@@ -1926,36 +1779,63 @@
             redrawAndSaveItem(item);
         });
 
-        // Add event listeners for real-time updates on text and color inputs.
-        // The 'input' event provides immediate feedback as the user interacts with the element.
-        const inputsToBind = [
-            `.config-line-dasharray-for-item-${itemId}`,
-            // `.config-line-trackcolor-for-item-${itemId}`,
-        ];
+        // --- Radio Button Logic for Item Line Type ---
+        const solidRadioItem = configArea.querySelector(`#line-type-solid-for-item-${itemId}`);
+        const dashedRadioItem = configArea.querySelector(`#line-type-dashed-for-item-${itemId}`);
+        const dashPatternContainerItem = configArea.querySelector('.dash-pattern-container-for-item');
+        const dashInputItem = configArea.querySelector('.config-line-dasharray-for-item');
 
-        inputsToBind.forEach(selector => {
-            const inputElement = configArea.querySelector(selector);
-            if (inputElement) {
-                inputElement.addEventListener('input', redrawCallback);
+        if (solidRadioItem && dashedRadioItem && dashPatternContainerItem && dashInputItem) {
+            solidRadioItem.addEventListener('change', () => {
+                if (solidRadioItem.checked) {
+                    dashPatternContainerItem.style.display = 'none';
+                    item.style.line.dashArray = "";
+                    redrawAndSaveItem(item);
+                }
+            });
+
+            dashedRadioItem.addEventListener('change', () => {
+                if (dashedRadioItem.checked) {
+                    dashPatternContainerItem.style.display = 'block';
+                    item.style.line.dashArray = dashInputItem.value.trim() || "5,10";
+                    dashInputItem.value = item.style.line.dashArray;
+                    redrawAndSaveItem(item);
+                }
+            });
+
+            dashInputItem.addEventListener('input', () => {
+                if (dashedRadioItem.checked) {
+                    item.style.line.dashArray = dashInputItem.value.trim();
+                    redrawAndSaveItem(item);
+                }
+            });
+        }
+
+        // --- Radio Button Logic for Item Line Cap ---
+        const lineCapRadiosItem = configArea.querySelectorAll(`input[name="line-cap-for-item-${itemId}"]`);
+        lineCapRadiosItem.forEach(radio => {
+          radio.addEventListener('change', () => {
+            if (radio.checked) {
+              item.style.line.lineCap = radio.value;
+              redrawAndSaveItem(item);
             }
+          });
         });
 
+        // redrawAndSaveItem(item) is not correct !!! redrawAndSaveItem gets stale values !!! 
+        /*
+        global.bindSlider(`line-weight-input-`, itemId, "weight", item.style.line, false, 0, parseInt, item.style.line, saveMetadata, () => redrawAndSaveItem(item));
+        global.bindSlider(`point-radius-input-`, itemId, "radius", item.style.point, false, 0, parseInt, item.style.point, saveMetadata, () => redrawAndSaveItem(item));
+        global.bindSlider(`point-weight-input-`, itemId, "weight", item.style.point, false, 0, parseInt, item.style.point, saveMetadata, () => redrawAndSaveItem(item));
+        */
+        
         // Correctly bind sliders by passing the function reference 'redrawCallback'
         global.bindSlider(`line-weight-input-`, itemId, "weight", item.style.line, false, 0, parseInt, item.style.line, saveMetadata, redrawCallback);
         global.bindSlider(`point-radius-input-`, itemId, "radius", item.style.point, false, 0, parseInt, item.style.point, saveMetadata, redrawCallback);
         global.bindSlider(`point-weight-input-`, itemId, "weight", item.style.point, false, 0, parseInt, item.style.point, saveMetadata, redrawCallback);
 
-        /*
-        // Setup the "Apply" button
-        const applyButton = configArea.querySelector(".customdata-apply-config-btn");
-        applyButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            // The callback now handles all UI updates and redrawing consistently.
-            redrawCallback();
-            alert(`Stil für "${item.name}" angewendet.`);
-            detailsElement.open = false; // Collapse the details section
-        });
-        */
+        // Initial preview render for each item
+        updateLinePreview(previewSvg, item.style.line);
     });
 
     // Use event delegation for common button actions (more efficient).
@@ -2008,10 +1888,7 @@
             }
         }
     });
-};
-
-
-
+  };
 
   async function _saveSettings() {
     localStorage.setItem(
@@ -2049,7 +1926,7 @@
     // It exists for sidepanel interface consistency.
   }
 
-  async function loadCustomData() {
+  async function llloadCustomData() {
     const storedLayersMetadata = await loadMetadata();
     if (!storedLayersMetadata || storedLayersMetadata.length === 0) {
       return;
@@ -2082,6 +1959,51 @@
       }
     }
   }
+  async function loadCustomData() {
+    const storedLayersMetadata = await loadMetadata();
+    if (!storedLayersMetadata || storedLayersMetadata.length === 0) {
+      return;
+    }
+
+    const loadPromises = storedLayersMetadata.map(async (item) => {
+      if (item.opfsPath) {
+        const fileNameInOpfs = item.opfsPath.split("/").pop();
+        const fileContent = await loadCustomDataFile(fileNameInOpfs);
+
+        if (fileContent) {
+          // Offload parsing to a macrotask to avoid blocking the main thread
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              const geojson = parseFileContentToGeoJson(
+                fileContent,
+                item.fileType,
+                item.name
+              );
+              if (geojson) {
+                item.visible = true; // or stored visibility state
+                // Schedule display in the next available animation frame
+                requestAnimationFrame(() => {
+                  displayCustomDataGeoJson(
+                    geojson,
+                    item.name,
+                    item.id,
+                    item.opfsPath,
+                    item.fileType,
+                    item.visible,
+                    item.style
+                  );
+                });
+              }
+              resolve();
+            }, 0);
+          });
+        }
+      }
+    });
+
+    await Promise.all(loadPromises);
+  }
+
 
   async function saveMetadata() {
     const serializableLayers = Array.from(_myCustomdataMap.values()).map((item) => ({

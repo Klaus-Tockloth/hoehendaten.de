@@ -4,6 +4,7 @@ Purpose:
 
 Releases:
 - v1.0.0 - 2025-10-18: initial release
+- v1.0.1 - 2025-12-04: initial release
 
 Copyright:
 - © 2025 | Klaus Tockloth
@@ -19,9 +20,12 @@ Description:
 
 html,
 body {
-	height: 100dvh;
-	height: -webkit-fill-available;
+	height: 100%;
 	height: 100vh;
+	height: -webkit-fill-available;
+	height: 100svh;
+	/* height: 100dvh; */ /* zeigt Karte vollständig, verhindert ausblenden der Browserleiste */
+	height: 100lvh; /* unterer Bereich der Karte fehlt bei eingeblendeter Browserleiste */
 	flex-direction: column;
 	margin: 0;
 	padding: 0;
@@ -375,6 +379,12 @@ nav.mobile-nav {
 	border-top: 4px solid #333;
 	border-radius: 50%;
 	animation: spin 1s linear infinite;
+}
+
+.loading-spinner .loading-text {
+	margin-top: 10px;
+	font-size: 1em;
+	color: #333;
 }
 
 @keyframes spin {

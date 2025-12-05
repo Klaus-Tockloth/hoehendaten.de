@@ -36,25 +36,6 @@ L.control.scale({ imperial: false, maxWidth: 200 }).addTo(map);
 // Customize Leaflet attribution prefix (removes the default Leaflet link or adds yours).
 map.attributionControl.setPrefix('');
 
-// Füge Google Maps Layer als Overlays hinzu ('roadmap', 'satellite', 'terrain', 'hybrid').
-var googleRoadmap = L.gridLayer.googleMutant({
-    type: 'roadmap'
-});
-
-var googleSatellite = L.gridLayer.googleMutant({
-    type: 'satellite'
-});
-
-/* TODO: Wie kann die Terrain-Ansicht genutzt werden?
-var googleTerrain = L.gridLayer.googleMutant({
-    type: 'terrain'
-});
-*/
-
-var googleHybrid = L.gridLayer.googleMutant({
-    type: 'hybrid'
-});
-
 // Definiere Basis-Layer für den Layer-Control und mache sie global zugänglich.
 // Die IDs müssen einzigartig sein und für das Speichern/Laden verwendet werden.
 window.baseLayersConfig = {
@@ -62,22 +43,7 @@ window.baseLayersConfig = {
         layer: osmLayer,
         id: "openstreetmap", // Unique ID for storage
         label: "OpenStreetMap"
-    },
-    "Google Roadmap": {
-        layer: googleRoadmap,
-        id: "googleRoadmap",
-        label: "Google Roadmap"
-    },
-    "Google Satellite": {
-        layer: googleSatellite,
-        id: "googleSatellite",
-        label: "Google Satellite"
-    },
-    "Google Hybrid": {
-        layer: googleHybrid,
-        id: "googleHybrid",
-        label: "Google Hybrid"
-    }
+    },    
 };
 
 // KEINEN L.control.layers hier hinzufügen. Die Steuerung erfolgt über map_1.js.

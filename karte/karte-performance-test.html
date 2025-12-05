@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>Leaflet Performance Test mit Bildeffekten</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Custom CSS for the map and the overlays -->
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+
+        /*
+         * Definiert den Stil für die ImageOverlay-Elemente mithilfe von CSS-Variablen.
+         * Diese Variablen werden per JavaScript gesteuert.
+        */
+        .leaflet-image-layer.custom-tile-overlay {
+            /* Standardwerte werden hier gesetzt und dann von JS überschrieben */
+            --opacity: 0.5;
+            --mix-blend-mode: multiply;
+            --filter-string: brightness(1) contrast(1) saturate(1);
+            mix-blend-mode: var(--mix-blend-mode);
+            filter: var(--filter-string);
+        }
+
+        /* Stil für die Steuerungs-Box */
+        #controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 1000; /* Stellt sicher, dass die Box über der Karte liegt */
+            font-family: sans-serif;
+            min-width: 220px;
+        }
+        #controls h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .control-group {
+            margin-bottom: 10px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+        }
+        .control-group fieldset {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .control-group legend {
+            padding: 0 5px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Steuerungs-Elemente für die Effekte -->
+    <div id="controls">
+        <h3>Bildeffekte</h3>
+        
+        <div class="control-group">
+            <label for="opacity-slider">Deckkraft</label>
+            <input type="range" id="opacity-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+
+        <div class="control-group">
+            <label for="brightness-slider">Helligkeit</label>
+            <input type="range" id="brightness-slider" min="0" max="2" step="0.05" value="1">
+        </div>
+
+        <div class="control-group">
+            <label for="contrast-slider">Kontrast</label>
+            <input type="range" id="contrast-slider" min="0" max="2" step="0.05" value="1">
+        </div>
+
+        <div class="control-group">
+            <label for="saturation-slider">Sättigung</label>
+            <input type="range" id="saturation-slider" min="0" max="3" step="0.1" value="1">
+        </div>
+
+        <div class="control-group">
+            <fieldset>
+                <legend>Mischmodus</legend>
+                <label><input type="radio" name="blend-mode" value="normal"> Normal</label>
+                <label><input type="radio" name="blend-mode" value="multiply" checked> Multiply</label>
+            </fieldset>
+        </div>
+    </div>
+
+    <script>
+        // --- Konfiguration ---
+        const MAP_CENTER = [51.9600, 7.6300]; // Münster, NRW
+        const START_LAT = 51.8000;
+        const START_LNG = 7.5000;
+        const TILE_SIZE_KM = 1;
+        const GRID_SIZE = 50;
+        const CUSTOM_PANE_NAME = 'customTestPane';
+
+        // Array zum Speichern der Leaflet-Layer-Objekte
+        const allImageOverlays = [];
+
+        // --- Map Initialisierung ---
+        const map = L.map('map').setView(MAP_CENTER, 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        if (!map.getPane(CUSTOM_PANE_NAME)) {
+            map.createPane(CUSTOM_PANE_NAME);
+            map.getPane(CUSTOM_PANE_NAME).style.zIndex = 250;
+        }
+
+        // --- Effekt-Steuerung ---
+        const opacitySlider = document.getElementById('opacity-slider');
+        const brightnessSlider = document.getElementById('brightness-slider');
+        const contrastSlider = document.getElementById('contrast-slider');
+        const saturationSlider = document.getElementById('saturation-slider');
+        const blendModeRadios = document.querySelectorAll('input[name="blend-mode"]');
+
+        function updateOverlayStyles() {
+            const opacity = opacitySlider.value;
+            const brightness = brightnessSlider.value;
+            const contrast = contrastSlider.value;
+            const saturation = saturationSlider.value;
+            const blendMode = document.querySelector('input[name="blend-mode"]:checked').value;
+
+            const filterString = `brightness(${brightness}) contrast(${contrast}) saturate(${saturation})`;
+
+            // 1. Hole den Custom Pane direkt
+            const customPane = map.getPane(CUSTOM_PANE_NAME);
+
+            // 2. Wende den Mischmodus auf den gesamten Pane an
+            if (customPane) {
+                customPane.style.mixBlendMode = blendMode;
+            }
+
+            // 3. Gehe weiterhin durch jedes Layer-Objekt für individuelle Stile
+            allImageOverlays.forEach(layer => {
+                // Verwende die native Leaflet-Methode für die Deckkraft
+                layer.setOpacity(opacity);
+
+                // Hole das DOM-Element für Filter-Effekte
+                const element = layer.getElement();
+                if (element) {
+                    // Wende nur noch den Filter hier an, nicht mehr den Mischmodus
+                    element.style.filter = filterString;
+                }
+            });
+        }
+
+        // Füge Event Listeners zu allen Steuerelementen hinzu
+        opacitySlider.addEventListener('input', updateOverlayStyles);
+        brightnessSlider.addEventListener('input', updateOverlayStyles);
+        contrastSlider.addEventListener('input', updateOverlayStyles);
+        saturationSlider.addEventListener('input', updateOverlayStyles);
+        blendModeRadios.forEach(radio => radio.addEventListener('input', updateOverlayStyles));
+
+        // --- Hilfsfunktionen ---
+        function createSolidColorPNGDataURL(hexColor) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1000;
+            canvas.height = 1000;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = hexColor;
+            ctx.fillRect(0, 0, 1000, 1000);
+            return canvas.toDataURL('image/png');
+        }
+
+        function calculateBounds(startLat, startLng, row, col, tileSizeKm) {
+            const latPerKm = 1 / 111.32;
+            const avgLatRad = (startLat + (row + 0.5) * tileSizeKm * latPerKm) * Math.PI / 180;
+            const lngPerKm = 1 / (111.32 * Math.cos(avgLatRad));
+            
+            const swLat = startLat + row * tileSizeKm * latPerKm;
+            const swLng = startLng + col * tileSizeKm * lngPerKm;
+            const neLat = swLat + tileSizeKm * latPerKm;
+            const neLng = swLng + tileSizeKm * lngPerKm;
+
+            return L.latLngBounds([swLat, swLng], [neLat, neLng]);
+        }
+
+        const colors = [
+            '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#33FFF6', '#FFC300', '#C70039', '#900C3F',
+            '#581845', '#FF8C00', '#00CED1', '#8A2BE2', '#7FFF00', '#DC143C', '#00008B', '#B8860B'
+        ];
+
+        // --- Kachel-Erstellung und Platzierung ---
+        function createAndPlaceTiles() {
+            let tileCount = 0;
+            const layersToAdd = [];
+
+            for (let i = 0; i < GRID_SIZE; i++) {
+                for (let j = 0; j < GRID_SIZE; j++) {
+                    const bounds = calculateBounds(START_LAT, START_LNG, i, j, TILE_SIZE_KM);
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const dataUrl = createSolidColorPNGDataURL(color);
+
+                    const overlay = L.imageOverlay(dataUrl, bounds, {
+                        pane: CUSTOM_PANE_NAME,
+                        className: 'custom-tile-overlay'
+                    });
+
+                    layersToAdd.push(overlay);
+                    // Speichere das Layer-Objekt im globalen Array
+                    allImageOverlays.push(overlay);
+                    tileCount++;
+                }
+            }
+            
+            L.layerGroup(layersToAdd).addTo(map);
+            console.log(`✅ ${tileCount} Kacheln (PNG ImageOverlays) im ${GRID_SIZE}x${GRID_SIZE} Raster platziert.`);
+            
+            const southWest = calculateBounds(START_LAT, START_LNG, 0, 0, TILE_SIZE_KM).getSouthWest();
+            const northEast = calculateBounds(START_LAT, START_LNG, GRID_SIZE - 1, GRID_SIZE - 1, TILE_SIZE_KM).getNorthEast();
+            const totalBounds = L.latLngBounds(southWest, northEast);
+            
+            map.fitBounds(totalBounds, {
+                padding: [20, 20]
+            });
+        }
+
+        // Starte die Kachel-Erstellung und setze die initialen Stile
+        map.whenReady(() => {
+            createAndPlaceTiles();
+            updateOverlayStyles();
+        });
+    </script>
+
+</body>
+</html>

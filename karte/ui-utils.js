@@ -981,7 +981,7 @@ const isLocalhost =
       allToggleEntries.push({ type, toggleFn, a: hamburgerMainBtn });
     }
    
-    let dddrawButton;
+    // let dddrawButton;
 
     hamburgerMainBtn.addEventListener("click", (e) => {
       e.preventDefault();   
@@ -1049,22 +1049,6 @@ const isLocalhost =
           if (sidepanel.isVisibleWithOptions()) {
             console.log("sidepanel.isVisibleWithOptions");
             sidepanel?.showOptions?.(type);
-          }
-        }
-        if (false) {
-          if (hamburgerMainBtn.classList.contains("nav-green-btn")) {
-            hamburgerMainBtn.classList.remove("nav-green-btn");
-          } else {
-            document
-              .querySelectorAll(".nav-green-btn")
-              .forEach((otherMainBtn) => {
-                otherMainBtn.classList.remove("nav-green-btn");
-              });
-            hamburgerMainBtn.classList.add("nav-green-btn");
-
-            if (dddrawButton) {
-              dddrawButton.click(); // Dispatch click to the "draw" button
-            }
           }
         }
       }
@@ -1153,7 +1137,7 @@ const isLocalhost =
           onClick?.call(hamburgerMainBtn, e);
         }
       });
-      dddrawButton = drawButton;
+      //dddrawButton = drawButton;
     }
 
     // Visibility toggle
@@ -1287,14 +1271,24 @@ const isLocalhost =
       <!--
       <div class="loading-text">Loading ...</div>
       -->
+      <div class="loading-text"></div>
     `;
 
     document.body.appendChild(spinnerWrapper);
   };
 
-  global.showLoadingSpinner = function () {
+  global.showLoadingSpinner = function (progressText = "") {
     const el = document.getElementById("loading-spinner");
-    if (el) el.classList.remove("hidden");
+    if (el) {
+      el.classList.remove("hidden");
+
+      if (true /*progressText*/) {     
+        const textElement = el.querySelector(".loading-text");   
+        if (textElement) {
+          textElement.textContent = progressText;
+        }
+      }
+    }
   };
 
   global.hideLoadingSpinner = function () {
@@ -1420,7 +1414,7 @@ function bindSlider(
       saveSettingsFn?.();
 
       if (triggerRedraw && redrawFn) {
-        console.log("bindSlider updateValue calling redrawFn()", num, optionKey);
+        // console.log("bindSlider updateValue calling redrawFn()", num, optionKey);
         redrawFn();
       }
     }
@@ -1990,6 +1984,7 @@ async function loadAllLayerTypes() {
 }
 
 function delay(ms) {
+  return; // kein delay !!!
   console.log("delay ms: ", ms);
   return new Promise((resolve) => setTimeout(resolve, ms));
 }

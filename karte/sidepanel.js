@@ -546,7 +546,7 @@ function searchIt(event, layerId) {
 
   if (layer) {
     if (layer.getBounds) {
-      map.fitBounds(layer.getBounds(), { padding: [20, 20] }); 
+      map.fitBounds(layer.getBounds(), { padding: [20, 20], maxZoom: 16  }); 
     } else {
       console.warn(`Layer ${layerId} hat keine 'getBounds'-Methode.`);
     }
@@ -810,7 +810,7 @@ async function removeTheTile(event, type, tileId, leaflet_id) {
 
 
 function getLayerById(id) {  
-
+  let foundLayer = null; // Declare and initialize the variable here
   if (map && typeof map.eachLayer === "function") {
     map.eachLayer(function (layer) {      
       if (layer._leaflet_id === id) {

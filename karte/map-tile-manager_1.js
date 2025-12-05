@@ -1,5 +1,14 @@
 // map-tile-manager.js
 
+/*
+The original code created and added individual L.imageOverlay layers to the map one by one. 
+The updated version collects all layers that need to be added into an array (layersToAdd). 
+It then adds them to the map at once using a single L.layerGroup. 
+This change can be found in the handleGoButtonForMode and loadLayersFromOPFS functions, 
+where the layer creation loop is now followed by L.layerGroup(layersToAdd).addTo(map);. 
+This approach can be more efficient when dealing with a large number of layers.
+*/
+
 function createTileManager(config) {
   const {
     type,
@@ -8,36 +17,36 @@ function createTileManager(config) {
     apiUrl,
     defaultOptions,
     hasGradientAlgorithm = true,
-    hasColorMap = true, 
+    hasColorMap = true,
     buildRequestBody,
     extractTileData,
     getCustomPanelHtml,
     initCustomPanelHelper,
-    createLayerFromTileData, 
+    createLayerFromTileData,
   } = config;
 
   const myTilesMap = new Map();
 
   // let myLayers = []; // Stores active layers for this specific mode
-  let optionsLast = { ...defaultOptions }; 
-  let fetchForRedraw = false; 
-  let TYPE_DIR_NAME = type + "_files"; 
-  let TYPE_MASTER_NAME =  "map_" + type + "_master.json";
-  
+  let optionsLast = { ...defaultOptions };
+  let fetchForRedraw = false;
+  let TYPE_DIR_NAME = type + "_files";
+  let TYPE_MASTER_NAME = "map_" + type + "_master.json";
+
   let isDrawingRectangle = false;
   let startLatLng = null;
   let currentRectangle = null;
-  let drawnRectangleBounds = null; 
+  let drawnRectangleBounds = null;
 
-  function saveSettings() {  
+  function saveSettings() {
     localStorage.setItem(`${type}_configuration`, JSON.stringify(optionsLast));
   }
- 
+
   function loadSettings() {
     try {
       const stored = localStorage.getItem(`${type}_configuration`);
       optionsLast = stored ? JSON.parse(stored) : { ...defaultOptions };
-     
+
       if (
         hasColorMap &&
         optionsLast.colorMap &&
@@ -45,9 +54,9 @@ function createTileManager(config) {
       ) {
         optionsLast.colorMap = structuredClone(optionsLast.colorMap);
       }
-      
+
       optionsLast = { ...defaultOptions, ...optionsLast };
-      if (hasColorMap && defaultOptions.colorMap && !optionsLast.colorMap) {       
+      if (hasColorMap && defaultOptions.colorMap && !optionsLast.colorMap) {
         optionsLast.colorMap = structuredClone(defaultOptions.colorMap);
       }
     } catch (e) {
@@ -59,7 +68,7 @@ function createTileManager(config) {
     }
   }
 
-  function saveLayers() {   
+  function saveLayers() {
     if (isOpfsAvailable) {
       saveLayersInOPFS();
       return;
@@ -70,18 +79,23 @@ function createTileManager(config) {
     const mapAsArray = Array.from(map.entries());
     const serializedMap = JSON.stringify(mapAsArray);
 
-    await persist("", TYPE_MASTER_NAME, serializedMap); 
+    await persist("", TYPE_MASTER_NAME, serializedMap);
+
+    console.log("saveTileMapInOPFS TYPE_MASTER_NAME: ", TYPE_MASTER_NAME, serializedMap);
   }
-  
-  async function saveSingleLayerInOPFS(entry, type) {    
-    try {      
+
+  async function saveSingleLayerInOPFS(entry, type) {
+    try {
       const fileName = `${type}_${entry.TileIndex || Date.now()}_${
         entry.Origin || "unknown"
       }.json`;
 
+     console.log(Object.prototype.toString.call(entry)); // "[object Object]"
+
       let content = null;
 
-      if (entry.layer === null) {        
+      if (entry.layer === null) {
+        console.error("entry.layer is null");
       }
       // 1. GeoJSON-Layer
       else if (entry.layer && typeof entry.layer.toGeoJSON === "function") {
@@ -90,14 +104,16 @@ function createTileManager(config) {
       // 2. ImageOverlay (Tile-Layer)
       else if (entry.layer instanceof L.ImageOverlay) {
         const bounds = entry.layer.getBounds();
-        const src = entry.layer.getElement()?.src; 
+        let src = entry.layer.getElement()?.src;
+        if (!src) {
+            src = entry.layer._url;}
 
         if (src && src.startsWith("data:")) {
           const [, mimeType, base64Data] =
             src.match(/^data:(.*?);base64,(.*)$/) || [];
           content = {
             type: "tile",
-            Data: base64Data, 
+            Data: base64Data,
             DataFormat: mimeType?.includes("tiff")
               ? "geotiff"
               : mimeType?.includes("jpeg")
@@ -110,11 +126,16 @@ function createTileManager(config) {
               MaxLon: bounds.getEast(),
             },
           };
+        } else {
+            console.error("uups: entry.layer: ", entry.layer);
         }
+      }
+      else {
+        console.log("entry.layer is ???");
       }
 
       if (entry.layer !== null && !content) {
-        console.warn(`⚠️ ${type} Layer could not be serialized:`, entry);
+        console.warn(`⚠️ ${type} Layer could not be serialized:`, entry, content);
         return null;
       }
 
@@ -122,7 +143,7 @@ function createTileManager(config) {
         entry.layer = null;
 
         const fileContent = JSON.stringify(content, null, 2);
-        await persist(TYPE_DIR_NAME, fileName, fileContent);        
+        await persist(TYPE_DIR_NAME, fileName, fileContent);
       }
 
       const { layer, ...rest } = entry;
@@ -130,17 +151,21 @@ function createTileManager(config) {
       return returnData;
     } catch (err) {
       console.error(`❌ Error saving a ${type} layer:`, err);
-      return null; 
+      return null;
     }
   }
 
   async function saveLayersInOPFS() {
+
+    return;
+
     try {
-      const masterData = []; 
-     
+      const masterData = [];
+
       const fileContent = JSON.stringify(masterData, null, 2);
       await persist("", TYPE_MASTER_NAME, fileContent); // Using the persistence module
 
+      console.log("saveLayersInOPFS TYPE_MASTER_NAME: ", TYPE_MASTER_NAME, fileContent);
       /*
       if (true) {
         console.log(
@@ -153,16 +178,16 @@ function createTileManager(config) {
       console.error(`❌ Error saving ${type} layers to OPFS:`, err);
     }
   }
- 
+
   function resetOptionsToDefaults(idSuffix = "") {
-    fetchForRedraw = true; 
+    fetchForRedraw = true;
     optionsLast = { ...defaultOptions };
     if (
       hasColorMap &&
       optionsLast.colorMap &&
       typeof defaultOptions.colorMap === "object"
     ) {
-      optionsLast.colorMap = structuredClone(defaultOptions.colorMap); 
+      optionsLast.colorMap = structuredClone(defaultOptions.colorMap);
     }
 
     const gradientAlgorithmVariant = document.getElementById(
@@ -179,7 +204,7 @@ function createTileManager(config) {
     }
 
     if (hasColorMap) {
-      renderColorPickers(idSuffix); 
+      renderColorPickers(idSuffix);
       const colorTextArea = document.getElementById(
         `colorTextFileContent${idSuffix}`
       );
@@ -187,15 +212,15 @@ function createTileManager(config) {
         colorTextArea.value = generateColorMapText(optionsLast);
       }
     }
-  
+
     if (optionsLast.opacity !== undefined) {
-      updateInputAndLabel("opacity", idSuffix, optionsLast.opacity.toFixed(1)); 
+      updateInputAndLabel("opacity", idSuffix, optionsLast.opacity.toFixed(1));
     }
 
     saveSettings();
     redrawTiles();
   }
- 
+
   function redrawTiles() {
     console.log("redrawLayers fetchForRedraw:", fetchForRedraw, type);
 
@@ -205,11 +230,11 @@ function createTileManager(config) {
         optionsLast.styleOptions
       );
     } else {
-      regenerateTiles(true); 
+      regenerateTiles(true);
     }
-    fetchForRedraw = false; 
+    fetchForRedraw = false;
   }
-  
+
   function regenerateTiles() {
     for (const tilesArray of myTilesMap.values()) {
       for (const tile of tilesArray) {
@@ -233,9 +258,9 @@ function createTileManager(config) {
   async function revisitTileIndices(copiedTilesMap = []) {
     console.log("revisitTileIndices optionsLast: ", optionsLast);
 
-    let lastTileIndex = ""; 
-    const originalMode = modeManager.get(); 
-    modeManager.set(modeId); 
+    let lastTileIndex = "";
+    const originalMode = modeManager.get();
+    modeManager.set(modeId);
 
     console.log("revisitTileIndices copiedTilesMap: ", copiedTilesMap);
 
@@ -243,12 +268,11 @@ function createTileManager(config) {
     const totalEntries = copiedTilesMap.size;
     let currentIndex = 1;
 
-
-    for (const [key, tilesArray] of copiedTilesMap.entries()) {     
-      // console.log("Map Key: ", key); 
+    for (const [key, tilesArray] of copiedTilesMap.entries()) {
+      // console.log("Map Key: ", key);
 
       // Create the progress string, e.g., "1/5", "2/5", etc.
-      const progressText = `${currentIndex} von ${totalEntries}`;      
+      const progressText = `${currentIndex} von ${totalEntries}`;
 
       const effectiveLatLng = calculateLatLng(key);
 
@@ -259,10 +283,10 @@ function createTileManager(config) {
       currentIndex++;
     }
 
-    modeManager.set(originalMode); 
+    modeManager.set(originalMode);
   }
 
-  function getPanelHtml(idSuffix = "") {    
+  function getPanelHtml(idSuffix = "") {
     if (getCustomPanelHtml) {
       return (
         // "<h4>Darstellung:</h4>" + getCustomPanelHtml(idSuffix, optionsLast)
@@ -351,15 +375,15 @@ function createTileManager(config) {
         </div>
     `;
   }
-  
-  function getPanelHelper(idSuffix = "") {    
-    const managerApi = {      
+
+  function getPanelHelper(idSuffix = "") {
+    const managerApi = {
       get options() {
         return optionsLast;
-      },     
+      },
       set options(newOptions) {
         optionsLast = newOptions;
-      }, 
+      },
       saveSettings,
       redrawLayers: redrawTiles,
       forceRedraw: () => {
@@ -368,18 +392,19 @@ function createTileManager(config) {
       resetOptionsToDefaults: () => resetOptionsToDefaults(idSuffix),
       hasGradientAlgorithm,
       hasColorMap,
-      //reloadLayersFromStorage: () => managerPublicApi.loadLayers(), 
-      reloadLayersFromStorage: () => {/* console.log("getPanelHelper reloadLayersFromStorage calling managerPublicApi.loadLayers()"); */managerPublicApi.removeLayersFromMap(); managerPublicApi.loadLayers()}, 
+      //reloadLayersFromStorage: () => managerPublicApi.loadLayers(),
+      reloadLayersFromStorage: () => {
+        /* console.log("getPanelHelper reloadLayersFromStorage calling managerPublicApi.loadLayers()"); */ managerPublicApi.removeLayersFromMap();
+        managerPublicApi.loadLayers();
+      },
     };
 
-   
     if (initCustomPanelHelper) {
       initCustomPanelHelper(idSuffix, managerApi);
     } else {
-     
       const styleManager = new MapStyleManager(
-        saveSettings, 
-        redrawTiles 
+        saveSettings,
+        redrawTiles
       );
       styleManager.init(optionsLast.styleOptions, idSuffix);
 
@@ -403,7 +428,7 @@ function createTileManager(config) {
             reader.onload = function (e) {
               const text = e.target.result;
               colorTextArea.value = text;
-              const newMap = parseColorText(text); 
+              const newMap = parseColorText(text);
               if (newMap) {
                 optionsLast.colorMap = newMap;
                 saveSettings();
@@ -421,11 +446,11 @@ function createTileManager(config) {
             const content = document.getElementById(
               `colorTextFileContent${idSuffix}`
             ).value;
-            const newMap = parseColorText(content); 
+            const newMap = parseColorText(content);
             if (newMap) {
               optionsLast.colorMap = newMap;
               saveSettings();
-              renderColorPickers(idSuffix); 
+              renderColorPickers(idSuffix);
               fetchForRedraw = true;
             }
           });
@@ -439,11 +464,11 @@ function createTileManager(config) {
           coloringAlgorithmVariantInput.addEventListener("change", function () {
             optionsLast.coloringAlgorithmVariant = this.value;
             saveSettings();
-            fetchForRedraw = true; 
+            fetchForRedraw = true;
           });
         }
       }
-     
+
       const gradientAlgorithmVariantInput = document.getElementById(
         `gradientAlgorithmVariant${idSuffix}`
       );
@@ -451,11 +476,11 @@ function createTileManager(config) {
         gradientAlgorithmVariantInput.addEventListener("change", function () {
           optionsLast.gradientAlgorithmVariant = this.value;
           saveSettings();
-          fetchForRedraw = true; 
+          fetchForRedraw = true;
         });
       }
     }
-    
+
     document
       .getElementById(`btn-${type}-standard${idSuffix}`)
       ?.addEventListener("click", () => {
@@ -467,7 +492,7 @@ function createTileManager(config) {
       ?.addEventListener("click", () => {
         redrawTiles();
       });
-  
+
     document
       .querySelectorAll(
         `#${type}-panel input, #${type}-panel button, #${type}-panel select, #${type}-panel textarea`
@@ -488,9 +513,9 @@ function createTileManager(config) {
         });
       });
   }
- 
+
   function renderColorPickers(idSuffix = "") {
-    if (!hasColorMap) return; 
+    if (!hasColorMap) return;
 
     const container = document.getElementById(`${type}ColorTable${idSuffix}`);
     if (!container) return;
@@ -502,7 +527,7 @@ function createTileManager(config) {
       return parseFloat(a) - parseFloat(b);
     });
 
-    container.innerHTML = ""; 
+    container.innerHTML = "";
     const header = document.createElement("div");
     header.className = "color-row color-header";
     header.innerHTML = `
@@ -512,9 +537,9 @@ function createTileManager(config) {
     container.appendChild(header);
 
     for (const val of sortedKeys) {
-      const safeVal = safeId(val); 
+      const safeVal = safeId(val);
       const color = colorMap[val];
-      const hex = rgbToHex(color.r, color.g, color.b); 
+      const hex = rgbToHex(color.r, color.g, color.b);
       const rgbaStr = `rgba(${color.r},${color.g},${color.b},${(
         color.a / 255
       ).toFixed(2)})`;
@@ -538,7 +563,7 @@ function createTileManager(config) {
         </div>
       `;
       container.appendChild(row);
-     
+
       const input = document.getElementById(
         `${type}-color-${safeVal}${idSuffix}`
       );
@@ -595,7 +620,7 @@ function createTileManager(config) {
             const hexNew = rgbToHex(r, g, b);
             input.style.backgroundColor = hexNew;
             input.style.color = getTextColor(hexNew);
-            fetchForRedraw = true; 
+            fetchForRedraw = true;
             if (true) {
               const colorTextArea = document.getElementById(
                 `colorTextFileContent${idSuffix}`
@@ -618,7 +643,7 @@ function createTileManager(config) {
 
   async function handleCustomInfoAction(allFoundTiles, lng, lat) {
     console.log("handleCustomInfoAction allFoundTiles: ", allFoundTiles);
-    try {     
+    try {
       let html = displayTiles(allFoundTiles, lng, lat, config.label);
 
       html += `
@@ -628,48 +653,48 @@ function createTileManager(config) {
         `;
 
       await showCustomInfo(type, html, allFoundTiles[0].tile.TileIndex);
-     
+
       console.log(
         "handleCustomInfoAction User confirmed deletion for allFoundTiles: ",
         allFoundTiles
       );
 
       if (true) {
-        allFoundTiles.forEach((tile) => {         
+        allFoundTiles.forEach((tile) => {
           removeLayerByLeafletId(tile.leaflet_id);
-         
+
           remove(type + "_files", tile.filename);
-         
+
           if (myTilesMap.has(tile.tile.TileIndex)) {
             myTilesMap.delete(tile.tile.TileIndex);
             console.log("deleted from myTilesMap key: ", tile.tile.TileIndex);
           }
         });
-        
+
         saveTileMapInOPFS(myTilesMap, type);
 
         updateDataInSidepanel();
       }
-    } catch (error) {      
+    } catch (error) {
       console.log("User canceled the action.");
     }
   }
-  
+
   function handleMapClick() {
-    map.on("click", async (e) => {      
-      if (modeManager.get() !== modeId) return; 
+    map.on("click", async (e) => {
+      if (modeManager.get() !== modeId) return;
 
       if (isDrawingRectangle || drawnRectangleBounds) {
-        drawnRectangleBounds = null; 
+        drawnRectangleBounds = null;
         return;
       }
 
       const latlng = e.latlng;
       window.theLatLng = latlng;
 
-      if (true) {      
+      if (true) {
         const allFoundTiles = findTiles(myTilesMap, latlng.lng, latlng.lat);
-        
+
         if (allFoundTiles.length === 0) {
           console.log("✅ String enthält KEIN 'Keine Kacheln'");
         } else {
@@ -677,7 +702,7 @@ function createTileManager(config) {
         }
         if (allFoundTiles.length !== 0) {
           await handleCustomInfoAction(allFoundTiles, latlng.lng, latlng.lat);
-          return; 
+          return;
         }
       }
 
@@ -714,34 +739,34 @@ function createTileManager(config) {
       handleGoButtonForMode(window.theLatLng);
     });
   }
-  
+
   function updateMarkerData(newLatLng) {
     const latLngText = newLatLng
       ? `${newLatLng.lat.toFixed(6)}, ${newLatLng.lng.toFixed(6)}`
       : `0.000000, 0.000000`;
-    const input = document.getElementById(`position_center_${type}`); 
+    const input = document.getElementById(`position_center_${type}`);
     if (input) {
       input.value = latLngText;
     }
   }
-   
-  async function handleGoButtonForMode(latlng, progressText = "") {
+
+  async function hhhandleGoButtonForMode(latlng, progressText = "") {
     if (!latlng) {
       alert("Please place a marker first.");
       return;
     }
-    
+
     if (typeof showLoadingSpinner === "function") showLoadingSpinner(progressText);
 
-    let res; 
-    let data; 
+    let res;
+    let data;
 
     try {
       const requestBody = buildRequestBody(latlng, optionsLast);
 
       const controller = new AbortController();
       const signal = controller.signal;
-      
+
       const seconds = 3;
       const timeoutId = setTimeout(() => controller.abort(), seconds * 1000);
 
@@ -752,18 +777,17 @@ function createTileManager(config) {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          body: JSON.stringify(requestBody),          
+          body: JSON.stringify(requestBody),
           signal,
         });
-        
-        clearTimeout(timeoutId);
 
+        clearTimeout(timeoutId);
       } catch (error) {
-        if (error.name === 'AbortError') {
+        if (error.name === "AbortError") {
           console.log(`Fetch request aborted after ${seconds} seconds`);
           throw new Error(`Keine Daten empfangen nach ${seconds} Sekunden.`);
         } else {
-          console.error('Fetch error:', error);
+          console.error("Fetch error:", error);
           throw new Error(`Keine Daten empfangen: ${error}`);
         }
       }
@@ -773,21 +797,21 @@ function createTileManager(config) {
         try {
           const errorJson = JSON.parse(errorText);
           errorText = errorJson.message || errorText;
-        } catch (e) {         
-        }
+        } catch (e) {}
         throw new Error(
           `${label} API error: ${res.status} ${res.statusText} - ${errorText}`
         );
       }
 
       data = await res.json();
-      
+
       const tilesData = extractTileData(data);
 
       if (!Array.isArray(tilesData) || tilesData.length === 0) {
         throw new Error(`No ${type} data found in response.`);
       }
 
+      let layersToAdd = [];
       for (const tileData of tilesData) {
         let layer;
         if (typeof createLayerFromTileData === "function") {
@@ -824,6 +848,10 @@ function createTileManager(config) {
         };
         const leaflet_id = drawTile(layer, metadata, latlng);
 
+        console.log("handleGoButtonForMode leaflet_id: ",leaflet_id);
+
+        layersToAdd.push(layer);
+
         saveLayers();
 
         if (true) {
@@ -834,6 +862,9 @@ function createTileManager(config) {
           console.log(" ", myTilesMap);
         }
       }
+      if (layersToAdd.length > 0) {
+        L.layerGroup(layersToAdd).addTo(map);
+      }
       window.activeMarker = null;
     } catch (err) {
       console.error(`${label} error:`, err);
@@ -842,23 +873,27 @@ function createTileManager(config) {
       if (typeof hideLoadingSpinner === "function") hideLoadingSpinner();
     }
   }
- 
-  function drawTile(layer, metadata, latLng) {   
+
+/**
+ * A helper function to replace the parts of `drawTile` that don't return the ID.
+ * This function prepares the layer before it's added to the map.
+ */
+function sssetupLayer(layer, metadata, latLng) {
     layer.on("add", () => {
       const img = layer.getElement?.();
       if (img) img.classList.add(`custom-${type}-tile`);
     });
     map.on("layerremove", function (e) {
-      if (e.layer === layer) {        
+      if (e.layer === layer) {
         const img = e.layer.getElement?.();
         if (img) img.classList.remove(`custom-${type}-tile`);
       }
     });
-   
+
     layer.name = `${label} @ ${latLng.lat.toFixed(4)}, ${latLng.lng.toFixed(
       4
     )}, ${metadata?.Origin || "?"}`;
-   
+
     const layerLabelHtml = `
       <details style="margin-top:4px;">
         <summary style="cursor:pointer;">
@@ -869,11 +904,9 @@ function createTileManager(config) {
         </div>
       </details>
     `;
-    
-    layer.addTo(map);
-   
+
     MapStyleManager.applyFilterAndBlendMode(type, optionsLast.styleOptions);
-    
+
     if (typeof layerControl !== "undefined") {
       layerControl.addOverlay(
         layer,
@@ -884,7 +917,378 @@ function createTileManager(config) {
         metadata?.Origin
       );
     }
-    updateDataInSidepanel(); 
+    updateDataInSidepanel();
+}
+
+
+async function hhhhhhhhhhhhhhandleGoButtonForMode(latlng, progressText = "") {
+  if (!latlng) {
+    alert("Please place a marker first.");
+    return;
+  }
+
+  if (typeof showLoadingSpinner === "function") showLoadingSpinner(progressText);
+
+  let res;
+  let data;
+
+  try {
+      const requestBody = buildRequestBody(latlng, optionsLast);
+
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      const seconds = 3;
+      const timeoutId = setTimeout(() => controller.abort(), seconds * 1000);
+
+      try {
+        res = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(requestBody),
+          signal,
+        });
+
+        clearTimeout(timeoutId);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log(`Fetch request aborted after ${seconds} seconds`);
+          throw new Error(`Keine Daten empfangen nach ${seconds} Sekunden.`);
+        } else {
+          console.error("Fetch error:", error);
+          throw new Error(`Keine Daten empfangen: ${error}`);
+        }
+      }
+
+      if (!res.ok) {
+        let errorText = await res.text();
+        try {
+          const errorJson = JSON.parse(errorText);
+          errorText = errorJson.message || errorText;
+        } catch (e) {}
+        throw new Error(
+          `${label} API error: ${res.status} ${res.statusText} - ${errorText}`
+        );
+      }
+
+      data = await res.json();
+      
+    const tilesData = extractTileData(data);
+
+    if (!Array.isArray(tilesData) || tilesData.length === 0) {
+      throw new Error(`No ${type} data found in response.`);
+    }
+
+    let layersAndMetadata = []; // Store layers and their metadata together
+
+    // 1. First, create all layers and prepare them
+    for (const tileData of tilesData) {
+
+      if (!tileData.BoundingBox) {
+        let clayer;
+        if (typeof createLayerFromTileData === "function") {
+          clayer = createLayerFromTileData(tileData, optionsLast, latlng);
+          console.log("seems to be contour clayer: ", clayer);
+        }
+        console.warn("Skipping tile due to missing BoundingBox:", tileData);
+        continue; // Überspringt die aktuelle Iteration der Schleife
+      }
+
+      let layer;
+      // ... (your layer creation logic for imageOverlay, etc.)
+      const base64Data = tileData.Data;
+      const format = tileData.DataFormat?.toLowerCase() || "png";
+      let mimeType = "image/png";
+      if (format === "geotiff") mimeType = "image/tiff";
+      else if (format === "jpeg" || format === "jpg") mimeType = "image/jpeg";
+      const imageUrl = `data:${mimeType};base64,${base64Data}`;
+      const bounds = [
+        [tileData.BoundingBox.MinLat, tileData.BoundingBox.MinLon],
+        [tileData.BoundingBox.MaxLat, tileData.BoundingBox.MaxLon],
+      ];
+      const pane = getOrCreatePane(map, type);
+      layer = L.imageOverlay(imageUrl, bounds, { pane });
+      layer.options.latLng = latlng;
+
+
+      const metadata = {
+        Actuality: tileData.Actuality || null,
+        Origin: tileData.Origin || null,
+        Attribution: tileData.Attribution || null,
+        TileIndex: tileData.TileIndex || null,
+        latLng: latlng,
+        optionsAtCreation: structuredClone(optionsLast),
+      };
+
+      // Set up the layer but don't try to get the ID yet
+      setupLayer(layer, metadata, latlng);
+
+      layersAndMetadata.push({ layer, metadata });
+    }
+
+    // 2. Add all layers to the map at once using a LayerGroup
+    if (layersAndMetadata.length > 0) {
+      const layers = layersAndMetadata.map(item => item.layer);
+      const layerGroup = L.layerGroup(layers);
+      layerGroup.addTo(map);
+    }
+
+    // 3. NOW that layers are on the map, iterate again to get the ID and save
+    for (const item of layersAndMetadata) {
+      const { layer, metadata } = item;
+      const leaflet_id = layer._leaflet_id; // It will be defined now!
+
+      console.log("handleGoButtonForMode leaflet_id: ", leaflet_id);
+
+      // Now you can safely use the leaflet_id
+      if (leaflet_id) {
+          await saveSingleLayerInOPFS({ layer, ...metadata }, type);
+          addTileToMap(myTilesMap, metadata, type, leaflet_id);
+          saveTileMapInOPFS(myTilesMap, type);
+          updateDataInSidepanel();
+          console.log(" ", myTilesMap);
+      }
+    }
+    
+    saveLayers();
+    window.activeMarker = null;
+
+  } catch (err) {
+    console.error(`${label} error:`, err);
+    alert(`Fehler bei ${label}:\n` + err.message + `\n${apiUrl}`);
+  } finally {
+    if (typeof hideLoadingSpinner === "function") hideLoadingSpinner();
+  }
+}
+async function handleGoButtonForMode(latlng, progressText = "") {
+  if (!latlng) {
+    alert("Please place a marker first.");
+    return;
+  }
+
+  if (typeof showLoadingSpinner === "function") showLoadingSpinner(progressText);
+
+  let res;
+  let data;
+
+  try {
+    const requestBody = buildRequestBody(latlng, optionsLast);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    const seconds = 3;
+    const timeoutId = setTimeout(() => controller.abort(), seconds * 1000);
+
+    try {
+      res = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(requestBody),
+        signal,
+      });
+      clearTimeout(timeoutId);
+    } catch (error) {
+      if (error.name === "AbortError") {
+        throw new Error(`Keine Daten empfangen nach ${seconds} Sekunden.`);
+      } else {
+        throw new Error(`Keine Daten empfangen: ${error}`);
+      }
+    }
+
+    if (!res.ok) {
+      let errorText = await res.text();
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorText = errorJson.message || errorText;
+      } catch (e) {}
+      throw new Error(
+        `${label} API error: ${res.status} ${res.statusText} - ${errorText}`
+      );
+    }
+
+    data = await res.json();
+    const tilesData = extractTileData(data);
+
+    if (!Array.isArray(tilesData) || tilesData.length === 0) {
+      throw new Error(`No ${type} data found in response.`);
+    }
+
+    let layersAndMetadata = []; // Store layers and their metadata together
+
+    // 1. First, create all layers and prepare them
+    for (const tileData of tilesData) {
+      const metadata = {
+        Actuality: tileData.Actuality || null,
+        Origin: tileData.Origin || null,
+        Attribution: tileData.Attribution || null,
+        TileIndex: tileData.TileIndex || null,
+        latLng: latlng,
+        optionsAtCreation: structuredClone(optionsLast),
+      };
+
+      // --- START OF MODIFICATION ---
+
+      // Check if this is contour data by looking for the 'geojson' property
+      if (tileData.geojson) {
+        if (typeof createLayerFromTileData === "function") {
+          const clayer = createLayerFromTileData(tileData, optionsLast, latlng); // This is an L.featureGroup
+
+          // Iterate over the layers within the feature group
+          clayer.eachLayer(layer => {
+            setupLayer(layer, metadata, latlng);
+            layersAndMetadata.push({ layer, metadata });
+          });
+        }
+      } else if (tileData.BoundingBox) { // Logic for image overlays
+        const base64Data = tileData.Data;
+        const format = tileData.DataFormat?.toLowerCase() || "png";
+        let mimeType = "image/png";
+        if (format === "geotiff") mimeType = "image/tiff";
+        else if (format === "jpeg" || format === "jpg") mimeType = "image/jpeg";
+        const imageUrl = `data:${mimeType};base64,${base64Data}`;
+        const bounds = [
+          [tileData.BoundingBox.MinLat, tileData.BoundingBox.MinLon],
+          [tileData.BoundingBox.MaxLat, tileData.BoundingBox.MaxLon],
+        ];
+        const pane = getOrCreatePane(map, type);
+        const layer = L.imageOverlay(imageUrl, bounds, { pane });
+        layer.options.latLng = latlng;
+
+        setupLayer(layer, metadata, latlng);
+        layersAndMetadata.push({ layer, metadata });
+      } else {
+         console.warn("Skipping tile due to unrecognized format:", tileData);
+      }
+      // --- END OF MODIFICATION ---
+    }
+
+    // 2. Add all layers to the map at once using a LayerGroup
+    if (layersAndMetadata.length > 0) {
+      const layers = layersAndMetadata.map(item => item.layer);
+      const layerGroup = L.layerGroup(layers);
+      layerGroup.addTo(map);
+    }
+
+    // 3. NOW that layers are on the map, iterate again to get the ID and save
+    for (const item of layersAndMetadata) {
+      const { layer, metadata } = item;
+      const leaflet_id = layer._leaflet_id; // It will be defined now!
+
+      if (leaflet_id) {
+        await saveSingleLayerInOPFS({ layer, ...metadata }, type);
+        addTileToMap(myTilesMap, metadata, type, leaflet_id);
+        saveTileMapInOPFS(myTilesMap, type);
+        updateDataInSidepanel();
+      }
+    }
+
+    saveLayers();
+    window.activeMarker = null;
+
+  } catch (err) {
+    console.error(`${label} error:`, err);
+    alert(`Fehler bei ${label}:\n` + err.message + `\n${apiUrl}`);
+  } finally {
+    if (typeof hideLoadingSpinner === "function") hideLoadingSpinner();
+  }
+}
+
+
+/**
+ * A helper function to replace the parts of `drawTile` that don't return the ID.
+ * This function prepares the layer before it's added to the map.
+ */
+function setupLayer(layer, metadata, latLng) {
+    layer.on("add", () => {
+      const img = layer.getElement?.();
+      if (img) img.classList.add(`custom-${type}-tile`);
+    });
+    map.on("layerremove", function (e) {
+      if (e.layer === layer) {
+        const img = e.layer.getElement?.();
+        if (img) img.classList.remove(`custom-${type}-tile`);
+      }
+    });
+
+    layer.name = `${label} @ ${latLng.lat.toFixed(4)}, ${latLng.lng.toFixed(
+      4
+    )}, ${metadata?.Origin || "?"}`;
+
+    const layerLabelHtml = `
+      <details style="margin-top:4px;">
+        <summary style="cursor:pointer;">
+          ${label}: ${metadata?.TileIndex || "?"} ${metadata?.Origin || "?"}
+        </summary>
+        <div style="margin-left:10px;">
+          ${buildTileInfo(metadata, metadata?.TileIndex || "?")}
+        </div>
+      </details>
+    `;
+
+    MapStyleManager.applyFilterAndBlendMode(type, optionsLast.styleOptions);
+
+    if (typeof layerControl !== "undefined") {
+      layerControl.addOverlay(
+        layer,
+        layer.name,
+        layerLabelHtml,
+        type,
+        metadata?.TileIndex,
+        metadata?.Origin
+      );
+    }
+    updateDataInSidepanel();
+}
+
+  function drawTile(layer, metadata, latLng) {
+    layer.on("add", () => {
+      const img = layer.getElement?.();
+      if (img) img.classList.add(`custom-${type}-tile`);
+    });
+    map.on("layerremove", function (e) {
+      if (e.layer === layer) {
+        const img = e.layer.getElement?.();
+        if (img) img.classList.remove(`custom-${type}-tile`);
+      }
+    });
+
+    layer.name = `${label} @ ${latLng.lat.toFixed(4)}, ${latLng.lng.toFixed(
+      4
+    )}, ${metadata?.Origin || "?"}`;
+
+    const layerLabelHtml = `
+      <details style="margin-top:4px;">
+        <summary style="cursor:pointer;">
+          ${label}: ${metadata?.TileIndex || "?"} ${metadata?.Origin || "?"}
+        </summary>
+        <div style="margin-left:10px;">
+          ${buildTileInfo(metadata, metadata?.TileIndex || "?")}
+        </div>
+      </details>
+    `;
+
+    // layer.addTo(map); // This is now handled by layerGroup
+
+    MapStyleManager.applyFilterAndBlendMode(type, optionsLast.styleOptions);
+
+    if (typeof layerControl !== "undefined") {
+      layerControl.addOverlay(
+        layer,
+        layer.name,
+        layerLabelHtml,
+        type,
+        metadata?.TileIndex,
+        metadata?.Origin
+      );
+    }
+    updateDataInSidepanel();
+
+    console.log("drawTile layer: ", layer);
 
     return layer._leaflet_id;
   }
@@ -902,26 +1306,26 @@ function createTileManager(config) {
           element &&
           element.textContent.includes(
             "Daten"
-          ) 
+          )
         ) {
           sidepanel.showData(type);
         }
       }
     }
   }
- 
+
   function setupRectangleDrawingHandlers() {
     map.on("mousedown", onMouseDownForRectangle);
     map.on("mousemove", onMouseMoveForRectangle);
     map.on("mouseup", onMouseUpForRectangle);
   }
 
-  function onMouseDownForRectangle(e) {    
+  function onMouseDownForRectangle(e) {
     if (e.originalEvent.shiftKey && modeManager.get() === modeId) {
       isDrawingRectangle = true;
       startLatLng = e.latlng;
-      map.dragging.disable(); 
-      e.originalEvent.preventDefault(); 
+      map.dragging.disable();
+      e.originalEvent.preventDefault();
     }
   }
 
@@ -946,12 +1350,12 @@ function createTileManager(config) {
   function onMouseUpForRectangle(e) {
     if (isDrawingRectangle) {
       isDrawingRectangle = false;
-      map.dragging.enable(); 
+      map.dragging.enable();
 
       if (currentRectangle) {
         drawnRectangleBounds = currentRectangle.getBounds();
-        map.removeLayer(currentRectangle); 
-        currentRectangle = null; 
+        map.removeLayer(currentRectangle);
+        currentRectangle = null;
 
         console.log(
           "onMouseUpForRectangle drawnRectangleBounds: ",
@@ -963,14 +1367,14 @@ function createTileManager(config) {
       startLatLng = null;
     }
   }
-  
+
   function movePointSouth(lat, km) {
     const earthRadiusKm = 6371;
     const latRad = (lat * Math.PI) / 180;
     const newLatRad = latRad - km / earthRadiusKm;
     return (newLatRad * 180) / Math.PI;
   }
- 
+
   function movePointEast(lat, lon, km) {
     const earthRadiusKm = 6371;
     const latRad = (lat * Math.PI) / 180;
@@ -978,10 +1382,10 @@ function createTileManager(config) {
     const newLonRad = lonRad + km / (earthRadiusKm * Math.cos(latRad));
     return (newLonRad * 180) / Math.PI;
   }
-  
+
   async function fetchDataForAreaInRectangle(bounds, stepKm) {
     const north = bounds.getNorth();
-    const west = bounds.getWest(); 
+    const west = bounds.getWest();
     const south = bounds.getSouth();
     const east = bounds.getEast();
 
@@ -991,21 +1395,21 @@ function createTileManager(config) {
     // --- Outer loop for rows (moving South) ---
     while (currentRowLat >= south) {
       console.log(`--- Evaluating Row ${rowCount} ---`);
-      let currentPointLon = west; 
+      let currentPointLon = west;
       let pointsInRow = 0;
       let colCount = 1;
 
       // --- Inner loop for columns (moving East) ---
       while (currentPointLon <= east) {
         const currentPoint = L.latLng(currentRowLat, currentPointLon);
-      
+
         if (!bounds.contains(currentPoint)) {
           console.log(
             `  Point (R${rowCount}C${colCount}) is OUT of bounds. Terminating column processing for Row ${rowCount}.`
           );
-          break;  
+          break;
         }
-        
+
         console.log(
           `  Processing Point (R${rowCount}C${colCount}) (Confirmed In Bounds): Lat=${currentPoint.lat.toFixed(
             6
@@ -1027,7 +1431,7 @@ function createTileManager(config) {
       // Move 1km south for the next row
       const prevLat = currentRowLat;
       currentRowLat = movePointSouth(currentRowLat, stepKm);
-     
+
       if (currentRowLat < south) {
         break;
       }
@@ -1040,8 +1444,8 @@ function createTileManager(config) {
       rowCount++;
     } // outer loop
   }
- 
-  function showRectangleActionDialog(bounds, clickPoint) {   
+
+  function showRectangleActionDialog(bounds, clickPoint) {
     let dialog = document.getElementById("rectangle-action-dialog");
     if (dialog) {
       dialog.remove();
@@ -1061,7 +1465,7 @@ function createTileManager(config) {
     if (clickPoint) {
       dialog.style.left = `${clickPoint.x}px`;
       dialog.style.top = `${clickPoint.y}px`;
-      dialog.style.transform = "translate(-50%, -100%)"; 
+      dialog.style.transform = "translate(-50%, -100%)";
     } else {
       const mapCenter = map.getContainerPoint(map.getCenter());
       dialog.style.left = `${mapCenter.x}px`;
@@ -1072,22 +1476,20 @@ function createTileManager(config) {
     const skm = calculateRectangleAreaInSqKm(bounds);
     console.log("calculateRectangleAreaInSqKm skm: ", skm);
 
-    // http://127.0.0.1:5500/src/hoehendaten_0.0.9/karte_ohne_GridLayer.html?skmValue=1000
-
-    // HACK
-    
     // Get the URL query string
-    const queryString = window.location.search;
-    // Create a new URLSearchParams object
-    const urlParams = new URLSearchParams(queryString);
-    console.log("urlParams: ", urlParams);
+  const queryString = window.location.search;
 
-    // Get the value of the 'skmValue' parameter
-    // If the parameter is not found, default to 64
-    const skmValue = parseInt(urlParams.get('skmValue')) || MAXIMUM_NUMBER_OF_TILES;
+  // Create a new URLSearchParams object
+  const urlParams = new URLSearchParams(queryString);
 
-    // Your original if statement, now using the dynamic value
-    if (skm > skmValue) {
+  console.log("urlParams: ", urlParams);
+
+  // Get the value of the 'skmValue' parameter
+  // If the parameter is not found, default to 64
+  const skmValue = parseInt(urlParams.get('skmValue')) || MAXIMUM_NUMBER_OF_TILES;
+
+  // Your original if statement, now using the dynamic value
+  if (skm > skmValue) {
     //if (skm > MAXIMUM_NUMBER_OF_TILES) {
       alert(`Der markierte Bereich ist größer als ${MAXIMUM_NUMBER_OF_TILES} Kacheln!`);
       return;
@@ -1115,13 +1517,13 @@ function createTileManager(config) {
 
     document
       .getElementById("fetch-data-rect")
-      .addEventListener("click", async () => {       
+      .addEventListener("click", async () => {
         console.log("Fetching data for rectangle:", bounds);
-        dialog.remove(); 
+        dialog.remove();
 
         if (typeof showLoadingSpinner === "function") showLoadingSpinner();
         try {
-          await fetchDataForAreaInRectangle(bounds, 1); 
+          await fetchDataForAreaInRectangle(bounds, 1);
           // alert(`Kacheln geladen für den Bereich: ${bounds.toBBoxString()}`);
 
           // Assuming 'bounds' is an object with getWest(), getSouth(), getEast(), and getNorth() methods
@@ -1150,15 +1552,15 @@ function createTileManager(config) {
         if (true) {
           const stepKm = 1;
           const north = bounds.getNorth();
-          const west = bounds.getWest(); 
+          const west = bounds.getWest();
           const south = bounds.getSouth();
           const east = bounds.getEast();
 
-          let currentRowLat = north; 
+          let currentRowLat = north;
           let rowCount = 1;
 
           let totalCount = 0;
-          let theTilesToBeDeleted = []; 
+          let theTilesToBeDeleted = [];
 
           // --- Outer loop for rows (moving South) ---
           while (currentRowLat >= south) {
@@ -1170,12 +1572,12 @@ function createTileManager(config) {
             // --- Inner loop for columns (moving East) ---
             while (currentPointLon <= east) {
               const currentPoint = L.latLng(currentRowLat, currentPointLon);
-              
+
               if (!bounds.contains(currentPoint)) {
                 console.log(
                   `  Point (R${rowCount}C${colCount}) is OUT of bounds. Terminating column processing for Row ${rowCount}.`
                 );
-                break; 
+                break;
               }
 
               console.log(
@@ -1210,7 +1612,7 @@ function createTileManager(config) {
             console.log(
               `--- Finished Row ${rowCount}. Total points in row: ${pointsInRow} ---`
             );
-           
+
             const prevLat = currentRowLat;
             currentRowLat = movePointSouth(currentRowLat, stepKm);
 
@@ -1229,9 +1631,9 @@ function createTileManager(config) {
 
           console.log("totalCount: ", totalCount, theTilesToBeDeleted);
 
-          theTilesToBeDeleted.forEach((tile) => {           
+          theTilesToBeDeleted.forEach((tile) => {
             removeLayerByLeafletId(tile.leaflet_id);
-          
+
             remove(type + "_files", tile.filename);
 
             if (myTilesMap.has(tile.tile.TileIndex)) {
@@ -1239,13 +1641,13 @@ function createTileManager(config) {
               console.log("deleted from myTilesMap key: ", tile.tile.TileIndex);
             }
           });
-          
+
           saveTileMapInOPFS(myTilesMap, type);
         }
 
         dialog.remove();
 
-        drawnRectangleBounds = null; 
+        drawnRectangleBounds = null;
       });
 
     document
@@ -1253,9 +1655,9 @@ function createTileManager(config) {
       .addEventListener("click", () => {
         console.log("Rectangle action cancelled.");
         dialog.remove();
-        drawnRectangleBounds = null; 
+        drawnRectangleBounds = null;
       });
-    
+
     dialog.querySelectorAll("button, p, h4").forEach((el) => {
       el.addEventListener("mousedown", (e) => {
         e.stopPropagation();
@@ -1268,31 +1670,28 @@ function createTileManager(config) {
       });
     });
   }
- 
+
   const managerPublicApi = {
     init: () => {
-      loadSettings(); 
-      MapStyleManager.applyFilterAndBlendMode(
-        type,
-        optionsLast.styleOptions
-      );
-      handleMapClick(); 
+      loadSettings();
+      MapStyleManager.applyFilterAndBlendMode(type, optionsLast.styleOptions);
+      handleMapClick();
       setupRectangleDrawingHandlers();
 
-      const idSuffix = getUniqueIdSuffix(); 
+      const idSuffix = getUniqueIdSuffix();
 
-      if (typeof createSidepanel === "function") {        
+      if (typeof createSidepanel === "function") {
         window.sidepanel = createSidepanel({
           type: type,
           label: label,
-          loadFn: managerPublicApi.loadLayers.bind(managerPublicApi), 
-          saveFn: saveLayers, 
+          loadFn: managerPublicApi.loadLayers.bind(managerPublicApi),
+          saveFn: saveLayers,
           panelHtmlFn: () => getPanelHtml(idSuffix),
           panelHelperFn: () => getPanelHelper(idSuffix),
           mode: modeId,
           array: null, // myLayers,
           tilesMap: myTilesMap,
-          geojsonLayers: null, 
+          geojsonLayers: null,
           onAction: ({ type: actionType, id, name, layers }) => {
             if (actionType === "update") {
               const latlng = extractLatLngFromNameHTML(name);
@@ -1307,20 +1706,20 @@ function createTileManager(config) {
       if (typeof createLayerControl === "function") {
         // Assign to window scope if 'layerControl' is a global singleton
         // window.layerControl = createLayerControl({ ...
-        // das war einmal 
-      }          
+        // das war einmal
+      }
     },
 
     addCustomControls() {
       if (typeof makeMenuEntry !== "undefined") {
         makeMenuEntry(
-          type, 
-          modeId, 
+          type,
+          modeId,
           null, // myLayers, // Array der von diesem Typ verwalteten Layer // TODO map
-          true, 
-          label, 
+          true,
+          label,
           "#",
-          true, 
+          true,
           () => {
             // --- OnActivate ---
             if (typeof layerControl !== "undefined") {
@@ -1328,7 +1727,7 @@ function createTileManager(config) {
             }
 
             if (window.mode !== undefined) {
-              window.mode = window.MODE_NONE; 
+              window.mode = window.MODE_NONE;
             }
             if (typeof modeManager !== "undefined") {
               modeManager.set(modeId);
@@ -1346,13 +1745,13 @@ function createTileManager(config) {
               window.activeMarker = null;
             }
           },
-          () => myLayers.length, 
-          "my-custom-class" 
+          () => myLayers.length,
+          "my-custom-class"
         );
       }
     },
 
-    removeLayersFromMap:  async function () {
+    removeLayersFromMap: async function () {
       console.log("new function: removeLayersFromMap()");
 
       for (const tilesArray of myTilesMap.values()) {
@@ -1370,49 +1769,47 @@ function createTileManager(config) {
     },
 
     loadLayers: async function () {
-
       if (isOpfsAvailable) managerPublicApi.loadLayersFromOPFS();
       else {
         managerPublicApi.loadLayersFromLocalStorage();
       }
     },
 
-    loadLayersFromOPFS: async function () {
-      try {    
-        if (map_options_last && !map_options_last.storeTiles) 
-          return []; 
+    llloadLayersFromOPFS: async function () {
+      try {
+        if (map_options_last && !map_options_last.storeTiles) return [];
 
         myTilesMap.clear();
 
         const content = await retrieve("", TYPE_MASTER_NAME);
-        
+
         if (content === "") {
           return [];
         }
 
-        const parsedData = JSON.parse(content);       
+        const parsedData = JSON.parse(content);
 
-        if (!Array.isArray(parsedData) || parsedData.length === 0) {         
+        if (!Array.isArray(parsedData) || parsedData.length === 0) {
           return [];
         }
 
         const ccontent = await retrieve("", TYPE_MASTER_NAME);
-        
-        const newTilesData = JSON.parse(ccontent);        
-        
+
+        const newTilesData = JSON.parse(ccontent);
+
         myTilesMap.clear();
 
         for (const [key, value] of newTilesData) {
           myTilesMap.set(key, value);
         }
-
+        let layersToAdd = [];
         for (const [key, value] of myTilesMap) {
           for (const entry of value) {
             try {
               const content = await retrieve(TYPE_DIR_NAME, entry.filename);
 
               if (content && content.trim().length > 0) {
-                const tile = JSON.parse(content); 
+                const tile = JSON.parse(content);
 
                 try {
                   latLng = calculateLatLng(entry.tile.TileIndex);
@@ -1448,20 +1845,19 @@ function createTileManager(config) {
                     TileIndex: entry.TileIndex || tile.TileIndex || null,
                     latLng: latLng,
                     optionsAtCreation:
-                      entry.optionsAtCreation || structuredClone(optionsLast), 
+                      entry.optionsAtCreation || structuredClone(optionsLast),
                   };
 
                   const leaflet_id = drawTile(layer, metadata, latLng);
-                  
+                  layersToAdd.push(layer);
                   entry.leaflet_id = leaflet_id;
-            
                 } else if (
                   tile.type === "geojson" &&
                   typeof createLayerFromTileData === "function"
                 ) {
                   const tileDataForCreate = {
                     geojson: tile.data,
-                    ...entry, 
+                    ...entry,
                   };
                   layer = createLayerFromTileData(
                     tileDataForCreate,
@@ -1476,11 +1872,11 @@ function createTileManager(config) {
                     TileIndex: entry.TileIndex || tile.TileIndex || null,
                     latLng: latLng,
                     optionsAtCreation:
-                      entry.optionsAtCreation || structuredClone(optionsLast), 
+                      entry.optionsAtCreation || structuredClone(optionsLast),
                   };
 
                   const leaflet_id = drawTile(layer, metadata, latLng);
-                
+                  layersToAdd.push(layer);
                   entry.leaflet_id = leaflet_id;
                 }
               } else {
@@ -1498,23 +1894,164 @@ function createTileManager(config) {
             }
           }
         }
+        if (layersToAdd.length > 0) {
+          L.layerGroup(layersToAdd).addTo(map);
+        }
 
-        MapStyleManager.applyFilterAndBlendMode(
-          type,
-          optionsLast.styleOptions
-        );
+        MapStyleManager.applyFilterAndBlendMode(type, optionsLast.styleOptions);
       } catch (err) {
-        console.error(`❌ Fehler beim Laden der ${type} Layer aus OPFS:`, err);        
+        console.error(`❌ Fehler beim Laden der ${type} Layer aus OPFS:`, err);
         managerPublicApi.loadLayersFromLocalStorage();
       }
     },
- 
+
+    loadLayersFromOPFS: async function () {
+      try {
+        if (map_options_last && !map_options_last.storeTiles) return [];
+
+        myTilesMap.clear();
+
+        const content = await retrieve("", TYPE_MASTER_NAME);
+
+        if (content === "") {
+          return [];
+        }
+
+        const parsedData = JSON.parse(content);
+
+        if (!Array.isArray(parsedData) || parsedData.length === 0) {
+          return [];
+        }
+
+        const ccontent = await retrieve("", TYPE_MASTER_NAME);
+        const newTilesData = JSON.parse(ccontent);
+
+        myTilesMap.clear();
+        for (const [key, value] of newTilesData) {
+          myTilesMap.set(key, value);
+        }
+
+        // 1. First, create all layers and prepare them, but don't add them yet.
+        let layersAndMetadata = []; // Store layers and their metadata together
+
+        for (const [key, value] of myTilesMap) {
+          for (const entry of value) {
+            try {
+              const content = await retrieve(TYPE_DIR_NAME, entry.filename);
+
+              if (content && content.trim().length > 0) {
+                const tile = JSON.parse(content);
+                let layer;
+                let latLng;
+
+                try {
+                  latLng = calculateLatLng(entry.tile.TileIndex);
+                } catch (err) {
+                  console.warn(
+                    "⚠️ Konnte LatLng aus TileIndex nicht berechnen:",
+                    entry.TileIndex,
+                    err
+                  );
+                }
+
+                const metadata = {
+                  Actuality: entry.Actuality || tile.Actuality || null,
+                  Origin: entry.Origin || tile.Origin || null,
+                  Attribution: entry.Attribution || tile.Attribution || null,
+                  TileIndex: entry.TileIndex || tile.TileIndex || null,
+                  latLng: latLng,
+                  optionsAtCreation:
+                    entry.optionsAtCreation || structuredClone(optionsLast),
+                };
+
+                if (tile?.type === "tile" && tile.Data) {
+                  const format = tile.DataFormat?.toLowerCase() || "png";
+                  let mimeType = "image/png";
+                  if (format === "geotiff") mimeType = "image/tiff";
+                  else if (["jpeg", "jpg"].includes(format))
+                    mimeType = "image/jpeg";
+
+                  const imageUrl = `data:${mimeType};base64,${tile.Data}`;
+                  const bounds = [
+                    [tile.BoundingBox.MinLat, tile.BoundingBox.MinLon],
+                    [tile.BoundingBox.MaxLat, tile.BoundingBox.MaxLon],
+                  ];
+                  const pane = getOrCreatePane(map, type);
+                  layer = L.imageOverlay(imageUrl, bounds, { pane });
+                } else if (
+                  tile.type === "geojson" &&
+                  typeof createLayerFromTileData === "function"
+                ) {
+                  const tileDataForCreate = {
+                    geojson: tile.data,
+                    ...entry,
+                  };
+                  layer = createLayerFromTileData(
+                    tileDataForCreate,
+                    optionsLast,
+                    latLng
+                  );
+                }
+
+                if (layer) {
+                  // Prepare the layer with popups, events, etc., before adding to map.
+                  // This replaces the old `drawTile` call.
+                  setupLayer(layer, metadata, latLng);
+                  layersAndMetadata.push({ layer, metadata, entry });
+                }
+              } else {
+                console.warn(
+                  "missing file, filename: ",
+                  entry.filename,
+                  TYPE_DIR_NAME
+                );
+              }
+            } catch (err) {
+              console.error(
+                `❌ Fehler beim Laden von Layer-Datei ${entry.filename}:`,
+                err
+              );
+            }
+          }
+        }
+
+        // 2. Add all layers to the map at once using a LayerGroup
+        if (layersAndMetadata.length > 0) {
+          const layers = layersAndMetadata.map((item) => item.layer);
+          const layerGroup = L.layerGroup(layers).addTo(map);
+        }
+
+        // 3. NOW that layers are on the map, iterate again to get the ID and save
+        for (const item of layersAndMetadata) {
+          const { layer, entry } = item;
+          const leaflet_id = layer._leaflet_id; // It will be defined now!
+
+          if (leaflet_id) {
+            entry.leaflet_id = leaflet_id;
+          } else {
+            console.warn(
+              "Could not find leaflet_id for a loaded layer.",
+              entry
+            );
+          }
+        }
+
+        // Optional: If you need to re-save the map with the correct IDs
+        // saveTileMapInOPFS(myTilesMap, type);
+
+        MapStyleManager.applyFilterAndBlendMode(type, optionsLast.styleOptions);
+      } catch (err) {
+        console.error(`❌ Fehler beim Laden der ${type} Layer aus OPFS:`, err);
+        managerPublicApi.loadLayersFromLocalStorage();
+      }
+    },
+
     getOptions: () => optionsLast,
-    
+
     triggerRedraw: () => {
       redrawTiles();
     },
-   
+
     forceRedraw: () => {
       fetchForRedraw = true;
       console.log("forceRedraw calling redrawLayers");
@@ -1524,10 +2061,10 @@ function createTileManager(config) {
     triggerSavelayers: () => {
       saveLayers();
     },
-    
+
     _saveTileMapInternal: saveTileMapInOPFS,
 
-    _removeSingleLayerInOPFS: (type, tileId, origin) => {      
+    _removeSingleLayerInOPFS: (type, tileId, origin) => {
       try {
         const directoryName = `${type}_files`;
         const fileName = `${type}_${tileId}_${origin}.json`;
@@ -1545,3 +2082,4 @@ function createTileManager(config) {
 
   return managerPublicApi;
 }
+

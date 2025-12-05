@@ -36,6 +36,7 @@ let consoleLogHistory = [];
 let db;
 const DB_NAME = "trackmeDB";
 const STORE_NAME = "points";
+let trackFilename = "";
 
 function initDB(callback) {
     const request = indexedDB.open(DB_NAME, 1);
@@ -81,6 +82,7 @@ function getAllPointsFromDB(callback) {
 }
 
 function clearDB() {
+    console.log("clearDB");
     if (!db) return;
     const transaction = db.transaction([STORE_NAME], "readwrite");
     const store = transaction.objectStore(STORE_NAME);
@@ -244,205 +246,122 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// --- Toolbar Controls ---
-function aaaddCustomControlsForTrackingPlugin() {
-    const Control = L.Control.extend({
-        onAdd: () => {
-            const container = L.DomUtil.create("div", "leaflet-control leaflet-bar trackme-bar");
-            let startBtn, pauseBtn, stopBtn;
+// Declare all button variables
+let container;
+let startContinuousBtn, startIntervalBtn, pauseBtn, stopBtn;
 
-            function updateButtonStates() {
-                if (isRecording && !isPaused) { // Tracking
-                    startBtn.style.display = 'none';
-                    pauseBtn.style.display = 'block';
-                    stopBtn.style.display = 'block';
-                    pauseBtn.innerHTML = '⏸️';
-                    pauseBtn.title = 'Pause tracking';
-                } else if (isRecording && isPaused) { // Paused
-                    startBtn.style.display = 'none';
-                    pauseBtn.style.display = 'block';
-                    stopBtn.style.display = 'block';
-                    pauseBtn.innerHTML = '▶️';
-                    pauseBtn.title = 'Resume tracking';
-                } else { // Stopped
-                    startBtn.style.display = 'block';
-                    pauseBtn.style.display = 'none';
-                    stopBtn.style.display = 'none';
-                }
-            }
+// --- Custom Dialog ---
+function showCustomDialog(promptText, defaultValue, confirmText, cancelText, onConfirm) {
+    const dialog = document.createElement('div');
+    dialog.style.position = 'fixed';
+    dialog.style.top = '50%';
+    dialog.style.left = '50%';
+    dialog.style.transform = 'translate(-50%, -50%)';
+    dialog.style.backgroundColor = 'white';
+    dialog.style.padding = '20px';
+    dialog.style.border = '1px solid black';
+    dialog.style.zIndex = '10000';
 
-            function makeBtn(html, title, onClick, cl = "") {
-                const a = L.DomUtil.create("a", "elevation-btn " + cl, container);
-                a.innerHTML = html;
-                a.title = title;
-                a.href = "#";
-                L.DomEvent.disableClickPropagation(a);
-                a.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onClick(a);
-                    updateButtonStates();
-                });
-                return a;
-            }
+    const text = document.createElement('p');
+    text.textContent = promptText;
+    dialog.appendChild(text);
 
-            const fileInput = L.DomUtil.create("input", "", container);
-            fileInput.type = "file";
-            fileInput.accept = ".gpx,.kml,.geojson";
-            fileInput.style.display = "none";
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = defaultValue;
+    dialog.appendChild(input);
 
-            makeBtn("📂", "Upload track", () => fileInput.click(), "elevation-btn-upload");
-            fileInput.addEventListener("change", onFileSelected);
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.marginTop = '10px';
 
-            makeBtn("📍", txt_GoToCurrentLocation, () => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const latlng = [position.coords.latitude, position.coords.longitude];
-                            logPosition(position);
-                            map.setView(latlng, 16);
-                            aaddMarker(L.latLng(latlng));
-                        },
-                        (err) => alert(txt_GeolocationFailed + err.message),
-                        GEOLOCATION_OPTIONS
-                    );
-                } else {
-                    alert(txt_GeolocationIsNotSupportedByYourBrowser);
-                }
-            }, "elevation-btn-locate");
-
-            // --- Recorder Style Buttons ---
-            startBtn = makeBtn("▶️", "Start tracking", () => {
-                isRecording = true;
-                isPaused = false;
-                localStorage.setItem("isRecording", "true");
-                localStorage.removeItem("isPaused");
-
-                // Reset all tracking variables
-                lastRecordedPoint = null;
-                totalDistance = 0;
-                up = 0;
-                down = 0;
-                trackMarkers.forEach(m => map.removeLayer(m));
-                trackMarkers = [];
-                trackLines.forEach(l => map.removeLayer(l));
-                trackLines = [];
-                lastTooltipMarker = null;
-                lastLocations = [];
-                consoleLogHistory = [];
-                clearDB();
-
-                requestNotificationPermission();
-                requestWakeLock();
-                startTracking();
-                alert("Tracking started...");
-                console.log(`Tracking started, ${TRACKING_DISTANCE_THRESHOLD} m`);
-            }, "elevation-btn-start");
-
-            pauseBtn = makeBtn("⏸️", "Pause tracking", () => {
-                isPaused = !isPaused;
-                if (isPaused) {
-                    localStorage.setItem("isPaused", "true");
-                    stopTracking(); // Stops watching position
-                    releaseWakeLock();
-                    console.log("Tracking paused.");
-                } else {
-                    localStorage.removeItem("isPaused");
-                    startTracking(); // Resumes watching position
-                    requestWakeLock();
-                    console.log("Tracking resumed.");
-                }
-            }, "elevation-btn-pause");
-
-            stopBtn = makeBtn("⏹️", "Stop tracking", () => {
-                isRecording = false;
-                isPaused = false;
-                localStorage.removeItem("isRecording");
-                localStorage.removeItem("isPaused");
-
-                releaseWakeLock();
-                stopTracking();
-
-                getAllPointsFromDB(points => {
-                    alert("Tracking stopped. Points recorded: " + (points ? points.length : 0));
-                });
-                saveGPXFile();
-            }, "elevation-btn-stop");
-
-            updateButtonStates(); // Set initial state
-            return container;
-        },
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = confirmText;
+    confirmButton.addEventListener('click', () => {
+        onConfirm(input.value);
+        document.body.removeChild(dialog);
     });
+    buttonContainer.appendChild(confirmButton);
 
-    const trackingModeControl = L.Control.extend({
-        onAdd: function(map) {
-            const container = L.DomUtil.create('div', 'leaflet-control-layers leaflet-control-layers-expanded');
-            const form = L.DomUtil.create('form', 'leaflet-control-layers-list', container);
-            const label = L.DomUtil.create('label', '', form);
-            const checkbox = L.DomUtil.create('input', '', label);
-            checkbox.type = 'checkbox';
-            checkbox.checked = TRACK_CONTIONUOUS;
-            checkbox.addEventListener('change', () => {
-                TRACK_CONTIONUOUS = checkbox.checked;
-            });
-            const span = L.DomUtil.create('span', '', label);
-            span.innerText = ' Continuous Tracking';
-            return container;
-        }
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = cancelText;
+    cancelButton.addEventListener('click', () => {
+        document.body.removeChild(dialog);
     });
+    buttonContainer.appendChild(cancelButton);
 
-    new Control({ position: "topleft" }).addTo(map);
-    new trackingModeControl({ position: 'topleft' }).addTo(map);
+    dialog.appendChild(buttonContainer);
+    document.body.appendChild(dialog);
 }
+
 // --- Toolbar Controls ---
 function addCustomControlsForTrackingPlugin() {
     const Control = L.Control.extend({
         onAdd: () => {
-            const container = L.DomUtil.create("div", "leaflet-control leaflet-bar trackme-bar");
-            // Declare all button variables
-            let startContinuousBtn, startIntervalBtn, pauseBtn, stopBtn;
+            container = L.DomUtil.create("div", "leaflet-control leaflet-bar trackme-bar");            
 
             // --- Common function to initiate tracking ---
             function initiateTracking(isContinuous) {
-                TRACK_CONTIONUOUS = isContinuous; // Set the mode
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const day = now.getDate().toString().padStart(2, '0');
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const presetFilename = `${year}-${month}-${day}-${hours}-${minutes}`;
 
-                isRecording = true;
-                isPaused = false;
-                localStorage.setItem("isRecording", "true");
-                localStorage.removeItem("isPaused");
+                showCustomDialog(
+                    'Enter a filename for the track:',
+                    presetFilename,
+                    'Weiter',
+                    'Abbruch',
+                    (filename) => {
+                        if (filename) {
+                            trackFilename = filename;
+                            TRACK_CONTIONUOUS = isContinuous; // Set the mode
 
-                // Reset all tracking variables
-                lastRecordedPoint = null;
-                totalDistance = 0;
-                up = 0;
-                down = 0;
-                trackMarkers.forEach(m => map.removeLayer(m));
-                trackMarkers = [];
-                trackLines.forEach(l => map.removeLayer(l));
-                trackLines = [];
-                lastTooltipMarker = null;
-                lastLocations = [];
-                consoleLogHistory = [];
-                clearDB();
+                            isRecording = true;
+                            isPaused = false;
+                            localStorage.setItem("isRecording", "true");
+                            localStorage.removeItem("isPaused");
 
-                requestNotificationPermission();
-                requestWakeLock();
-                
-                // Start the correct tracking function based on the mode
-                if (TRACK_CONTIONUOUS) {
-                    startTracking();
-                } else {
-                    xstartTracking();
-                }
+                            // Reset all tracking variables
+                            lastRecordedPoint = null;
+                            totalDistance = 0;
+                            up = 0;
+                            down = 0;
+                            trackMarkers.forEach(m => map.removeLayer(m));
+                            trackMarkers = [];
+                            trackLines.forEach(l => map.removeLayer(l));
+                            trackLines = [];
+                            lastTooltipMarker = null;
+                            lastLocations = [];
+                            consoleLogHistory = [];
+                            
+                            // clearDB();
 
-                alert(`Tracking started (Continuous: ${isContinuous})`);
-                if (!isContinuous)
-                    console.log(`Tracking started (Continuous: ${isContinuous}), ${TRACKING_DISTANCE_THRESHOLD} m, ${SEC_INTERVALDURATION} sec`);
-                else
-                    console.log(`Tracking started (Continuous: ${isContinuous}), ${TRACKING_DISTANCE_THRESHOLD} m`);
+                            requestNotificationPermission();
+                            requestWakeLock();
+                            
+                            // Start the correct tracking function based on the mode
+                            if (TRACK_CONTIONUOUS) {
+                                startTracking();
+                            } else {
+                                xstartTracking();
+                            }
+
+                            if (!isContinuous)
+                                console.log(`Tracking started (Continuous: ${isContinuous}), ${TRACKING_DISTANCE_THRESHOLD} m, ${SEC_INTERVALDURATION} sec`);
+                            else
+                                console.log(`Tracking started (Continuous: ${isContinuous}), ${TRACKING_DISTANCE_THRESHOLD} m`);
+                            
+                            updateButtonStates();
+                        }
+                    }
+                );
             }
 
             function updateButtonStates() {
+                console.log("updateButtonStates");
                 const isActivelyRecording = isRecording && !isPaused;
                 const isPausedRecording = isRecording && isPaused;
 
@@ -534,22 +453,36 @@ function addCustomControlsForTrackingPlugin() {
             }, "elevation-btn-pause");
 
             stopBtn = makeBtn("⏹️", "Stop tracking", () => {
-                isRecording = false;
-                isPaused = false;
-                localStorage.removeItem("isRecording");
-                localStorage.removeItem("isPaused");
+                showCustomDialog(
+                    'Edit filename and stop tracking:',
+                    trackFilename,
+                    'Beenden',
+                    'Abbrechen',
+                    (filename) => {
+                        if (filename) {
+                            trackFilename = filename;
+                            isRecording = false;
+                            isPaused = false;
+                            localStorage.removeItem("isRecording");
+                            localStorage.removeItem("isPaused");
 
-                releaseWakeLock();
-                // Stop function automatically handles which clear method to use
-                stopTracking();
+                            releaseWakeLock();
+                            // Stop function automatically handles which clear method to use
+                            stopTracking();
 
-                getAllPointsFromDB(points => {
-                    alert("Tracking stopped. Points recorded: " + (points ? points.length : 0));
-                });
-                saveGPXFile();
+                            getAllPointsFromDB(points => {
+                                alert("Tracking stopped. Points recorded: " + (points ? points.length : 0));
+                            });
+                            saveGPXFile();
+
+                            clearDB();
+                        }
+                    }
+                );
             }, "elevation-btn-stop");
 
             updateButtonStates(); // Set initial state
+
             return container;
         },
     });
@@ -589,7 +522,8 @@ function onFileSelected(evt) {
             }
         }).addTo(map);
 
-        map.fitBounds(gpxLayer.getBounds());
+        //map.fitBounds(gpxLayer.getBounds());
+        map.fitBounds(gpxLayer.getBounds(), { padding: [20, 20], maxZoom: 16  }); 
     };
     reader.readAsText(file);
 }
@@ -666,7 +600,7 @@ function exportToGPX(callback) {
 
         const header = `<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="TrackMe" xmlns="http://www.topografix.com/GPX/1/1">
-<trk><name>My Track</name><trkseg>`;
+<trk><name>${trackFilename}</name><trkseg>`; // <-- MODIFIED LINE
 
         const footer = `</trkseg></trk></gpx>`;
 
@@ -696,27 +630,30 @@ function saveGPXFile() {
         const gpxUrl = URL.createObjectURL(gpxBlob);
         const gpxLink = document.createElement("a");
         gpxLink.href = gpxUrl;
-        gpxLink.download = "track.gpx";
+        gpxLink.download = `${trackFilename}.gpx`;
         document.body.appendChild(gpxLink);
         gpxLink.click();
         document.body.removeChild(gpxLink);
         URL.revokeObjectURL(gpxUrl);
 
         // --- Save Console Log File ---
-        if (false) {
-          setTimeout(() => {
-            const logData = consoleLogHistory.join("\n");
-            const logBlob = new Blob([logData], { type: "text/plain" });
-            const logUrl = URL.createObjectURL(logUrl);
-            const logLink = document.createElement("a");
-            logLink.href = logUrl;
-            logLink.download = "console_log.txt";
-            document.body.appendChild(logLink);
-            logLink.click();
-            document.body.removeChild(logLink);
-            URL.revokeObjectURL(logUrl);
-          }, 5000);
+        // --- Save Console Log File ---
+        if (true) {
+            setTimeout(() => {
+                const logData = consoleLogHistory.join("\n");
+                const logBlob = new Blob([logData], { type: "text/plain" });
+                // Corrected line: Use logBlob to create the URL
+                const logUrl = URL.createObjectURL(logBlob); 
+                const logLink = document.createElement("a");
+                logLink.href = logUrl;
+                logLink.download = "console_log.txt";
+                document.body.appendChild(logLink);
+                logLink.click();
+                document.body.removeChild(logLink);
+                URL.revokeObjectURL(logUrl);
+            }, 5000);
         }
+
     });
 }
 
@@ -887,7 +824,7 @@ function xstopTracking() {
 function updateMapUI(newPoint, lastPoint, distance) {
     // Update Map Marker
     const marker = L.circleMarker([newPoint.lat, newPoint.lng], {
-        radius: 3, color: "blue", fillColor: "#30f", fillOpacity: 0.8, weight: 1
+        radius: 3, color: "red", fillColor: "#30f", fillOpacity: 0.8, weight: 1
     }).addTo(map);
     map.setView([newPoint.lat, newPoint.lng]);
     trackMarkers.push(marker);
@@ -895,7 +832,7 @@ function updateMapUI(newPoint, lastPoint, distance) {
     // Update Map Line
     if (lastPoint) {
         const line = L.polyline([[lastPoint.lat, lastPoint.lng], [newPoint.lat, newPoint.lng]], 
-            { color: "blue", weight: 2, opacity: 0.8 }
+            { color: "red", weight: 2, opacity: 0.8 }
         ).addTo(map);
         trackLines.push(line);
         totalDistance += distance;
@@ -912,13 +849,16 @@ function updateMapUI(newPoint, lastPoint, distance) {
     lastTooltipMarker = marker;
 }
 
-function updateMapAndData(newPoint, lastPoint, distance, flag) {
-    // Create the object to be stored, now including the distance
-    const pointToStore = { ...newPoint, distance: distance, flag: flag };
-    addPointToDB(pointToStore);    
+function updateMapAndData(newPoint, lastPoint, distance, flag) {  
 
     if (flag) {
-        lastRecordedPoint = newPoint; // Update the last recorded point for the next distance calculation
+        // Create the object to be stored, now including the distance
+        const pointToStore = { ...newPoint, distance: distance, flag: flag };
+        addPointToDB(pointToStore);  
+        
+        // Update the last recorded point for the next distance calculation
+        lastRecordedPoint = newPoint; 
+        
         // Update the visual representation on the map
         updateMapUI(newPoint, lastPoint, distance);
     }
@@ -930,6 +870,9 @@ function updateMapAndData(newPoint, lastPoint, distance, flag) {
 // --- Restore track from DB ---
 function restoreTrackIfNeeded() {
     if (localStorage.getItem("isRecording") === "true") {
+
+        alert ("Wiederherstellung ...");
+
         isRecording = true;
         isPaused = localStorage.getItem("isPaused") === "true";
 
@@ -939,6 +882,7 @@ function restoreTrackIfNeeded() {
                 let currentLastPoint = null;
                 totalDistance = 0;
 
+                const flag = true;
                 points.forEach(point => {
                     const distance = point.distance || 0;
                     updateMapUI(point, currentLastPoint, distance, flag);
@@ -947,24 +891,38 @@ function restoreTrackIfNeeded() {
 
                 lastRecordedPoint = currentLastPoint;
 
-                // Manually trigger button state update on the next cycle
-                setTimeout(() => {
-                    const dummyElement = document.querySelector('.elevation-btn-start');
-                    if (dummyElement) {
-                        const container = dummyElement.parentElement;
-                        // This is a bit of a hack to re-run the state logic
-                        // A better approach might be a dedicated function, but this works
-                        container.querySelector('.elevation-btn-start').dispatchEvent(new Event('click'));
-                        container.querySelector('.elevation-btn-pause').dispatchEvent(new Event('click'));
-                        container.querySelector('.elevation-btn-stop').dispatchEvent(new Event('click'));
-                     }
-                }, 100);
+                if (false) {
+                   // Manually trigger button state update on the next cycle
+                    setTimeout(() => {
+                        const dummyElement = document.querySelector('.elevation-btn-start');
+                        if (dummyElement) {
+                            const container = dummyElement.parentElement;
+                            // This is a bit of a hack to re-run the state logic
+                            // A better approach might be a dedicated function, but this works
+                            container.querySelector('.elevation-btn-start').dispatchEvent(new Event('click'));
+                            container.querySelector('.elevation-btn-pause').dispatchEvent(new Event('click'));
+                            container.querySelector('.elevation-btn-stop').dispatchEvent(new Event('click'));
+                        }
+                    }, 100);
 
-                if (!isPaused) {
-                    startTracking();
-                } else {
-                     console.log("Session restored in a paused state.");
-                }
+                    if (!isPaused) {
+                        startTracking();
+                    } else {
+                        console.log("Session restored in a paused state.");
+                    } 
+                }  
+                if (true) {
+                  const dummyElement = document.querySelector(
+                    ".elevation-btn-start"
+                  );
+                  const container = dummyElement
+.parentElement;
+                  // This is a bit of a hack to re-run the state logic
+                  // A better approach might be a dedicated function, but this works
+                  container
+                    .querySelector(".elevation-btn-start")
+                    .dispatchEvent(new Event("click"));
+                }                
             }
         });
     }
@@ -976,3 +934,4 @@ function aaddMarker(latlng) {
       .bindPopup("Your location")
       .openPopup();
 }
+
