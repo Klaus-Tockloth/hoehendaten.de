@@ -1,5 +1,8 @@
 // slope.js
 
+/* global createTileManager */ 
+/* global createLoadingSpinner */ 
+
 const slope_url = "https://api.hoehendaten.de:14444/v1/slope";
 
 const txt_slope = "Hangneigung";

@@ -1,4 +1,7 @@
-// map-tile-manager.js
+// map-tile-manager_3.js
+// mit GridLayer
+
+/* global L */
 
 function createTileManager(config) {
   const {
@@ -23,6 +26,8 @@ function createTileManager(config) {
   let fetchForRedraw = false; 
   let TYPE_DIR_NAME = type + "_files"; 
   let TYPE_MASTER_NAME =  "map_" + type + "_master.json";
+  
+  const MAXIMUM_NUMBER_OF_TILES = 1000;
   
   let isDrawingRectangle = false;
   let startLatLng = null;
@@ -315,25 +320,48 @@ function createTileManager(config) {
   function redrawTiles() {
         console.log("redrawLayers fetchForRedraw:", fetchForRedraw, type);
 
+        /* obsolet
         if (myGridLayer) {
+            console.log("calling myGridLayer.redraw()");
             myGridLayer.redraw();
         }
+        */
 
         if (!fetchForRedraw) {
             MapStyleManager.applyFilterAndBlendMode(
                 type,
                 optionsLast.styleOptions
             );
-        } else {
-            // The redraw() on the grid layer will handle regeneration
+        } else {            
+            regenerateTiles(true);
         }
         fetchForRedraw = false;
     }
 
     function regenerateTiles() {
-        if (myGridLayer) {
+      // das reicht nicht !!!
+      /*
+      if (myGridLayer) {
             myGridLayer.redraw();
+      }
+      */
+      for (const tilesArray of myTilesMap.values()) {
+        for (const tile of tilesArray) {
+          console.log("tile: ", tile);
+          console.log("tile.leaflet_id: ", tile.leaflet_id);
         }
+      }
+
+      for (const tilesArray of myTilesMap.values()) {
+        for (const tile of tilesArray) {
+          removeLayerById(tile.leaflet_id);
+        }
+      }
+
+      const copiedTilesMap = new Map(myTilesMap);
+      myTilesMap.clear();
+
+      revisitTileIndices(copiedTilesMap);
     }
 
   async function revisitTileIndices(copiedTilesMap = []) {
@@ -468,8 +496,9 @@ function createTileManager(config) {
       }, 
       saveSettings,
       redrawLayers: redrawTiles,
-      forceRedraw: () => {
+      forceRedraw: () => {        
         fetchForRedraw = true;
+        console.log("getPanelHelper forceRedraw");
       },
       resetOptionsToDefaults: () => resetOptionsToDefaults(idSuffix),
       hasGradientAlgorithm,

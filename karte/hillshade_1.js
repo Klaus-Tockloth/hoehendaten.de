@@ -1,5 +1,8 @@
 // hillshade_1.js
 
+/* global MapStyleManager */ 
+/* global createTileManager */ 
+
 (function(global) {
 
   const HILLSHADE_API_URL = "https://api.hoehendaten.de:14444/v1/hillshade";

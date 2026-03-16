@@ -1,5 +1,8 @@
 // roughness.js
 
+/* global createTileManager */ 
+/* global createLoadingSpinner */ 
+
 const roughness_url = "https://api.hoehendaten.de:14444/v1/roughness";
 
 const txt_roughness = "Geländerauheit";

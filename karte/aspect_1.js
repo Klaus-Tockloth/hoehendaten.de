@@ -1,3 +1,8 @@
+// aspect_1.js
+
+/* global createTileManager */ 
+/* global createLoadingSpinner */ 
+
 const aspect_url = "https://api.hoehendaten.de:14444/v1/aspect";
 
 const txt_aspect = "Hangexposition";

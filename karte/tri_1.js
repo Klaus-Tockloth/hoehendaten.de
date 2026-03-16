@@ -1,5 +1,8 @@
 // tri.js
 
+/* global createTileManager */ 
+/* global createLoadingSpinner */ 
+
 const tri_url = "https://api.hoehendaten.de:14444/v1/tri";
 
 // const txt_tri = "TRI&nbsp;(Ruggedness)";

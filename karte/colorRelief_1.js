@@ -1,3 +1,8 @@
+/* colorRelief_1.js */
+
+/* global createTileManager */ 
+/* global createLoadingSpinner */ 
+
 const colorrelief_url = "https://api.hoehendaten.de:14444/v1/colorrelief";
 
 const txt_colorrelief = "Farbrelief";

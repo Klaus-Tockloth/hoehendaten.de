@@ -1,5 +1,8 @@
 // tpi.js
 
+/* global createTileManager */ 
+/* global createLoadingSpinner */ 
+
 const tpi_url = "https://api.hoehendaten.de:14444/v1/tpi";
 
 // const txt_tpi = "TPI&nbsp;(Position)";

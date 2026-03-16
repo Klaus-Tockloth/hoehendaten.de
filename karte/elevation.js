@@ -1,3 +1,8 @@
+// elevation.js
+
+/* global L */
+/* global map */
+
 /*
 Zweck:
 - Erweitert eine Leaflet-Karte um interaktive Funktionen zur Höhenabfrage und -visualisierung.
@@ -79,7 +84,7 @@ const elevation_url = "https://api.hoehendaten.de:14444/v1/point";
 
 const simulateApiCall = false;
 
-const localStorageTimer = 5; // save to localStorage all x seconds
+// const localStorageTimer = 5; // save to localStorage all x seconds
 
 const usePopups = true;
 
@@ -305,6 +310,7 @@ function addCustomControls() {
         "elevation-btn-2points"
       );
 
+      // eslint-disable-next-line no-constant-condition
       if (true) {
          // Set initial button state from localStorage
         if (mode === MODE_POINT && pointBtn) {
@@ -412,7 +418,6 @@ function generateLineInfoContent(pair) {
     
     const angleRad = Math.atan(Math.abs(diff) / dist);
     const angleDeg = angleRad * (180 / Math.PI);
-    const formattedAngle = formatNumber(angleDeg, 1);
 
     const getPointInfo = (m) => {
         if (!m.isError) {
@@ -443,17 +448,17 @@ function generateLineInfoContent(pair) {
 
     const lineInfo = (!pair.m1.isError && !pair.m2.isError) ?
             `
-            Delta: ${Math.abs(formatNumber(diff))} m<br>
+            Delta: ${Math.abs(formatNumber(diff))} m<br>
             Prozent: ${gradientPercent} %<br>
             Winkel: ${formatNumber(angleDeg, 1)}°<br>
-            Strecke: ${formatNumber(dist)} m<br>            
-        ` :
+            Strecke: ${formatNumber(dist)} m<br> 
+            ` :
             `
             Delta: -<br>
             Prozent: -<br>
             Winkel: -<br>
-            Strecke: ${formatNumber(dist)} m<br>            
-        `;
+            Strecke: ${formatNumber(dist)} m<br>
+            `;
 
     const detailed = false;
     if (detailed) {
@@ -571,8 +576,9 @@ createMarker instanziiert und gibt ein Leaflet-Marker-Objekt mit angegebenen Eig
 Es setzt die Position des Markers, den ziehbaren Zustand und das Icon basierend auf der angegebenen
 Farbe. Diese Hilfsfunktion zentralisiert die Logik zur Erstellung von Markern.
 */
-function createMarker(latlng, draggable, color, markerStyle = 'icon') {
+function createMarker(latlng, draggable, color /*, markerStyle = 'icon'*/) {
     let marker;
+    let icon;
 
     if (color === 'red') {
         icon = new ElevationIcon({
@@ -605,20 +611,20 @@ function addTooltipAndPopupToMarker(marker, m) {
 
     //console.log("m.isError: ", m.isError);
     //console.log("m.isError: ", m);
-    // 1 ) handle the special string first
+    // 1) handle the special string first
     if (m.isError === true) {
         tooltip = "Elevation error";
 
-        /* 2 ) then the numeric tests
+        /* 2) then the numeric tests
               (Number(...) turns non‑number strings into NaN, so we check that
               before converting) */
     } else if (Number(m.elevation) >= 9999) {
         console.log("Elevation is 9999 or more");
         tooltip = "NoData";
     
-        /* 3 ) default case – just echo the value plus unit */
+        /* 3) default case – just echo the value plus unit */
     } else {
-        tooltip = `${formatNumber(m.elevation)} m`;
+        tooltip = `${formatNumber(m.elevation)} m`;
     }
 
     marker.bindTooltip(tooltip, {
@@ -749,7 +755,7 @@ function addEventhandlingToLineTooltip(pair) {
     // Hover popup
     if (linePopupOnHover) {
         if (usePopups) {
-            tooltipEl.addEventListener("mouseenter", (e) => {
+            tooltipEl.addEventListener("mouseenter", () => {
                 const popupContent = generateLineInfoContent(pair);
                 const popup = L.popup({
                         closeButton: false,
@@ -799,7 +805,7 @@ um die Informationen des Markers und jede zugehörige Linie zu aktualisieren.
 */
 function addEventhandlingToMarker(marker, pair) {
     // marker.on("click", () => {
-    marker.on("click", function(e) {
+    marker.on("click", function() {
         if (mode === MODE_ERASE)
             erase(marker);
         return;
@@ -1071,7 +1077,7 @@ function createLineTooltip(pair) {
     const latlng1 = pair.marker1.getLatLng();
     const latlng2 = pair.marker2.getLatLng();
 
-    const dist = latlng1.distanceTo(latlng2);
+    // const dist = latlng1.distanceTo(latlng2);
 
     let tipText;
     if (pair.m1.isError || pair.m2.isError) {
@@ -1081,7 +1087,7 @@ function createLineTooltip(pair) {
             parseFloat(pair.m2.elevation) - parseFloat(pair.m1.elevation)
             );
         const displayDiffValue = Math.abs(parseFloat(diff)).toFixed(2);
-        tipText = `${displayDiffValue} m`;
+        tipText = `${displayDiffValue} m`;
     }
     const tip = tipText;   
 
@@ -1139,7 +1145,7 @@ function createLineTooltip(pair) {
     // 2. Popup‑Inhalt definieren
     const popupHtml = generateLineInfoContent(pair);
 
-    // 3. Popup binden (autoClose / closeOnClick nach Bedarf)
+    // 3. Popup binden (autoClose / closeOnClick nach Bedarf)
     ghost.bindPopup(popupHtml, {
         closeButton: true,
         autoClose: true,

@@ -1,5 +1,11 @@
 // ui-utils.js
 
+/* global L */
+/* global map */
+
+/* global sidepanel */
+
+
 // --- Init on DOM ready ---
 document.addEventListener("DOMContentLoaded", () => {
   // Eine Info-Meldung, dass das Skript geladen und initialisiert wird.

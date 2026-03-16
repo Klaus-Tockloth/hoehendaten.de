@@ -52,9 +52,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // dann kann man oben in setTimeout auch auf 0 setzen
 
     function displayImpressum() {
-        //fetch('https://hoehendaten.de/impressum.html')
+        // fetch('https://hoehendaten.de/impressum.html')
         // Fetches 'impressum.html' from the root of the current server.
-        fetch('/impressum.html')
+        // fetch('/impressum.html')
+
+        // Check if the current URL's domain includes 'jokoart.de'
+        const isJokoart = window.location.hostname.includes('jokoart.de');
+        
+        // Set the target URL based on the domain check
+        // Note: I added the .html extension, assuming it's an HTML file. 
+        // If your server routes it without the extension, just use '/impressum_Franz'
+        const targetUrl = isJokoart ? './impressum_Franz.html' : './impressum.html';
+
+        fetch(targetUrl)
             .then(response => response.text())
             .then(html => {
                 const parser = new DOMParser();
@@ -71,9 +81,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function displayImpressumInHamburgerMenu() {
-    //fetch('https://hoehendaten.de/impressum.html')
+    // fetch('https://hoehendaten.de/impressum.html')
     // Fetches 'impressum.html' from the root of the current server.
-    fetch('/impressum.html')
+    // fetch('/impressum.html')
+
+    // Check if the current URL's domain includes 'jokoart.de'
+    const isJokoart = window.location.hostname.includes('jokoart.de');
+    
+    // Set the target URL based on the domain check
+    // Note: I added the .html extension, assuming it's an HTML file. 
+    // If your server routes it without the extension, just use '/impressum_Franz'
+    const targetUrl = isJokoart ? '/impressum_Franz.html' : '/impressum.html';
+
+    fetch(targetUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
@@ -93,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.appendChild(modal);
         })
         .catch(error => console.error('Error fetching impressum:', error));
-}
+    }
 
 
     function createModal(content) {

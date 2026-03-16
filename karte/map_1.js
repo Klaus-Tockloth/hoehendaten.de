@@ -1,8 +1,12 @@
 // map_1.js
 
+/* global map */
+
+/* global theSidepanelSingleton */
+
 const MODE_MAP = 10; 
 
-const MAXIMUM_NUMBER_OF_TILES = 1000;
+//const MAXIMUM_NUMBER_OF_TILES = 1000;
 
 let isOpfsAvailable = true;
 

@@ -235,10 +235,20 @@ class SidepanelManager {
     this._container.classList.add("options");
     this._container.classList.remove("data");
 
+    /*
     if (this._sidepanelTitle) {
       this._sidepanelTitle.innerHTML =
         "Konfiguration " + (this.configs[type]?.label || type);
     }
+    */
+    if (this._sidepanelTitle) {
+      this._sidepanelTitle.innerHTML =
+        (type === "track-controls" || type === "track-planner")
+          ? (this.configs[type]?.label || type)
+          : "Konfiguration " + (this.configs[type]?.label || type);
+    }
+
+
     
     this.updateInfoContent(type);
 

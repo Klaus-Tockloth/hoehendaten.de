@@ -1,5 +1,10 @@
 // geo-utils.js
 
+/* global L */
+/* global map */
+/* global proj4 */
+/* global turf */
+
 function isLatLngInTile(latlng, tileIndexStr) {
   // Requires global proj4
   const [zoneStr, eastingStr, northingStr] = tileIndexStr.split("_");
@@ -130,6 +135,7 @@ function lookupTileInMap(map, tileindex) {
     return map.get(tileindex);
 }
 
+// eslint-disable-next-line no-unused-vars
 function getTiles(map, lon, lat) {
 
     let allFoundTiles = [];
@@ -157,8 +163,9 @@ function getTiles(map, lon, lat) {
     return allFoundTiles;
 }
 
+// eslint-disable-next-line no-unused-vars
 function findAndDisplayTiles(map, lon, lat) {
-    const resultsDiv = document.getElementById('results');    
+    // const resultsDiv = document.getElementById('results');    
     let resultsHTML = `<h2>Informationen ...</h2>`;
     let allFoundTiles = [];
 
@@ -206,6 +213,7 @@ function findAndDisplayTiles(map, lon, lat) {
     return resultsHTML;
 }
 
+// eslint-disable-next-line no-unused-vars
 function findTiles(map, lon, lat) {
    let allFoundTiles = [];
     
@@ -231,8 +239,10 @@ function findTiles(map, lon, lat) {
 
     return allFoundTiles;
 }
+
+// eslint-disable-next-line no-unused-vars
 function displayTiles(allFoundTiles, lon, lat, typeName="") {    
-  const resultsDiv = document.getElementById('results');    
+    // const resultsDiv = document.getElementById('results');    
     // let resultsHTML = `<h2>Informationen ...</h2>`;
     let resultsHTML = `<h2>${typeName}</h2>`;
   
@@ -261,6 +271,7 @@ function displayTiles(allFoundTiles, lon, lat, typeName="") {
     return resultsHTML;
 }
 
+// eslint-disable-next-line no-unused-vars
 function calculateRectangleAreaInSqKm(drawnRectangleBounds) {
   // Ensure Turf.js is loaded
   if (typeof turf === "undefined") {
@@ -308,6 +319,7 @@ function calculateRectangleAreaInSqKm(drawnRectangleBounds) {
   return areaInSquareKilometers;
 }
 
+// eslint-disable-next-line no-unused-vars
 function removeLayerByLeafletId(id) {
     var layerToRemove = null;
     map.eachLayer(function(layer) {

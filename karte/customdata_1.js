@@ -1,5 +1,20 @@
 // customdata.js
 
+/* global L */
+/* global map */
+/* global MapStyleManager */ 
+
+/* global getOrCreatePane */
+/* global toGeoJSON */
+/* global getFileExtension */
+/* global persist */
+/* global retrieve */
+/* global remove */
+/* global generateUUID */
+/* global togglePaneVisibility */
+/* global sidepanel */
+/* global visibilityBtn */
+
 (function (global) {
 
   global.TEXT_CUSTOMDATA_LABEL = "Eigene Objekte";
@@ -134,6 +149,49 @@
       } else {
         console.warn(`Item with ID ${id} not found to remove.`);
       }
+    };
+
+    // --- NEW: Expose a function to import data programmatically (e.g. from Track Recorder) ---
+    global.importCustomDataFromContent = async function (fileContent, fileName, fileExtension) {
+      console.log(`Programmatic import started for: ${fileName}`);
+      
+      const fileId = generateUUID();
+      const fileNameInOpfs = `${fileId}.${fileExtension}`;
+      const opfsPath = `${CUSTOMDATA_DIR_NAME}/${fileNameInOpfs}`;
+
+      const geojson = parseFileContentToGeoJson(
+        fileContent,
+        fileExtension,
+        fileName
+      );
+
+      if (geojson) {
+        displayCustomDataGeoJson(
+          geojson,
+          fileName,
+          fileId,
+          opfsPath,
+          fileExtension,
+          true
+        );
+
+        await persist(CUSTOMDATA_DIR_NAME, fileNameInOpfs, fileContent);
+        await saveMetadata();
+
+        console.log(`File ${fileName} imported successfully via API.`);
+
+        // Refresh UI if the panel is open
+        if (
+          typeof global.sidepanel !== "undefined" &&
+          global.sidepanel.isVisible() &&
+          global.sidepanel.currentType === "customdata"
+        ) {
+           global.sidepanel.showCustomData("customdata");
+        }
+        
+        return true; // Success
+      }
+      return false; // Failure
     };
   };
  
@@ -270,8 +328,12 @@
           if (
             feature.properties &&
             (feature.properties.type === "track" ||
+              /*
               feature.properties.hasOwnProperty("trackseg") ||
               feature.properties.hasOwnProperty("gx_track"))
+              */
+              Object.prototype.hasOwnProperty.call(feature.properties, "trackseg") ||
+              Object.prototype.hasOwnProperty.call(feature.properties, "gx_track"))
           ) {
             styleToApply.dashArray = null;
             styleToApply.color = effectiveLineStyle.trackColor; 
@@ -333,7 +395,8 @@
               popupContent += `Zeit: ${new Date(
                 feature.properties.time
               ).toLocaleString()}<br>`;
-            } catch (e) {
+            } catch {
+               // No '(e)' needed here
             }
           }
           // If no specific content, add a few generic properties (up to 3)
@@ -509,85 +572,42 @@
       return null;
     }
   }
- 
+  
+  // Inside customdata.js, replace the existing handleFileSelect with this:
+
   async function handleFileSelect(event) {
     const files = event.target.files;
-    if (files.length === 0) {
-      console.log("Keine Datei ausgewählt.");
-      return;
-    }
+    if (files.length === 0) return;
 
     const file = files[0];
     const fileName = file.name;
     const fileExtension = getFileExtension(fileName);
-    
+
     if (!["gpx", "json", "geojson", "kml"].includes(fileExtension)) {
-      alert(
-        "Bitte wählen Sie eine Datei mit der Endung .gpx, .kml, .json oder .geojson aus."
-      );
+      alert("Bitte wählen Sie eine Datei mit der Endung .gpx, .kml, .json oder .geojson aus.");
       event.target.value = "";
       return;
     }
 
     const reader = new FileReader();
-
     reader.onload = async function (e) {
       const fileContent = e.target.result;
-      const fileId = generateUUID(); 
-      const fileNameInOpfs = `${fileId}.${fileExtension}`; 
-      const opfsPath = `${CUSTOMDATA_DIR_NAME}/${fileNameInOpfs}`; 
-
-      const geojson = parseFileContentToGeoJson(
-        fileContent,
-        fileExtension,
-        fileName
-      );
-
-      if (geojson) {
-        displayCustomDataGeoJson(
-          geojson,
-          fileName,
-          fileId,
-          opfsPath,
-          fileExtension,
-          true
-        );
-        
-        persist(CUSTOMDATA_DIR_NAME, fileNameInOpfs, fileContent);
-
-        console.log(`file ${fileName} imported`);
-
-        if (document.querySelector(".side-panel.open.data"))
-          global.sidepanel.showCustomData("customdata");
-
-        // macht das gleiche
-        /*
-        if (
-          typeof global.sidepanel !== "undefined" &&
-          global.sidepanel.isVisible() &&
-          global.sidepanel.currentType === "customdata"
-        ) {
-           global.sidepanel.showCustomData("customdata");
-        }
-        */
-
-        await saveMetadata();
-      }
-
+      
+      // Use the new shared function
+      await global.importCustomDataFromContent(fileContent, fileName, fileExtension);
+      
       event.target.value = ""; 
     };
-
+    
     reader.onerror = function (e) {
-      console.error(
-        `Fehler beim Lesen der Datei "${fileName}" mit FileReader:`,
-        e
-      );
+      console.error(`Fehler beim Lesen der Datei "${fileName}":`, e);
       alert(`Fehler beim Lesen der Datei "${fileName}".`);
       event.target.value = "";
     };
 
     reader.readAsText(file);
   }
+
 
   function applyGlobalCustomDataStyleToPane() {
     if (!global.map || !global.map.getPane) {      
@@ -775,7 +795,8 @@
     );
 
     // Sichtbarkeit 
-    let _visible = true;
+    // let _visible = true;
+    // eslint-disable-next-line no-constant-condition
     if (true) {
       const updateButtonState = (button, isVisible) => {
         const icon = isVisible
@@ -862,6 +883,7 @@
           submenu.style.display === "flex" ? "none" : "flex";
       }    
 
+      // eslint-disable-next-line no-constant-condition
       if (true) {
         const type = "customdata";
         if (sidepanel.isVisibleWithData()) {
@@ -964,6 +986,7 @@
       // arrow.textContent = visible ? " -" : " +";
       arrow.textContent = visible ? "▽" : "▷";
 
+      // eslint-disable-next-line no-constant-condition
       if (true) {
         const type = "customdata";
         if (sidepanel.isVisibleWithData()) {
@@ -1004,6 +1027,7 @@
         document.getElementById("status-info").textContent =
           global.TEXT_CUSTOMDATA_LABEL; 
         const infoBtn = document.getElementById("info-button");
+        // eslint-disable-next-line no-constant-condition
         if (false)
         if (infoBtn) {
           infoBtn.textContent = global.TEXT_CUSTOMDATA_LABEL;
@@ -1023,7 +1047,8 @@
     );
 
     // Sichtbarkeit 
-    let _visible = true;
+    // let _visible = true;
+    // eslint-disable-next-line no-constant-condition
     if (true) {
       const type = "customdata";
       const eyeButton = addSubBtn("Sichtbarkeit", () => {
@@ -1926,39 +1951,6 @@
     // It exists for sidepanel interface consistency.
   }
 
-  async function llloadCustomData() {
-    const storedLayersMetadata = await loadMetadata();
-    if (!storedLayersMetadata || storedLayersMetadata.length === 0) {
-      return;
-    }
-   
-    for (const item of storedLayersMetadata) {
-      if (item.opfsPath) {
-        const fileNameInOpfs = item.opfsPath.split("/").pop(); 
-        const fileContent = await loadCustomDataFile(fileNameInOpfs);
-
-        if (fileContent) {
-          const geojson = parseFileContentToGeoJson(
-            fileContent,
-            item.fileType,
-            item.name
-          );
-          if (geojson) {
-            item.visible = true;
-            displayCustomDataGeoJson(
-              geojson,
-              item.name,
-              item.id,
-              item.opfsPath,
-              item.fileType,
-              item.visible,
-              item.style
-            );
-          }
-        }
-      }
-    }
-  }
   async function loadCustomData() {
     const storedLayersMetadata = await loadMetadata();
     if (!storedLayersMetadata || storedLayersMetadata.length === 0) {

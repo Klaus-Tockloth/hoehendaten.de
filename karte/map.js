@@ -17,6 +17,8 @@ Description:
 - NN
 */
 
+/* global L */
+
 // Initialisiere die Karte (auf die 'Mitte Deutschlands').
 var map = L.map('map').setView([51.220906, 9.357579], 8);
 

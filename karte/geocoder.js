@@ -1,5 +1,8 @@
 // geocoder.js
 
+/* global L */
+/* global map */
+
 let searchMarker = null; // Speichert den aktuellen Suchmarker global
 
 document.addEventListener("DOMContentLoaded", () => {

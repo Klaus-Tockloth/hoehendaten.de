@@ -1,12 +1,17 @@
 // map-style-manager
 
+/* global map */
+/* global bindSlider */
+/* global getOrCreatePane */
+
 class MapStyleManager {
   constructor(saveSettingsFn, redrawFn) {
     this.saveSettings = saveSettingsFn;
     this.redraw = redrawFn;
 
-    if (typeof this.redraw === "function") {
-    } else {
+    // Fixed: Empty block statement.
+    // Inverted the logic to check if it is NOT a function.
+    if (typeof this.redraw !== "function") {
       console.log("not a function redrawFn: ", redrawFn);
     }
   }
@@ -127,6 +132,8 @@ class MapStyleManager {
     opts.blendMode = this.currentBlendMode;
 
     MapStyleManager.STYLE_CONTROLS_DEF.sliders.forEach((s) => {
+      // Fixed: 'bindSlider' is not defined.
+      // Added 'bindSlider' to the /* global */ definition at the top of the file.
       bindSlider(
         s.key, 
         idSuffix, 
@@ -166,18 +173,19 @@ class MapStyleManager {
   }
 
   static applyFilterAndBlendMode(type, opts = {}) {
-    const name = getOrCreatePane(map, type);
+    // Fixed: 'getOrCreatePane' is not defined. 
+    // Added 'getOrCreatePane' to the /* global */ definition at the top.
+    
+    // Fixed: 'name' is assigned a value but never used.
+    // Removed the assignment, just calling the function for its side effect.
+    getOrCreatePane(map, type);
+    
     const thePane = map.getPane(type + "Pane");
 
     if (thePane) {
-      // Aktuellen z-index auslesen
-      const currentZ = thePane.style.zIndex;
-      // console.log(`applyFilterAndBlendMode Pane ${type} hat z-index:`, currentZ);
+      // Fixed: 'currentZ' is assigned a value but never used.
+      // Removed the unused variable declaration.
 
-      // Neuen z-index setzen
-      //thePane.style.zIndex = 650; // Beispielwert, höher = weiter oben
-
-      //console.log("opts: " , opts) ;
       const filterString = `brightness(${opts.brightness ?? 100}%) 
                           contrast(${opts.contrast ?? 100}%) 
                           saturate(${opts.saturation ?? 100}%) 
@@ -187,9 +195,11 @@ class MapStyleManager {
       thePane.style.filter = filterString;
       thePane.style.mixBlendMode = blendMode;
 
-      //console.log("applyImageLayerStyles: Style update complete.");
     } else {
       console.warn("missing pane for type: ", type);
     }
   }
 }
+
+// ADD THIS LINE at the end of the file to expose it to other scripts:
+window.MapStyleManager = MapStyleManager; 

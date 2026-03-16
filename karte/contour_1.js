@@ -1,3 +1,9 @@
+// contour_1.js
+
+/* global L */
+/* global map */
+/* global MapStyleManager */ 
+
 (function(global) {
   ("use strict");
 
@@ -176,11 +182,13 @@
     }
 
     // TODO kann das weg ?
+    /*
     // Bestimmt den anfänglichen Checked-Zustand für Alpha-Checkboxen basierend auf dem Alpha-Wert der aktuellen Farbe.
     const isMainColorVisible =
       global.getAlphaFromColorString(options.color) > 0;
     const isMajorColorVisible =
       global.getAlphaFromColorString(options.majorColor) > 0;
+    */
 
     return `
       <!-- Style Controls -->
@@ -313,7 +321,7 @@
   function initContourPanelHelper(idSuffix, managerApi) {
     // Don't destructure 'options' from managerApi, as it would create a local,
     // potentially stale reference if managerApi.options uses a getter and optionsLast is reassigned.
-    const { saveSettings, redrawLayers, forceRedraw, resetOptionsToDefaults } =
+    const { saveSettings, redrawLayers, forceRedraw} =
       managerApi;
 
     let mustFetch = false;
@@ -407,6 +415,7 @@
 
       // Event-Listener für die Alpha-Sichtbarkeits-Checkbox (auskommentiert, aber Logik ist hier).
       if (alphaCheckbox) {
+        /*
         alphaCheckbox.addEventListener("change", () => {
           const currentRgbaObj = global.parseColorStringToRgbaObject(
             options[optionKey]
@@ -434,6 +443,7 @@
 
           // !!! this.redrawLayers(); // Neudarstellung auslösen, um neuen Stil anzuwenden.
         });
+        */
       }
     };
 
@@ -450,6 +460,7 @@
       "contour-major-alpha-visible-" // ID der Alpha-Checkbox
     );
 
+    /* 
     // Helper to bind a color input and its alpha slider
     const bindColorAndAlpha = (colorKey, colorInputId, alphaInputId) => {
       const colorInput = document.getElementById(colorInputId + idSuffix);
@@ -460,7 +471,6 @@
         const alpha = parseFloat(alphaInput.value);
         options[colorKey] = global.hexToRgbaString(hex, alpha);
         saveSettings();
-      };
 
       // TODO colorInput.addEventListener("input", updateColor);
       // TODO alphaInput.addEventListener("input", updateColor);
@@ -468,6 +478,7 @@
 
     bindColorAndAlpha("color", "color", "color-alpha");
     bindColorAndAlpha("majorColor", "majorColor", "majorColor-alpha");
+    */
 
     // Bind sliders
     global.bindSlider(
@@ -560,7 +571,7 @@
       });
   }
   
-  const contourModeManager = createTileManager({
+  const contourModeManager = global.createTileManager({
     type: "contour",
     label: TEXT_CONTOUR_LABEL,
     modeId: MODE_CONTOUR,
